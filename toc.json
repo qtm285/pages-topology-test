@@ -1,0 +1,92 @@
+[
+  {
+    "title": "Prediction, Inference, and Causality I",
+    "level": "part",
+    "page": 1
+  },
+  {
+    "title": "1 The Social Pressure Experiment",
+    "level": "chapter",
+    "page": 2
+  },
+  {
+    "title": "2 Homework: Setting Up",
+    "level": "chapter",
+    "page": 3
+  },
+  {
+    "title": "3 Homework: Basic Descriptive Statistics",
+    "level": "chapter",
+    "page": 4
+  },
+  {
+    "title": "4 Sampling",
+    "level": "chapter",
+    "page": 5
+  },
+  {
+    "title": "5 Point and Interval Estimates",
+    "level": "chapter",
+    "page": 6
+  },
+  {
+    "title": "6 Homework: The Idea of Calibration",
+    "level": "chapter",
+    "page": 7
+  },
+  {
+    "title": "7 Calibrating Interval Estimates with Binary Observations",
+    "level": "chapter",
+    "page": 8
+  },
+  {
+    "title": "8 Sampling with Replacement and the Binomial Distribution",
+    "level": "chapter",
+    "page": 9
+  },
+  {
+    "title": "9 Homework: Calibration with Binary Outcomes",
+    "level": "chapter",
+    "page": 10
+  },
+  {
+    "title": "10 Sampling without Replacement and the Hypergeometric Distribution",
+    "level": "chapter",
+    "page": 11
+  },
+  {
+    "title": "12 Homework — Random Variables, Moments, and the Standard Deviation",
+    "level": "chapter",
+    "page": 13
+  },
+  {
+    "title": "13 Calibrating Interval Estimates using the Bootstrap",
+    "level": "chapter",
+    "page": 12
+  },
+  {
+    "title": "Calibrating Interval Estimates using the Bootstrap — Slides",
+    "level": "section",
+    "page": 18
+  },
+  {
+    "title": "15 Random Variables and Moments",
+    "level": "chapter",
+    "page": 14
+  },
+  {
+    "title": "17 The Standard Deviation is Standard",
+    "level": "chapter",
+    "page": 15
+  },
+  {
+    "title": "18 Normal Approximation",
+    "level": "chapter",
+    "page": 16
+  },
+  {
+    "title": "23 Bias and Coverage",
+    "level": "chapter",
+    "page": 17
+  }
+]
