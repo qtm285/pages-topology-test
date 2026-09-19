@@ -40,6 +40,7 @@
     letter-spacing: -0.01em;
   }
   h2 + h3 { margin-top: 1.4rem; }
+  h2 + p { margin-top: 0.95rem; }
   main > hr { display: none; }
   p { margin: 0 0 1.05rem; }
   strong { font-weight: 600; }
@@ -59,9 +60,17 @@
   pre code { background: none; padding: 0; }
 
   img {
-    display: block; max-width: 100%; height: auto; margin: 1.5rem 0;
+    display: block; max-width: 100%; height: auto; margin: 1.5rem 0 0.55rem;
     border: 1px solid var(--rule); border-radius: 6px;
   }
+  /* Caption: a paragraph that is nothing but emphasis, directly under a shot.
+     It says which surface the capture came from, so the screen is unambiguous
+     wherever the page is hosted. */
+  p > em:only-child {
+    display: block; font-style: normal; font-size: 0.85rem; line-height: 1.5;
+    color: var(--dim); margin: 0 0 1.6rem;
+  }
+  p > em:only-child code { font-size: 0.92em; background: none; padding: 0; }
   ul { margin: 0 0 1.05rem; padding-left: 1.2rem; }
   li { margin: 0.2rem 0; }
   a { color: var(--accent); }
@@ -75,7 +84,7 @@
 on a copy — <code>qtm285-book</code>&#39;s source tree cloned to its own project, course,
 assignment and student, on the same code, server and build executor, so nothing
 here wrote to the class. <strong>The class site shown under <em>Students see it</em> is the
-real one, <code>qtm285.github.io</code>, read and not written.</strong></p>
+real one, <code>qtm285.github.io/static/</code>, read and not written.</strong></p>
 <p>Every number here was measured on that walk. Every screen is a capture of the
 surface named in its beat.</p>
 <hr>
@@ -109,14 +118,17 @@ a cold full render and takes minutes; this is the loop he is actually in.</p>
 code around it evaluated — <code>rainbow straws</code> and <code>pickle roulette</code> are computed
 values, not typed ones.</p>
 <p><img src="img/03-chapter-built.png" alt="The rebuilt chapter, on the copy"></p>
+<p><em>Captured on the walk copy — project <code>qtm285-walk</code>, chapter <code>chapters/chapter-sampling.html</code>.</em></p>
 <p><strong>What changes.</strong> The sentence he typed is in the book, in position, rendered.</p>
 <p><strong>Space.</strong> Same chapter, same scroll position he was reading.</p>
 <hr>
 <h2>The class side</h2>
 <h3>Students see it</h3>
-<p><strong>On screen.</strong> His class site, <code>qtm285.github.io</code> — title, the figure, the
-description, and the two doors in: <strong>book</strong> and <strong>app</strong>.</p>
+<p><strong>On screen.</strong> His class site at <code>qtm285.github.io/static/</code> — title, the figure,
+the description, and the two doors in: <strong>book</strong> and <strong>app</strong>.</p>
 <p><img src="img/05-students-see.png" alt="His class site, as it stands today"></p>
+<p><em>Captured from <code>https://qtm285.github.io/static/</code> — his real class site, read and
+not written.</em></p>
 <p><strong>What they do.</strong> Click through to a chapter, or download the homework zip —
 every chapter, homework page and handout archive on it opens.</p>
 <p><strong>Space.</strong> New frame. The first screen seen from the student&#39;s side.</p>

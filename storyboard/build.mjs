@@ -59,6 +59,7 @@ const html = `<!doctype html>
     letter-spacing: -0.01em;
   }
   h2 + h3 { margin-top: 1.4rem; }
+  h2 + p { margin-top: 0.95rem; }
   main > hr { display: none; }
   p { margin: 0 0 1.05rem; }
   strong { font-weight: 600; }
@@ -78,9 +79,17 @@ const html = `<!doctype html>
   pre code { background: none; padding: 0; }
 
   img {
-    display: block; max-width: 100%; height: auto; margin: 1.5rem 0;
+    display: block; max-width: 100%; height: auto; margin: 1.5rem 0 0.55rem;
     border: 1px solid var(--rule); border-radius: 6px;
   }
+  /* Caption: a paragraph that is nothing but emphasis, directly under a shot.
+     It says which surface the capture came from, so the screen is unambiguous
+     wherever the page is hosted. */
+  p > em:only-child {
+    display: block; font-style: normal; font-size: 0.85rem; line-height: 1.5;
+    color: var(--dim); margin: 0 0 1.6rem;
+  }
+  p > em:only-child code { font-size: 0.92em; background: none; padding: 0; }
   ul { margin: 0 0 1.05rem; padding-left: 1.2rem; }
   li { margin: 0.2rem 0; }
   a { color: var(--accent); }

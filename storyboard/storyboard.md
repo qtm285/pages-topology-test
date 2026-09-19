@@ -6,7 +6,7 @@ Walked on 2026-09-19 against the running system.
 on a copy — `qtm285-book`'s source tree cloned to its own project, course,
 assignment and student, on the same code, server and build executor, so nothing
 here wrote to the class. **The class site shown under *Students see it* is the
-real one, `qtm285.github.io`, read and not written.**
+real one, `qtm285.github.io/static/`, read and not written.**
 
 Every number here was measured on that walk. Every screen is a capture of the
 surface named in its beat.
@@ -57,6 +57,8 @@ values, not typed ones.
 
 ![The rebuilt chapter, on the copy](img/03-chapter-built.png)
 
+*Captured on the walk copy — project `qtm285-walk`, chapter `chapters/chapter-sampling.html`.*
+
 **What changes.** The sentence he typed is in the book, in position, rendered.
 
 **Space.** Same chapter, same scroll position he was reading.
@@ -67,10 +69,13 @@ values, not typed ones.
 
 ### Students see it
 
-**On screen.** His class site, `qtm285.github.io` — title, the figure, the
-description, and the two doors in: **book** and **app**.
+**On screen.** His class site at `qtm285.github.io/static/` — title, the figure,
+the description, and the two doors in: **book** and **app**.
 
 ![His class site, as it stands today](img/05-students-see.png)
+
+*Captured from `https://qtm285.github.io/static/` — his real class site, read and
+not written.*
 
 **What they do.** Click through to a chapter, or download the homework zip —
 every chapter, homework page and handout archive on it opens.
