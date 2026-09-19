@@ -22,7 +22,7 @@ const html = `<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The teaching loop</title>
+<title>${(source.match(/^#\s+(.+)$/m) || [, 'Storyboard'])[1]}</title>
 <style>
   :root {
     --ink: #17171a; --dim: #5d5d68; --rule: #e0e0e4;
@@ -47,10 +47,18 @@ const html = `<!doctype html>
     font-size: 2.1rem; line-height: 1.15; margin: 0 0 1.2rem;
     letter-spacing: -0.015em; font-weight: 600;
   }
+  /* Section — a run of beats. Reads as a divider, not as a beat. */
   h2 {
-    font-size: 1.16rem; margin: 3.6rem 0 1rem; font-weight: 600;
-    letter-spacing: -0.005em; padding-top: 1.7rem; border-top: 1px solid var(--rule);
+    font-size: 0.82rem; margin: 4rem 0 0; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.11em; color: var(--dim);
+    padding-top: 1.7rem; border-top: 1px solid var(--rule);
   }
+  /* Beat. */
+  h3 {
+    font-size: 1.3rem; margin: 2.4rem 0 1rem; font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  h2 + h3 { margin-top: 1.4rem; }
   main > hr { display: none; }
   p { margin: 0 0 1.05rem; }
   strong { font-weight: 600; }

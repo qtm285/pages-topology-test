@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The teaching loop</title>
+<title>From an edit to a hand-in</title>
 <style>
   :root {
     --ink: #17171a; --dim: #5d5d68; --rule: #e0e0e4;
@@ -28,10 +28,18 @@
     font-size: 2.1rem; line-height: 1.15; margin: 0 0 1.2rem;
     letter-spacing: -0.015em; font-weight: 600;
   }
+  /* Section — a run of beats. Reads as a divider, not as a beat. */
   h2 {
-    font-size: 1.16rem; margin: 3.6rem 0 1rem; font-weight: 600;
-    letter-spacing: -0.005em; padding-top: 1.7rem; border-top: 1px solid var(--rule);
+    font-size: 0.82rem; margin: 4rem 0 0; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.11em; color: var(--dim);
+    padding-top: 1.7rem; border-top: 1px solid var(--rule);
   }
+  /* Beat. */
+  h3 {
+    font-size: 1.3rem; margin: 2.4rem 0 1rem; font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  h2 + h3 { margin-top: 1.4rem; }
   main > hr { display: none; }
   p { margin: 0 0 1.05rem; }
   strong { font-weight: 600; }
@@ -61,15 +69,15 @@
 </head>
 <body>
 <main>
-<h1>The teaching loop</h1>
-<p>One pass through the whole process, walked on 2026-09-19 against the running
-system. Every number on this page was measured on that walk; every screen is a
-capture of the real surface, not a drawing of one.</p>
-<p>The walk ran on a copy of the live course — the source tree of <code>qtm285-book</code>
-cloned to its own project, its own course, its own assignment, its own student.
-Same code, same server, same build executor, same publish path.</p>
+<h1>From an edit to a hand-in</h1>
+<p>Walked on 2026-09-19 against the running system, on a copy of the live course —
+the source tree of <code>qtm285-book</code> cloned to its own project, its own course, its
+own assignment, its own student. Same code, same server, same build executor.</p>
+<p>Every number here was measured on that walk. Every screen is a capture of the
+real surface.</p>
 <hr>
-<h2>Beat 1 — He edits a chapter</h2>
+<h2>His loop</h2>
+<h3>He edits a chapter</h3>
 <p><strong>On screen.</strong> The chapter source in his editor, on disk, in the course repo.</p>
 <p><strong>What he does.</strong> Adds a sentence to <code>chapters/chapter-sampling.qmd</code>.</p>
 <pre><code>@@ -37,2 +37,4 @@ We&#39;ll run three surveys, each about a different pair.
@@ -80,9 +88,9 @@ Same code, same server, same build executor, same publish path.</p>
 </code></pre>
 <p><strong>What changes.</strong> One file on disk. Nothing else yet.</p>
 <hr>
-<h2>Beat 2 — It builds</h2>
+<h3>It builds</h3>
 <p><strong>On screen.</strong> The terminal, briefly, then nothing to watch.</p>
-<p><strong>What he does.</strong> Nothing. The push is the whole action.</p>
+<p><strong>What he does.</strong> Nothing further. The push is the whole action.</p>
 <pre><code>$ tlda project push
 Source submitted.
 
@@ -90,20 +98,19 @@ Source submitted.
   rebuild settled           79 seconds
 </code></pre>
 <p><strong>What changes.</strong> The submitted revision becomes the built book. Seventy-nine
-seconds from a saved file to a rebuilt chapter — the first build of a project
-is a cold full render and takes minutes, but this is the loop he is actually in.</p>
+seconds from a saved file to a rebuilt chapter. The first build of a project is
+a cold full render and takes minutes; this is the loop he is actually in.</p>
 <hr>
-<h2>Beat 3 — He sees it</h2>
-<p><strong>On screen.</strong> The rebuilt chapter, with the new sentence in place, the R code
-around it evaluated — <code>rainbow straws</code>, <code>pickle roulette</code> are computed values,
-not typed ones.</p>
+<h3>He sees it</h3>
+<p><strong>On screen.</strong> The rebuilt chapter, the new sentence in place, the R code around
+it evaluated — <code>rainbow straws</code> and <code>pickle roulette</code> are computed values, not
+typed ones.</p>
 <p><img src="img/03-chapter-built.png" alt="The rebuilt chapter"></p>
 <p><strong>What changes.</strong> The sentence he typed is in the book, in position, rendered.</p>
 <p><strong>Space.</strong> Same chapter, same scroll position he was reading.</p>
 <hr>
-<h2>Beat 4 — It publishes</h2>
-<hr>
-<h2>Beat 5 — Students see it</h2>
+<h2>The class side</h2>
+<h3>Students see it</h3>
 <p><strong>On screen.</strong> The class site. Title, the figure, the description, and the two
 doors in: <strong>book</strong> and <strong>app</strong>.</p>
 <p><img src="img/05-students-see.png" alt="What a student opens"></p>
@@ -114,7 +121,7 @@ doors in: <strong>book</strong> and <strong>app</strong>.</p>
 </code></pre>
 <p><strong>Space.</strong> New frame. This is the first screen that is not his.</p>
 <hr>
-<h2>Beat 6 — They hand in</h2>
+<h3>They hand in</h3>
 <p><strong>On screen.</strong> Positron, the editor the class works in. <strong>View → Command
 Palette → Homework: Submit.</strong></p>
 <p><strong>What happens.</strong> The command reads the server and assignment out of the
@@ -129,18 +136,9 @@ homework&#39;s own front matter, zips the assignment folder, and posts it.</p>
 the thirteen answer blocks they filled in. No upload page, no attachment, no
 email.</p>
 <hr>
-<h2>Beat 7 — He marks</h2>
-<p><strong>On screen, first.</strong> The gradebook. Every hand-in, whether it built, and the
-way in.</p>
-<p><img src="img/07-gradebook.png" alt="The gradebook"></p>
-<p><strong>What he does.</strong> Opens the submitted work.</p>
-<hr>
-<h2>Beat 8 — They get it back</h2>
-<p><strong>On screen.</strong> One button, in the header.</p>
-<hr>
 <h2>What this page is</h2>
-<p>An acceptance test with pictures. It exists because the loop ran end to end on
-the date above; each beat was performed, not described.</p>
+<p>An acceptance test with pictures. Each step above was performed on the date
+given, not described.</p>
 
 </main>
 </body>
