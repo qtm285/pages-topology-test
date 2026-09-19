@@ -9,7 +9,13 @@ const require = createRequire(import.meta.url)
 const { marked } = require('/Users/skip/work/tlda/node_modules/marked')
 
 const HERE = dirname(fileURLToPath(import.meta.url))
-const body = marked.parse(readFileSync(join(HERE, 'storyboard.md'), 'utf8'))
+
+// Working notes live in the source and never in the artifact. Markdown passes
+// HTML comments straight through, so a `<!-- not captured yet -->` note would
+// ship inside the published page — invisible to a reader, readable by anyone
+// who views source. Strip them here rather than relying on remembering to.
+const source = readFileSync(join(HERE, 'storyboard.md'), 'utf8').replace(/<!--[\s\S]*?-->/g, '')
+const body = marked.parse(source)
 
 const html = `<!doctype html>
 <html lang="en">
