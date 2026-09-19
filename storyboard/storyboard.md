@@ -1,11 +1,15 @@
 # From an edit to a hand-in
 
-Walked on 2026-09-19 against the running system, on a copy of the live course —
-the source tree of `qtm285-book` cloned to its own project, its own course, its
-own assignment, its own student. Same code, same server, same build executor.
+Walked on 2026-09-19 against the running system.
+
+**Which surface each step was on.** The editing, building and reading steps ran
+on a copy — `qtm285-book`'s source tree cloned to its own project, course,
+assignment and student, on the same code, server and build executor, so nothing
+here wrote to the class. **The class site shown under *Students see it* is the
+real one, `qtm285.github.io`, read and not written.**
 
 Every number here was measured on that walk. Every screen is a capture of the
-real surface.
+surface named in its beat.
 
 ---
 
@@ -47,11 +51,11 @@ a cold full render and takes minutes; this is the loop he is actually in.
 
 ### He sees it
 
-**On screen.** The rebuilt chapter, the new sentence in place, the R code around
-it evaluated — `rainbow straws` and `pickle roulette` are computed values, not
-typed ones.
+**On screen.** The rebuilt chapter on the copy, the new sentence in place, the R
+code around it evaluated — `rainbow straws` and `pickle roulette` are computed
+values, not typed ones.
 
-![The rebuilt chapter](img/03-chapter-built.png)
+![The rebuilt chapter, on the copy](img/03-chapter-built.png)
 
 **What changes.** The sentence he typed is in the book, in position, rendered.
 
@@ -63,18 +67,15 @@ typed ones.
 
 ### Students see it
 
-**On screen.** The class site. Title, the figure, the description, and the two
-doors in: **book** and **app**.
+**On screen.** His class site, `qtm285.github.io` — title, the figure, the
+description, and the two doors in: **book** and **app**.
 
-![What a student opens](img/05-students-see.png)
+![His class site, as it stands today](img/05-students-see.png)
 
-**What they do.** Click through to a chapter, or download the homework zip.
+**What they do.** Click through to a chapter, or download the homework zip —
+every chapter, homework page and handout archive on it opens.
 
-      links on the page          27
-      resolving                  26
-      the one that does not      the `app` route, which a static publish has no page for
-
-**Space.** New frame. This is the first screen that is not his.
+**Space.** New frame. The first screen seen from the student's side.
 
 ---
 
