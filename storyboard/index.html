@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The teaching loop</title>
+<style>
+  :root {
+    --ink: #17171a; --dim: #5d5d68; --rule: #e0e0e4;
+    --bg: #fbfbfa; --panel: #f3f3f1; --accent: #7a5c2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#e8e8ea; --dim:#a0a0aa; --rule:#33333a; --bg:#141416; --panel:#1d1d21; --accent:#d3b177; }
+  }
+  :root[data-theme="dark"] { --ink:#e8e8ea; --dim:#a0a0aa; --rule:#33333a; --bg:#141416; --panel:#1d1d21; --accent:#d3b177; }
+  :root[data-theme="light"] { --ink:#17171a; --dim:#5d5d68; --rule:#e0e0e4; --bg:#fbfbfa; --panel:#f3f3f1; --accent:#7a5c2e; }
+
+  html { box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: inherit; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 17px/1.62 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    -webkit-text-size-adjust: 100%;
+  }
+  main { max-width: 46rem; margin: 0 auto; padding: 4rem 1.25rem 6rem; }
+
+  h1 {
+    font-size: 2.1rem; line-height: 1.15; margin: 0 0 1.2rem;
+    letter-spacing: -0.015em; font-weight: 600;
+  }
+  h2 {
+    font-size: 1.16rem; margin: 3.6rem 0 1rem; font-weight: 600;
+    letter-spacing: -0.005em; padding-top: 1.7rem; border-top: 1px solid var(--rule);
+  }
+  main > hr { display: none; }
+  p { margin: 0 0 1.05rem; }
+  strong { font-weight: 600; }
+  em { font-style: italic; }
+
+  /* The beat fields — "On screen.", "What changes." — read as labels. */
+  p > strong:first-child { color: var(--accent); }
+
+  pre {
+    background: var(--panel); border: 1px solid var(--rule); border-radius: 6px;
+    padding: 0.85rem 1rem; overflow-x: auto; margin: 0 0 1.15rem;
+    font: 13.5px/1.6 ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    color: var(--ink);
+  }
+  code { font: 0.88em/1.5 ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; }
+  p code, li code { background: var(--panel); padding: 0.1em 0.34em; border-radius: 3px; }
+  pre code { background: none; padding: 0; }
+
+  img {
+    display: block; max-width: 100%; height: auto; margin: 1.5rem 0;
+    border: 1px solid var(--rule); border-radius: 6px;
+  }
+  ul { margin: 0 0 1.05rem; padding-left: 1.2rem; }
+  li { margin: 0.2rem 0; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+<h1>The teaching loop</h1>
+<p>One pass through the whole process, walked on 2026-09-19 against the running
+system. Every number on this page was measured on that walk; every screen is a
+capture of the real surface, not a drawing of one.</p>
+<p>The walk ran on a copy of the live course — the source tree of <code>qtm285-book</code>
+cloned to its own project, its own course, its own assignment, its own student.
+Same code, same server, same build executor, same publish path.</p>
+<hr>
+<h2>Beat 1 — He edits a chapter</h2>
+<p><strong>On screen.</strong> The chapter source in his editor, on disk, in the course repo.</p>
+<p><strong>What he does.</strong> Adds a sentence to <code>chapters/chapter-sampling.qmd</code>.</p>
+<pre><code>@@ -37,2 +37,4 @@ We&#39;ll run three surveys, each about a different pair.
+
++The population never changes between surveys; only the pair being asked about does.
++
+ - Survey 1: `r A1` or `r B1`
+</code></pre>
+<p><strong>What changes.</strong> One file on disk. Nothing else yet.</p>
+<hr>
+<h2>Beat 2 — It builds</h2>
+<p><strong>On screen.</strong> The terminal, briefly, then nothing to watch.</p>
+<p><strong>What he does.</strong> Nothing. The push is the whole action.</p>
+<pre><code>$ tlda project push
+Source submitted.
+
+  push returned              4 seconds
+  rebuild settled           79 seconds
+</code></pre>
+<p><strong>What changes.</strong> The submitted revision becomes the built book. Seventy-nine
+seconds from a saved file to a rebuilt chapter — the first build of a project
+is a cold full render and takes minutes, but this is the loop he is actually in.</p>
+<hr>
+<h2>Beat 3 — He sees it</h2>
+<p><strong>On screen.</strong> The rebuilt chapter, with the new sentence in place, the R code
+around it evaluated — <code>rainbow straws</code>, <code>pickle roulette</code> are computed values,
+not typed ones.</p>
+<p><img src="img/03-chapter-built.png" alt="The rebuilt chapter"></p>
+<p><strong>What changes.</strong> The sentence he typed is in the book, in position, rendered.</p>
+<p><strong>Space.</strong> Same chapter, same scroll position he was reading.</p>
+<hr>
+<h2>Beat 4 — It publishes</h2>
+<p><strong>On screen.</strong> Nothing. Publishing is a consequence of the build, not a
+separate act.</p>
+<p><strong>What changes.</strong> The built book becomes a static site: <code>toc.json</code>,
+<code>page-info.json</code>, and a rendered page per entry, served over the public web.</p>
+<pre><code>  pages published            33
+  of which decks              6
+  table of contents          agrees with the pages, 1 : 1
+</code></pre>
+<hr>
+<h2>Beat 5 — Students see it</h2>
+<p><strong>On screen.</strong> The class site. Title, the figure, the description, and the two
+doors in: <strong>book</strong> and <strong>app</strong>.</p>
+<p><img src="img/05-students-see.png" alt="What a student opens"></p>
+<p><strong>What they do.</strong> Click through to a chapter, or download the homework zip.</p>
+<pre><code>  links on the page          19
+  resolving                  17
+  the rest                   an `app` route and a `tel:` number
+</code></pre>
+<p><strong>Space.</strong> New frame. This is the first screen that is not his.</p>
+<hr>
+<h2>Beat 6 — They hand in</h2>
+<p><strong>On screen.</strong> Positron, the editor the class works in. <strong>View → Command
+Palette → Homework: Submit.</strong></p>
+<p><strong>What happens.</strong> The command reads the server and assignment out of the
+homework&#39;s own front matter, zips the assignment folder, and posts it.</p>
+<pre><code>SERVER ACCEPTED
+  assignment      walk-calibration
+  student         walk-student
+  answers parsed  13
+  build           success, 22 seconds later
+</code></pre>
+<p><strong>What changes.</strong> Their work becomes a rendered document on the server, keyed to
+the thirteen answer blocks they filled in. No upload page, no attachment, no
+email.</p>
+<hr>
+<h2>Beat 7 — He marks</h2>
+<p><strong>On screen, first.</strong> The gradebook. Every hand-in, whether it built, and the
+way in.</p>
+<p><img src="img/07-gradebook.png" alt="The gradebook"></p>
+<p><strong>What he does.</strong> Opens the submitted work.</p>
+<p><strong>On screen, then.</strong> Their homework, with the marking tools down the left and
+the problem he is on named at the top. He moves between problems with the
+selector and between students with the arrows.</p>
+<p><img src="img/07-marking.png" alt="The marking surface"></p>
+<p><strong>What changes.</strong> His marks go onto their work, in a layer of their own — the
+student&#39;s document underneath is not touched.</p>
+<hr>
+<h2>Beat 8 — They get it back</h2>
+<p><strong>On screen.</strong> The same surface, one button: <strong>Return marks</strong>.</p>
+<p><strong>What changes.</strong> The submission moves to returned, stamped, and the marks
+become visible to the student who owns them — and to no one else.</p>
+<pre><code>  grading status    returned
+  returned at       2026-09-19T19:26:23Z
+</code></pre>
+<hr>
+<h2>What this page is</h2>
+<p>An acceptance test with pictures. It exists because the loop ran end to end on
+the date above; each beat was performed, not described.</p>
+
+</main>
+</body>
+</html>
