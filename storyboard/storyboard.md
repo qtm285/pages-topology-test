@@ -118,26 +118,29 @@ way in.
 
 **What he does.** Opens the submitted work.
 
-**On screen, then.** Their homework, with the marking tools down the left and
-the problem he is on named at the top. He moves between problems with the
-selector and between students with the arrows.
-
-![The marking surface](img/07-marking.png)
-
-**What changes.** His marks go onto their work, in a layer of their own — the
-student's document underneath is not touched.
+<!-- NOT CAPTURED YET — DO NOT PUBLISH THIS BEAT AS IT STANDS.
+     The marking screen must be the solution chapter in the ordinary flow:
+     solution full width, the student's answer in the margin, buttons in the
+     header. Skip, 15:19. The capture I had (img/07-marking.png) was
+     ?workspace=classroom-problems — the standalone mode he killed — and showed
+     no solution callout, no student answer and no margin. It has been removed
+     rather than re-captioned.
+     Blocked on grading-2 landing the gradebook ruling, and the image must
+     contain a visible mark. -->
 
 ---
 
 ## Beat 8 — They get it back
 
-**On screen.** The same surface, one button: **Return marks**.
+**On screen.** One button, in the header.
 
-**What changes.** The submission moves to returned, stamped, and the marks
-become visible to the student who owns them — and to no one else.
-
-      grading status    returned
-      returned at       2026-09-19T19:26:23Z
+<!-- NOT CAPTURED YET — AND THE EVIDENCE I HAD PROVED THE OPPOSITE.
+     `returned at 2026-09-19T19:26:23Z` is NOT evidence the student received
+     marks. Return without a problem id skips copying the marking layer, still
+     marks the submission returned, and still answers 200 — so that timestamp is
+     the symptom of the bug, printed as proof the bug did not happen.
+     Blocked on c41b25e8a being deployed, and on someone seeing marks actually
+     arrive on the student's side. -->
 
 ---
 
