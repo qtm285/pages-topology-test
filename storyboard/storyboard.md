@@ -60,15 +60,20 @@ not typed ones.
 
 ## Beat 4 — It publishes
 
-**On screen.** Nothing. Publishing is a consequence of the build, not a
-separate act.
+<!-- HELD pending Skip's ruling. DO NOT PUBLISH THIS BEAT AS IT STANDS.
 
-**What changes.** The built book becomes a static site: `toc.json`,
-`page-info.json`, and a rendered page per entry, served over the public web.
+     What I had written — "publishing is a consequence of the build" — is FALSE.
+     There is no path from a render to his site except a person deciding to
+     push. `qtm285.github.io/static/book/` is a wholesale copytree of `_book`
+     committed into a Pages repo by hand.
 
-      pages published            33
-      of which decks              6
-      table of contents          agrees with the pages, 1 : 1
+     The numbers I had here (33 pages / 6 decks) were my copy's BUILD, not a
+     publication, and are the stage error I retracted.
+
+     `tlda project publish` exists and has never been pointed at his class
+     site; pointing it there today would send 20 html against the 37 live.
+     Which of those two is "his book" is the ruling in flight. Write this beat
+     when it lands. -->
 
 ---
 
@@ -81,9 +86,9 @@ doors in: **book** and **app**.
 
 **What they do.** Click through to a chapter, or download the homework zip.
 
-      links on the page          19
-      resolving                  17
-      the rest                   an `app` route and a `tel:` number
+      links on the page          27
+      resolving                  26
+      the one that does not      the `app` route, which a static publish has no page for
 
 **Space.** New frame. This is the first screen that is not his.
 
