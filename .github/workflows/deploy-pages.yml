@@ -22,6 +22,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # This repository is the publication target while Skip reviews the test
+      # site, so it runs the same gate the class site runs. Publishing here
+      # ungated would relax the system rather than move it.
+      - name: Refuse to publish worked solutions
+        run: python3 check-published-tree.py --site-dir static
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
