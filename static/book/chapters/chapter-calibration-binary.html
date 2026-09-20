@@ -1,4 +1,5 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -33,7 +34,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../chapters/chapter-sampling-with-replacement.html" rel="next">
-<link href="../homework/homework-calibration-solutions.html" rel="prev">
+<link href="../homework/homework-calibration.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -43,7 +44,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-fc47e451316820cd4726ab4d2a53c78b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c2285da70463f4438cb186c72dbe10d2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
 <link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
 <script src="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
@@ -93,7 +94,74 @@ ul.task-list li input[type="checkbox"] {
       }
     },
     loader: {load: ['[tex]/physics', '[tex]/unicode']},
-    tex: {packages: {'[+]': ['physics', 'unicode']}}
+    tex: {packages: {'[+]': ['physics', 'unicode']},
+      macros: {
+        E: '\operatorname{E}',
+        V: '\operatorname{V}',
+        Var: '\operatorname{\V}',
+        Cov: '\operatorname{Cov}',
+        sd: '\operatorname{sd}',
+        hVar: '\operatorname{\widehat{V}}',
+        bias: '\operatorname{bias}',
+        invlogit: '\operatorname{logit^{-1}}',
+        argmin: '\operatorname{argmin}',
+        R: '\mathbb{R}',
+        model: '\mathcal{M}',
+        all: '\text{all}',
+        Deltaall: '\Delta_{\text{all}}',
+        ind: ['1_{\{#1\}}', 1],
+        cb: ['\left\{ #1 \right\}', 1],
+        lcb: ['\color{gray}\left\{ \color{black} #1 \color{gray} \right\} \color{black}', 1],
+        pcb: ['\color{#EF476F}\left\{ \color{black} #1 \color{#EF476F} \right\} \color{black}', 1],
+        tcb: ['\color{#118AB2}\left\{ \color{black} #1 \color{#118AB2} \right\} \color{black}', 1],
+        mapbg: '\color{#06D6A0}',
+        polla: '\color{#073B4C}',
+        pollb: '\color{#EF476F}',
+        pollc: '\color{#118AB2}',
+        polld: '\color{#06D6A0}',
+        polle: '\color{#FFD166}',
+        groupa: '\color{#F8766D}',
+        groupb: '\color{#00BFC4}',
+        faded: '\color{#404040}',
+        inmapbg: ['\textcolor[RGB]{6,214,160}{#1}', 1],
+        inpolla: ['\textcolor[RGB]{7,59,76}{#1}', 1],
+        inpollb: ['\textcolor[RGB]{239,71,111}{#1}', 1],
+        inpollc: ['\textcolor[RGB]{17,138,178}{#1}', 1],
+        inpolld: ['\textcolor[RGB]{6,214,160}{#1}', 1],
+        inpolle: ['\textcolor[RGB]{255,209,102}{#1}', 1],
+        ingroupa: ['\textcolor[RGB]{248,118,109}{#1}', 1],
+        ingroupb: ['\textcolor[RGB]{0,191,196}{#1}', 1],
+        inred: ['\ingroupa{#1}', 1],
+        ingreen: ['\ingroupb{#1}', 1],
+        inblue: ['\textcolor[RGB]{0,0,255}{#1}', 1],
+        inmidnight: ['\inpolla{#1}', 1],
+        inpink: ['\inpollb{#1}', 1],
+        inteal: ['\inpollc{#1}', 1],
+        inpurple: ['\textcolor[RGB]{160,32,240}{#1}', 1],
+        ingray: ['\textcolor[RGB]{150,150,150}{#1}', 1],
+        alert: ['\textcolor[RGB]{128,128,128}{#1}', 1],
+        faint: ['\textcolor[RGB]{128,128,128}{#1}', 1],
+        veryfaint: ['\textcolor[RGB]{192,192,192}{#1}', 1],
+        wone: '\overset{\veryfaint{w}}{1}',
+        wzero: '\overset{\veryfaint{w}}{0}',
+        xone: '\overset{\veryfaint{x}}{1}',
+        xzero: '\overset{\veryfaint{x}}{0}',
+        mua: ['\ingroupa{\mu(0, #1)}', 1],
+        mub: ['\ingroupb{\mu(1, #1)}', 1],
+        pa: ['\ingroupa{p_{#1 \mid 0}}', 1],
+        pb: ['\ingroupb{p_{#1 \mid 1}}', 1],
+        pall: ['\inpurple{p_{#1}}', 1],
+        hmua: ['\ingroupa{\hat\mu(0, #1)}', 1],
+        hmub: ['\ingroupb{\hat\mu(1, #1)}', 1],
+        tmua: ['\ingroupa{\tilde\mu(0, #1)}', 1],
+        tmub: ['\ingroupb{\tilde\mu(1, #1)}', 1],
+        effect: ['\mub{x}-\mua{x}', 1],
+        heffect: ['\hmub{x}-\hmua{x}', 1],
+        with: '\ingroupb{\text{degree}}',
+        without: '\ingroupa{\text{no degree}}',
+        explain: ['\overset{\texttip{\small{\unicode{x2753}}}{#2}}{#1}', 2],
+        mathexplain: ['\overset{\mathtip{\small{\unicode{x2753}}}{#2}}{#1}', 2]
+      }}
   }
 </script>
 
@@ -138,7 +206,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">One-Sample Problems</li><li class="breadcrumb-item"><a href="../chapters/chapter-calibration-binary.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-calibration-binary.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -186,7 +254,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../homework/homework-descriptive-solutions.html" class="sidebar-item-text sidebar-link">
+  <a href="../homework/homework-descriptive.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework: Basic Descriptive Statistics</span></span></a>
   </div>
 </li>
@@ -194,8 +262,8 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            
- <span class="menu-text">One-Sample Problems</span>
+            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">One-Sample Problems</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -215,7 +283,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../homework/homework-calibration-solutions.html" class="sidebar-item-text sidebar-link">
+  <a href="../homework/homework-calibration.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
   </div>
 </li>
@@ -245,38 +313,38 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
+  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span>
+  <a href="../homework/homework-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span>
+  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -293,26 +361,26 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators</span></span>
+  <a href="../homework/homework-markov-chebyshev.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Probability Review</span></span>
+  <a href="../chapters/chapter-probability-review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Probability Review</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Variance, Standard Deviation, and Sample Size</span></span>
+  <a href="../chapters/chapter-variance-and-sample-size.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Variance, Standard Deviation, and Sample Size</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span>
+  <a href="../homework/homework-comparing-estimators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -323,16 +391,16 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span>
+  <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text">References</span>
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
   </div>
 </li>
     </ul>
@@ -359,7 +427,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">One-Sample Problems</li><li class="breadcrumb-item"><a href="../chapters/chapter-calibration-binary.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-calibration-binary.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></h1>
 </div>
@@ -379,10 +447,10 @@ window.Quarto = {
 
 
 <section id="sec-calibration" class="level1">
-<h1 data-source-line="6">Calibration</h1>
-<p data-source-line="8">What does it mean for an interval estimate to be calibrated? We’ll work through a polling example to see why calibration matters and what goes wrong when you get it wrong.</p>
+<h1>Calibration</h1>
+<p>What does it mean for an interval estimate to be calibrated? We’ll work through a polling example to see why calibration matters and what goes wrong when you get it wrong.</p>
 <section id="before-the-election" class="level2">
-<h2 class="anchored" data-anchor-id="before-the-election" data-source-line="10">Before the Election</h2>
+<h2 class="anchored" data-anchor-id="before-the-election">Before the Election</h2>
 <div class="hidden">
 <p>$$ \newcommand{X}{} \newcommand{Y}{} </p>
 <p>$$</p>
@@ -395,7 +463,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-calibration-binary_files/figure-html/plot-your-interval-1.svg?v=1789605397597" class="img-fluid figure-img" alt="A narrow interval centered on the observed poll estimate, shown before the election when the population turnout proportion is unknown."></p>
+<p><img src="chapter-calibration-binary_files/figure-html/plot-your-interval-1.svg" class="img-fluid figure-img" alt="A narrow interval centered on the observed poll estimate, shown before the election when the population turnout proportion is unknown."></p>
 </figure>
 </div>
 </div>
@@ -406,7 +474,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-calibration-binary_files/figure-html/plot-estimand-line-1.svg?v=1789605397597" class="img-fluid figure-img" alt="The same observed estimate with three candidate interval widths and the realized population turnout proportion marked by a green vertical line; the narrowest interval misses."></p>
+<p><img src="chapter-calibration-binary_files/figure-html/plot-estimand-line-1.svg" class="img-fluid figure-img" alt="The same observed estimate with three candidate interval widths and the realized population turnout proportion marked by a green vertical line; the narrowest interval misses."></p>
 </figure>
 </div>
 </div>
@@ -419,19 +487,19 @@ Figure&nbsp;8.1
 </figure>
 </div>
 <div class="election-step">
-<p data-source-line="88"><strong>Before the election.</strong> You want to estimate the proportion of <em>all registered voters</em>—the population—who will vote. To do this, you use the proportion of <em>polled voters</em>—your sample—who said they would. You’re probably not going to match the population proportion exactly, so you report an <em>interval estimate</em>—a range of values we claim the population proportion is in. You know you’re not going to be right 100% of the time you make claims like this, so you state a <em>nominal coverage probability</em>—how often you’re right about claims like this.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p data-source-line="91">Without thinking too hard about it, you report, as your interval, <span class="polld">your sample proportion (72%) ± 1%</span>. Because it sounds good. And you say your coverage probability is 95%. Because that’s what everybody else says.</p>
+<p><strong>Before the election.</strong> You want to estimate the proportion of <em>all registered voters</em>—the population—who will vote. To do this, you use the proportion of <em>polled voters</em>—your sample—who said they would. You’re probably not going to match the population proportion exactly, so you report an <em>interval estimate</em>—a range of values we claim the population proportion is in. You know you’re not going to be right 100% of the time you make claims like this, so you state a <em>nominal coverage probability</em>—how often you’re right about claims like this.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Without thinking too hard about it, you report, as your interval, <span class="polld">your sample proportion (72%) ± 1%</span>. Because it sounds good. And you say your coverage probability is 95%. Because that’s what everybody else says.</p>
 </div>
 <div class="election-step">
-<p data-source-line="95"><strong>After the election.</strong> When the election occurs, we get to see who turns out to vote. 5.05M people, or roughly 70% of registered voters, actually vote. You—and future employers—can see how well you did. And how well everybody else did.</p>
+<p><strong>After the election.</strong> When the election occurs, we get to see who turns out to vote. 5.05M people, or roughly 70% of registered voters, actually vote. You—and future employers—can see how well you did. And how well everybody else did.</p>
 <p><span class="polld">Your interval</span> missed the target. It doesn’t contain <span class="target">the turnout proportion</span>. Your point estimate is only off by 2%. But you overstated your precision. Now you’re kicking yourself. You’d briefly considered saying ± 3% or ± 4%. That would’ve done it. But that didn’t sound as good, so you went for ± 1%.</p>
 </div>
-<p data-source-line="101">You hope you’re not the only one who missed. So you check out the competition.</p>
+<p>You hope you’re not the only one who missed. So you check out the competition.</p>
 </section>
 <section id="the-competition" class="level2">
-<h2 class="anchored" data-anchor-id="the-competition" data-source-line="103">The Competition</h2>
+<h2 class="anchored" data-anchor-id="the-competition">The Competition</h2>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation" data-source-line="106"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Your Competitors’ Polls</a></li><li class="nav-item" role="presentation" data-source-line="134"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Visualizing the Competition</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Your Competitors’ Polls</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Visualizing the Competition</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <p><span class="math display">\[
@@ -446,7 +514,7 @@ Figure&nbsp;8.1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-calibration-binary_files/figure-html/plot-competitor-intervals-1.svg?v=1789605397597" class="img-fluid figure-img" alt="One hundred competitor confidence intervals over the polling sampling distribution; most cross the green population target, while the emphasized narrow interval misses."></p>
+<p><img src="chapter-calibration-binary_files/figure-html/plot-competitor-intervals-1.svg" class="img-fluid figure-img" alt="One hundred competitor confidence intervals over the polling sampling distribution; most cross the green population target, while the emphasized narrow interval misses."></p>
 </figure>
 </div>
 </div>
@@ -454,53 +522,53 @@ Figure&nbsp;8.1
 </div>
 </div>
 </div>
-<p data-source-line="150">It turns out that everyone got their point estimate exactly like you did. Each of them rolled their 7.23M-sided die 625 times. And after making their 625 calls, they reported their sample proportion.</p>
-<p data-source-line="152">You’re not the only one who missed, but you’re part of a pretty small club. 5% of the other polls got it wrong. But you are the only one who claimed they’d get within 1%. Everyone else claimed they’d get within roughly 4%. Most were right. About 95%. And a lot of them had worse point estimates than you.</p>
-<p data-source-line="154">What you have is a <em>calibration</em> problem.</p>
+<p>It turns out that everyone got their point estimate exactly like you did. Each of them rolled their 7.23M-sided die 625 times. And after making their 625 calls, they reported their sample proportion.</p>
+<p>You’re not the only one who missed, but you’re part of a pretty small club. 5% of the other polls got it wrong. But you are the only one who claimed they’d get within 1%. Everyone else claimed they’d get within roughly 4%. Most were right. About 95%. And a lot of them had worse point estimates than you.</p>
+<p>What you have is a <em>calibration</em> problem.</p>
 </section>
 <section id="calibration-using-the-sampling-distribution" class="level2">
-<h2 class="anchored" data-anchor-id="calibration-using-the-sampling-distribution" data-source-line="157">Calibration using the Sampling Distribution</h2>
+<h2 class="anchored" data-anchor-id="calibration-using-the-sampling-distribution">Calibration using the Sampling Distribution</h2>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-calibration-binary_files/figure-html/plot-calibration-1.svg?v=1789605397597" alt="Polling sampling distribution with competitor intervals and the emphasized narrow interval; central reference lines and the green target show why the narrow interval is under-calibrated." height="400" class="figure-img"></p>
+<p><img src="chapter-calibration-binary_files/figure-html/plot-calibration-1.svg" alt="Polling sampling distribution with competitor intervals and the emphasized narrow interval; central reference lines and the green target show why the narrow interval is under-calibrated." height="400" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p data-source-line="176">You’d have seen that your interval was miscalibrated if you knew what you do now: your competitors’ point estimates, which they got exactly like you got yours, and who actually turned out, so you could simulate even more polls if you wanted to.</p>
+<p>You’d have seen that your interval was miscalibrated if you knew what you do now: your competitors’ point estimates, which they got exactly like you got yours, and who actually turned out, so you could simulate even more polls if you wanted to.</p>
 <p>You’d have drawn ± 1% intervals around all these point estimates.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> And noticed that many but not most of these intervals cover <span class="target">the target</span>. About 43% do. Or, if leaving the target out of it, that only 43% of them cover <span class="blue">the mean</span> of all these estimates. Same thing. The mean and target are right on top of one another. Like this: <span class="blue target">|</span>.</p>
-<p data-source-line="180">And you’d have known how to choose the right interval width. One that makes 95% of these intervals cover. Right?</p>
+<p>And you’d have known how to choose the right interval width. One that makes 95% of these intervals cover. Right?</p>
 </section>
 <section id="question" class="level2">
-<h2 class="anchored" data-anchor-id="question" data-source-line="182">Question</h2>
+<h2 class="anchored" data-anchor-id="question">Question</h2>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-calibration-binary_files/figure-html/plot-quiz-intervals-1.svg?v=1789605397597" class="img-fluid figure-img" alt="Sampling distribution with three colored candidate intervals centered on one estimate; their widths correspond roughly to 50, 95, and 99.7 percent central ranges."></p>
+<p><img src="chapter-calibration-binary_files/figure-html/plot-quiz-intervals-1.svg" class="img-fluid figure-img" alt="Sampling distribution with three colored candidate intervals centered on one estimate; their widths correspond roughly to 50, 95, and 99.7 percent central ranges."></p>
 </figure>
 </div>
 </div>
 </div>
-<p data-source-line="204">I’ve drawn the sampling distribution of an estimator, 100 draws from it as <span class="purple">●</span>s, and 3 interval estimates. One of these interval estimates is calibrated to have exactly 95% coverage. Which is it?</p>
+<p>I’ve drawn the sampling distribution of an estimator, 100 draws from it as <span class="purple">●</span>s, and 3 interval estimates. One of these interval estimates is calibrated to have exactly 95% coverage. Which is it?</p>
 <ul>
 <li>A. The one around the <span class="polla">●</span> on top.</li>
 <li>B. The one around the <span class="pollb">●</span> in the middle.</li>
 <li>C. The one around the <span class="pollc">●</span> on the bottom.</li>
 </ul>
-<p data-source-line="210"><em>Hint</em>. You can reach your twin with your arms if your twin can reach you with theirs.</p>
+<p><em>Hint</em>. You can reach your twin with your arms if your twin can reach you with theirs.</p>
 <p><em>Hint</em>. Maybe you look like this <span class="purple">●</span> and your twin like this <span class="blue target">|</span>.</p>
 </section>
 <section id="calibration-in-reality" class="level2">
-<h2 class="anchored" data-anchor-id="calibration-in-reality" data-source-line="215">Calibration in Reality</h2>
+<h2 class="anchored" data-anchor-id="calibration-in-reality">Calibration in Reality</h2>
 <div class="cell quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="chapter-calibration-binary_files/figure-html/plot-calibration-shaded-1.svg?v=1789605397597" class="img-fluid figure-img" alt="Post-election sampling distribution with the target-centered middle 95 percent shaded, competitor intervals, and the observer's too-narrow interval."></p>
+<p><img src="chapter-calibration-binary_files/figure-html/plot-calibration-shaded-1.svg" class="img-fluid figure-img" alt="Post-election sampling distribution with the target-centered middle 95 percent shaded, competitor intervals, and the observer's too-narrow interval."></p>
 <figcaption>What You Know Now</figcaption>
 </figure>
 </div>
@@ -508,28 +576,28 @@ Figure&nbsp;8.1
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="chapter-calibration-binary_files/figure-html/plot-calibration-shaded-2.svg?v=1789605397597" class="img-fluid figure-img" alt="Only the observed point estimate and its narrow interval on otherwise blank axes, representing the information available before the election."></p>
+<p><img src="chapter-calibration-binary_files/figure-html/plot-calibration-shaded-2.svg" class="img-fluid figure-img" alt="Only the observed point estimate and its narrow interval on otherwise blank axes, representing the information available before the election."></p>
 <figcaption>What You Knew Then</figcaption>
 </figure>
 </div>
 </div>
 </div>
 </div>
-<p data-source-line="240">But you didn’t know any of this. You just knew <span class="polld">your own point estimate</span>. Without all that post-election information, you didn’t know how to calibrate an interval estimate. But everyone else did. Their widths were almost the same as the width you’d choose now.</p>
+<p>But you didn’t know any of this. You just knew <span class="polld">your own point estimate</span>. Without all that post-election information, you didn’t know how to calibrate an interval estimate. But everyone else did. Their widths were almost the same as the width you’d choose now.</p>
 <div class="columns">
 <div class="column">
 <div class="cell">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="chapter-calibration-binary_files/figure-html/plot-interval-band-1.svg?v=1789605397597" class="img-fluid figure-img" alt="One hundred competitor intervals recentered at the population target and compared with the green middle-95-percent width of the sampling distribution; their widths closely match."></p>
+<p><img src="chapter-calibration-binary_files/figure-html/plot-interval-band-1.svg" class="img-fluid figure-img" alt="One hundred competitor intervals recentered at the population target and compared with the green middle-95-percent width of the sampling distribution; their widths closely match."></p>
 <figcaption>Your competitors’ intervals, recentered for easy comparison of width to the sampling distribution’s.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 </div><div class="column">
-<p data-source-line="261">They didn’t know the point estimator’s actual sampling distribution, but they knew enough <em>about it</em> to choose the right interval width. That’s what we’re going to look into now. Over the course of this lecture and the next, we’ll work out what the sampling distributon of our estimator <em>can</em> look like and how what it <em>does</em> look like depends on the population. And we’ll see how to use that information to calibrate our intervals.</p>
+<p>They didn’t know the point estimator’s actual sampling distribution, but they knew enough <em>about it</em> to choose the right interval width. That’s what we’re going to look into now. Over the course of this lecture and the next, we’ll work out what the sampling distributon of our estimator <em>can</em> look like and how what it <em>does</em> look like depends on the population. And we’ll see how to use that information to calibrate our intervals.</p>
 </div>
 </div>
 
@@ -1221,7 +1289,7 @@ window._ojs.runtime.interpretFromScriptTags();
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../homework/homework-calibration-solutions.html" class="pagination-link" aria-label="Homework: The Idea of Calibration">
+      <a href="../homework/homework-calibration.html" class="pagination-link" aria-label="Homework: The Idea of Calibration">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span>
       </a>          
   </div>

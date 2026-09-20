@@ -1,4 +1,5 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -33,7 +34,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../chapters/chapter-normal-approximation.html" rel="next">
-
+<link href="../homework/homework-random-variables-and-moments.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -43,7 +44,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-fc47e451316820cd4726ab4d2a53c78b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c2285da70463f4438cb186c72dbe10d2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
 <link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
 <script src="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
@@ -93,7 +94,74 @@ ul.task-list li input[type="checkbox"] {
       }
     },
     loader: {load: ['[tex]/physics', '[tex]/unicode']},
-    tex: {packages: {'[+]': ['physics', 'unicode']}}
+    tex: {packages: {'[+]': ['physics', 'unicode']},
+      macros: {
+        E: '\operatorname{E}',
+        V: '\operatorname{V}',
+        Var: '\operatorname{\V}',
+        Cov: '\operatorname{Cov}',
+        sd: '\operatorname{sd}',
+        hVar: '\operatorname{\widehat{V}}',
+        bias: '\operatorname{bias}',
+        invlogit: '\operatorname{logit^{-1}}',
+        argmin: '\operatorname{argmin}',
+        R: '\mathbb{R}',
+        model: '\mathcal{M}',
+        all: '\text{all}',
+        Deltaall: '\Delta_{\text{all}}',
+        ind: ['1_{\{#1\}}', 1],
+        cb: ['\left\{ #1 \right\}', 1],
+        lcb: ['\color{gray}\left\{ \color{black} #1 \color{gray} \right\} \color{black}', 1],
+        pcb: ['\color{#EF476F}\left\{ \color{black} #1 \color{#EF476F} \right\} \color{black}', 1],
+        tcb: ['\color{#118AB2}\left\{ \color{black} #1 \color{#118AB2} \right\} \color{black}', 1],
+        mapbg: '\color{#06D6A0}',
+        polla: '\color{#073B4C}',
+        pollb: '\color{#EF476F}',
+        pollc: '\color{#118AB2}',
+        polld: '\color{#06D6A0}',
+        polle: '\color{#FFD166}',
+        groupa: '\color{#F8766D}',
+        groupb: '\color{#00BFC4}',
+        faded: '\color{#404040}',
+        inmapbg: ['\textcolor[RGB]{6,214,160}{#1}', 1],
+        inpolla: ['\textcolor[RGB]{7,59,76}{#1}', 1],
+        inpollb: ['\textcolor[RGB]{239,71,111}{#1}', 1],
+        inpollc: ['\textcolor[RGB]{17,138,178}{#1}', 1],
+        inpolld: ['\textcolor[RGB]{6,214,160}{#1}', 1],
+        inpolle: ['\textcolor[RGB]{255,209,102}{#1}', 1],
+        ingroupa: ['\textcolor[RGB]{248,118,109}{#1}', 1],
+        ingroupb: ['\textcolor[RGB]{0,191,196}{#1}', 1],
+        inred: ['\ingroupa{#1}', 1],
+        ingreen: ['\ingroupb{#1}', 1],
+        inblue: ['\textcolor[RGB]{0,0,255}{#1}', 1],
+        inmidnight: ['\inpolla{#1}', 1],
+        inpink: ['\inpollb{#1}', 1],
+        inteal: ['\inpollc{#1}', 1],
+        inpurple: ['\textcolor[RGB]{160,32,240}{#1}', 1],
+        ingray: ['\textcolor[RGB]{150,150,150}{#1}', 1],
+        alert: ['\textcolor[RGB]{128,128,128}{#1}', 1],
+        faint: ['\textcolor[RGB]{128,128,128}{#1}', 1],
+        veryfaint: ['\textcolor[RGB]{192,192,192}{#1}', 1],
+        wone: '\overset{\veryfaint{w}}{1}',
+        wzero: '\overset{\veryfaint{w}}{0}',
+        xone: '\overset{\veryfaint{x}}{1}',
+        xzero: '\overset{\veryfaint{x}}{0}',
+        mua: ['\ingroupa{\mu(0, #1)}', 1],
+        mub: ['\ingroupb{\mu(1, #1)}', 1],
+        pa: ['\ingroupa{p_{#1 \mid 0}}', 1],
+        pb: ['\ingroupb{p_{#1 \mid 1}}', 1],
+        pall: ['\inpurple{p_{#1}}', 1],
+        hmua: ['\ingroupa{\hat\mu(0, #1)}', 1],
+        hmub: ['\ingroupb{\hat\mu(1, #1)}', 1],
+        tmua: ['\ingroupa{\tilde\mu(0, #1)}', 1],
+        tmub: ['\ingroupb{\tilde\mu(1, #1)}', 1],
+        effect: ['\mub{x}-\mua{x}', 1],
+        heffect: ['\hmub{x}-\hmua{x}', 1],
+        with: '\ingroupb{\text{degree}}',
+        without: '\ingroupa{\text{no degree}}',
+        explain: ['\overset{\texttip{\small{\unicode{x2753}}}{#2}}{#1}', 2],
+        mathexplain: ['\overset{\mathtip{\small{\unicode{x2753}}}{#2}}{#1}', 2]
+      }}
   }
 </script>
 
@@ -138,7 +206,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">One-Sample Problems</li><li class="breadcrumb-item"><a href="../chapters/chapter-standard-deviation.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-standard-deviation.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -186,7 +254,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../homework/homework-descriptive-solutions.html" class="sidebar-item-text sidebar-link">
+  <a href="../homework/homework-descriptive.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework: Basic Descriptive Statistics</span></span></a>
   </div>
 </li>
@@ -194,8 +262,8 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            
- <span class="menu-text">One-Sample Problems</span>
+            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">One-Sample Problems</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -215,7 +283,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../homework/homework-calibration-solutions.html" class="sidebar-item-text sidebar-link">
+  <a href="../homework/homework-calibration.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
   </div>
 </li>
@@ -245,38 +313,38 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
+  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span>
+  <a href="../homework/homework-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span>
+  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -293,26 +361,26 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators</span></span>
+  <a href="../homework/homework-markov-chebyshev.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Probability Review</span></span>
+  <a href="../chapters/chapter-probability-review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Probability Review</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Variance, Standard Deviation, and Sample Size</span></span>
+  <a href="../chapters/chapter-variance-and-sample-size.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Variance, Standard Deviation, and Sample Size</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span>
+  <a href="../homework/homework-comparing-estimators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -323,16 +391,16 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span>
+  <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text">References</span>
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
   </div>
 </li>
     </ul>
@@ -358,7 +426,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">One-Sample Problems</li><li class="breadcrumb-item" data-source-line="97"><a href="../chapters/chapter-standard-deviation.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-standard-deviation.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></h1>
 </div>
@@ -405,14 +473,14 @@ window.Quarto = {
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="chapter-standard-deviation_files/figure-html/sds-markov-picture-1.svg?v=1789605397597" class="img-fluid figure-img" alt="The tail indicator jumps from zero to one at t. The increasing line x divided by t lies above it for every nonnegative x."></p>
+<p><img src="chapter-standard-deviation_files/figure-html/sds-markov-picture-1.svg" class="img-fluid figure-img" alt="The tail indicator jumps from zero to one at t. The increasing line x divided by t lies above it for every nonnegative x."></p>
 <figcaption>For nonnegative x, the line x/t lies above the tail indicator. Monotonicity turns this pointwise picture into Markov’s probability bound.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <section id="markovs-inequality" class="level1">
-<h1 data-source-line="150">Markov’s Inequality</h1>
+<h1>Markov’s Inequality</h1>
 <p>Markov’s inequality says that for a non-negative random variable <span class="math inline">\(X\)</span> and any <span class="math inline">\(t &gt; 0\)</span>, <span class="math display">\[
 P(X \ge t) \le \frac{\E[X]}{t}.
 \]</span></p>
@@ -486,7 +554,7 @@ P(|X-\E X|\ge k\sigma)\le \frac1{k^2}.
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="chapter-standard-deviation_files/figure-html/sds-chebyshev-picture-1.svg?v=1789605397597" class="img-fluid figure-img" alt="A bell-shaped density has both tails beyond two standard deviations shaded, illustrating that Chebyshev bounds their combined area."></p>
+<p><img src="chapter-standard-deviation_files/figure-html/sds-chebyshev-picture-1.svg" class="img-fluid figure-img" alt="A bell-shaped density has both tails beyond two standard deviations shaded, illustrating that Chebyshev bounds their combined area."></p>
 <figcaption>A density-shaped illustration of Chebyshev’s bound. The bound is on the combined shaded tail area, not on the height of the curve.</figcaption>
 </figure>
 </div>
@@ -502,14 +570,14 @@ P(|X-\E X|\ge k\sigma)\le \frac1{k^2}.
 </section>
 <section id="markovs-inequality-and-interval-estimation" class="level1">
 <h1>Markov’s Inequality and Interval Estimation</h1>
-<p data-source-line="152">So far, when we’ve calibrated interval estimates using our estimator’s standard deviation, we’ve relied on normal approximation. In effect, we’ve been using a formula for <span class="math inline">\(P(\lvert\hat\theta - \theta\rvert \le \epsilon)\)</span> that’s accurate when <span class="math inline">\(\hat\theta\)</span> has a normal distribution and close enough when its distribution is close enough to normal. In this problem, we’re going to think about doing without this reliance on approximate normality.</p>
-<p data-source-line="154">Let’s consider <span class="math inline">\(\hat\theta\)</span>, an unbiased estimator of <span class="math inline">\(\theta\)</span> with standard deviation <span class="math inline">\(\sigma\)</span>, so the normal approximation to the distribution of <span class="math inline">\(\hat\theta-\theta\)</span> has the density <span class="math inline">\(f_{0,\sigma}(x)\)</span> below.</p>
+<p>So far, when we’ve calibrated interval estimates using our estimator’s standard deviation, we’ve relied on normal approximation. In effect, we’ve been using a formula for <span class="math inline">\(P(\lvert\hat\theta - \theta\rvert \le \epsilon)\)</span> that’s accurate when <span class="math inline">\(\hat\theta\)</span> has a normal distribution and close enough when its distribution is close enough to normal. In this problem, we’re going to think about doing without this reliance on approximate normality.</p>
+<p>Let’s consider <span class="math inline">\(\hat\theta\)</span>, an unbiased estimator of <span class="math inline">\(\theta\)</span> with standard deviation <span class="math inline">\(\sigma\)</span>, so the normal approximation to the distribution of <span class="math inline">\(\hat\theta-\theta\)</span> has the density <span class="math inline">\(f_{0,\sigma}(x)\)</span> below.</p>
 <p><span class="math display">\[
 P\p*{|\hat\theta - \theta| \le \epsilon}
 \approx \int_{-\epsilon}^{\epsilon} f_{0,\sigma}(x) dx
 \qfor f_{0, \sigma}(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{-x^2/(2\sigma^2)}
 \]</span></p>
-<p data-source-line="163">The reason we’ve been talking about interval estimators of the form <span class="math inline">\(\hat\theta \pm 1.96 \sigma\)</span> is that, if this approximation were perfect, these interval estimators would have 95% coverage. That is, it’d be true that <span class="math inline">\(P(|\hat\theta-\theta| \le 1.96 \sigma) = .95\)</span>. And if the approximation is pretty good, we should still expect coverage close to that. But suppose we’re not confident that it is. Markov’s inequality allows us to calibrate interval estimates in terms of our estimator’s standard deviation <em>without any caveats</em> about its sampling distribution being approximately normal. Let’s give it a shot.</p>
+<p>The reason we’ve been talking about interval estimators of the form <span class="math inline">\(\hat\theta \pm 1.96 \sigma\)</span> is that, if this approximation were perfect, these interval estimators would have 95% coverage. That is, it’d be true that <span class="math inline">\(P(|\hat\theta-\theta| \le 1.96 \sigma) = .95\)</span>. And if the approximation is pretty good, we should still expect coverage close to that. But suppose we’re not confident that it is. Markov’s inequality allows us to calibrate interval estimates in terms of our estimator’s standard deviation <em>without any caveats</em> about its sampling distribution being approximately normal. Let’s give it a shot.</p>
 <div id="exr-sds-markov-interval" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 23.1</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -522,7 +590,7 @@ P\p*{|\hat\theta - \theta| \le \epsilon}
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="170">Let <span class="math inline">\(\hat\theta\)</span> be an unbiased estimator of <span class="math inline">\(\theta\)</span> with standard deviation <span class="math inline">\(\sigma\)</span>. By applying Markov’s inequality to <span class="math inline">\(|\hat\theta-\theta|^2\)</span>, find a <em>lower bound</em> on <span class="math inline">\(P(|\hat\theta-\theta| \le t\sigma)\)</span> as a function of <span class="math inline">\(t\)</span>. For what choice of <span class="math inline">\(t\)</span> is this bound equal to <span class="math inline">\(.95\)</span>? Explain how you can use this to get an interval estimate <span class="math inline">\(\hat\theta \pm t\sigma\)</span> with a coverage probability of at least 95%.</p>
+<p>Let <span class="math inline">\(\hat\theta\)</span> be an unbiased estimator of <span class="math inline">\(\theta\)</span> with standard deviation <span class="math inline">\(\sigma\)</span>. By applying Markov’s inequality to <span class="math inline">\(|\hat\theta-\theta|^2\)</span>, find a <em>lower bound</em> on <span class="math inline">\(P(|\hat\theta-\theta| \le t\sigma)\)</span> as a function of <span class="math inline">\(t\)</span>. For what choice of <span class="math inline">\(t\)</span> is this bound equal to <span class="math inline">\(.95\)</span>? Explain how you can use this to get an interval estimate <span class="math inline">\(\hat\theta \pm t\sigma\)</span> with a coverage probability of at least 95%.</p>
 </div>
 </div>
 </div>
@@ -538,7 +606,7 @@ P\p*{|\hat\theta - \theta| \le \epsilon}
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p data-source-line="178">If you have an upper bound on <span class="math inline">\(P(X &gt; \epsilon)\)</span>, then you have a lower bound on <span class="math inline">\(P(X \le \epsilon)\)</span>. <span class="math inline">\(P(X \le \epsilon)=1-P(X &gt; \epsilon)\)</span> because <span class="math inline">\(X &gt; \epsilon\)</span> if and only if it is not the case that <span class="math inline">\(X \le \epsilon\)</span>, so if <span class="math inline">\(P(X &gt; \epsilon) \le u\)</span>, then <span class="math inline">\(P(X \le \epsilon) = 1-P(X &gt; \epsilon) \ge 1-u\)</span>. And if you’re troubled that Markov’s inequality says <span class="math inline">\(\ge\)</span> instead of <span class="math inline">\(&gt;\)</span>, don’t be. You have a bound on <span class="math inline">\(P(X &gt; \epsilon)\)</span> too. <span class="math inline">\(P(X &gt; \epsilon) \le  P(X\ge \epsilon)\)</span> because <span class="math inline">\(X \ge \epsilon\)</span> whenever <span class="math inline">\(X &gt; \epsilon\)</span>.</p>
+<p>If you have an upper bound on <span class="math inline">\(P(X &gt; \epsilon)\)</span>, then you have a lower bound on <span class="math inline">\(P(X \le \epsilon)\)</span>. <span class="math inline">\(P(X \le \epsilon)=1-P(X &gt; \epsilon)\)</span> because <span class="math inline">\(X &gt; \epsilon\)</span> if and only if it is not the case that <span class="math inline">\(X \le \epsilon\)</span>, so if <span class="math inline">\(P(X &gt; \epsilon) \le u\)</span>, then <span class="math inline">\(P(X \le \epsilon) = 1-P(X &gt; \epsilon) \ge 1-u\)</span>. And if you’re troubled that Markov’s inequality says <span class="math inline">\(\ge\)</span> instead of <span class="math inline">\(&gt;\)</span>, don’t be. You have a bound on <span class="math inline">\(P(X &gt; \epsilon)\)</span> too. <span class="math inline">\(P(X &gt; \epsilon) \le  P(X\ge \epsilon)\)</span> because <span class="math inline">\(X \ge \epsilon\)</span> whenever <span class="math inline">\(X &gt; \epsilon\)</span>.</p>
 </div>
 </div>
 </div>
@@ -555,18 +623,18 @@ P\p*{|\hat\theta - \theta| \le \epsilon}
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution">
-<p data-source-line="186">Applying Markov’s inequality to <span class="math inline">\(|\hat\theta-\theta|^2\)</span>, which has mean-square <span class="math inline">\(\sigma^2\)</span> because <span class="math inline">\(\hat\theta\)</span> is unbiased, for <span class="math inline">\(\epsilon = (t\sigma)^2\)</span> gives</p>
-<p data-source-line="189"><span class="math display">\[
+<p>Applying Markov’s inequality to <span class="math inline">\(|\hat\theta-\theta|^2\)</span>, which has mean-square <span class="math inline">\(\sigma^2\)</span> because <span class="math inline">\(\hat\theta\)</span> is unbiased, for <span class="math inline">\(\epsilon = (t\sigma)^2\)</span> gives</p>
+<p><span class="math display">\[
 P(|\hat\theta-\theta|^2 \ge (t\sigma)^2) \le \frac{\E[(\hat\theta-\theta)^2]}{(t\sigma)^2} = \frac{\sigma^2}{(t\sigma)^2} = \frac{1}{t^2}.
 \]</span> The probability that <span class="math inline">\(|\hat\theta-\theta| &gt; t\sigma\)</span> is also no larger than <span class="math inline">\(1/t^2\)</span> because this happens <em>only if</em> <span class="math inline">\(|\hat\theta-\theta|^2 \ge (t\sigma)^2\)</span>. And it follows that the probability that <span class="math inline">\(|\hat\theta-\theta| \le t\sigma\)</span> is at least <span class="math inline">\(1-1/t^2\)</span>.</p>
-<p data-source-line="193">To find the value of <span class="math inline">\(t\)</span> that makes this lower bound equal to <span class="math inline">\(.95\)</span>, we solve <span class="math inline">\(1-1/t^2=.95\)</span> to find <span class="math inline">\(t=\sqrt{1/(1-.95)}= \sqrt{20} \approx 4.5\)</span>. And because <span class="math inline">\(\hat\theta \in [\theta - t\sigma, \theta + t\sigma]\)</span> if (and only if) <span class="math inline">\(|\hat\theta-\theta| \le t\sigma\)</span>, it follows that this interval has a coverage probability of at least <span class="math inline">\(.95\)</span>.</p>
+<p>To find the value of <span class="math inline">\(t\)</span> that makes this lower bound equal to <span class="math inline">\(.95\)</span>, we solve <span class="math inline">\(1-1/t^2=.95\)</span> to find <span class="math inline">\(t=\sqrt{1/(1-.95)}= \sqrt{20} \approx 4.5\)</span>. And because <span class="math inline">\(\hat\theta \in [\theta - t\sigma, \theta + t\sigma]\)</span> if (and only if) <span class="math inline">\(|\hat\theta-\theta| \le t\sigma\)</span>, it follows that this interval has a coverage probability of at least <span class="math inline">\(.95\)</span>.</p>
 </div>
 </div>
 </div>
 </div>
 </section>
 <section id="transition-honest-but-loose" class="level1">
-<h1 data-source-line="198">Transition: Honest but Loose</h1>
+<h1>Transition: Honest but Loose</h1>
 <!-- ============================================================================
   HOLE (transition into normal approximation): Chebyshev's interval is honest but
   LOOSE (sqrt(20) ~ 4.5 sigma vs the 1.96 you're used to) — that is the price of
@@ -574,8 +642,8 @@ P(|\hat\theta-\theta|^2 \ge (t\sigma)^2) \le \frac{\E[(\hat\theta-\theta)^2]}{(t
   little theory (the CLT — proof deferred to the post-exam "when you're older"
   enrichment) and the interval gets sharp. Sets up the normal-approximation chapter.
 ============================================================================ -->
-<p data-source-line="208">The guaranteed 95% interval reaches roughly <span class="math inline">\(4.5\)</span> standard deviations in both directions. The exact Binomial calculation students already know usually gives a much narrower interval. That comparison creates the next question: can we keep the cheap mean-and-standard-deviation calculation without paying for a uselessly wide universal guarantee?</p>
-<p data-source-line="213">Normal approximation answers yes. It keeps the same two moments and adds information about shape. The resulting interval is approximate rather than universal, but it is close to the sharp exact Binomial interval. The next chapter puts all three answers beside each other: exact, guaranteed, and approximate.</p>
+<p>The guaranteed 95% interval reaches roughly <span class="math inline">\(4.5\)</span> standard deviations in both directions. The exact Binomial calculation students already know usually gives a much narrower interval. That comparison creates the next question: can we keep the cheap mean-and-standard-deviation calculation without paying for a uselessly wide universal guarantee?</p>
+<p>Normal approximation answers yes. It keeps the same two moments and adds information about shape. The resulting interval is approximate rather than universal, but it is close to the sharp exact Binomial interval. The next chapter puts all three answers beside each other: exact, guaranteed, and approximate.</p>
 
 
 <script type="ojs-module-contents">
@@ -1263,9 +1331,9 @@ window._ojs.runtime.interpretFromScriptTags();
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span>
-                
+      <a href="../homework/homework-random-variables-and-moments.html" class="pagination-link" aria-label="Homework — Random Variables, Moments, and the Standard Deviation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../chapters/chapter-normal-approximation.html" class="pagination-link" aria-label="Normal Approximation">

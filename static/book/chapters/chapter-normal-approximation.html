@@ -1,4 +1,5 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -32,7 +33,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-
+<link href="../homework/homework-markov-chebyshev.html" rel="next">
 <link href="../chapters/chapter-standard-deviation.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -43,7 +44,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-fc47e451316820cd4726ab4d2a53c78b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c2285da70463f4438cb186c72dbe10d2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
 <link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
 <script src="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
@@ -93,7 +94,74 @@ ul.task-list li input[type="checkbox"] {
       }
     },
     loader: {load: ['[tex]/physics', '[tex]/unicode']},
-    tex: {packages: {'[+]': ['physics', 'unicode']}}
+    tex: {packages: {'[+]': ['physics', 'unicode']},
+      macros: {
+        E: '\operatorname{E}',
+        V: '\operatorname{V}',
+        Var: '\operatorname{\V}',
+        Cov: '\operatorname{Cov}',
+        sd: '\operatorname{sd}',
+        hVar: '\operatorname{\widehat{V}}',
+        bias: '\operatorname{bias}',
+        invlogit: '\operatorname{logit^{-1}}',
+        argmin: '\operatorname{argmin}',
+        R: '\mathbb{R}',
+        model: '\mathcal{M}',
+        all: '\text{all}',
+        Deltaall: '\Delta_{\text{all}}',
+        ind: ['1_{\{#1\}}', 1],
+        cb: ['\left\{ #1 \right\}', 1],
+        lcb: ['\color{gray}\left\{ \color{black} #1 \color{gray} \right\} \color{black}', 1],
+        pcb: ['\color{#EF476F}\left\{ \color{black} #1 \color{#EF476F} \right\} \color{black}', 1],
+        tcb: ['\color{#118AB2}\left\{ \color{black} #1 \color{#118AB2} \right\} \color{black}', 1],
+        mapbg: '\color{#06D6A0}',
+        polla: '\color{#073B4C}',
+        pollb: '\color{#EF476F}',
+        pollc: '\color{#118AB2}',
+        polld: '\color{#06D6A0}',
+        polle: '\color{#FFD166}',
+        groupa: '\color{#F8766D}',
+        groupb: '\color{#00BFC4}',
+        faded: '\color{#404040}',
+        inmapbg: ['\textcolor[RGB]{6,214,160}{#1}', 1],
+        inpolla: ['\textcolor[RGB]{7,59,76}{#1}', 1],
+        inpollb: ['\textcolor[RGB]{239,71,111}{#1}', 1],
+        inpollc: ['\textcolor[RGB]{17,138,178}{#1}', 1],
+        inpolld: ['\textcolor[RGB]{6,214,160}{#1}', 1],
+        inpolle: ['\textcolor[RGB]{255,209,102}{#1}', 1],
+        ingroupa: ['\textcolor[RGB]{248,118,109}{#1}', 1],
+        ingroupb: ['\textcolor[RGB]{0,191,196}{#1}', 1],
+        inred: ['\ingroupa{#1}', 1],
+        ingreen: ['\ingroupb{#1}', 1],
+        inblue: ['\textcolor[RGB]{0,0,255}{#1}', 1],
+        inmidnight: ['\inpolla{#1}', 1],
+        inpink: ['\inpollb{#1}', 1],
+        inteal: ['\inpollc{#1}', 1],
+        inpurple: ['\textcolor[RGB]{160,32,240}{#1}', 1],
+        ingray: ['\textcolor[RGB]{150,150,150}{#1}', 1],
+        alert: ['\textcolor[RGB]{128,128,128}{#1}', 1],
+        faint: ['\textcolor[RGB]{128,128,128}{#1}', 1],
+        veryfaint: ['\textcolor[RGB]{192,192,192}{#1}', 1],
+        wone: '\overset{\veryfaint{w}}{1}',
+        wzero: '\overset{\veryfaint{w}}{0}',
+        xone: '\overset{\veryfaint{x}}{1}',
+        xzero: '\overset{\veryfaint{x}}{0}',
+        mua: ['\ingroupa{\mu(0, #1)}', 1],
+        mub: ['\ingroupb{\mu(1, #1)}', 1],
+        pa: ['\ingroupa{p_{#1 \mid 0}}', 1],
+        pb: ['\ingroupb{p_{#1 \mid 1}}', 1],
+        pall: ['\inpurple{p_{#1}}', 1],
+        hmua: ['\ingroupa{\hat\mu(0, #1)}', 1],
+        hmub: ['\ingroupb{\hat\mu(1, #1)}', 1],
+        tmua: ['\ingroupa{\tilde\mu(0, #1)}', 1],
+        tmub: ['\ingroupb{\tilde\mu(1, #1)}', 1],
+        effect: ['\mub{x}-\mua{x}', 1],
+        heffect: ['\hmub{x}-\hmua{x}', 1],
+        with: '\ingroupb{\text{degree}}',
+        without: '\ingroupa{\text{no degree}}',
+        explain: ['\overset{\texttip{\small{\unicode{x2753}}}{#2}}{#1}', 2],
+        mathexplain: ['\overset{\mathtip{\small{\unicode{x2753}}}{#2}}{#1}', 2]
+      }}
   }
 </script>
 
@@ -138,7 +206,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">One-Sample Problems</li><li class="breadcrumb-item"><a href="../chapters/chapter-normal-approximation.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-normal-approximation.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -186,7 +254,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../homework/homework-descriptive-solutions.html" class="sidebar-item-text sidebar-link">
+  <a href="../homework/homework-descriptive.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework: Basic Descriptive Statistics</span></span></a>
   </div>
 </li>
@@ -194,8 +262,8 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            
- <span class="menu-text">One-Sample Problems</span>
+            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">One-Sample Problems</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -215,7 +283,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../homework/homework-calibration-solutions.html" class="sidebar-item-text sidebar-link">
+  <a href="../homework/homework-calibration.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
   </div>
 </li>
@@ -245,38 +313,38 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
+  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span>
+  <a href="../homework/homework-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span>
+  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -293,26 +361,26 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators</span></span>
+  <a href="../homework/homework-markov-chebyshev.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Probability Review</span></span>
+  <a href="../chapters/chapter-probability-review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Probability Review</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Variance, Standard Deviation, and Sample Size</span></span>
+  <a href="../chapters/chapter-variance-and-sample-size.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Variance, Standard Deviation, and Sample Size</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span>
+  <a href="../homework/homework-comparing-estimators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -323,16 +391,16 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span>
+  <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  
- <span class="menu-text">References</span>
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
   </div>
 </li>
     </ul>
@@ -376,9 +444,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">One-Sample Problems</li><li class="breadcrumb-item" data-source-line="146"><a href="../chapters/chapter-normal-approximation.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-normal-approximation.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title" data-source-line="180"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></h1>
+<h1 class="title"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></h1>
 </div>
 
 
@@ -450,7 +518,7 @@ y_j^*  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-binomial-vs-hypergeometric-1.svg?v=1789605397597" class="img-fluid figure-img" alt="The teal bootstrap distribution of a sample proportion closely overlaps the red exact Binomial sampling distribution when sampling with replacement."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/plot-binomial-vs-hypergeometric-1.svg" class="img-fluid figure-img" alt="The teal bootstrap distribution of a sample proportion closely overlaps the red exact Binomial sampling distribution when sampling with replacement."></p>
 <figcaption>Sampling with replacement</figcaption>
 </figure>
 </div>
@@ -458,7 +526,7 @@ y_j^*  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-binomial-vs-hypergeometric-2.svg?v=1789605397597" class="img-fluid figure-img" alt="The teal bootstrap distribution is wider than the blue exact Hypergeometric sampling distribution when sampling half of a finite population without replacement."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/plot-binomial-vs-hypergeometric-2.svg" class="img-fluid figure-img" alt="The teal bootstrap distribution is wider than the blue exact Hypergeometric sampling distribution when sampling half of a finite population without replacement."></p>
 <figcaption>Sampling without replacement</figcaption>
 </figure>
 </div>
@@ -475,7 +543,7 @@ y_j^*  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
 </section>
 </section>
 <section id="sec-normal-approximation" class="level1">
-<h1 data-source-line="364">Normal Approximation</h1>
+<h1>Normal Approximation</h1>
 <section id="the-normal-distribution" class="level2">
 <h2 class="anchored" data-anchor-id="the-normal-distribution">The Normal Distribution</h2>
 <div class="cell quarto-layout-panel" data-layout-ncol="2">
@@ -483,7 +551,7 @@ y_j^*  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-normal-family-1.svg?v=1789605397597" class="img-fluid figure-img" alt="Three normal density curves have the same spread and different means at minus two, zero, and two; changing the mean shifts the curve horizontally without changing its shape."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/plot-normal-family-1.svg" class="img-fluid figure-img" alt="Three normal density curves have the same spread and different means at minus two, zero, and two; changing the mean shifts the curve horizontally without changing its shape."></p>
 <figcaption>Different means θ</figcaption>
 </figure>
 </div>
@@ -491,7 +559,7 @@ y_j^*  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-normal-family-2.svg?v=1789605397597" class="img-fluid figure-img" alt="Three normal density curves share mean zero and have standard deviations one-half, one, and two; larger standard deviation produces a wider, lower curve."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/plot-normal-family-2.svg" class="img-fluid figure-img" alt="Three normal density curves share mean zero and have standard deviations one-half, one, and two; larger standard deviation produces a wider, lower curve."></p>
 <figcaption>Different standard deviations σ</figcaption>
 </figure>
 </div>
@@ -506,7 +574,7 @@ P_{\theta,\sigma}(X \in [a,b]) = \int_a^b  f_{\theta,\sigma}(x)dx \qfor f_{\thet
 </section>
 <section id="normal-approximation" class="level2">
 <h2 class="anchored" data-anchor-id="normal-approximation">Normal Approximation</h2>
-<div id="fig-normal-approx" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-labels="n = 10,n = 30,n = 90" data-mode="steps" data-layout="sidebar">
+<div id="fig-normal-approx" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-mode="steps" data-layout="sidebar" data-labels="n = 10,n = 30,n = 90">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-normal-approx-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
@@ -514,7 +582,7 @@ P_{\theta,\sigma}(X \in [a,b]) = \int_a^b  f_{\theta,\sigma}(x)dx \qfor f_{\thet
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-10-1.svg?v=1789605397597" class="img-fluid figure-img" alt="For ten fair coin flips, the discrete Binomial distribution of the sample proportion is visibly jagged while its overlaid normal approximation is smooth."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-10-1.svg" class="img-fluid figure-img" alt="For ten fair coin flips, the discrete Binomial distribution of the sample proportion is visibly jagged while its overlaid normal approximation is smooth."></p>
 </figure>
 </div>
 </div>
@@ -525,7 +593,7 @@ P_{\theta,\sigma}(X \in [a,b]) = \int_a^b  f_{\theta,\sigma}(x)dx \qfor f_{\thet
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-30-1.svg?v=1789605397597" class="img-fluid figure-img" alt="For thirty fair coin flips, the discrete Binomial distribution of the sample proportion lies more closely along its overlaid normal approximation."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-30-1.svg" class="img-fluid figure-img" alt="For thirty fair coin flips, the discrete Binomial distribution of the sample proportion lies more closely along its overlaid normal approximation."></p>
 </figure>
 </div>
 </div>
@@ -536,7 +604,7 @@ P_{\theta,\sigma}(X \in [a,b]) = \int_a^b  f_{\theta,\sigma}(x)dx \qfor f_{\thet
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-90-1.svg?v=1789605397597" class="img-fluid figure-img" alt="For ninety fair coin flips, the narrow discrete Binomial distribution of the sample proportion closely follows its overlaid normal approximation."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-90-1.svg" class="img-fluid figure-img" alt="For ninety fair coin flips, the narrow discrete Binomial distribution of the sample proportion closely follows its overlaid normal approximation."></p>
 </figure>
 </div>
 </div>
@@ -581,7 +649,7 @@ Figure&nbsp;20.1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-normal-width-1.svg?v=1789605397597" class="img-fluid figure-img" alt="Standard normal density with vertical reference lines at the mean, one standard deviation on either side, and two standard deviations on either side. The central intervals contain progressively more of the distribution."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/plot-normal-width-1.svg" class="img-fluid figure-img" alt="Standard normal density with vertical reference lines at the mean, one standard deviation on either side, and two standard deviations on either side. The central intervals contain progressively more of the distribution."></p>
 </figure>
 </div>
 </div>
@@ -595,13 +663,13 @@ Figure&nbsp;20.1
 <p>To get almost exactly 95% of draws, we go out 1.96 standard deviations: <span class="math inline">\(\theta \pm 1.96\sigma\)</span>. Two is close enough in practice, but we tend to write 1.96 anyway. It’s a signal about what we’re doing. You can get a 2 anywhere in a calculation. When you see a 1.96, you know you’re talking about the middle 95% of the normal.</p>
 </section>
 <section id="calibration-using-normal-approximation" class="level2">
-<h2 class="anchored" data-anchor-id="calibration-using-normal-approximation" data-source-line="440">Calibration Using Normal Approximation</h2>
+<h2 class="anchored" data-anchor-id="calibration-using-normal-approximation">Calibration Using Normal Approximation</h2>
 <div class="cell quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-actual-vs-estimated-sampling-dist-1.svg?v=1789605397597" class="img-fluid figure-img" alt="The true Binomial sampling distribution and its normal approximation, with a simulated estimate marked and red exact-Binomial and blue normal-approximation intervals nearly overlapping."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/plot-actual-vs-estimated-sampling-dist-1.svg" class="img-fluid figure-img" alt="The true Binomial sampling distribution and its normal approximation, with a simulated estimate marked and red exact-Binomial and blue normal-approximation intervals nearly overlapping."></p>
 <figcaption>The (Binomial) sampling distribution and its normal approximation.</figcaption>
 </figure>
 </div>
@@ -609,7 +677,7 @@ Figure&nbsp;20.1
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-actual-vs-estimated-sampling-dist-2.svg?v=1789605397597" class="img-fluid figure-img" alt="Estimated Binomial and normal sampling distributions centered at the observed sample proportion, with their corresponding red and blue intervals nearly overlapping."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/plot-actual-vs-estimated-sampling-dist-2.svg" class="img-fluid figure-img" alt="Estimated Binomial and normal sampling distributions centered at the observed sample proportion, with their corresponding red and blue intervals nearly overlapping."></p>
 <figcaption>Binomial and normal estimates of the sampling distribution.</figcaption>
 </figure>
 </div>
@@ -644,13 +712,13 @@ Figure&nbsp;20.1
 <div class="cell quarto-layout-panel" data-layout-ncol="3">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-with-replacement-1.svg?v=1789605397597" class="img-fluid" alt="Binomial distributions and normal approximations for sample proportions from 10 fair draws with replacement; the discrete bars remain visibly coarse."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-with-replacement-1.svg" class="img-fluid" alt="Binomial distributions and normal approximations for sample proportions from 10 fair draws with replacement; the discrete bars remain visibly coarse."></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-with-replacement-2.svg?v=1789605397597" class="img-fluid" alt="Binomial distributions and normal approximations for sample proportions from 30 fair draws with replacement; the bars follow the normal curve more closely."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-with-replacement-2.svg" class="img-fluid" alt="Binomial distributions and normal approximations for sample proportions from 30 fair draws with replacement; the bars follow the normal curve more closely."></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-with-replacement-3.svg?v=1789605397597" class="img-fluid" alt="Binomial distributions and normal approximations for sample proportions from 90 fair draws with replacement; the narrow bars closely follow the normal curve."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-with-replacement-3.svg" class="img-fluid" alt="Binomial distributions and normal approximations for sample proportions from 90 fair draws with replacement; the narrow bars closely follow the normal curve."></p>
 </div>
 </div>
 </div>
@@ -668,13 +736,13 @@ Figure&nbsp;20.1
 <div class="cell quarto-layout-panel" data-layout-ncol="3">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-hypergeometric-without-replacement-1.svg?v=1789605397597" class="img-fluid" alt="Hypergeometric distributions and normal approximations for sample proportions from 10 draws without replacement from a balanced population of 20; the discrete bars are coarse."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/plot-hypergeometric-without-replacement-1.svg" class="img-fluid" alt="Hypergeometric distributions and normal approximations for sample proportions from 10 draws without replacement from a balanced population of 20; the discrete bars are coarse."></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-hypergeometric-without-replacement-2.svg?v=1789605397597" class="img-fluid" alt="Hypergeometric distributions and normal approximations for sample proportions from 30 draws without replacement from a balanced population of 60; the bars follow the normal curve more closely."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/plot-hypergeometric-without-replacement-2.svg" class="img-fluid" alt="Hypergeometric distributions and normal approximations for sample proportions from 30 draws without replacement from a balanced population of 60; the bars follow the normal curve more closely."></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-hypergeometric-without-replacement-3.svg?v=1789605397597" class="img-fluid" alt="Hypergeometric distributions and normal approximations for sample proportions from 90 draws without replacement from a balanced population of 180; the narrow bars closely follow the normal curve."></p>
+<p><img src="chapter-normal-approximation_files/figure-html/plot-hypergeometric-without-replacement-3.svg" class="img-fluid" alt="Hypergeometric distributions and normal approximations for sample proportions from 90 draws without replacement from a balanced population of 180; the narrow bars closely follow the normal curve."></p>
 </div>
 </div>
 </div>
@@ -694,18 +762,18 @@ Figure&nbsp;20.1
 &amp;f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n} &amp;&amp; \text{a proportion when sampling with replacement} \\
 &amp;f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n} \times \frac{m-n}{m-1} &amp;&amp; \text{a proportion when sampling without replacement}
 \end{aligned}\]</span>
-<p data-source-line="447">What makes all this work is that we’re using good estimates of our estimator’s standard deviation. If we have a formula for the estimator’s standard deviation, this is usually not so hard. We estimate whatever population summaries show up in the formula and plug them in.</p>
-<p data-source-line="449">But we do need to do a bit of work to get that formula. The standard deviation of the sample proportion is <span class="math inline">\(\sqrt{\theta(1-\theta)/n}\)</span> when we sample with replacement and <span class="math inline">\(\sqrt{\theta(1-\theta)/n} \times \sqrt{(m-n)/(m-1)}\)</span> when we sample without replacement. You’ve already seen these formulas—they showed up in the normal approximations we just discussed. We’ll derive them after we’ve built up tools for working with expectations and variances.</p>
+<p>What makes all this work is that we’re using good estimates of our estimator’s standard deviation. If we have a formula for the estimator’s standard deviation, this is usually not so hard. We estimate whatever population summaries show up in the formula and plug them in.</p>
+<p>But we do need to do a bit of work to get that formula. The standard deviation of the sample proportion is <span class="math inline">\(\sqrt{\theta(1-\theta)/n}\)</span> when we sample with replacement and <span class="math inline">\(\sqrt{\theta(1-\theta)/n} \times \sqrt{(m-n)/(m-1)}\)</span> when we sample without replacement. You’ve already seen these formulas—they showed up in the normal approximations we just discussed. We’ll derive them after we’ve built up tools for working with expectations and variances.</p>
 </section>
 </section>
 <section id="appendix" class="level1">
-<h1 data-source-line="451">Appendix</h1>
-<p data-source-line="453">Nothing here will show up on an exam.</p>
+<h1>Appendix</h1>
+<p>Nothing here will show up on an exam.</p>
 <section id="sec-a-blessing" class="level2">
-<h2 class="anchored" data-anchor-id="sec-a-blessing" data-source-line="455">Why Continuous Distribution is a Blessing</h2>
-<p data-source-line="457">Think about what happens when you tried to compare binomial distributions for different sample sizes <span class="math inline">\(n\)</span>. If you’re lucky, and your sample sizes are all multiples of each other, then the probability shown in one wide bar gets split up into several narrow bars when sample size increases. E.g., how the probability in the bar <span class="math inline">\(5/10\)</span> gets split into <span class="math inline">\(14/30\)</span>, <span class="math inline">\(15/30\)</span>, and <span class="math inline">\(16/30\)</span> and then into <span class="math inline">\(42/90 \ldots 48/90\)</span> as sample size goes from <span class="math inline">\(10\)</span> to <span class="math inline">\(30\)</span> to <span class="math inline">\(90\)</span>.</p>
-<p data-source-line="459">If your sample sizes aren’t multiples, we don’t just split up one wide bar’s probability into several narrow ones. For the narrow bars we see straddling two wide bars, we have to ‘merge’ probability from two wide bars. It’s a mess. And using bars hides the worst of it. Most of the points that have mass for one <span class="math inline">\(n\)</span> will have none for the others. It’s not possible to have a sample mean of <span class="math inline">\(5/10\)</span> with a sample size of <span class="math inline">\(25\)</span>. It’s the wrong denominator. Probability mass at <span class="math inline">\(\hat\theta = 1/2\)</span> can go from maximal for <span class="math inline">\(n=10\)</span> to zero for <span class="math inline">\(n=25\)</span> even if the population mean is the same: always <span class="math inline">\(\theta=1/2\)</span>.</p>
-<p data-source-line="461">Using an approximation with zero mass at any particular point, like the normal distribution, lets us avoid all this. We do have to integrate whenever we want to calculate a probability. But we can easily compare the probabilities of the same interval at different sample sizes. In a sense, all the ‘splitting’ and ‘merging’ is built into the approximation.</p>
+<h2 class="anchored" data-anchor-id="sec-a-blessing">Why Continuous Distribution is a Blessing</h2>
+<p>Think about what happens when you tried to compare binomial distributions for different sample sizes <span class="math inline">\(n\)</span>. If you’re lucky, and your sample sizes are all multiples of each other, then the probability shown in one wide bar gets split up into several narrow bars when sample size increases. E.g., how the probability in the bar <span class="math inline">\(5/10\)</span> gets split into <span class="math inline">\(14/30\)</span>, <span class="math inline">\(15/30\)</span>, and <span class="math inline">\(16/30\)</span> and then into <span class="math inline">\(42/90 \ldots 48/90\)</span> as sample size goes from <span class="math inline">\(10\)</span> to <span class="math inline">\(30\)</span> to <span class="math inline">\(90\)</span>.</p>
+<p>If your sample sizes aren’t multiples, we don’t just split up one wide bar’s probability into several narrow ones. For the narrow bars we see straddling two wide bars, we have to ‘merge’ probability from two wide bars. It’s a mess. And using bars hides the worst of it. Most of the points that have mass for one <span class="math inline">\(n\)</span> will have none for the others. It’s not possible to have a sample mean of <span class="math inline">\(5/10\)</span> with a sample size of <span class="math inline">\(25\)</span>. It’s the wrong denominator. Probability mass at <span class="math inline">\(\hat\theta = 1/2\)</span> can go from maximal for <span class="math inline">\(n=10\)</span> to zero for <span class="math inline">\(n=25\)</span> even if the population mean is the same: always <span class="math inline">\(\theta=1/2\)</span>.</p>
+<p>Using an approximation with zero mass at any particular point, like the normal distribution, lets us avoid all this. We do have to integrate whenever we want to calculate a probability. But we can easily compare the probabilities of the same interval at different sample sizes. In a sense, all the ‘splitting’ and ‘merging’ is built into the approximation.</p>
 
 
 <script type="ojs-module-contents">
@@ -1399,9 +1467,9 @@ window._ojs.runtime.interpretFromScriptTags();
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      
+      <a href="../homework/homework-markov-chebyshev.html" class="pagination-link" aria-label="Homework: RVs, Markov's Inequality, Chebyshev's Inequality, Biased Estimators">
         <span class="nav-page-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators</span></span> <i class="bi bi-arrow-right-short"></i>
-      
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
