@@ -237,6 +237,132 @@
       }
     },
     {
+      "file": "part-breather.html",
+      "title": "The Social Pressure Experiment",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "part-breather.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-stein-normal.html",
+      "title": "Why the CLT Works — Stein’s Method",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-stein-normal.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-poisson-approximation.html",
+      "title": "When Normal Breaks Down — Poisson Approximation and Quality Control",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-poisson-approximation.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-stein-poisson.html",
+      "title": "Stein’s Method and Poisson Approximation",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-stein-poisson.qmd"
+      }
+    },
+    {
+      "file": "part2-two-sample.html",
+      "title": "The Social Pressure Experiment",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "part2-two-sample.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-comparing-two-groups.html",
+      "title": "Comparing Two Groups",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-comparing-two-groups.qmd"
+      }
+    },
+    {
+      "file": "homework/homework-bias-two-groups.html",
+      "title": "Homework: Bias with Two Groups",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "homework/homework-bias-two-groups.qmd"
+      }
+    },
+    {
+      "file": "homework/homework-sample-size-two-sample.html",
+      "title": "Homework: Sample Size Calculation for Two-Sample Problems",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "homework/homework-sample-size-two-sample.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-potential-outcomes-randomization.html",
+      "title": "Potential Outcomes and Randomization",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-potential-outcomes-randomization.qmd"
+      }
+    },
+    {
+      "file": "homework/homework-causality.html",
+      "title": "Homework: Causality",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "homework/homework-causality.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-sampling-and-randomization.html",
+      "title": "Sampling and Randomization",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-sampling-and-randomization.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-observational-confounding.html",
+      "title": "Observational Studies and Confounding",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-observational-confounding.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-models.html",
+      "title": "Models",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-models.qmd"
+      }
+    },
+    {
+      "file": "exams/practice-midterm-2.html",
+      "title": "Practice Midterm 2",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "exams/practice-midterm-2.qmd"
+      }
+    },
+    {
       "file": "references.html",
       "title": "The Social Pressure Experiment",
       "source": {
