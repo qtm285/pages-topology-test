@@ -787,16 +787,16 @@ window.Quarto = {
 <p>$$</p>
 </div>
 <section id="summary" class="level1">
-<h1 data-source-line="35">Summary</h1>
-<p data-source-line="37">In this homework, we’ll work with the potential outcomes framework for causal inference. We’ll start with a small example to build intuition, then use the Michigan social pressure experiment to see how randomization works in practice.</p>
-<p data-source-line="39">We’ll use the tidyverse.</p>
+<h1 data-source-line="36">Summary</h1>
+<p data-source-line="38">In this homework, we’ll work with the potential outcomes framework for causal inference. We’ll start with a small example to build intuition, then use the Michigan social pressure experiment to see how randomization works in practice.</p>
+<p data-source-line="40">We’ll use the tidyverse.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="potential-outcomes" class="level1">
-<h1 data-source-line="46">Potential Outcomes</h1>
-<p data-source-line="48">In our lecture on randomized experiments, we introduced the potential outcomes framework. Each person <span class="math inline">j</span> in a population has two potential outcomes:</p>
+<h1 data-source-line="47">Potential Outcomes</h1>
+<p data-source-line="49">In our lecture on randomized experiments, we introduced the potential outcomes framework. Each person <span class="math inline">j</span> in a population has two potential outcomes:</p>
 <ul>
 <li><span class="math inline">y_j(1)</span> is the outcome they would have if treated</li>
 <li><span class="math inline">y_j(0)</span> is the outcome they would have if untreated</li>
@@ -805,8 +805,8 @@ window.Quarto = {
 \bar\tau = \frac{1}{m}\sum_{j=1}^m \tau_j = \frac{1}{m}\sum_{j=1}^m \{y_j(1) - y_j(0)\}.
 </span></p>
 <section id="a-tiny-example" class="level2">
-<h2 class="anchored" data-anchor-id="a-tiny-example" data-source-line="58">A Tiny Example</h2>
-<p data-source-line="60">Consider this population of 6 people.</p>
+<h2 class="anchored" data-anchor-id="a-tiny-example" data-source-line="59">A Tiny Example</h2>
+<p data-source-line="61">Consider this population of 6 people.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tiny.pop <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">j =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>,</span>
@@ -835,32 +835,7 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="75">Calculate the average treatment effect <span class="math inline">\bar\tau</span> for this population. Show your work.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ate <span class="ot">=</span> <span class="fu">mean</span>(tiny.pop<span class="sc">$</span>tau)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.166667</code></pre>
-</div>
-</div>
-<p data-source-line="86">Or by hand: <span class="math inline">\bar\tau = \frac{1}{6}(4 + 0 + 3 + 0 + 4 + 2) = \frac{13}{6} \approx 2.17</span>.</p>
-</div>
+<p data-source-line="76">Calculate the average treatment effect <span class="math inline">\bar\tau</span> for this population. Show your work.</p>
 </div>
 </div>
 </div>
@@ -879,51 +854,9 @@ window.Quarto = {
 <p>Suppose we assign treatments <span class="math inline">w_1 \ldots w_6 = (1, 0, 1, 0, 1, 0)</span>. That is, persons 1, 3, and 5 are treated and persons 2, 4, and 6 are untreated.</p>
 <ol type="1">
 <li>What realized outcome <span class="math inline">y_j(w_j)</span> do we observe for each person?</li>
-<li data-source-line="93">Calculate the difference in group means: <span class="math inline">\hat\tau = \frac{1}{3}\sum_{j:w_j=1} y_j(w_j) - \frac{1}{3}\sum_{j:w_j=0} y_j(w_j)</span>.</li>
-<li data-source-line="94">Is <span class="math inline">\hat\tau</span> equal to <span class="math inline">\bar\tau</span>? Why or why not?</li>
+<li data-source-line="94">Calculate the difference in group means: <span class="math inline">\hat\tau = \frac{1}{3}\sum_{j:w_j=1} y_j(w_j) - \frac{1}{3}\sum_{j:w_j=0} y_j(w_j)</span>.</li>
+<li data-source-line="95">Is <span class="math inline">\hat\tau</span> equal to <span class="math inline">\bar\tau</span>? Why or why not?</li>
 </ol>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<ol type="1">
-<li>The realized outcomes are:
-<ul>
-<li>Person 1: <span class="math inline">y_1(1) = 6</span></li>
-<li>Person 2: <span class="math inline">y_2(0) = 0</span></li>
-<li>Person 3: <span class="math inline">y_3(1) = 4</span></li>
-<li>Person 4: <span class="math inline">y_4(0) = 7</span></li>
-<li>Person 5: <span class="math inline">y_5(1) = 8</span></li>
-<li>Person 6: <span class="math inline">y_6(0) = 0</span></li>
-</ul></li>
-<li data-source-line="106">The difference in group means is:</li>
-</ol>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>w <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>realized <span class="ot">=</span> <span class="fu">ifelse</span>(w <span class="sc">==</span> <span class="dv">1</span>, tiny.pop<span class="sc">$</span>y1, tiny.pop<span class="sc">$</span>y0)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>tau.hat <span class="ot">=</span> <span class="fu">mean</span>(realized[w <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(realized[w <span class="sc">==</span> <span class="dv">0</span>])</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>tau.hat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 3.666667</code></pre>
-</div>
-</div>
-<p data-source-line="116">Or by hand: <span class="math inline">\hat\tau = \frac{6 + 4 + 8}{3} - \frac{0 + 7 + 0}{3} = 6 - 2.33 = 3.67</span>.</p>
-<ol start="3" type="1">
-<li data-source-line="118">No, <span class="math inline">\hat\tau \neq \bar\tau</span>. The estimate <span class="math inline">\hat\tau = 3.67</span> is different from the true ATE <span class="math inline">\bar\tau = 2.17</span>. This is because we’re comparing different people in different groups. The treated group happens to have higher <span class="math inline">y_j(0)</span> values on average than the untreated group, which inflates our estimate.</li>
-</ol>
-</div>
 </div>
 </div>
 </div>
@@ -940,43 +873,15 @@ window.Quarto = {
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
 <p>Now suppose we assign treatments <span class="math inline">w_1 \ldots w_6 = (0, 1, 0, 1, 0, 1)</span>. That is, persons 2, 4, and 6 are treated and persons 1, 3, and 5 are untreated.</p>
-<p data-source-line="124">Calculate <span class="math inline">\hat\tau</span> for this assignment. How does it compare to the true ATE?</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>w <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>realized <span class="ot">=</span> <span class="fu">ifelse</span>(w <span class="sc">==</span> <span class="dv">1</span>, tiny.pop<span class="sc">$</span>y1, tiny.pop<span class="sc">$</span>y0)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>tau.hat <span class="ot">=</span> <span class="fu">mean</span>(realized[w <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(realized[w <span class="sc">==</span> <span class="dv">0</span>])</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>tau.hat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.6666667</code></pre>
-</div>
-</div>
-<p data-source-line="137">Or by hand: <span class="math inline">\hat\tau = \frac{0 + 7 + 2}{3} - \frac{2 + 1 + 4}{3} = 3 - 2.33 = 0.67</span>.</p>
-<p data-source-line="139">This estimate is below the true ATE of 2.17. Different treatment assignments give different estimates.</p>
-</div>
+<p data-source-line="125">Calculate <span class="math inline">\hat\tau</span> for this assignment. How does it compare to the true ATE?</p>
 </div>
 </div>
 </div>
 </section>
 </section>
 <section id="randomization" class="level1">
-<h1 data-source-line="142">Randomization</h1>
-<p data-source-line="144">The key insight is that if we <em>randomize</em> treatment assignment, our estimator <span class="math inline">\hat\tau</span> is unbiased for the true ATE <span class="math inline">\bar\tau</span>. Different randomizations give different estimates, but on average they’re right.</p>
+<h1 data-source-line="143">Randomization</h1>
+<p data-source-line="145">The key insight is that if we <em>randomize</em> treatment assignment, our estimator <span class="math inline">\hat\tau</span> is unbiased for the true ATE <span class="math inline">\bar\tau</span>. Different randomizations give different estimates, but on average they’re right.</p>
 <div id="exr-all-randomizations" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 35.1</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -989,82 +894,34 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="147">There are <span class="math inline">\binom{6}{3} = 20</span> ways to choose 3 people out of 6 to treat. For each of these 20 treatment assignments:</p>
+<p data-source-line="148">There are <span class="math inline">\binom{6}{3} = 20</span> ways to choose 3 people out of 6 to treat. For each of these 20 treatment assignments:</p>
 <ol type="1">
-<li data-source-line="149">Calculate <span class="math inline">\hat\tau</span>.</li>
-<li data-source-line="150">Calculate the mean of all 20 values of <span class="math inline">\hat\tau</span>.</li>
-<li data-source-line="151">Compare this mean to <span class="math inline">\bar\tau</span>. What do you notice?</li>
+<li data-source-line="150">Calculate <span class="math inline">\hat\tau</span>.</li>
+<li data-source-line="151">Calculate the mean of all 20 values of <span class="math inline">\hat\tau</span>.</li>
+<li data-source-line="152">Compare this mean to <span class="math inline">\bar\tau</span>. What do you notice?</li>
 </ol>
-<p data-source-line="153"><em>Hint</em>. You can use <code>combn(6, 3)</code> in R to generate all ways to choose 3 items from 6.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate all ways to choose 3 people to treat</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>assignments <span class="ot">=</span> <span class="fu">combn</span>(<span class="dv">6</span>, <span class="dv">3</span>)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># For each assignment, calculate tau.hat</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>tau.hats <span class="ot">=</span> <span class="fu">apply</span>(assignments, <span class="dv">2</span>, <span class="cf">function</span>(treated) {</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">6</span>)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  w[treated] <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  realized <span class="ot">=</span> <span class="fu">ifelse</span>(w <span class="sc">==</span> <span class="dv">1</span>, tiny.pop<span class="sc">$</span>y1, tiny.pop<span class="sc">$</span>y0)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(realized[w <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(realized[w <span class="sc">==</span> <span class="dv">0</span>])</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Show all estimates</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">assignment =</span> <span class="fu">apply</span>(assignments, <span class="dv">2</span>, paste, <span class="at">collapse =</span> <span class="st">","</span>),</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">tau.hat =</span> <span class="fu">round</span>(tau.hats, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div data-pagedtable="false">
-  <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":["assignment"],"name":[1],"type":["chr"],"align":["left"]},{"label":["tau.hat"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"1,2,3","2":"-0.333"},{"1":"1,2,4","2":"2.667"},{"1":"1,2,5","2":"2.000"},{"1":"1,2,6","2":"-1.333"},{"1":"1,3,4","2":"4.333"},{"1":"1,3,5","2":"3.667"},{"1":"1,3,6","2":"0.333"},{"1":"1,4,5","2":"6.667"},{"1":"1,4,6","2":"3.333"},{"1":"1,5,6","2":"2.667"},{"1":"2,3,4","2":"1.667"},{"1":"2,3,5","2":"1.000"},{"1":"2,3,6","2":"-2.333"},{"1":"2,4,5","2":"4.000"},{"1":"2,4,6","2":"0.667"},{"1":"2,5,6","2":"0.000"},{"1":"3,4,5","2":"5.667"},{"1":"3,4,6","2":"2.333"},{"1":"3,5,6","2":"1.667"},{"1":"4,5,6","2":"4.667"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-</div>
-</div>
-<p data-source-line="176">The mean of all estimates:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(tau.hats)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.166667</code></pre>
-</div>
-</div>
-<p>This equals the true ATE <span class="math inline">\bar\tau = 2.167</span>. When we average over all possible randomizations, we get exactly the right answer. This is what it means for <span class="math inline">\hat\tau</span> to be unbiased.</p>
-</div>
+<p data-source-line="154"><em>Hint</em>. You can use <code>combn(6, 3)</code> in R to generate all ways to choose 3 items from 6.</p>
 </div>
 </div>
 </div>
 </section>
 <section id="the-michigan-social-pressure-experiment" class="level1">
-<h1 data-source-line="186">The Michigan Social Pressure Experiment</h1>
-<p data-source-line="188">Now let’s work with real data. In 2006, Gerber, Green, and Larimer ran an experiment in Michigan to see what messages would increase voter turnout. They randomly assigned households to receive different letters.</p>
+<h1 data-source-line="187">The Michigan Social Pressure Experiment</h1>
+<p data-source-line="189">Now let’s work with real data. In 2006, Gerber, Green, and Larimer ran an experiment in Michigan to see what messages would increase voter turnout. They randomly assigned households to receive different letters.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>social.pressure <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">'../data/social-pressure-data.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>social.pressure <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">'../data/social-pressure-data.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p data-source-line="196">We’ll focus on two groups: the control group (no letter) and the “Neighbors” group (a letter showing their neighbors’ voting records).</p>
+<p data-source-line="197">We’ll focus on two groups: the control group (no letter) and the “Neighbors” group (a letter showing their neighbors’ voting records).</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>michigan <span class="ot">=</span> social.pressure <span class="sc">|&gt;</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(treatment <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">' Control'</span>, <span class="st">' Neighbors'</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">w =</span> <span class="fu">as.numeric</span>(treatment <span class="sc">==</span> <span class="st">' Neighbors'</span>),</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="fu">as.numeric</span>(voted <span class="sc">==</span> <span class="st">'Yes'</span>),</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">age =</span> <span class="dv">2006</span> <span class="sc">-</span> yob) <span class="sc">|&gt;</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(hh_id, treatment, w) <span class="sc">|&gt;</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">y=</span><span class="fu">mean</span>(y), <span class="at">age=</span><span class="fu">mean</span>(age), <span class="at">.groups=</span><span class="st">'drop'</span>)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(michigan)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>michigan <span class="ot">=</span> social.pressure <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(treatment <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">' Control'</span>, <span class="st">' Neighbors'</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">w =</span> <span class="fu">as.numeric</span>(treatment <span class="sc">==</span> <span class="st">' Neighbors'</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="fu">as.numeric</span>(voted <span class="sc">==</span> <span class="st">'Yes'</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">age =</span> <span class="dv">2006</span> <span class="sc">-</span> yob) <span class="sc">|&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(hh_id, treatment, w) <span class="sc">|&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">y=</span><span class="fu">mean</span>(y), <span class="at">age=</span><span class="fu">mean</span>(age), <span class="at">.groups=</span><span class="st">'drop'</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(michigan)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
@@ -1085,32 +942,7 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="213">Treatment was assigned by household. Calculate the difference in mean household voting rates between the Neighbors group and the Control group. This is our estimate of the average household-level treatment effect of receiving the “Neighbors” letter.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>tau.hat <span class="ot">=</span> <span class="fu">mean</span>(michigan<span class="sc">$</span>y[michigan<span class="sc">$</span>w <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(michigan<span class="sc">$</span>y[michigan<span class="sc">$</span>w <span class="sc">==</span> <span class="dv">0</span>])</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>tau.hat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.08478808</code></pre>
-</div>
-</div>
-<p data-source-line="224">The estimated treatment effect is about 8.5 percentage points. Household turnout was higher among households assigned the “Neighbors” letter.</p>
-</div>
+<p data-source-line="214">Treatment was assigned by household. Calculate the difference in mean household voting rates between the Neighbors group and the Control group. This is our estimate of the average household-level treatment effect of receiving the “Neighbors” letter.</p>
 </div>
 </div>
 </div>
@@ -1126,39 +958,13 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="228">How many households are in each group? Let <span class="math inline">n_1</span> be the number treated (Neighbors) and <span class="math inline">n_0</span> be the number in Control.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">=</span> <span class="fu">sum</span>(michigan<span class="sc">$</span>w <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>n0 <span class="ot">=</span> <span class="fu">sum</span>(michigan<span class="sc">$</span>w <span class="sc">==</span> <span class="dv">0</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">n1 =</span> n1, <span class="at">n0 =</span> n0)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   n1    n0 
-20000 99999 </code></pre>
-</div>
-</div>
-</div>
+<p data-source-line="229">How many households are in each group? Let <span class="math inline">n_1</span> be the number treated (Neighbors) and <span class="math inline">n_0</span> be the number in Control.</p>
 </div>
 </div>
 </div>
 <section id="simulating-randomization-variability" class="level2">
-<h2 class="anchored" data-anchor-id="simulating-randomization-variability" data-source-line="241">Simulating Randomization Variability</h2>
-<p data-source-line="243">Because treatment was randomized, we can think about what would have happened under different randomizations. Let’s simulate this.</p>
+<h2 class="anchored" data-anchor-id="simulating-randomization-variability" data-source-line="242">Simulating Randomization Variability</h2>
+<p data-source-line="244">Because treatment was randomized, we can think about what would have happened under different randomizations. Let’s simulate this.</p>
 <div id="exr-rerandomize" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 36.3</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -1171,78 +977,37 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="246">The code below re-randomizes treatment 1000 times, keeping the same number of treated and control units as in the actual experiment. For each re-randomization, it calculates <span class="math inline">\hat\tau</span>.</p>
+<p data-source-line="247">The code below re-randomizes treatment 1000 times, keeping the same number of treated and control units as in the actual experiment. For each re-randomization, it calculates <span class="math inline">\hat\tau</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">nrow</span>(michigan)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">=</span> <span class="fu">sum</span>(michigan<span class="sc">$</span>w <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>tau.hats <span class="ot">=</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Randomly assign n1 households to treatment</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  w.star <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, n)</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  w.star[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, n1)] <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate treatment effect estimate</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(michigan<span class="sc">$</span>y[w.star <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(michigan<span class="sc">$</span>y[w.star <span class="sc">==</span> <span class="dv">0</span>])</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">nrow</span>(michigan)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">=</span> <span class="fu">sum</span>(michigan<span class="sc">$</span>w <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>tau.hats <span class="ot">=</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Randomly assign n1 households to treatment</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  w.star <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, n)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  w.star[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, n1)] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate treatment effect estimate</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(michigan<span class="sc">$</span>y[w.star <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(michigan<span class="sc">$</span>y[w.star <span class="sc">==</span> <span class="dv">0</span>])</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ol type="1">
-<li data-source-line="266">Plot a histogram of these 1000 estimates.</li>
-<li data-source-line="267">What is the mean of this distribution?</li>
-<li data-source-line="268">What is the standard deviation?</li>
-<li data-source-line="269">Add a vertical line at the actual estimate from the real experiment. Where does it fall in the distribution?</li>
+<li data-source-line="267">Plot a histogram of these 1000 estimates.</li>
+<li data-source-line="268">What is the mean of this distribution?</li>
+<li data-source-line="269">What is the standard deviation?</li>
+<li data-source-line="270">Add a vertical line at the actual estimate from the real experiment. Where does it fall in the distribution?</li>
 </ol>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> tau.hats), <span class="at">bins =</span> <span class="dv">50</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(tau.hats), <span class="at">color =</span> <span class="st">'blue'</span>, <span class="at">linetype =</span> <span class="st">'dashed'</span>) <span class="sc">+</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> tau.hat, <span class="at">color =</span> <span class="st">'red'</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(<span class="fu">hat</span>(tau)), <span class="at">y =</span> <span class="st">'Count'</span>,</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">'Distribution of treatment effect estimates under re-randomization'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="homework-causality_files/figure-html/plot-rerandomization-distribution-1.svg?v=1789983370871" class="img-fluid figure-img" alt="Randomization distribution of 1,000 difference-in-means estimates after reshuffling treatment labels. A dashed blue line marks the distribution's near-zero mean; a solid red line marks the experiment's actual positive estimate far in the right tail."></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">mean =</span> <span class="fu">mean</span>(tau.hats), <span class="at">sd =</span> <span class="fu">sd</span>(tau.hats))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>         mean            sd 
--1.428365e-05  3.262414e-03 </code></pre>
-</div>
-</div>
-<p data-source-line="292">The mean is approximately zero. This is because we’re shuffling labels on the <em>same</em> realized outcomes—we’re not using the potential outcomes framework here, just seeing what the difference in means would look like if treatment assignment were unrelated to outcomes. The actual estimate (red line) is far from this distribution, which suggests the treatment had a real effect.</p>
-</div>
 </div>
 </div>
 </div>
 </section>
 <section id="standard-errors" class="level2">
-<h2 class="anchored" data-anchor-id="standard-errors" data-source-line="295">Standard Errors</h2>
-<p data-source-line="297">In lecture, we showed that the variance of <span class="math inline">\hat\tau</span> under randomization is approximately <span class="math display">
+<h2 class="anchored" data-anchor-id="standard-errors" data-source-line="296">Standard Errors</h2>
+<p data-source-line="298">In lecture, we showed that the variance of <span class="math inline">\hat\tau</span> under randomization is approximately <span class="math display">
 \mathop{\mathrm{\mathop{\mathrm{V}}}}(\hat\tau) \approx \frac{\sigma^2(1)}{n_1} + \frac{\sigma^2(0)}{n_0}
 </span> where <span class="math inline">\sigma^2(w)</span> is the variance of potential outcomes under treatment <span class="math inline">w</span>.</p>
-<p data-source-line="303">Since we can’t observe both potential outcomes for anyone, we estimate this using the observed variances in each group: <span class="math display">
+<p data-source-line="304">Since we can’t observe both potential outcomes for anyone, we estimate this using the observed variances in each group: <span class="math display">
 \widehat{\mathop{\mathrm{\mathop{\mathrm{V}}}}}(\hat\tau) = \frac{\hat\sigma^2(1)}{n_1} + \frac{\hat\sigma^2(0)}{n_0}
 </span></p>
 <div id="exr-se" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
@@ -1258,42 +1023,10 @@ window.Quarto = {
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
 <ol type="1">
-<li data-source-line="309">Calculate <span class="math inline">\hat\sigma^2(1)</span> and <span class="math inline">\hat\sigma^2(0)</span>, the sample variances in the treated and control groups.</li>
-<li data-source-line="310">Calculate the estimated standard error <span class="math inline">\widehat{SE}(\hat\tau) = \sqrt{\widehat{\mathop{\mathrm{\mathop{\mathrm{V}}}}}(\hat\tau)}</span>.</li>
-<li data-source-line="311">Compare this to the standard deviation of your simulated <span class="math inline">\hat\tau</span> values from the previous exercise.</li>
+<li data-source-line="310">Calculate <span class="math inline">\hat\sigma^2(1)</span> and <span class="math inline">\hat\sigma^2(0)</span>, the sample variances in the treated and control groups.</li>
+<li data-source-line="311">Calculate the estimated standard error <span class="math inline">\widehat{SE}(\hat\tau) = \sqrt{\widehat{\mathop{\mathrm{\mathop{\mathrm{V}}}}}(\hat\tau)}</span>.</li>
+<li data-source-line="312">Compare this to the standard deviation of your simulated <span class="math inline">\hat\tau</span> values from the previous exercise.</li>
 </ol>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>sigma2<span class="fl">.1</span> <span class="ot">=</span> <span class="fu">var</span>(michigan<span class="sc">$</span>y[michigan<span class="sc">$</span>w <span class="sc">==</span> <span class="dv">1</span>])</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>sigma2<span class="fl">.0</span> <span class="ot">=</span> <span class="fu">var</span>(michigan<span class="sc">$</span>y[michigan<span class="sc">$</span>w <span class="sc">==</span> <span class="dv">0</span>])</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>var.hat <span class="ot">=</span> sigma2<span class="fl">.1</span> <span class="sc">/</span> n1 <span class="sc">+</span> sigma2<span class="fl">.0</span> <span class="sc">/</span> n0</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>se.hat <span class="ot">=</span> <span class="fu">sqrt</span>(var.hat)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">sigma2.1 =</span> sigma2<span class="fl">.1</span>, <span class="at">sigma2.0 =</span> sigma2<span class="fl">.0</span>, <span class="at">se.hat =</span> se.hat,</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">sd.simulated =</span> <span class="fu">sd</span>(tau.hats))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>    sigma2.1     sigma2.0       se.hat sd.simulated 
- 0.196413988  0.174763756  0.003401228  0.003262414 </code></pre>
-</div>
-</div>
-<p data-source-line="328">The formula-based standard error is close to the simulated standard deviation. This confirms that our variance formula is working correctly.</p>
-</div>
 </div>
 </div>
 </div>
@@ -1309,59 +1042,34 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="332">Construct a 95% confidence interval for the average treatment effect using the normal approximation: <span class="math inline">\hat\tau \pm 1.96 \times \widehat{SE}(\hat\tau)</span>.</p>
-<p data-source-line="334">Interpret this interval in words.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>ci <span class="ot">=</span> tau.hat <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">*</span> <span class="fl">1.96</span> <span class="sc">*</span> se.hat</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>ci</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.07812167 0.09145448</code></pre>
-</div>
-</div>
-<p data-source-line="345">We are 95% confident that receiving the “Neighbors” letter increases voter turnout by between 7.8 and 9.1 percentage points.</p>
-</div>
+<p data-source-line="333">Construct a 95% confidence interval for the average treatment effect using the normal approximation: <span class="math inline">\hat\tau \pm 1.96 \times \widehat{SE}(\hat\tau)</span>.</p>
+<p data-source-line="335">Interpret this interval in words.</p>
 </div>
 </div>
 </div>
 </section>
 </section>
 <section id="checking-coverage-with-fake-data" class="level1">
-<h1 data-source-line="348">Checking Coverage with Fake Data</h1>
-<p data-source-line="350">We’ve constructed a confidence interval, but how do we know it actually has 95% coverage? We can check using fake data where we know the true ATE.</p>
+<h1 data-source-line="349">Checking Coverage with Fake Data</h1>
+<p data-source-line="351">We’ve constructed a confidence interval, but how do we know it actually has 95% coverage? We can check using fake data where we know the true ATE.</p>
 <section id="creating-a-fake-population" class="level2">
-<h2 class="anchored" data-anchor-id="creating-a-fake-population" data-source-line="352">Creating a Fake Population</h2>
-<p data-source-line="354">We’ll create a fake population of potential outcomes based on the Michigan household data. The idea is to make up <span class="math inline">y_j(0)</span> and <span class="math inline">y_j(1)</span> for each household, then repeatedly randomize and check whether our intervals cover the true ATE.</p>
+<h2 class="anchored" data-anchor-id="creating-a-fake-population" data-source-line="353">Creating a Fake Population</h2>
+<p data-source-line="355">We’ll create a fake population of potential outcomes based on the Michigan household data. The idea is to make up <span class="math inline">y_j(0)</span> and <span class="math inline">y_j(1)</span> for each household, then repeatedly randomize and check whether our intervals cover the true ATE.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the Michigan data to create a population of potential outcomes</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll pretend the observed outcomes are y(0) and add a treatment effect</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">nrow</span>(michigan)</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>fake.pop <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> michigan<span class="sc">$</span>y,</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> michigan<span class="sc">$</span>y <span class="sc">+</span> <span class="fu">rbinom</span>(m, <span class="dv">1</span>, <span class="fl">0.08</span>)  <span class="co"># treatment adds ~8pp on average</span></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>fake.pop<span class="sc">$</span>y1 <span class="ot">=</span> <span class="fu">pmin</span>(fake.pop<span class="sc">$</span>y1, <span class="dv">1</span>)  <span class="co"># cap at 1 (can't vote more than once)</span></span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="co"># The true ATE in this fake population</span></span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>true.ate <span class="ot">=</span> <span class="fu">mean</span>(fake.pop<span class="sc">$</span>y1 <span class="sc">-</span> fake.pop<span class="sc">$</span>y0)</span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>true.ate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the Michigan data to create a population of potential outcomes</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll pretend the observed outcomes are y(0) and add a treatment effect</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">nrow</span>(michigan)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>fake.pop <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> michigan<span class="sc">$</span>y,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> michigan<span class="sc">$</span>y <span class="sc">+</span> <span class="fu">rbinom</span>(m, <span class="dv">1</span>, <span class="fl">0.08</span>)  <span class="co"># treatment adds ~8pp on average</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>fake.pop<span class="sc">$</span>y1 <span class="ot">=</span> <span class="fu">pmin</span>(fake.pop<span class="sc">$</span>y1, <span class="dv">1</span>)  <span class="co"># cap at 1 (can't vote more than once)</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># The true ATE in this fake population</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>true.ate <span class="ot">=</span> <span class="fu">mean</span>(fake.pop<span class="sc">$</span>y1 <span class="sc">-</span> fake.pop<span class="sc">$</span>y0)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>true.ate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.0536585</code></pre>
 </div>
@@ -1378,70 +1086,40 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="376">The code below simulates 1000 randomized experiments from this fake population. For each experiment, it:</p>
+<p data-source-line="377">The code below simulates 1000 randomized experiments from this fake population. For each experiment, it:</p>
 <ol type="1">
-<li data-source-line="378">Randomly assigns half the population to treatment</li>
-<li data-source-line="379">Calculates <span class="math inline">\hat\tau</span></li>
-<li data-source-line="380">Calculates the standard error and constructs a 95% CI</li>
-<li data-source-line="381">Checks whether the CI covers the true ATE</li>
+<li data-source-line="379">Randomly assigns half the population to treatment</li>
+<li data-source-line="380">Calculates <span class="math inline">\hat\tau</span></li>
+<li data-source-line="381">Calculates the standard error and constructs a 95% CI</li>
+<li data-source-line="382">Checks whether the CI covers the true ATE</li>
 </ol>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">nrow</span>(fake.pop)</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">=</span> m <span class="sc">%/%</span> <span class="dv">2</span>  <span class="co"># half treated</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>covers <span class="ot">=</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Randomize treatment</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, m)</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  w[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>m, n1)] <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Realized outcomes</span></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">=</span> <span class="fu">ifelse</span>(w <span class="sc">==</span> <span class="dv">1</span>, fake.pop<span class="sc">$</span>y1, fake.pop<span class="sc">$</span>y0)</span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Point estimate</span></span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  tau.hat <span class="ot">=</span> <span class="fu">mean</span>(y[w <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(y[w <span class="sc">==</span> <span class="dv">0</span>])</span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Standard error</span></span>
-<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  se <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">var</span>(y[w <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">/</span> <span class="fu">sum</span>(w <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">var</span>(y[w <span class="sc">==</span> <span class="dv">0</span>]) <span class="sc">/</span> <span class="fu">sum</span>(w <span class="sc">==</span> <span class="dv">0</span>))</span>
-<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Does 95% CI cover?</span></span>
-<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>  tau.hat <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se <span class="sc">&lt;=</span> true.ate <span class="sc">&amp;</span> true.ate <span class="sc">&lt;=</span> tau.hat <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se</span>
-<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">nrow</span>(fake.pop)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">=</span> m <span class="sc">%/%</span> <span class="dv">2</span>  <span class="co"># half treated</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>covers <span class="ot">=</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Randomize treatment</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, m)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  w[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>m, n1)] <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Realized outcomes</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">=</span> <span class="fu">ifelse</span>(w <span class="sc">==</span> <span class="dv">1</span>, fake.pop<span class="sc">$</span>y1, fake.pop<span class="sc">$</span>y0)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Point estimate</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  tau.hat <span class="ot">=</span> <span class="fu">mean</span>(y[w <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(y[w <span class="sc">==</span> <span class="dv">0</span>])</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Standard error</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  se <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">var</span>(y[w <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">/</span> <span class="fu">sum</span>(w <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">var</span>(y[w <span class="sc">==</span> <span class="dv">0</span>]) <span class="sc">/</span> <span class="fu">sum</span>(w <span class="sc">==</span> <span class="dv">0</span>))</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Does 95% CI cover?</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  tau.hat <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se <span class="sc">&lt;=</span> true.ate <span class="sc">&amp;</span> true.ate <span class="sc">&lt;=</span> tau.hat <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ol type="1">
-<li data-source-line="410">What fraction of the intervals cover the true ATE?</li>
-<li data-source-line="411">Is this close to 95%? If not, why might there be a discrepancy?</li>
+<li data-source-line="411">What fraction of the intervals cover the true ATE?</li>
+<li data-source-line="412">Is this close to 95%? If not, why might there be a discrepancy?</li>
 </ol>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-20" class="callout-20-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(covers)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.966</code></pre>
-</div>
-</div>
-<p data-source-line="421">The coverage is close to 95%. Any discrepancy from exactly 95% is due to:</p>
-<ol type="1">
-<li data-source-line="423">Simulation noise (we only ran 1000 experiments)</li>
-<li data-source-line="424">The normal approximation not being perfect</li>
-<li data-source-line="425">Using sample variances to estimate population variances</li>
-</ol>
-<p>With a large population like this one (119999 people), the normal approximation works well and we get coverage close to the nominal 95%.</p>
-</div>
 </div>
 </div>
 </div>
@@ -1457,70 +1135,19 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="431">Now let’s see what happens with a smaller experiment. Modify the simulation to use only <span class="math inline">n = 200</span> households (sampled from the fake population) instead of the full population.</p>
+<p data-source-line="432">Now let’s see what happens with a smaller experiment. Modify the simulation to use only <span class="math inline">n = 200</span> households (sampled from the fake population) instead of the full population.</p>
 <ol type="1">
-<li data-source-line="433">What coverage do you get?</li>
-<li data-source-line="434">How does the width of the confidence intervals compare to the full-population case?</li>
+<li data-source-line="434">What coverage do you get?</li>
+<li data-source-line="435">How does the width of the confidence intervals compare to the full-population case?</li>
 </ol>
-<p data-source-line="436"><em>Hint</em>. You’ll need to sample 200 households from <code>fake.pop</code> before randomizing treatment.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-22" class="callout-22-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">200</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">=</span> n <span class="sc">%/%</span> <span class="dv">2</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>covers.small <span class="ot">=</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sample from population</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  J <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>m, n, <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  y0.sam <span class="ot">=</span> fake.pop<span class="sc">$</span>y0[J]</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  y1.sam <span class="ot">=</span> fake.pop<span class="sc">$</span>y1[J]</span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Randomize treatment</span></span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, n)</span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  w[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, n1)] <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Realized outcomes</span></span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">=</span> <span class="fu">ifelse</span>(w <span class="sc">==</span> <span class="dv">1</span>, y1.sam, y0.sam)</span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Point estimate</span></span>
-<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  tau.hat <span class="ot">=</span> <span class="fu">mean</span>(y[w <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(y[w <span class="sc">==</span> <span class="dv">0</span>])</span>
-<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Standard error</span></span>
-<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>  se <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">var</span>(y[w <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">/</span> <span class="fu">sum</span>(w <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">var</span>(y[w <span class="sc">==</span> <span class="dv">0</span>]) <span class="sc">/</span> <span class="fu">sum</span>(w <span class="sc">==</span> <span class="dv">0</span>))</span>
-<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Does 95% CI cover?</span></span>
-<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>  tau.hat <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se <span class="sc">&lt;=</span> true.ate <span class="sc">&amp;</span> true.ate <span class="sc">&lt;=</span> tau.hat <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se</span>
-<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(covers.small)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.942</code></pre>
-</div>
-</div>
-<p data-source-line="474">Coverage is still close to 95%. The intervals are wider (because we have less data), but they’re calibrated correctly. The standard error formula accounts for the smaller sample size.</p>
-</div>
+<p data-source-line="437"><em>Hint</em>. You’ll need to sample 200 households from <code>fake.pop</code> before randomizing treatment.</p>
 </div>
 </div>
 </div>
 </section>
 </section>
 <section id="connection-to-sampling" class="level1">
-<h1 data-source-line="477">Connection to Sampling</h1>
+<h1 data-source-line="478">Connection to Sampling</h1>
 <div id="exr-two-sources" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 38.1</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -1533,36 +1160,18 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="480">In the small-sample exercise above, there were two sources of randomness:</p>
+<p data-source-line="481">In the small-sample exercise above, there were two sources of randomness:</p>
 <ol type="1">
-<li data-source-line="482"><strong>Sampling</strong>: Which 200 people we selected from the population</li>
-<li data-source-line="483"><strong>Randomization</strong>: Which of those 200 got assigned to treatment</li>
+<li data-source-line="483"><strong>Sampling</strong>: Which 200 people we selected from the population</li>
+<li data-source-line="484"><strong>Randomization</strong>: Which of those 200 got assigned to treatment</li>
 </ol>
-<p data-source-line="485">Our standard error formula only accounts for randomization variability. Yet we still got ~95% coverage. In a sentence or two, explain why this worked out.</p>
-<p data-source-line="487"><em>Hint</em>. Think about what happens to the sample ATE (the ATE among the 200 people we sampled) vs the population ATE.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-24" class="callout-24-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p data-source-line="491">The sample ATE (among the 200 people we happened to sample) varies from sample to sample, but our estimator <span class="math inline">\hat\tau</span> is unbiased for the sample ATE, not the population ATE. Our confidence interval is really for the sample ATE. It happens to cover the population ATE most of the time because the sample ATE is usually close to the population ATE when we sample 200 people from a population of 119999. If we wanted to be more careful about inference for the population ATE, we’d need to account for both sources of variability.</p>
-</div>
+<p data-source-line="486">Our standard error formula only accounts for randomization variability. Yet we still got ~95% coverage. In a sentence or two, explain why this worked out.</p>
+<p data-source-line="488"><em>Hint</em>. Think about what happens to the sample ATE (the ATE among the 200 people we sampled) vs the population ATE.</p>
 </div>
 </div>
 </div>
 <div id="exr-build-experiment" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p data-source-line="495"><span class="theorem-title"><strong>Exercise 38.2 (Build Your Own Experiment)</strong></span> &nbsp;</p>
+<p data-source-line="496"><span class="theorem-title"><strong>Exercise 38.2 (Build Your Own Experiment)</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -1573,33 +1182,15 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="497">Create a fake population of <span class="math inline">m=1000</span> households, each with two potential outcomes <span class="math inline">Y_i(0)</span> and <span class="math inline">Y_i(1)</span>. Make them up however you like — draw them from distributions, set them by hand, whatever. Compute the true population ATE <span class="math inline">\tau = \frac{1}{m}\sum_{i=1}^m \{Y_i(1)-Y_i(0)\}</span>.</p>
-<p data-source-line="499">Now run 5,000 simulated experiments. In each one:</p>
+<p data-source-line="498">Create a fake population of <span class="math inline">m=1000</span> households, each with two potential outcomes <span class="math inline">Y_i(0)</span> and <span class="math inline">Y_i(1)</span>. Make them up however you like — draw them from distributions, set them by hand, whatever. Compute the true population ATE <span class="math inline">\tau = \frac{1}{m}\sum_{i=1}^m \{Y_i(1)-Y_i(0)\}</span>.</p>
+<p data-source-line="500">Now run 5,000 simulated experiments. In each one:</p>
 <ol type="a">
 <li>Randomly assign half to treatment (<span class="math inline">W_i=1</span>) and half to control (<span class="math inline">W_i=0</span>).</li>
 <li>Observe <span class="math inline">Y_i = W_i Y_i(1) + (1-W_i) Y_i(0)</span>.</li>
 <li>Compute the difference in means <span class="math inline">\hat\tau = \bar Y_1 - \bar Y_0</span>.</li>
 <li>Construct a 95% confidence interval using <span class="math inline">\hat\tau \pm 1.96 \hat\sigma</span> where <span class="math inline">\hat\sigma = \sqrt{s_1^2/n_1 + s_0^2/n_0}</span>.</li>
 </ol>
-<p data-source-line="506">Report: (i) the average of <span class="math inline">\hat\tau</span> across simulations (is it close to <span class="math inline">\tau</span>?), and (ii) the fraction of intervals that contain <span class="math inline">\tau</span> (is it close to 95%?).</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-26" class="callout-26-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p data-source-line="510"><em>To do: write a solution.</em></p>
-</div>
+<p data-source-line="507">Report: (i) the average of <span class="math inline">\hat\tau</span> across simulations (is it close to <span class="math inline">\tau</span>?), and (ii) the fraction of intervals that contain <span class="math inline">\tau</span> (is it close to 95%?).</p>
 </div>
 </div>
 </div>

@@ -746,7 +746,7 @@ window.Quarto = {
 
 
 <div class="hidden">
-<p data-source-line="18"><span class="math display">
+<p data-source-line="19"><span class="math display">
 \DeclareMathOperator{\E}{E}
 \DeclareMathOperator{\Var}{V}
 \DeclareMathOperator{\hVar}{\widehat{V}}
@@ -755,7 +755,7 @@ window.Quarto = {
 </span></p>
 </div>
 <section id="problem-1" class="level1">
-<h1 data-source-line="26">Problem 1</h1>
+<h1 data-source-line="27">Problem 1</h1>
 <p>Suppose we have a sample <span class="math inline">Y_1 \ldots Y_n</span> drawn with replacement from a population <span class="math inline">y_1 \ldots y_m</span> with mean <span class="math inline">\mu = \frac{1}{m}\sum_{j=1}^m y_j</span>. We have it in an vector <span class="math inline">Y</span> of length <span class="math inline">n</span>. We run this code.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>B<span class="ot">=</span><span class="dv">1000</span></span>
@@ -769,7 +769,7 @@ window.Quarto = {
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="practice-midterm-2_files/figure-html/plot-sample-and-bootstrap-1.svg?v=1789983370871" style="height:6in" alt="Histogram of 1,000 observations in Y with lines at its mean and one standard deviation on either side, plus a horizontal 95 percent range for individual observations." class="figure-img"></p>
+<p><img src="practice-midterm-2_files/figure-html/plot-sample-and-bootstrap-1.svg?v=1789985091138" style="height:6in" alt="Histogram of 1,000 observations in Y with lines at its mean and one standard deviation on either side, plus a horizontal 95 percent range for individual observations." class="figure-img"></p>
 <figcaption>Histogram of the vector Y’s elements</figcaption>
 </figure>
 </div>
@@ -777,7 +777,7 @@ window.Quarto = {
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="practice-midterm-2_files/figure-html/plot-sample-and-bootstrap-2.svg?v=1789983370871" style="height:6in" alt="Histogram of 1,000 bootstrap sample means in Y.bar with lines at its mean and one standard deviation on either side, plus a horizontal 95 percent interval for the population mean." class="figure-img"></p>
+<p><img src="practice-midterm-2_files/figure-html/plot-sample-and-bootstrap-2.svg?v=1789985091138" style="height:6in" alt="Histogram of 1,000 bootstrap sample means in Y.bar with lines at its mean and one standard deviation on either side, plus a horizontal 95 percent interval for the population mean." class="figure-img"></p>
 <figcaption>Histogram of the Y.bar’s elements</figcaption>
 </figure>
 </div>
@@ -795,28 +795,10 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="73">What does this code calculate? State it in words and mark it with an ‘a’, and an arrow or bracket if necessary for clarity, on the appropriate plot above.</p>
+<p data-source-line="74">What does this code calculate? State it in words and mark it with an ‘a’, and an arrow or bracket if necessary for clarity, on the appropriate plot above.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Y) <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span> <span class="fu">sd</span>(Y)<span class="sc">/</span><span class="fu">sqrt</span>(n)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Y) <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span> <span class="fu">sd</span>(Y)<span class="sc">/</span><span class="fu">sqrt</span>(n)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p>A 95% confidence interval, based on normal approximation, for the population mean <span class="math inline">\mu</span>. This is indicated by the horizontal segment (with a dot in the middle) on the right histogram.</p>
 </div>
 </div>
 </div>
@@ -832,35 +814,13 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="94">How could you calculate roughly the same thing as in Part A using <code>sd(Y.bar)</code> and not <code>sd(Y)</code>?</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p data-source-line="99">We can use the standard deviation of the bootstrap sampling distribution, rather than <code>sd(Y)/sqrt(n)</code>, as our estimate of the standard deviation of our point estimate <code>mean(Y)</code>.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Y) <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">sd</span>(Y.bar)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Y) <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">sd</span>(Y.bar)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
+<p data-source-line="95">How could you calculate roughly the same thing as in Part A using <code>sd(Y.bar)</code> and not <code>sd(Y)</code>?</p>
 </div>
 </div>
 </div>
 </section>
 <section id="problem-2" class="level1">
-<h1 data-source-line="112">Problem 2</h1>
+<h1 data-source-line="113">Problem 2</h1>
 <p>Suppose <span class="math inline">Y_1 \ldots Y_n</span> are sampled with replacement from a population with mean <span class="math inline">\mu=1</span> and variance <span class="math inline">\sigma^2=1</span>. In Midterm 1, we discussed the estimator <span class="math inline">\tilde{Y}_k = \frac{1}{n-k} \sum_{i=1}^n Y_i</span> for <span class="math inline">k=2</span>. Here, we’ll talk about that case and the case <span class="math inline">k=\sqrt{n}</span>.</p>
 <div class="callout callout-style-simple callout-exercise no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -875,95 +835,24 @@ window.Quarto = {
 <div class="callout-exercise">
 <p>For both estimators <span class="math inline">\tilde{Y}_2</span> and <span class="math inline">\tilde{Y}_{\sqrt{n}}</span>, for each of the three sample sizes <span class="math inline">n=10</span>, <span class="math inline">n=10^2=100</span>, and <span class="math inline">n=10^4=10,000</span>, do the following.</p>
 <ol type="1">
-<li data-source-line="123">Calculate the estimator’s mean <span class="math inline">\E[\tilde{Y}_k]</span> and variance <span class="math inline">\Var[\tilde{Y}_k]</span>.</li>
-<li data-source-line="124">Sketch the estimator’s sampling distribution. Label your axes clearly and include <span class="math inline">\mu=1</span> in your sketch.</li>
-<li data-source-line="125">On top of your sketches, illustrate how you’ve calculate the coverage probability of the interval estimate <span class="math inline">\tilde{Y}_k \pm 1.96 \sqrt{\Var[\tilde{Y}_{k}]}</span>.</li>
-<li data-source-line="127">Give a rough approximation of this coverage probability. You don’t have to do this well—just do it by eye. Is it about 95%? Is it above 50%? That’s the kind of precision I’m looking for.</li>
+<li data-source-line="124">Calculate the estimator’s mean <span class="math inline">\E[\tilde{Y}_k]</span> and variance <span class="math inline">\Var[\tilde{Y}_k]</span>.</li>
+<li data-source-line="125">Sketch the estimator’s sampling distribution. Label your axes clearly and include <span class="math inline">\mu=1</span> in your sketch.</li>
+<li data-source-line="126">On top of your sketches, illustrate how you’ve calculate the coverage probability of the interval estimate <span class="math inline">\tilde{Y}_k \pm 1.96 \sqrt{\Var[\tilde{Y}_{k}]}</span>.</li>
+<li data-source-line="128">Give a rough approximation of this coverage probability. You don’t have to do this well—just do it by eye. Is it about 95%? Is it above 50%? That’s the kind of precision I’m looking for.</li>
 </ol>
-<p data-source-line="129">You should have 6 sketches with corresponding means, standard errors, and coverage probabilities. That’s more than we’d ask for on the real exam. If you get the idea and want to save time by skipping the <span class="math inline">n=10^2</span> case, that’s fine.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p data-source-line="133">Let’s start by considering the general case, with arbitrary <span class="math inline">\mu</span>, <span class="math inline">\sigma</span>, and <span class="math inline">k</span>. We’ll calculate the mean.</p>
-<p data-source-line="141"><span class="math display">
-\begin{aligned}
-\E[\tilde{Y}_k] &amp;= \frac{1}{n-k}\sum_{i=1}^n \E[Y_i] = \frac{n}{n-k}\mu = \cb*{\frac{n-k}{n-k} + \frac{k}{n-k}} \mu = \cb*{1+\frac{k}{n-k}}\mu.
-\end{aligned}
-</span> so the bias is</p>
-<p><span class="math display">
-\begin{aligned}
-\E[\tilde{Y}_k] - \mu &amp;= \frac{k}{n-k} \mu.
-\end{aligned}
-</span></p>
-<p data-source-line="150">And the variance and resulting standard error. <span class="math display">
-\begin{aligned}
-V[\tilde{Y}_k] &amp;= V[ \frac{1}{n-k} \displaystyle \sum_{i=1}^n Y_i] \\
-&amp;= \frac{1}{(n-k)^2} V[ \sum_{i=1}^n Y_i]\\
-&amp;= \frac{1}{(n-k)^2} \p*{\sum_{i=1}^n V[Y_i]}\\
-&amp;=\frac{1}{(n-k)^2} \p*{\sum_{i=1}^n \sigma^2 }\\
-&amp;=\frac{1}{(n-k)^2} n\sigma^2 \\
-&amp;= \frac{n\sigma^2}{(n-k)^2}
-\end{aligned}
-</span> so its square root, the estimator’s standard error, is <span class="math display">
-\begin{aligned}
-\text{se} = \sigma \sqrt{\frac{n}{(n-k)^2}}.
-\end{aligned}
-</span> Specializing to the case <span class="math inline">\mu=\sigma=1</span> we’re considering, we get a mean of <span class="math inline">1 + 2/(n-2)</span> and standard error of <span class="math inline">\sqrt{n/(n-2)^2}</span> for <span class="math inline">\tilde{Y}_2</span> and a mean of <span class="math inline">1 + \sqrt{n}/(n-\sqrt{n})=1+1/(\sqrt{n}-1)</span> and standard error of <span class="math inline">\sqrt{n/(n-\sqrt{n})^2}=1/(\sqrt{n}-1)</span> for <span class="math inline">\tilde{Y}_{\sqrt{n}}</span>.</p>
-<p data-source-line="172">Now let’s draw some pictures. I’ll do it with code, so they’ll be a bit more precise than what I’d expect on an exam. We’ll have <span class="math inline">k=2</span> on the left and <span class="math inline">k=\sqrt{n}</span> on the right, with sample size increasing as we go downward. I’m scaling the <span class="math inline">x</span>-axis so the sampling distributions all look about the same size—the spacing between the ticks is <span class="math inline">1/\sqrt{n}</span>.</p>
-<p data-source-line="174">I’ve drawn a normal approximation to the estimator’s sampling distribution in gray. The blue line is <span class="math inline">\E[\tilde Y]</span> and the green line is <span class="math inline">\mu=1</span>. The dotted blue lines indicate <span class="math inline">\E[\tilde Y] \pm 1.96\sigma_n</span>. 95% of the sampling distribution is between them. And if we draw arms of length <span class="math inline">1.96\sigma_n</span> on a point estimate <span class="math inline">\hat\mu</span> drawn from this sampling distribution, we’ll get an interval covering <span class="math inline">\mu</span> if and only if arms of the same length drawn around <span class="math inline">\mu</span> touch the point estimate <span class="math inline">\hat\mu</span> — i.e., if they’re within the range <span class="math inline">\mu \pm 1.96\sigma_n</span> where we’ve colored the sampling distribution yellow. Thus, the coverage probability is the area we’ve colored yellow—the mass of the sampling distribution that’s in this range.</p>
-<p data-source-line="177">For <span class="math inline">k=2</span>, this coverage probability is well above 50% but less than 95% at <span class="math inline">n=10</span> and gets closer to 95% as <span class="math inline">n</span> increases (and therefore bias decreases). For <span class="math inline">k=\sqrt{n}</span> we get essentially the same coverage probability as <span class="math inline">n</span> increases because <span class="math inline">\text{bias}/{se} = \{ 1/(\sqrt{n}-1) \} / \{ 1/(\sqrt{n}-1) \} = 1</span> for all <span class="math inline">n</span>. This is a bit worse than the coverage probability for <span class="math inline">k=2</span> at <span class="math inline">n=10</span> because <span class="math inline">\sqrt{10} \approx 3&gt;2</span>, but still closer to 95% than to 50%.</p>
-<div class="cell quarto-layout-panel" data-layout-ncol="2" data-fig-nrow="3">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="practice-midterm-2_files/figure-html/plot-scaling-comparison-1.svg?v=1789983370871" class="img-fluid" alt="Sampling distribution of the estimator with k equal to 2 at n equal to 10; the blue mean is right of the green target and the yellow coverage region contains substantially less than 95 percent of the distribution."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="practice-midterm-2_files/figure-html/plot-scaling-comparison-2.svg?v=1789983370871" class="img-fluid" alt="Sampling distribution of the estimator with k equal to square root of n at n equal to 10; bias equals one standard error and the yellow coverage region contains less than 95 percent."></p>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="practice-midterm-2_files/figure-html/plot-scaling-comparison-3.svg?v=1789983370871" class="img-fluid" alt="Estimator with k equal to 2 at n equal to 100; the blue mean is closer to the green target and the yellow coverage region contains nearly 95 percent."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="practice-midterm-2_files/figure-html/plot-scaling-comparison-4.svg?v=1789983370871" class="img-fluid" alt="Estimator with k equal to square root of n at n equal to 100; bias remains one standard error and the yellow coverage fraction is unchanged."></p>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="practice-midterm-2_files/figure-html/plot-scaling-comparison-5.svg?v=1789983370871" class="img-fluid" alt="Estimator with k equal to 2 at n equal to 10,000; the blue mean nearly coincides with the green target and yellow coverage is about 95 percent."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="practice-midterm-2_files/figure-html/plot-scaling-comparison-6.svg?v=1789983370871" class="img-fluid" alt="Estimator with k equal to square root of n at n equal to 10,000; bias remains one standard error and the yellow coverage fraction is unchanged."></p>
-</div>
-</div>
-</div>
-</div>
+<p data-source-line="130">You should have 6 sketches with corresponding means, standard errors, and coverage probabilities. That’s more than we’d ask for on the real exam. If you get the idea and want to save time by skipping the <span class="math inline">n=10^2</span> case, that’s fine.</p>
 </div>
 </div>
 </div>
 </section>
 <section id="problem-3" class="level1">
-<h1 data-source-line="242">Problem 3</h1>
-<p data-source-line="244">In the plot below, I’m showing some data from a (fake) survey of people in your city who’ve recently finished with school and begun working. For whatever reason, nobody who attends school in this city goes to college, so everyone finishes with between 8 and 12 years of education. There are 10,000 of these people, and we mailed out (and received back) 2000 surveys, sampling from this population of 10,000 with replacement. The x-axis shows the survey recipient’s years of education, the y-axis shows their income, the points with arms are within-column means and standard deviations, and the heights of the bars are proportional to the proportion of recipients with each level of education.</p>
+<h1 data-source-line="243">Problem 3</h1>
+<p data-source-line="245">In the plot below, I’m showing some data from a (fake) survey of people in your city who’ve recently finished with school and begun working. For whatever reason, nobody who attends school in this city goes to college, so everyone finishes with between 8 and 12 years of education. There are 10,000 of these people, and we mailed out (and received back) 2000 surveys, sampling from this population of 10,000 with replacement. The x-axis shows the survey recipient’s years of education, the y-axis shows their income, the points with arms are within-column means and standard deviations, and the heights of the bars are proportional to the proportion of recipients with each level of education.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="practice-midterm-2_files/figure-html/plot-income-by-education-1.svg?v=1789983370871" class="img-fluid figure-img" style="width:100.0%" alt="Income versus 8 through 12 years of education for 2,000 survey respondents. Points and within-year mean-plus-or-minus-standard-deviation markers rise with education; translucent bar heights show that higher education years are more common."></p>
+<p><img src="practice-midterm-2_files/figure-html/plot-income-by-education-1.svg?v=1789985091138" class="img-fluid figure-img" style="width:100.0%" alt="Income versus 8 through 12 years of education for 2,000 survey respondents. Points and within-year mean-plus-or-minus-standard-deviation markers rise with education; translucent bar heights show that higher education years are more common."></p>
 </figure>
 </div>
 </div>
@@ -979,86 +868,68 @@ V[\tilde{Y}_k] &amp;= V[ \frac{1}{n-k} \displaystyle \sum_{i=1}^n Y_i] \\
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="283">Consider two summaries of the incremental value of a year of high school in this sample.</p>
+<p data-source-line="284">Consider two summaries of the incremental value of a year of high school in this sample.</p>
 <p><span class="math display">
 \begin{aligned}
 \hat\theta_{\text{years}}  &amp;= \frac{\sum_{x \in 9 \ldots 12}     \cb*{\hat\mu(x) - \hat\mu(x-1)}}{4} \\
 \hat\theta_{\text{people}} &amp;= \frac{\sum_{i:X_i \in 9 \ldots 12} \cb*{\hat\mu(X_i) - \hat\mu(X_i-1)}}{\sum_{i:X_i \in 9\ldots 12} 1} \\
 \end{aligned}
 </span></p>
-<p data-source-line="292">Which is larger? Explain how you know.</p>
+<p data-source-line="293">Which is larger? Explain how you know.</p>
 </div>
 </div>
 </div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p><span class="math inline">\hat\theta_{\text{people}}</span> is larger. The increments <span class="math inline">\hat\mu(x) - \hat\mu(x-1)</span> get larger as <span class="math inline">x</span> increases, and so does the proportion of individuals with that level of education (i.e.&nbsp;the number of dots in the <span class="math inline">\text{years}=x</span> column). In <span class="math inline">\hat\theta_{\text{people}}</span>, these larger increments get more weight because there are more with these larger values of <span class="math inline">x</span>; in <span class="math inline">\hat\theta_{\text{years}}</span> all increments get equal weight.</p>
-</div>
-</div>
-</div>
-</div>
-<p data-source-line="301">These survey recipients went to two schools: School 0 (circles) and School 1 (triangles).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p data-source-line="302">These survey recipients went to two schools: School 0 (circles) and School 1 (triangles).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="practice-midterm-2_files/figure-html/plot-conditional-proportions-1.svg?v=1789983370871" class="img-fluid figure-img" style="width:100.0%" alt="Income versus education separated by school: circles for School 0 and triangles for School 1, with horizontally offset group means and frequency bars. School 1 has more observations at higher education levels."></p>
+<p><img src="practice-midterm-2_files/figure-html/plot-conditional-proportions-1.svg?v=1789985091138" class="img-fluid figure-img" style="width:100.0%" alt="Income versus education separated by school: circles for School 0 and triangles for School 1, with horizontally offset group means and frequency bars. School 1 has more observations at higher education levels."></p>
 </figure>
 </div>
 </div>
 </div>
-<p data-source-line="321">Children in your district go to School 0. Your cousin, who lives in a district that goes to School 1, encourages you to pretend that you and your family live with them so that your child can go to School 1. This is a thing that happens, at least on the TV show ‘Friday Night Lights.’ Their argument is that School B must be better because the average income of students who have attended it is clearly higher. Check out this confidence interval for the difference in mean incomes of students who have attended the two schools, they say.</p>
+<p data-source-line="322">Children in your district go to School 0. Your cousin, who lives in a district that goes to School 1, encourages you to pretend that you and your family live with them so that your child can go to School 1. This is a thing that happens, at least on the TV show ‘Friday Night Lights.’ Their argument is that School B must be better because the average income of students who have attended it is clearly higher. Check out this confidence interval for the difference in mean incomes of students who have attended the two schools, they say.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Delta.hat <span class="ot">=</span> <span class="fu">mean</span>(Y[W<span class="sc">==</span><span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(Y[W<span class="sc">==</span><span class="dv">0</span>])</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>Delta.hat.star <span class="ot">=</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  J.star <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="at">size=</span>n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  W.star <span class="ot">=</span> W[J.star]</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  X.star <span class="ot">=</span> X[J.star]</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  Y.star <span class="ot">=</span> Y[J.star]</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(Y.star[W.star<span class="sc">==</span><span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(Y.star[W.star<span class="sc">==</span><span class="dv">0</span>])</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>interval.width <span class="ot">=</span> <span class="fu">width</span>(Delta.hat.star)</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>confidence.interval <span class="ot">=</span> <span class="fu">c</span>(Delta.hat <span class="sc">-</span> interval.width<span class="sc">/</span><span class="dv">2</span>, </span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                        Delta.hat <span class="sc">+</span> interval.width<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>confidence.interval</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Delta.hat <span class="ot">=</span> <span class="fu">mean</span>(Y[W<span class="sc">==</span><span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(Y[W<span class="sc">==</span><span class="dv">0</span>])</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Delta.hat.star <span class="ot">=</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  J.star <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="at">size=</span>n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  W.star <span class="ot">=</span> W[J.star]</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  X.star <span class="ot">=</span> X[J.star]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  Y.star <span class="ot">=</span> Y[J.star]</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(Y.star[W.star<span class="sc">==</span><span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(Y.star[W.star<span class="sc">==</span><span class="dv">0</span>])</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>interval.width <span class="ot">=</span> <span class="fu">width</span>(Delta.hat.star)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>confidence.interval <span class="ot">=</span> <span class="fu">c</span>(Delta.hat <span class="sc">-</span> interval.width<span class="sc">/</span><span class="dv">2</span>, </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                        Delta.hat <span class="sc">+</span> interval.width<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>confidence.interval</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  7323 12428</code></pre>
 </div>
 </div>
-<p data-source-line="363">They even based their calculation on one of your QTM 285 homework solutions, so it’s got to be legit. School 1 is at least $7323 better.</p>
-<p data-source-line="365">You, on the other hand, look at the data and claim that a year at School 0 is worth just as much as a year at School 1. And you’re right. You calculate school-specific versions of <span class="math inline">\hat\theta_{\text{years}}</span>, bootstrap the difference between them, and find convincing evidence that the incremental value of a year at each school is the roughly the same.</p>
+<p data-source-line="364">They even based their calculation on one of your QTM 285 homework solutions, so it’s got to be legit. School 1 is at least $7323 better.</p>
+<p data-source-line="366">You, on the other hand, look at the data and claim that a year at School 0 is worth just as much as a year at School 1. And you’re right. You calculate school-specific versions of <span class="math inline">\hat\theta_{\text{years}}</span>, bootstrap the difference between them, and find convincing evidence that the incremental value of a year at each school is the roughly the same.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>your.summary <span class="ot">=</span> <span class="cf">function</span>(W,X,Y) {</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  muhat <span class="ot">=</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(w,x) { <span class="fu">mean</span>(Y[W<span class="sc">==</span>w <span class="sc">&amp;</span> X<span class="sc">==</span>x]) })</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  (<span class="fu">mean</span>(<span class="fu">muhat</span>(<span class="dv">1</span>,<span class="dv">9</span><span class="sc">:</span><span class="dv">12</span>)<span class="sc">-</span><span class="fu">muhat</span>(<span class="dv">1</span>,<span class="dv">8</span><span class="sc">:</span><span class="dv">11</span>))) <span class="sc">-</span> (<span class="fu">mean</span>(<span class="fu">muhat</span>(<span class="dv">0</span>,<span class="dv">9</span><span class="sc">:</span><span class="dv">12</span>)<span class="sc">-</span><span class="fu">muhat</span>(<span class="dv">0</span>,<span class="dv">8</span><span class="sc">:</span><span class="dv">11</span>)))</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>theta.hat.years.difference <span class="ot">=</span> <span class="fu">your.summary</span>(W,X,Y)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>theta.hat.years.difference.star <span class="ot">=</span> <span class="fu">replicate</span>(<span class="dv">100</span>, {</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  J.star <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="at">size=</span>n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">your.summary</span>(W[J.star], X[J.star], Y[J.star])</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>interval.width <span class="ot">=</span> <span class="fu">width</span>(theta.hat.years.difference.star)</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>confidence.interval <span class="ot">=</span> <span class="fu">c</span>(theta.hat.years.difference <span class="sc">-</span> interval.width<span class="sc">/</span><span class="dv">2</span>, </span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>                        theta.hat.years.difference <span class="sc">+</span> interval.width<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>confidence.interval</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>your.summary <span class="ot">=</span> <span class="cf">function</span>(W,X,Y) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  muhat <span class="ot">=</span> <span class="fu">Vectorize</span>(<span class="cf">function</span>(w,x) { <span class="fu">mean</span>(Y[W<span class="sc">==</span>w <span class="sc">&amp;</span> X<span class="sc">==</span>x]) })</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  (<span class="fu">mean</span>(<span class="fu">muhat</span>(<span class="dv">1</span>,<span class="dv">9</span><span class="sc">:</span><span class="dv">12</span>)<span class="sc">-</span><span class="fu">muhat</span>(<span class="dv">1</span>,<span class="dv">8</span><span class="sc">:</span><span class="dv">11</span>))) <span class="sc">-</span> (<span class="fu">mean</span>(<span class="fu">muhat</span>(<span class="dv">0</span>,<span class="dv">9</span><span class="sc">:</span><span class="dv">12</span>)<span class="sc">-</span><span class="fu">muhat</span>(<span class="dv">0</span>,<span class="dv">8</span><span class="sc">:</span><span class="dv">11</span>)))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>theta.hat.years.difference <span class="ot">=</span> <span class="fu">your.summary</span>(W,X,Y)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>theta.hat.years.difference.star <span class="ot">=</span> <span class="fu">replicate</span>(<span class="dv">100</span>, {</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  J.star <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="at">size=</span>n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">your.summary</span>(W[J.star], X[J.star], Y[J.star])</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>interval.width <span class="ot">=</span> <span class="fu">width</span>(theta.hat.years.difference.star)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>confidence.interval <span class="ot">=</span> <span class="fu">c</span>(theta.hat.years.difference <span class="sc">-</span> interval.width<span class="sc">/</span><span class="dv">2</span>, </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>                        theta.hat.years.difference <span class="sc">+</span> interval.width<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>confidence.interval</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] -1518  1302</code></pre>
 </div>
@@ -1074,32 +945,14 @@ V[\tilde{Y}_k] &amp;= V[ \frac{1}{n-k} \displaystyle \sum_{i=1}^n Y_i] \\
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="393">Explain, in terms your cousin can understand, how it’s possible that the average income of students who have attended School 1 is higher than the average income of students who have attended School 0, but the average incremental value of a year at both schools is the same.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p data-source-line="397"><em>To do: write a solution.</em></p>
-</div>
+<p data-source-line="394">Explain, in terms your cousin can understand, how it’s possible that the average income of students who have attended School 1 is higher than the average income of students who have attended School 0, but the average incremental value of a year at both schools is the same.</p>
 </div>
 </div>
 </div>
 </section>
 <section id="problem-4" class="level1">
-<h1 data-source-line="400">Problem 4</h1>
-<p data-source-line="402">Consider this population of 6 people in a randomized experiment.</p>
+<h1 data-source-line="401">Problem 4</h1>
+<p data-source-line="403">Consider this population of 6 people in a randomized experiment.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="ghmwrkzxfo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -1622,25 +1475,7 @@ V[\tilde{Y}_k] &amp;= V[ \frac{1}{n-k} \displaystyle \sum_{i=1}^n Y_i] \\
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="419">What is the average treatment effect <span class="math inline">\bar\tau = \frac{1}{6}\sum_{j=1}^6 \tau_j</span>?</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p data-source-line="423"><span class="math inline">\bar\tau = \frac{1}{6}(4 + 0 + 3 + 0 + 4 + 2) = \frac{13}{6} \approx 2.17</span></p>
-</div>
+<p data-source-line="420">What is the average treatment effect <span class="math inline">\bar\tau = \frac{1}{6}\sum_{j=1}^6 \tau_j</span>?</p>
 </div>
 </div>
 </div>
@@ -1700,65 +1535,6 @@ V[\tilde{Y}_k] &amp;= V[ \frac{1}{n-k} \displaystyle \sum_{i=1}^n Y_i] \\
 </div>
 </div>
 </div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th><span class="math inline">j</span></th>
-<th><span class="math inline">W_j</span></th>
-<th><span class="math inline">Y_j</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td>1</td>
-<td>6</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td>1</td>
-<td>7</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td>1</td>
-<td>8</td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td>0</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<p>Person 1 is treated, so we observe <span class="math inline">y_1(1) = 6</span>. Person 2 is untreated, so we observe <span class="math inline">y_2(0) = 0</span>. And so on.</p>
-</div>
-</div>
-</div>
-</div>
 <div class="callout callout-style-simple callout-exercise no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1770,25 +1546,7 @@ V[\tilde{Y}_k] &amp;= V[ \frac{1}{n-k} \displaystyle \sum_{i=1}^n Y_i] \\
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="457">Calculate the difference-in-means estimator <span class="math inline">\hat\tau = \bar Y_1 - \bar Y_0</span> for this treatment assignment, where <span class="math inline">\bar Y_1</span> is the mean outcome among the treated and <span class="math inline">\bar Y_0</span> is the mean among the untreated.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p><span class="math display">\hat\tau = \frac{6 + 7 + 8}{3} - \frac{0 + 1 + 0}{3} = 7 - \frac{1}{3} = \frac{20}{3} \approx 6.67</span></p>
-</div>
+<p data-source-line="458">Calculate the difference-in-means estimator <span class="math inline">\hat\tau = \bar Y_1 - \bar Y_0</span> for this treatment assignment, where <span class="math inline">\bar Y_1</span> is the mean outcome among the treated and <span class="math inline">\bar Y_0</span> is the mean among the untreated.</p>
 </div>
 </div>
 </div>
@@ -1803,29 +1561,11 @@ V[\tilde{Y}_k] &amp;= V[ \frac{1}{n-k} \displaystyle \sum_{i=1}^n Y_i] \\
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="467">Is <span class="math inline">\hat\tau</span> equal to <span class="math inline">\bar\tau</span>? In one sentence, explain why they differ.</p>
+<p data-source-line="468">Is <span class="math inline">\hat\tau</span> equal to <span class="math inline">\bar\tau</span>? In one sentence, explain why they differ.</p>
 </div>
 </div>
 </div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p data-source-line="471">No.&nbsp;They differ because we’re comparing different people: the treated group happens to have higher <span class="math inline">y_j(0)</span> values than the untreated group, which inflates our estimate.</p>
-</div>
-</div>
-</div>
-</div>
-<p data-source-line="475">Now suppose we randomize by choosing 3 people uniformly at random to treat (and the other 3 are untreated). There are <span class="math inline">\binom{6}{3} = 20</span> possible treatment assignments.</p>
+<p data-source-line="476">Now suppose we randomize by choosing 3 people uniformly at random to treat (and the other 3 are untreated). There are <span class="math inline">\binom{6}{3} = 20</span> possible treatment assignments.</p>
 <div class="callout callout-style-simple callout-exercise no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1837,25 +1577,7 @@ V[\tilde{Y}_k] &amp;= V[ \frac{1}{n-k} \displaystyle \sum_{i=1}^n Y_i] \\
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="479">For the assignment <span class="math inline">(1,1,1,0,0,0)</span>—treating persons 1, 2, and 3—calculate <span class="math inline">\hat\tau</span>.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-20" class="callout-20-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p><span class="math display">\hat\tau = \frac{y_1(1) + y_2(1) + y_3(1)}{3} - \frac{y_4(0) + y_5(0) + y_6(0)}{3} = \frac{6 + 0 + 4}{3} - \frac{7 + 4 + 0}{3} = \frac{10}{3} - \frac{11}{3} = -\frac{1}{3}</span></p>
-</div>
+<p data-source-line="480">For the assignment <span class="math inline">(1,1,1,0,0,0)</span>—treating persons 1, 2, and 3—calculate <span class="math inline">\hat\tau</span>.</p>
 </div>
 </div>
 </div>
@@ -1870,25 +1592,7 @@ V[\tilde{Y}_k] &amp;= V[ \frac{1}{n-k} \displaystyle \sum_{i=1}^n Y_i] \\
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="489">For the assignment <span class="math inline">(0,0,0,1,1,1)</span>—treating persons 4, 5, and 6—calculate <span class="math inline">\hat\tau</span>.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-22" class="callout-22-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p><span class="math display">\hat\tau = \frac{y_4(1) + y_5(1) + y_6(1)}{3} - \frac{y_1(0) + y_2(0) + y_3(0)}{3} = \frac{7 + 8 + 2}{3} - \frac{2 + 0 + 1}{3} = \frac{17}{3} - 1 = \frac{14}{3}</span></p>
-</div>
+<p data-source-line="490">For the assignment <span class="math inline">(0,0,0,1,1,1)</span>—treating persons 4, 5, and 6—calculate <span class="math inline">\hat\tau</span>.</p>
 </div>
 </div>
 </div>
@@ -1903,25 +1607,7 @@ V[\tilde{Y}_k] &amp;= V[ \frac{1}{n-k} \displaystyle \sum_{i=1}^n Y_i] \\
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="499">If we average <span class="math inline">\hat\tau</span> over all 20 possible assignments (each equally likely), what do we get? You don’t need to enumerate all 20—just state what the answer must be and why.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-24" class="callout-24-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p data-source-line="503">We get <span class="math inline">\bar\tau = 13/6 \approx 2.17</span>. This is because <span class="math inline">\hat\tau</span> is an unbiased estimator of <span class="math inline">\bar\tau</span> under randomization: <span class="math inline">\E[\hat\tau] = \bar\tau</span>. The average over all possible randomizations equals the true average treatment effect.</p>
-</div>
+<p data-source-line="500">If we average <span class="math inline">\hat\tau</span> over all 20 possible assignments (each equally likely), what do we get? You don’t need to enumerate all 20—just state what the answer must be and why.</p>
 </div>
 </div>
 </div>

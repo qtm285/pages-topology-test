@@ -22,41 +22,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -768,17 +733,17 @@ window.Quarto = {
 </span></p>
 </div>
 <section id="setup" class="level1">
-<h1 data-source-line="30">Setup</h1>
-<p data-source-line="32">In an earlier homework, we studied a biased estimator that mixes <span class="math inline">\nprior</span> pseudo-observations with prior mean <span class="math inline">\thetaprior</span> into the sample mean. When estimating a population proportion <span class="math inline">\theta</span> from a sample <span class="math inline">Y_1 \ldots Y_n</span> drawn with replacement, this gives us the estimator <span class="math display">
+<h1 data-source-line="31">Setup</h1>
+<p data-source-line="33">In an earlier homework, we studied a biased estimator that mixes <span class="math inline">\nprior</span> pseudo-observations with prior mean <span class="math inline">\thetaprior</span> into the sample mean. When estimating a population proportion <span class="math inline">\theta</span> from a sample <span class="math inline">Y_1 \ldots Y_n</span> drawn with replacement, this gives us the estimator <span class="math display">
 \tilde{Y}_{\nprior} = \frac{\nprior \thetaprior + n\bar{Y}}{\nprior + n}.
 </span> We showed that it has bias <span class="math inline">\frac{\nprior(\thetaprior - \theta)}{\nprior + n}</span> and standard deviation <span class="math inline">\sqrt{\frac{n\theta(1-\theta)}{(\nprior+n)^2}}</span>.</p>
-<p data-source-line="38">Now we’ll do the same thing with two groups. We have a population <span class="math inline">(x_1, y_1) \ldots (x_m, y_m)</span> where <span class="math inline">x_j \in \{0,1\}</span> indicates group membership. We sample <span class="math inline">(X_1, Y_1) \ldots (X_n, Y_n)</span> with replacement. The subsample means are <span class="math inline">\hat\mu(0)</span> and <span class="math inline">\hat\mu(1)</span>, and we’re interested in the difference <span class="math inline">\hat\mu(1) - \hat\mu(0)</span>.</p>
-<p data-source-line="40">Instead of using the subsample means, we’ll mix in <span class="math inline">\nprior</span> pseudo-observations to each group separately. For group <span class="math inline">x \in \{0,1\}</span>, we use <span class="math display">
+<p data-source-line="39">Now we’ll do the same thing with two groups. We have a population <span class="math inline">(x_1, y_1) \ldots (x_m, y_m)</span> where <span class="math inline">x_j \in \{0,1\}</span> indicates group membership. We sample <span class="math inline">(X_1, Y_1) \ldots (X_n, Y_n)</span> with replacement. The subsample means are <span class="math inline">\hat\mu(0)</span> and <span class="math inline">\hat\mu(1)</span>, and we’re interested in the difference <span class="math inline">\hat\mu(1) - \hat\mu(0)</span>.</p>
+<p data-source-line="41">Instead of using the subsample means, we’ll mix in <span class="math inline">\nprior</span> pseudo-observations to each group separately. For group <span class="math inline">x \in \{0,1\}</span>, we use <span class="math display">
 \tilde\mu(x) = \frac{\nprior \thetaprior(x) + N_x \hat\mu(x)}{\nprior + N_x}
 </span> where <span class="math inline">N_x = \sum_{i=1}^n 1_{=x}(X_i)</span> is the number of observations in group <span class="math inline">x</span> and <span class="math inline">\thetaprior(x)</span> is the prior mean for that group.</p>
 </section>
 <section id="problem-1-bias-of-group-means" class="level1">
-<h1 data-source-line="47">Problem 1: Bias of Group Means</h1>
+<h1 data-source-line="48">Problem 1: Bias of Group Means</h1>
 <div id="exr-hw7-1a" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 31.1 (Part A)</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -795,26 +760,6 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution" data-week="7">
-<p data-source-line="55">This is the same calculation as in the earlier homework, with <span class="math inline">N_x</span> playing the role of <span class="math inline">n</span>, <span class="math inline">\hat\mu(x)</span> playing the role of <span class="math inline">\bar Y</span>, and <span class="math inline">\mu(x)</span> playing the role of <span class="math inline">\theta</span>. <span class="math display">
-\mathop{\mathrm{E}}[\tilde\mu(x) \mid X_1 \ldots X_n] - \mu(x) = \frac{\nprior\p*{\thetaprior(x) - \mu(x)}}{\nprior + N_x}
-</span> The bias is proportional to how wrong the prior is about group <span class="math inline">x</span>, scaled down by the total number of observations (real + pseudo) in that group.</p>
-</div>
-</div>
-</div>
-</div>
 <div id="exr-hw7-1b" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 31.2 (Part B)</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -827,37 +772,13 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="65">Calculate the bias of the difference <span class="math inline">\tilde\mu(1) - \tilde\mu(0)</span> as an estimator of <span class="math inline">\mu(1) - \mu(0)</span>, conditional on <span class="math inline">X_1 \ldots X_n</span>.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution" data-week="7">
-<p data-source-line="69">By linearity of expectation, the bias of the difference is the difference of the biases. <span class="math display">
-\begin{aligned}
-\mathop{\mathrm{bias}}\sb*{\tilde\mu(1) - \tilde\mu(0)}
-&amp;= \frac{\nprior\p*{\thetaprior(1) - \mu(1)}}{\nprior + N_1}
-- \frac{\nprior\p*{\thetaprior(0) - \mu(0)}}{\nprior + N_0}
-\end{aligned}
-</span></p>
-</div>
+<p data-source-line="66">Calculate the bias of the difference <span class="math inline">\tilde\mu(1) - \tilde\mu(0)</span> as an estimator of <span class="math inline">\mu(1) - \mu(0)</span>, conditional on <span class="math inline">X_1 \ldots X_n</span>.</p>
 </div>
 </div>
 </div>
 </section>
 <section id="problem-2-same-direction-vs.-opposite-direction" class="level1">
-<h1 data-source-line="80">Problem 2: Same Direction vs.&nbsp;Opposite Direction</h1>
+<h1 data-source-line="81">Problem 2: Same Direction vs.&nbsp;Opposite Direction</h1>
 <div id="exr-hw7-2a" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 32.1 (Part A)</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -870,43 +791,12 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="84">Suppose <span class="math inline">\mu(0) = 0.6</span> and <span class="math inline">\mu(1) = 0.7</span>, so the true difference is <span class="math inline">0.1</span>. Consider two choices of prior:</p>
+<p data-source-line="85">Suppose <span class="math inline">\mu(0) = 0.6</span> and <span class="math inline">\mu(1) = 0.7</span>, so the true difference is <span class="math inline">0.1</span>. Consider two choices of prior:</p>
 <ol type="1">
-<li data-source-line="86"><span class="math inline">\thetaprior(0) = \thetaprior(1) = 0.5</span> (the same prior for both groups, below both means)</li>
-<li data-source-line="87"><span class="math inline">\thetaprior(0) = 0.7</span> and <span class="math inline">\thetaprior(1) = 0.5</span> (different priors — the prior for group 0 is too high, the prior for group 1 is too low)</li>
+<li data-source-line="87"><span class="math inline">\thetaprior(0) = \thetaprior(1) = 0.5</span> (the same prior for both groups, below both means)</li>
+<li data-source-line="88"><span class="math inline">\thetaprior(0) = 0.7</span> and <span class="math inline">\thetaprior(1) = 0.5</span> (different priors — the prior for group 0 is too high, the prior for group 1 is too low)</li>
 </ol>
-<p data-source-line="89">For each choice, with <span class="math inline">\nprior = 10</span> and <span class="math inline">N_0 = N_1 = 200</span>, compute the bias of each group mean and the bias of the difference <span class="math inline">\tilde\mu(1) - \tilde\mu(0)</span>.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution" data-week="7">
-<p data-source-line="93"><strong>Choice 1: Same prior, <span class="math inline">\thetaprior = 0.5</span>.</strong></p>
-<p data-source-line="95">Both biases are negative — both group means get pulled <em>down</em> toward <span class="math inline">0.5</span>. <span class="math display">
-\begin{aligned}
-\mathop{\mathrm{bias}}[\tilde\mu(0)] &amp;= \frac{10(0.5 - 0.6)}{210} = -0.0048 \\
-\mathop{\mathrm{bias}}[\tilde\mu(1)] &amp;= \frac{10(0.5 - 0.7)}{210} = -0.0095
-\end{aligned}
-</span> The bias of the difference is <span class="math inline">-0.0095 - (-0.0048) = -0.0048</span>. Both means got pulled down, so the difference barely changed.</p>
-<p data-source-line="104"><strong>Choice 2: Different priors, <span class="math inline">\thetaprior(0) = 0.7</span>, <span class="math inline">\thetaprior(1) = 0.5</span>.</strong></p>
-<p data-source-line="106">The biases go in <em>opposite directions</em> — group 0 gets pulled up, group 1 gets pulled down. <span class="math display">
-\begin{aligned}
-\mathop{\mathrm{bias}}[\tilde\mu(0)] &amp;= \frac{10(0.7 - 0.6)}{210} = +0.0048 \\
-\mathop{\mathrm{bias}}[\tilde\mu(1)] &amp;= \frac{10(0.5 - 0.7)}{210} = -0.0095
-\end{aligned}
-</span> The bias of the difference is <span class="math inline">-0.0095 - (+0.0048) = -0.0143</span>. Group 1 got pulled down and group 0 got pulled up, so the estimated difference got squeezed from both sides.</p>
-</div>
+<p data-source-line="90">For each choice, with <span class="math inline">\nprior = 10</span> and <span class="math inline">N_0 = N_1 = 200</span>, compute the bias of each group mean and the bias of the difference <span class="math inline">\tilde\mu(1) - \tilde\mu(0)</span>.</p>
 </div>
 </div>
 </div>
@@ -922,25 +812,7 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="118">In choice 1, each group mean is biased. Why is the difference barely biased?</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution" data-week="7">
-<p data-source-line="122">Because the biases are in the same direction. Both group means get pulled down toward <span class="math inline">\thetaprior = 0.5</span>. When you subtract one from the other, the downward pull mostly cancels. The difference is still slightly biased because the two group means are different distances from <span class="math inline">\thetaprior</span>, so they get pulled by slightly different amounts. But the bias of the difference is much smaller than the bias of either mean.</p>
-</div>
+<p data-source-line="119">In choice 1, each group mean is biased. Why is the difference barely biased?</p>
 </div>
 </div>
 </div>
@@ -956,31 +828,13 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="127">In choice 2, the individual biases are no larger than in choice 1. Why is the bias of the difference so much worse?</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution" data-week="7">
-<p data-source-line="131">Because the biases go in opposite directions. Group 0’s mean gets pulled up and group 1’s mean gets pulled down. When you take the difference, these biases <em>add</em> instead of canceling. The difference gets pushed toward zero from both sides.</p>
-</div>
+<p data-source-line="128">In choice 2, the individual biases are no larger than in choice 1. Why is the bias of the difference so much worse?</p>
 </div>
 </div>
 </div>
 </section>
 <section id="problem-3-wrong-in-the-same-direction" class="level1">
-<h1 data-source-line="135">Problem 3: Wrong in the Same Direction</h1>
+<h1 data-source-line="136">Problem 3: Wrong in the Same Direction</h1>
 <div id="exr-hw7-3" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 33.1</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -993,31 +847,13 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="138">Explain, in a sentence or two, the punchline of this homework: when is it OK to use a biased estimator for a comparison?</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution" data-week="7">
-<p data-source-line="142">When the biases are in the same direction — both group means pulled the same way — the bias of the difference is small because the biases partially cancel. When the biases are in opposite directions, they add up and the difference gets worse. You don’t have to be right. You just have to be wrong in the same direction.</p>
-</div>
+<p data-source-line="139">Explain, in a sentence or two, the punchline of this homework: when is it OK to use a biased estimator for a comparison?</p>
 </div>
 </div>
 </div>
 </section>
 <section id="problem-4-simulation" class="level1">
-<h1 data-source-line="146">Problem 4: Simulation</h1>
+<h1 data-source-line="147">Problem 4: Simulation</h1>
 <div id="exr-hw7-4" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 34.1</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -1030,66 +866,13 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="149">Using the GA turnout data, simulate the coverage of three interval estimators for the difference in turnout between <span class="groupb">Black</span> and <span class="groupa">non-Black</span> voters:</p>
+<p data-source-line="150">Using the GA turnout data, simulate the coverage of three interval estimators for the difference in turnout between <span class="groupb">Black</span> and <span class="groupa">non-Black</span> voters:</p>
 <ol type="1">
-<li data-source-line="151">The unregularized difference in subsample means <span class="math inline">\hat\mu(1) - \hat\mu(0)</span></li>
-<li data-source-line="152">The regularized difference <span class="math inline">\tilde\mu(1) - \tilde\mu(0)</span> with <span class="math inline">\nprior = 10</span> and <span class="math inline">\thetaprior = 1/2</span> for both groups</li>
-<li data-source-line="153">The regularized difference with <span class="math inline">\nprior = 10</span> and <span class="math inline">\thetaprior(0) = 0.6</span>, <span class="math inline">\thetaprior(1) = 0.8</span> (i.e.&nbsp;different priors for the two groups)</li>
+<li data-source-line="152">The unregularized difference in subsample means <span class="math inline">\hat\mu(1) - \hat\mu(0)</span></li>
+<li data-source-line="153">The regularized difference <span class="math inline">\tilde\mu(1) - \tilde\mu(0)</span> with <span class="math inline">\nprior = 10</span> and <span class="math inline">\thetaprior = 1/2</span> for both groups</li>
+<li data-source-line="154">The regularized difference with <span class="math inline">\nprior = 10</span> and <span class="math inline">\thetaprior(0) = 0.6</span>, <span class="math inline">\thetaprior(1) = 0.8</span> (i.e.&nbsp;different priors for the two groups)</li>
 </ol>
-<p data-source-line="155">For each, draw 10,000 samples of size <span class="math inline">n = 625</span> with replacement, compute a 95% confidence interval <span class="math inline">\hat\Delta \pm 1.96\hat\sigma</span> where <span class="math inline">\hat\sigma</span> is the bootstrap standard deviation, and report the coverage.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution" data-week="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setup: GA turnout population</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>theta.true <span class="ot">=</span> <span class="fu">mean</span>(y[x<span class="sc">==</span><span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(y[x<span class="sc">==</span><span class="dv">0</span>])</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>estimators <span class="ot">=</span> <span class="fu">list</span>(</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">unregularized =</span> <span class="cf">function</span>(X, Y) {</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(Y[X<span class="sc">==</span><span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(Y[X<span class="sc">==</span><span class="dv">0</span>])</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  },</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">same.prior =</span> <span class="cf">function</span>(X, Y) {</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    n.prior <span class="ot">=</span> <span class="dv">10</span>; prior <span class="ot">=</span> <span class="fl">0.5</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    mu1 <span class="ot">=</span> (n.prior <span class="sc">*</span> prior <span class="sc">+</span> <span class="fu">sum</span>(Y[X<span class="sc">==</span><span class="dv">1</span>])) <span class="sc">/</span> (n.prior <span class="sc">+</span> <span class="fu">sum</span>(X<span class="sc">==</span><span class="dv">1</span>))</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    mu0 <span class="ot">=</span> (n.prior <span class="sc">*</span> prior <span class="sc">+</span> <span class="fu">sum</span>(Y[X<span class="sc">==</span><span class="dv">0</span>])) <span class="sc">/</span> (n.prior <span class="sc">+</span> <span class="fu">sum</span>(X<span class="sc">==</span><span class="dv">0</span>))</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    mu1 <span class="sc">-</span> mu0</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  },</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">diff.prior =</span> <span class="cf">function</span>(X, Y) {</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    n.prior <span class="ot">=</span> <span class="dv">10</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    mu1 <span class="ot">=</span> (n.prior <span class="sc">*</span> <span class="fl">0.8</span> <span class="sc">+</span> <span class="fu">sum</span>(Y[X<span class="sc">==</span><span class="dv">1</span>])) <span class="sc">/</span> (n.prior <span class="sc">+</span> <span class="fu">sum</span>(X<span class="sc">==</span><span class="dv">1</span>))</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    mu0 <span class="ot">=</span> (n.prior <span class="sc">*</span> <span class="fl">0.6</span> <span class="sc">+</span> <span class="fu">sum</span>(Y[X<span class="sc">==</span><span class="dv">0</span>])) <span class="sc">/</span> (n.prior <span class="sc">+</span> <span class="fu">sum</span>(X<span class="sc">==</span><span class="dv">0</span>))</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    mu1 <span class="sc">-</span> mu0</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>coverage <span class="ot">=</span> <span class="cf">function</span>(est.fn) {</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span> <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(.) {</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    J <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>m, n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    Xsam <span class="ot">=</span> x[J]; Ysam <span class="ot">=</span> y[J]</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    est <span class="ot">=</span> <span class="fu">est.fn</span>(Xsam, Ysam)</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    boot.sd <span class="ot">=</span> <span class="fu">sd</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">500</span> <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(.) {</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>      I <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">est.fn</span>(Xsam[I], Ysam[I])</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    }))</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">abs</span>(est <span class="sc">-</span> theta.true) <span class="sc">&lt;=</span> <span class="fl">1.96</span> <span class="sc">*</span> boot.sd</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">|&gt;</span> <span class="fu">mean</span>()</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(estimators, coverage)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p data-source-line="197">The unregularized estimator should have about 95% coverage. The same-prior regularized estimator should have close to 95% too, since the bias is small and roughly equal across groups. The different-prior estimator will have lower coverage because the bias differs across groups and doesn’t cancel.</p>
-</div>
+<p data-source-line="156">For each, draw 10,000 samples of size <span class="math inline">n = 625</span> with replacement, compute a 95% confidence interval <span class="math inline">\hat\Delta \pm 1.96\hat\sigma</span> where <span class="math inline">\hat\sigma</span> is the bootstrap standard deviation, and report the coverage.</p>
 </div>
 </div>
 </div>

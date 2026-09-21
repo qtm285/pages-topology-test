@@ -22,41 +22,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -729,7 +694,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part2-two-sample.html">Two-Sample Problems</a></li><li class="breadcrumb-item" data-source-line="327"><a href="../homework/homework-sample-size-two-sample.html"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation for Two-Sample Problems</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part2-two-sample.html">Two-Sample Problems</a></li><li class="breadcrumb-item" data-source-line="328"><a href="../homework/homework-sample-size-two-sample.html"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation for Two-Sample Problems</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation for Two-Sample Problems</span></h1>
 </div>
@@ -789,7 +754,7 @@ f(x,y)
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="homework-sample-size-two-sample_files/figure-html/plot-earnings-by-group-1.svg?v=1789983370871" class="img-fluid figure-img" alt="Jittered 1978 incomes for National Supported Work participants in control and treated groups, with each group mean plus or minus one standard deviation."></p>
+<p><img src="homework-sample-size-two-sample_files/figure-html/plot-earnings-by-group-1.svg?v=1789985091138" class="img-fluid figure-img" alt="Jittered 1978 incomes for National Supported Work participants in control and treated groups, with each group mean plus or minus one standard deviation."></p>
 </figure>
 </div>
 </div>
@@ -816,24 +781,6 @@ Figure&nbsp;33.1: 1978 income for participants in the National Supported Work De
 <div class="callout-exercise">
 <p>We showed that an individual subsample mean <span class="math inline">\hat\mu(x)</span> is an unbiased estimator of the corresponding population mean <span class="math inline">\mu(x)</span>. That implies that the difference of two such estimates, <span class="math inline">\hat\mu(1)-\hat\mu(0)</span>, is an unbiased estimator of the difference of the corresponding population means, <span class="math inline">\mu(1)-\mu(0)</span>.</p>
 <p>Explain why the first implies the second. A sentence or even a couple words should do.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p>Expectation is linear.</p>
-</div>
 </div>
 </div>
 </div>
@@ -873,7 +820,7 @@ Figure&nbsp;33.1: 1978 income for participants in the National Supported Work De
 </div>
 </div>
 <div class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -882,14 +829,14 @@ Figure&nbsp;33.1: 1978 income for participants in the National Supported Work De
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Look over the calculation we used for one subsample mean <span class="math inline">\hat{\mu}(x)</span> <a href="../chapters/chapter-comparing-two-groups.html#sec-variance-of-the-subsample-mean">here</a>. You’ll want to use a lot of the same ideas: writing sums over our subsamples as sums over <span class="math inline">1 \ldots n</span> by putting in group indicators <span class="math inline">1_{=x}(X_i)</span>, conditioning on <span class="math inline">X_1 \ldots X_n</span>, the indicator trick, thinking about what happens when <span class="math inline">j=i</span> and <span class="math inline">j\neq i</span> in the double sum we get when we expand the product, etc. In the subsample mean calculation, the <span class="math inline">j=i</span> terms gave us some stuff that was nonzero. Why isn’t that happening here?</p>
 </div>
 </div>
 </div>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -898,44 +845,9 @@ Figure&nbsp;33.1: 1978 income for participants in the National Supported Work De
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>I saw a lot of you guys claim that <span class="math inline">\hat\mu(0)</span> and <span class="math inline">\hat\mu(1)</span> are independent in your submission. Sometimes that claim wasn’t justified; sometimes it was justified by the claim that the subsamples <span class="math inline">\{ (X_i,Y_i) \ : \ X_i=0\}</span> and <span class="math inline">\{ (X_i, Y_i) \ : \  X_i=1 \}</span> are independent. That’s not true. One way of seeing that the subsamples aren’t independent is to notice that the numbers <span class="math inline">N_0</span> and <span class="math inline">N_1</span> of observations in these subsamples sum to <span class="math inline">n</span>, so if you know one you know the other. The means do, however, have zero covariance. That’s the point of this exercise, but it does take a little calculation to show it.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p>We’ll show that the expectation conditional on <span class="math inline">X_1 \ldots X_n</span> is zero. By the law of iterated expectations, this will imply that the unconditional expectation is also zero.</p>
-<p>Let’s start by just expanding <span class="math inline">\hat{\mu}(1)</span> and <span class="math inline">\hat{\mu}(0)</span> in the cross term, doing a little arithmetic, and then using the <em>indicator trick</em>. <span class="math display">
-\begin{aligned}
-\{\hat{\mu}(1) - \mu(1)\}\{\hat{\mu}(0) -\mu(0)\}
-&amp;= \frac{1}{N_1}\sum_{i=1}^n 1_{=1}(X_i) \{ Y_i-\mu(1) \} \frac{1}{N_0}\sum_{j=1}^n 1_{=0}(X_j) \{Y_j-\mu(0)\} \\
-&amp;= \frac{1}{N_1 N_0} \sum_{i=1}^n \sum_{j=1}^n 1_{=1}(X_i) 1_{=0}(X_j) \{ Y_i-\mu(1) \} \{Y_j-\mu(0)\} \\
-&amp;= \frac{1}{N_1 N_0} \sum_{i=1}^n \sum_{j=1}^n 1_{=1}(X_i) 1_{=0}(X_j) \{ Y_i-\mu(X_i) \} \{Y_j-\mu(X_j)\}
-\end{aligned}
-</span> Now let’s look at the conditional expectation. Using linearity of conditional expectations, we can push the expectation all the way into the double sum. <span class="math display">
-\begin{aligned}
-&amp;\mathop{\mathrm{E}}\sb*{\{\hat{\mu}(1) - \mu(1)\}\{\hat{\mu}(0) -\mu(0)\} \mid X_1 \ldots X_n } \\
-&amp;= \frac{1}{N_1 N_0} \sum_{i=1}^n \sum_{j=1}^n 1_{=1}(X_i) 1_{=0}(X_j) \mathop{\mathrm{E}}\sb*{\{Y_i-\mu(X_i)\}\{Y_j-\mu(X_j)\} \mid X_1 \ldots X_n }
-\end{aligned}
-</span> Every term in this double sum is zero. Why?</p>
-<ul>
-<li>If <span class="math inline">i \neq j</span>, then <span class="math inline">\mathop{\mathrm{E}}\sb*{\{Y_i-\mu(X_i)\}\{Y_j-\mu(X_j)\} \mid X_1 \ldots X_n } = 0</span> because <span class="math inline">(X_i,Y_i)</span> and <span class="math inline">(X_j,Y_j)</span> are independent. This is shown <a href="https://qtm285-1.github.io/assets/lectures/Lecture6.html#step-2.-centering-and-squaring">here</a> in our lecture on Comparing Two Groups.</li>
-<li>If <span class="math inline">i=j</span>, then it’s not possible that <span class="math inline">X_i=1</span> and <span class="math inline">X_j=0</span>, so the product of indicators is zero.</li>
-</ul>
-</div>
 </div>
 </div>
 </div>
@@ -970,24 +882,6 @@ f(\hat\mu(1), \hat\mu(0)) \approx f(\mu(1), \mu(0))
 </div>
 </div>
 </div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p>If we have a large sample size in group <span class="math inline">x</span>, then <span class="math inline">\hat\mu(x)-\mu(x)</span> will be small with very high probability. It’s approximately normal with mean zero and standard deviation <span class="math inline">\sigma=\sqrt{\mathop{\mathrm{E}}[\sigma^2(x)/N_x]}</span>. This means that the difference should be smaller than <span class="math inline">2\sigma</span> in 95% of samples and smaller than <span class="math inline">3\sigma</span> in more than 99% of samples.</p>
-</div>
-</div>
-</div>
-</div>
 <p>Now that we’ve justified the approximation, let’s use it to analyze our ratio estimator.</p>
 <div id="exr-ratio-bias" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 33.4</strong></span> &nbsp;</p>
@@ -1002,37 +896,6 @@ f(\hat\mu(1), \hat\mu(0)) \approx f(\mu(1), \mu(0))
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
 <p>Write out a formula for the linear approximation to the ratio estimator <span class="math inline">\hat\mu(1)/\hat\mu(0)</span> in terms of <span class="math inline">\mu(0)</span>, <span class="math inline">\mu(1)</span>, <span class="math inline">\hat\mu(1)-\mu(1)</span>, and <span class="math inline">\hat\mu(0)-\mu(0)</span>. Then approximate its bias by comparing the expected value of this linear approximation to the estimation target <span class="math inline">\mu(1)/\mu(0)</span>.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p>We’ll start by calculating the partial derivatives that appear in our linear approximation. For <span class="math inline">f(x,y) = x/y</span>, <span class="math display">
-\begin{aligned}
-\frac{\partial f}{\partial x} &amp;= \frac{1}{y} \\
-\frac{\partial f}{\partial y} &amp;= -\frac{x}{y^2}
-\end{aligned}
-</span> Plugging these into our formula for the linear approximation, we get this. <span class="math display">
-\frac{\hat\mu(1)}{\hat\mu(0)} \approx \frac{\mu(1)}{\mu(0)} + \frac{1}{\mu(0)} (\hat\mu(1) - \mu(1)) - \frac{\mu(1)}{\mu(0)^2} (\hat\mu(0) - \mu(0)).
-</span> To approximate our bias, we take the expectation of both sides. <span class="math display">
-\begin{aligned}
-\mathop{\mathrm{E}}\sb*{\frac{\hat\mu(1)}{\hat\mu(0)}}
-&amp;\approx \frac{\mu(1)}{\mu(0)} + \frac{1}{\mu(0)} \mathop{\mathrm{E}}\sb*{\hat\mu(1) - \mu(1)} - \frac{\mu(1)}{\mu(0)^2} \mathop{\mathrm{E}}\sb*{\hat\mu(0) - \mu(0)} \\
-&amp;=\frac{\mu(1)}{\mu(0)} + \frac{1}{\mu(0)} \times 0 - \frac{\mu(1)}{\mu(0)^2} \times 0 = \frac{\mu(1)}{\mu(0)}
-\end{aligned}
-</span> Subtracting <span class="math inline">\frac{\mu(1)}{\mu(0)}</span> from both sides, it follows that our bias, <span class="math inline">\mathop{\mathrm{E}}\sb*{\frac{\hat\mu(1)}{\hat\mu(0)}} - \frac{\mu(1)}{\mu(0)}</span>, is approximately zero.</p>
-</div>
 </div>
 </div>
 </div>
@@ -1053,65 +916,6 @@ f(\hat\mu(1), \hat\mu(0)) \approx f(\mu(1), \mu(0))
 </div>
 </div>
 </div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p>Using our linear approximation, we can see that our ratio estimator’s variance is approximately the variance of a linear combination of the subsample means <span class="math inline">\hat\mu(1)</span> and <span class="math inline">\hat\mu(0)</span>. <span class="math display">
-\begin{aligned}
-\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb*{\frac{\hat\mu(1)}{\hat\mu(0)}}
-&amp;\approx \mathop{\mathrm{\mathop{\mathrm{V}}}}\sb*{\frac{\mu(1)}{\mu(0)} + \frac{1}{\mu(0)} \{\hat\mu(1) - \mu(1)\} - \frac{\mu(1)}{\mu(0)^2} \{\hat\mu(0) - \mu(0)\}} \\
-&amp;=\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb*{\frac{1}{\mu(0)} \{\hat\mu(1) - \mu(1)\} - \frac{\mu(1)}{\mu(0)^2} \{\hat\mu(0) - \mu(0)\}}
-\end{aligned}
-</span> A slight extension of our result from <a href="#exr-variance-crossterm" class="quarto-xref">Exercise&nbsp;<span>33.2</span></a> shows that this variance is the sum of the variances of the two terms. In particular, the cross term in an expansion analogous to <a href="#eq-difference-variance-expansion" class="quarto-xref">Equation&nbsp;<span>33.1</span></a> is just a constant times the cross term that is in <a href="#eq-difference-variance-expansion" class="quarto-xref">Equation&nbsp;<span>33.1</span></a>, and we showed that was zero in <a href="#exr-variance-crossterm" class="quarto-xref">Exercise&nbsp;<span>33.2</span></a>. Since <span class="math inline">\mathop{\mathrm{\mathop{\mathrm{V}}}}[aX] = a^2 \mathop{\mathrm{\mathop{\mathrm{V}}}}[X]</span> for any constant <span class="math inline">a</span>, using our formula for the variance of <span class="math inline">\hat\mu(1)</span> and <span class="math inline">\hat\mu(0)</span> from <a href="../chapters/chapter-comparing-two-groups.html#sec-variance-of-the-subsample-mean">Lecture 6</a> we get this. <span class="math display">
-\begin{aligned}
-\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb*{\frac{\hat\mu(1)}{\hat\mu(0)}}
-&amp;=\frac{1}{\mu(0)^2} \mathop{\mathrm{\mathop{\mathrm{V}}}}\sb*{\hat\mu(1) - \mu(1)} + \frac{\mu(1)^2}{\mu(0)^4} \mathop{\mathrm{\mathop{\mathrm{V}}}}\sb*{\hat\mu(0) - \mu(0)} \\
-&amp;=\frac{1}{\mu(0)^2} \mathop{\mathrm{E}}\sb*{\frac{\sigma^2(1)}{N_1}} + \frac{\mu(1)^2}{\mu(0)^4} \mathop{\mathrm{E}}\sb*{\frac{\sigma^2(0)}{N_0}}.
-\end{aligned}
-</span> To estimate this quantity, we plug in the subsample means <span class="math inline">\hat\mu(1)</span> and <span class="math inline">\hat\mu(0)</span> for <span class="math inline">\mu(1)</span> and <span class="math inline">\mu(0)</span>; the sample variances <span class="math inline">\hat\sigma^2(1)</span> and <span class="math inline">\hat\sigma^2(0)</span> for the population variances <span class="math inline">\sigma^2(1)</span> and <span class="math inline">\sigma^2(0)</span>; and the sample sizes <span class="math inline">1/N_1</span> and <span class="math inline">1/N_0</span> for their expected values <span class="math inline">\mathop{\mathrm{E}}[ 1/N_1]</span> and <span class="math inline">\mathop{\mathrm{E}}[ 1/N_0]</span>.</p>
-<p><span class="math display">
-\begin{aligned}
-\mathop{\mathrm{\widehat{V}}}\sb*{\frac{\hat\mu(1)}{\hat\mu(0)}}
-&amp;=\frac{1}{\hat\mu(0)^2} \frac{\hat\sigma^2(1)}{N_1} + \frac{\hat\mu(1)^2}{\hat\mu(0)^4} \frac{\hat\sigma^2(0)}{N_0} \\
-&amp;= \frac{1}{4600^2} \frac{7900^2}{185} +
-\frac{6300^2}{4600^4} \frac{5500^2}{260} \\
-&amp;\approx 0.0262563 \\
-&amp;\approx 0.16^2
-\end{aligned}
-</span></p>
-<p>It follows that this interval estimate for the ratio <span class="math inline">\mu(1)/\mu(0)</span> should have approximately 95% coverage. <span id="eq-ratio-interval"><span class="math display">
-\begin{aligned}
-\frac{\hat\mu(1)}{\hat\mu(0)} \pm 1.96 \times \sqrt{\mathop{\mathrm{\widehat{V}}}\sb*{\frac{\hat\mu(1)}{\hat\mu(0)}}}
-&amp;\approx \frac{6300}{4600} \pm 1.96 \times 0.16 \\
-&amp;\approx [1.05, 1.69].
-\end{aligned}
-\tag{33.2}</span></span></p>
-<p>Below, we see this interval drawn in purple on top of the bootstrap sampling distribution plot from Figure 2. It’s very similar to the bootstrap-calibrated interval, but not centered in exactly the same place. The reason for that is rounding error. In the Figure 2, I calculate the exact ratio of subsample means <span class="math inline">\hat\mu(1)/\hat\mu(0)</span>, whereas in the calculation above I used rounded version of <span class="math inline">\hat\mu(1)</span> and <span class="math inline">\hat\mu(1)</span> from <a href="../chapters/chapter-comparing-two-groups.html#sec-national-supported-work-demonstration">this table from Lecture</a>.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="homework-sample-size-two-sample_files/figure-html/plot-ratio-interval-1.svg?v=1789983370871" class="img-fluid figure-img" alt="Bootstrap sampling distribution of the treated-to-control mean-income ratio with three nearly overlapping 95 percent intervals: bootstrap-calibrated in blue, rounded normal approximation in purple, and exact-center normal approximation in red."></p>
-</figure>
-</div>
-</div>
-</div>
-<p>If you replace the ratio <span class="math inline">6300/4600</span> with the exact ratio of subsample means in the formula <a href="#eq-ratio-interval" class="quarto-xref">Equation&nbsp;<span>33.2</span></a>, you get the interval drawn in red, which is even more similar to the bootstrap-calibrated interval. Note that I did not replace the rounded values of <span class="math inline">\hat\mu(1)</span> and <span class="math inline">\hat\mu(0)</span> in the variance estimate. That’d probably have given an even more similar interval.</p>
-<p>The unintended lesson here is that, unless you’re just doing a rough calculation by hand, you shouldn’t round until the end of your calculations.</p>
-</div>
-</div>
-</div>
-</div>
 <p>All of that ignores the error of our linear approximation as a potential problem. We should, if we like, be able to reason about this error using tools from calculus.</p>
 <div id="exr-bias-bound" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 33.6</strong></span> &nbsp;</p>
@@ -1129,30 +933,12 @@ f(\hat\mu(1), \hat\mu(0)) \approx f(\mu(1), \mu(0))
 </div>
 </div>
 </div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p><em>To do: write a solution.</em></p>
-</div>
-</div>
-</div>
-</div>
 </section>
 </section>
 <section id="sample-size-calculation-for-two-sample-problems" class="level1">
 <h1>Sample Size Calculation for Two-Sample Problems</h1>
-<p data-source-line="329">In the one-sample case, we used the formula <span class="math inline">\text{se} = \sigma/\sqrt{n}</span> to figure out how large a sample we needed for a given interval width. Now we want to do the same thing for the difference in means <span class="math inline">\hat\mu(1) - \hat\mu(0)</span>.</p>
-<p data-source-line="333">The variance of the difference is <span class="math inline">\mathop{\mathrm{E}}[\sigma^2(1)/N_1 + \sigma^2(0)/N_0]</span>. The subsample sizes <span class="math inline">N_1</span> and <span class="math inline">N_0</span> aren’t fixed — they depend on our sample. But on average, if a fraction <span class="math inline">\pi</span> of the population is in group 1, then <span class="math inline">N_1 \approx n\pi</span> and <span class="math inline">N_0 \approx n(1-\pi)</span>. So the variance of the difference is approximately <span class="math display">
+<p data-source-line="330">In the one-sample case, we used the formula <span class="math inline">\text{se} = \sigma/\sqrt{n}</span> to figure out how large a sample we needed for a given interval width. Now we want to do the same thing for the difference in means <span class="math inline">\hat\mu(1) - \hat\mu(0)</span>.</p>
+<p data-source-line="334">The variance of the difference is <span class="math inline">\mathop{\mathrm{E}}[\sigma^2(1)/N_1 + \sigma^2(0)/N_0]</span>. The subsample sizes <span class="math inline">N_1</span> and <span class="math inline">N_0</span> aren’t fixed — they depend on our sample. But on average, if a fraction <span class="math inline">\pi</span> of the population is in group 1, then <span class="math inline">N_1 \approx n\pi</span> and <span class="math inline">N_0 \approx n(1-\pi)</span>. So the variance of the difference is approximately <span class="math display">
 \frac{\sigma^2(1)}{n\pi} + \frac{\sigma^2(0)}{n(1-\pi)} = \frac{1}{n}\left\{ * \right\}{\frac{\sigma^2(1)}{\pi} + \frac{\sigma^2(0)}{1-\pi}}.
 </span></p>
 <div id="exr-sample-size-two-sample" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
@@ -1167,35 +953,7 @@ f(\hat\mu(1), \hat\mu(0)) \approx f(\mu(1), \mu(0))
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="338">Using the NSW data, estimate the quantities <span class="math inline">\sigma^2(1)</span>, <span class="math inline">\sigma^2(0)</span>, and <span class="math inline">\pi</span> from the sample. Then calculate approximately how large a sample you’d need to get a 95% confidence interval for <span class="math inline">\mu(1) - \mu(0)</span> with a half-width of no more than $500.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution" data-week="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pi.hat <span class="ot">=</span> <span class="fu">mean</span>(X <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>sigma2<span class="fl">.1</span> <span class="ot">=</span> <span class="fu">var</span>(Y[X<span class="sc">==</span><span class="dv">1</span>])</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>sigma2<span class="fl">.0</span> <span class="ot">=</span> <span class="fu">var</span>(Y[X<span class="sc">==</span><span class="dv">0</span>])</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Variance of difference at sample size n is approximately</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># (sigma2.1/pi.hat + sigma2.0/(1-pi.hat)) / n</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Half-width is 1.96 * sqrt(variance)</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Set 1.96 * sqrt(variance) = 500 and solve for n</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>target.halfwidth <span class="ot">=</span> <span class="dv">500</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>n.needed <span class="ot">=</span> (<span class="fl">1.96</span><span class="sc">/</span>target.halfwidth)<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (sigma2<span class="fl">.1</span><span class="sc">/</span>pi.hat <span class="sc">+</span> sigma2<span class="fl">.0</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>pi.hat))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<p data-source-line="339">Using the NSW data, estimate the quantities <span class="math inline">\sigma^2(1)</span>, <span class="math inline">\sigma^2(0)</span>, and <span class="math inline">\pi</span> from the sample. Then calculate approximately how large a sample you’d need to get a 95% confidence interval for <span class="math inline">\mu(1) - \mu(0)</span> with a half-width of no more than $500.</p>
 </div>
 </div>
 </div>
@@ -1211,25 +969,7 @@ f(\hat\mu(1), \hat\mu(0)) \approx f(\mu(1), \mu(0))
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="359">Compare the sample size you calculated above to what you’d need if you were estimating a <em>single</em> group mean <span class="math inline">\mu(1)</span> with the same half-width. Why is the two-sample problem harder?</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution" data-week="8">
-<p data-source-line="363">For a single group mean <span class="math inline">\mu(1)</span> with half-width $500, we need <span class="math inline">n_1 = (1.96/500)^2 \sigma^2(1)</span> observations <em>in group 1</em>. But in the two-sample problem, only a fraction <span class="math inline">\pi</span> of our sample lands in group 1, so we need <span class="math inline">n = n_1/\pi</span> total observations to get <span class="math inline">n_1</span> in group 1. And on top of that, we also need enough observations in group 0. The two-sample problem is harder because we’re estimating two things with one sample, and the sample has to be big enough for both.</p>
-</div>
+<p data-source-line="360">Compare the sample size you calculated above to what you’d need if you were estimating a <em>single</em> group mean <span class="math inline">\mu(1)</span> with the same half-width. Why is the two-sample problem harder?</p>
 </div>
 </div>
 </div>
@@ -1245,36 +985,7 @@ f(\hat\mu(1), \hat\mu(0)) \approx f(\mu(1), \mu(0))
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="368">Verify your sample size calculation by simulation. Draw 10,000 samples of size <span class="math inline">n</span> (using the <span class="math inline">n</span> you calculated in Part A) with replacement from the NSW data. For each, compute the difference in means <span class="math inline">\hat\mu(1) - \hat\mu(0)</span> and a 95% normal-approximation confidence interval. Report: (1) the average half-width, and (2) the fraction of samples where the half-width is no more than $500.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-20" class="callout-20-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution" data-week="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">ceiling</span>(n.needed)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span> <span class="sc">|&gt;</span> <span class="fu">map</span>(<span class="cf">function</span>(.) {</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    I <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(nsw), n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    Xstar <span class="ot">=</span> X[I]; Ystar <span class="ot">=</span> Y[I]</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    diff <span class="ot">=</span> <span class="fu">mean</span>(Ystar[Xstar<span class="sc">==</span><span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(Ystar[Xstar<span class="sc">==</span><span class="dv">0</span>])</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    se <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">var</span>(Ystar[Xstar<span class="sc">==</span><span class="dv">1</span>])<span class="sc">/</span><span class="fu">sum</span>(Xstar<span class="sc">==</span><span class="dv">1</span>) <span class="sc">+</span> <span class="fu">var</span>(Ystar[Xstar<span class="sc">==</span><span class="dv">0</span>])<span class="sc">/</span><span class="fu">sum</span>(Xstar<span class="sc">==</span><span class="dv">0</span>))</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">diff=</span>diff, <span class="at">halfwidth=</span><span class="fl">1.96</span><span class="sc">*</span>se)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">|&gt;</span> <span class="fu">bind_rows</span>()</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">mean.halfwidth =</span> <span class="fu">mean</span>(results<span class="sc">$</span>halfwidth),</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">fraction.under.500 =</span> <span class="fu">mean</span>(results<span class="sc">$</span>halfwidth <span class="sc">&lt;=</span> <span class="dv">500</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p data-source-line="385">The average half-width should be close to $500 and the fraction under $500 should be close to 1/2. It’s close to 1/2 rather than 1 because we calculated the sample size using estimated variances, and about half the time the actual variance is a bit larger than what we estimated.</p>
-</div>
+<p data-source-line="369">Verify your sample size calculation by simulation. Draw 10,000 samples of size <span class="math inline">n</span> (using the <span class="math inline">n</span> you calculated in Part A) with replacement from the NSW data. For each, compute the difference in means <span class="math inline">\hat\mu(1) - \hat\mu(0)</span> and a 95% normal-approximation confidence interval. Report: (1) the average half-width, and (2) the fraction of samples where the half-width is no more than $500.</p>
 </div>
 </div>
 </div>
