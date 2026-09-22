@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-db3ce77e2fa810ba93e795bc1b6f5287.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-1ac2df87fdaba1ba8ddd56025ef42e4c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
 <link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
 <script src="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
@@ -771,11 +771,11 @@ window.Quarto = {
 <p>$$ \newcommand{X}{} \newcommand{Y}{} </p>
 <p>$$</p>
 </div>
-<p>To calibrate an interval estimate, we add ‘arms’ of equal length to our point estimate. We choose the arm length so that, in 95% of surveys done like ours, the estimation target is within them. We can’t choose that length without the sampling distribution of our point estimate, and we don’t have it. So we estimate it. That’s what <a href="chapter-calibration-with-the-binomial.html" class="quarto-xref"><span>Chapter 12</span></a> does: plug a sample frequency <span class="math inline">\hat\theta</span> into the Binomial formula from <a href="chapter-sampling-with-replacement.html" class="quarto-xref"><span>Chapter 9</span></a> and read the width off the result.</p>
+<p>To calibrate an interval estimate, we add ‘arms’ of equal length to our point estimate. We choose the arm length so that, in 95% of surveys done like ours, the estimation target is within them. We can’t choose that length without the sampling distribution of our point estimate, and we don’t have it. So we estimate it. That’s what <span class="quarto-unresolved-ref">?sec-calibration-with-the-binomial</span> does: plug a sample frequency <span class="math inline">\hat\theta</span> into the Binomial formula from <span class="quarto-unresolved-ref">?sec-sampling-with-replacement</span> and read the width off the result.</p>
 <p><span class="math display">
 \hat P\p*{\sum_{i=1}^n Y_i = s} = \binom{n}{s} \hat\theta^{s} (1-\hat\theta)^{n-s}
 </span></p>
-<p data-source-line="258">Both of the sampling distributions we’ve worked out came to us as a <em>parametric form</em>. By parametric form, I mean a formula in terms of some parameters. That tells us what parameters we need to estimate to estimate the sampling distribution. Sampling with replacement, the Binomial’s one parameter is the population frequency <span class="math inline">\theta</span>, which is what we’re trying to estimate anyway. Sampling without replacement, <a href="chapter-sampling-without-replacement.html" class="quarto-xref"><span>Chapter 11</span></a>, it’s the Hypergeometric, and there are two parameters we don’t know—the population size <span class="math inline">m</span> and the number of ones <span class="math inline">m_1</span>—so we plug in <span class="math inline">m\hat\theta</span> for the second.</p>
+<p data-source-line="258">Both of the sampling distributions we’ve worked out came to us as a <em>parametric form</em>. By parametric form, I mean a formula in terms of some parameters. That tells us what parameters we need to estimate to estimate the sampling distribution. Sampling with replacement, the Binomial’s one parameter is the population frequency <span class="math inline">\theta</span>, which is what we’re trying to estimate anyway. Sampling without replacement, <span class="quarto-unresolved-ref">?sec-sampling-without-replacement</span>, it’s the Hypergeometric, and there are two parameters we don’t know—the population size <span class="math inline">m</span> and the number of ones <span class="math inline">m_1</span>—so we plug in <span class="math inline">m\hat\theta</span> for the second.</p>
 <p>That’s what we’re about to give up.</p>
 </section>
 <section id="an-exercise" class="level1">
@@ -788,7 +788,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/plot-exercise-sample-1.svg?v=1789985091138" class="img-fluid figure-img" alt="Six binary survey responses plotted by respondent index: three zeros followed by three ones."></p>
+<p><img src="chapter-bootstrap_files/figure-html/plot-exercise-sample-1.svg?v=1790066093076" class="img-fluid figure-img" alt="Six binary survey responses plotted by respondent index: three zeros followed by three ones."></p>
 </figure>
 </div>
 </div>
@@ -850,7 +850,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEi
 <div id="fig-bootstrap-vs-binomial" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Simulated bootstrap distribution of the mean of six binary responses overlaid on the matching Binomial distribution; the two bar series coincide.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bootstrap-vs-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-bootstrap_files/figure-html/fig-bootstrap-vs-binomial-1.svg?v=1789985091138" id="fig-bootstrap-vs-binomial" class="img-fluid figure-img" alt="Simulated bootstrap distribution of the mean of six binary responses overlaid on the matching Binomial distribution; the two bar series coincide.">
+<img src="chapter-bootstrap_files/figure-html/fig-bootstrap-vs-binomial-1.svg?v=1790066093076" id="fig-bootstrap-vs-binomial" class="img-fluid figure-img" alt="Simulated bootstrap distribution of the mean of six binary responses overlaid on the matching Binomial distribution; the two bar series coincide.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-bootstrap-vs-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;14.1
@@ -926,7 +926,7 @@ Figure&nbsp;14.1
 \text{Binomial}(n, \hat\theta)\big/n
 \end{array}
 </span></p>
-<p>The top edge is the derivation from <a href="chapter-sampling-with-replacement.html" class="quarto-xref"><span>Chapter 9</span></a>: sampling with replacement, the sample frequency is Binomial. The right edge is our estimate—one approximation, <span class="math inline">\hat\theta</span> in place of <span class="math inline">\theta</span>. The bottom edge is the exercise you just did: the bootstrap sampling distribution <em>is</em> the plug-in estimate. And the left edge is the one we care about: does the bootstrap estimate the real sampling distribution? Follow the other three edges around the rectangle and you have the answer. The left edge inherits the right edge’s error, and only that.</p>
+<p>The top edge is the derivation from <span class="quarto-unresolved-ref">?sec-sampling-with-replacement</span>: sampling with replacement, the sample frequency is Binomial. The right edge is our estimate—one approximation, <span class="math inline">\hat\theta</span> in place of <span class="math inline">\theta</span>. The bottom edge is the exercise you just did: the bootstrap sampling distribution <em>is</em> the plug-in estimate. And the left edge is the one we care about: does the bootstrap estimate the real sampling distribution? Follow the other three edges around the rectangle and you have the answer. The left edge inherits the right edge’s error, and only that.</p>
 </section>
 </section>
 <section id="sec-bootstrap" class="level1">
@@ -941,7 +941,7 @@ Figure&nbsp;14.1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/show-population-map-1.svg?v=1789985091138" class="img-fluid figure-img" alt="Map of Georgia's registered-voter population represented by many small, faint points."></p>
+<p><img src="chapter-bootstrap_files/figure-html/show-population-map-1.svg?v=1790066093076" class="img-fluid figure-img" alt="Map of Georgia's registered-voter population represented by many small, faint points."></p>
 </figure>
 </div>
 </div>
@@ -952,7 +952,7 @@ Figure&nbsp;14.1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/show-sample-map-1.svg?v=1789985091138" class="img-fluid figure-img" alt="Map of a random sample from Georgia's registered-voter population; sampled people appear as points sized by how often selected."></p>
+<p><img src="chapter-bootstrap_files/figure-html/show-sample-map-1.svg?v=1790066093076" class="img-fluid figure-img" alt="Map of a random sample from Georgia's registered-voter population; sampled people appear as points sized by how often selected."></p>
 </figure>
 </div>
 </div>
@@ -963,7 +963,7 @@ Figure&nbsp;14.1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/show-bootstrap-map-1.svg?v=1789985091138" class="img-fluid figure-img" alt="Map of a bootstrap sample drawn from the original sample; repeated selections produce visibly different point sizes."></p>
+<p><img src="chapter-bootstrap_files/figure-html/show-bootstrap-map-1.svg?v=1790066093076" class="img-fluid figure-img" alt="Map of a bootstrap sample drawn from the original sample; repeated selections produce visibly different point sizes."></p>
 </figure>
 </div>
 </div>
@@ -1030,7 +1030,7 @@ y_j^*  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/plot-bootstrap-vs-binomial-1.svg?v=1789985091138" alt="Bootstrap distribution of the turnout sample proportion shown as bars and overlaid by the matching plug-in Binomial probability curve." height="400" class="figure-img"></p>
+<p><img src="chapter-bootstrap_files/figure-html/plot-bootstrap-vs-binomial-1.svg?v=1790066093076" alt="Bootstrap distribution of the turnout sample proportion shown as bars and overlaid by the matching plug-in Binomial probability curve." height="400" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1068,7 +1068,7 @@ H_i  &amp;  1 &amp; 4 &amp; \dots &amp; 2 &amp; 2.8 \\
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/plot-history-histogram-1.svg?v=1789985091138" class="img-fluid figure-img" alt="Actual sampling distribution of average five-election vote history, with the population mean, central 95 percent, and calibrated intervals marked."></p>
+<p><img src="chapter-bootstrap_files/figure-html/plot-history-histogram-1.svg?v=1790066093076" class="img-fluid figure-img" alt="Actual sampling distribution of average five-election vote history, with the population mean, central 95 percent, and calibrated intervals marked."></p>
 </figure>
 </div>
 </div>
@@ -1090,7 +1090,7 @@ H_i  &amp;  1 &amp; 4 &amp; \dots &amp; 2 &amp; 2.8 \\
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/plot-actual-vs-bootstrap-history-1.svg?v=1789985091138" class="img-fluid figure-img" alt="Actual sampling distribution of average vote history with the population mean, one sampled estimate, and an interval using the bootstrap width."></p>
+<p><img src="chapter-bootstrap_files/figure-html/plot-actual-vs-bootstrap-history-1.svg?v=1790066093076" class="img-fluid figure-img" alt="Actual sampling distribution of average vote history with the population mean, one sampled estimate, and an interval using the bootstrap width."></p>
 <figcaption>The actual sampling distribution</figcaption>
 </figure>
 </div>
@@ -1098,7 +1098,7 @@ H_i  &amp;  1 &amp; 4 &amp; \dots &amp; 2 &amp; 2.8 \\
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/plot-actual-vs-bootstrap-history-2.svg?v=1789985091138" class="img-fluid figure-img" alt="Bootstrap sampling distribution of average vote history centered at the observed sample mean, with its central interval shaded red."></p>
+<p><img src="chapter-bootstrap_files/figure-html/plot-actual-vs-bootstrap-history-2.svg?v=1790066093076" class="img-fluid figure-img" alt="Bootstrap sampling distribution of average vote history centered at the observed sample mean, with its central interval shaded red."></p>
 <figcaption>The bootstrap sampling distribution</figcaption>
 </figure>
 </div>
@@ -1127,7 +1127,7 @@ H_i  &amp;  1 &amp; 4 &amp; \dots &amp; 2 &amp; 2.8 \\
 </section>
 <section id="scope-of-the-bootstrap" class="level1">
 <h1>Scope of the Bootstrap</h1>
-<p>The bootstrap resamples with replacement, no matter how the sample itself was drawn. So what it estimates is the with-replacement sampling distribution—the plug-in Binomial. But suppose our poll had sampled <strong>without replacement</strong>. Then the real sampling distribution is the Hypergeometric from <a href="chapter-sampling-without-replacement.html" class="quarto-xref"><span>Chapter 11</span></a>:</p>
+<p>The bootstrap resamples with replacement, no matter how the sample itself was drawn. So what it estimates is the with-replacement sampling distribution—the plug-in Binomial. But suppose our poll had sampled <strong>without replacement</strong>. Then the real sampling distribution is the Hypergeometric from <span class="quarto-unresolved-ref">?sec-sampling-without-replacement</span>:</p>
 <p><span class="math display">
 P_\theta(\hat\theta = t) = \binom{n}{nt}\,
 \frac{\bigl[m_1(m_1-1)\ldots(m_1-nt+1)\bigr]\,\bigl[m_0(m_0-1)\ldots(m_0-n(1-t)+1)\bigr]}{m(m-1)\ldots(m-n+1)}
@@ -1151,7 +1151,7 @@ P_\theta(\hat\theta = t) = \binom{n}{nt}\,
 <div id="fig-binom-vs-hyper" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Binomial and Hypergeometric sample-proportion probabilities with population proportion 0.5. The nine panels cross sample sizes 10, 20, 40 with population sizes 50, 100, 200. Both axes and panel locations remain fixed across all four tabs.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-vs-hyper-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-bootstrap_files/figure-html/fig-binom-vs-hyper-1.svg?v=1789985091138" id="fig-binom-vs-hyper" class="img-fluid figure-img" alt="Binomial and Hypergeometric sample-proportion probabilities with population proportion 0.5. The nine panels cross sample sizes 10, 20, 40 with population sizes 50, 100, 200. Both axes and panel locations remain fixed across all four tabs.">
+<img src="chapter-bootstrap_files/figure-html/fig-binom-vs-hyper-1.svg?v=1790066093076" id="fig-binom-vs-hyper" class="img-fluid figure-img" alt="Binomial and Hypergeometric sample-proportion probabilities with population proportion 0.5. The nine panels cross sample sizes 10, 20, 40 with population sizes 50, 100, 200. Both axes and panel locations remain fixed across all four tabs.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-vs-hyper-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;17.1
@@ -1167,7 +1167,7 @@ Figure&nbsp;17.1
 <div id="fig-binom-hyper-mid" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The same nine-panel Binomial and Hypergeometric comparison with population proportion 0.7; sample-size rows, population-size columns, and axes match the other tabs.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-hyper-mid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-bootstrap_files/figure-html/fig-binom-hyper-mid-1.svg?v=1789985091138" id="fig-binom-hyper-mid" class="img-fluid figure-img" alt="The same nine-panel Binomial and Hypergeometric comparison with population proportion 0.7; sample-size rows, population-size columns, and axes match the other tabs.">
+<img src="chapter-bootstrap_files/figure-html/fig-binom-hyper-mid-1.svg?v=1790066093076" id="fig-binom-hyper-mid" class="img-fluid figure-img" alt="The same nine-panel Binomial and Hypergeometric comparison with population proportion 0.7; sample-size rows, population-size columns, and axes match the other tabs.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-hyper-mid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;17.2
@@ -1183,7 +1183,7 @@ Figure&nbsp;17.2
 <div id="fig-binom-hyper-extreme" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The same nine-panel comparison with population proportion 0.9. The sample proportions cluster toward one. Axes and panel locations match the other tabs.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-hyper-extreme-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-bootstrap_files/figure-html/fig-binom-hyper-extreme-1.svg?v=1789985091138" id="fig-binom-hyper-extreme" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.9. The sample proportions cluster toward one. Axes and panel locations match the other tabs.">
+<img src="chapter-bootstrap_files/figure-html/fig-binom-hyper-extreme-1.svg?v=1790066093076" id="fig-binom-hyper-extreme" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.9. The sample proportions cluster toward one. Axes and panel locations match the other tabs.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-hyper-extreme-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;17.3
@@ -1199,7 +1199,7 @@ Figure&nbsp;17.3
 <div id="fig-binom-hyper-flipped" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The same nine-panel comparison with population proportion 0.1. The probabilities mirror the 0.9 tab around a sample proportion of one half. Axes and panel locations remain fixed.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-hyper-flipped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-bootstrap_files/figure-html/fig-binom-hyper-flipped-1.svg?v=1789985091138" id="fig-binom-hyper-flipped" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.1. The probabilities mirror the 0.9 tab around a sample proportion of one half. Axes and panel locations remain fixed.">
+<img src="chapter-bootstrap_files/figure-html/fig-binom-hyper-flipped-1.svg?v=1790066093076" id="fig-binom-hyper-flipped" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.1. The probabilities mirror the 0.9 tab around a sample proportion of one half. Axes and panel locations remain fixed.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-hyper-flipped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;17.4
@@ -1213,6 +1213,7 @@ Figure&nbsp;17.4
 </div>
 <p data-source-line="559">The Hypergeometric looks a lot like the Binomial when <span class="math inline">n</span> is small relative to <span class="math inline">m</span>. That’s because sampling without replacement is almost like sampling with replacement when you’re unlikely to pick the same person twice anyway. When <span class="math inline">n</span> is a meaningful fraction of <span class="math inline">m</span>, the Hypergeometric is narrower—you get better precision by not wasting calls on people you’ve already talked to.</p>
 <p data-source-line="561">If you called everybody you’d know <span class="math inline">\theta_1</span> exactly, and there’d be nothing left to be uncertain about.</p>
+<p><span id="tlda-incremental-publish-proof-20260922" hidden=""></span></p>
 
 
 <script type="webr-data">

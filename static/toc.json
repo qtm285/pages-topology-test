@@ -1,81 +1,66 @@
 [
   {
-    "title": "Prediction, Inference, and Causality I",
+    "title": "index",
     "level": "part",
     "page": 1
   },
   {
-    "title": "1 The Social Pressure Experiment",
+    "title": "The Social Pressure Experimenpp",
     "level": "chapter",
     "page": 2
   },
   {
-    "title": "2 Homework: Setting Up",
+    "title": "What this assignment is",
     "level": "chapter",
     "page": 3
   },
   {
-    "title": "3 Homework: Basic Descriptive Statistics",
+    "title": "Mean and Standard Deviation",
     "level": "chapter",
     "page": 4
   },
   {
-    "title": "One-Sample Problems",
+    "title": "part1-one-sample",
     "level": "part",
     "page": 5
   },
   {
-    "title": "4 Sampling",
+    "title": "Chocolate Sampling",
     "level": "chapter",
     "page": 6
   },
   {
-    "title": "Sampling — Slides",
-    "level": "section",
-    "page": 42
-  },
-  {
-    "title": "5 Point and Interval Estimates",
+    "title": "Sampling Review",
     "level": "chapter",
     "page": 7
   },
   {
-    "title": "Point and Interval Estimates — Slides",
-    "level": "section",
-    "page": 43
-  },
-  {
-    "title": "6 Homework: The Idea of Calibration",
+    "title": "A Die",
     "level": "chapter",
     "page": 8
   },
   {
-    "title": "7 Calibrating Interval Estimates with Binary Observations",
+    "title": "Calibration",
     "level": "chapter",
     "page": 9
   },
   {
-    "title": "Calibrating Interval Estimates with Binary Observations — Slides",
-    "level": "section",
-    "page": 44
-  },
-  {
-    "title": "8 Sampling with Replacement and the Binomial Distribution",
+    "title": "Sampling with Replacement",
     "level": "chapter",
     "page": 10
   },
   {
-    "title": "9 Homework: Calibration with Binary Outcomes",
+    "title": "homework-calibration-binary",
     "level": "chapter",
     "page": 11
   },
   {
-    "title": "10 Sampling without Replacement and the Hypergeometric Distribution",
+    "title": "Review: Sampling with Replacement",
     "level": "chapter",
     "page": 12
   },
   {
-    "title": "11 Calibration using the Binomial Distribution",
+    "title": "Calibration using the Binomial Distribution",
     "level": "chapter",
     "page": 13
   },
@@ -85,147 +70,132 @@
     "page": 14
   },
   {
-    "title": "Calibrating Interval Estimates using the Bootstrap — Slides",
-    "level": "section",
-    "page": 45
-  },
-  {
-    "title": "13 Homework: Bootstrap",
+    "title": "plot nonbinary.coverage #<1>",
     "level": "chapter",
     "page": 15
   },
   {
-    "title": "14 Random Variables and Moments",
+    "title": "Random Variables",
     "level": "chapter",
     "page": 16
   },
   {
-    "title": "Random Variables and Moments — Slides",
-    "level": "section",
-    "page": 46
-  },
-  {
-    "title": "15 Homework: Sample Size Calculation and Coverage",
+    "title": "Problem 1: Interval Calibration",
     "level": "chapter",
     "page": 17
   },
   {
-    "title": "16 Homework — Random Variables, Moments, and the Standard Deviation",
+    "title": "Warm-up: Computing Moments",
     "level": "chapter",
     "page": 18
   },
   {
-    "title": "17 The Standard Deviation is Standard",
+    "title": "Markov's Inequality",
     "level": "chapter",
     "page": 19
   },
   {
-    "title": "18 Normal Approximation",
+    "title": "Review",
     "level": "chapter",
     "page": 20
   },
   {
-    "title": "Normal Approximation and Sample Size Calculation — Slides",
-    "level": "section",
-    "page": 47
-  },
-  {
-    "title": "19 Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators",
+    "title": "Markov's Inequality and Consistency",
     "level": "chapter",
     "page": 21
   },
   {
-    "title": "20 Probability Review",
+    "title": "A New Dataset",
     "level": "chapter",
     "page": 22
   },
   {
-    "title": "21 Variance, Standard Deviation, and Sample Size",
+    "title": "Variance and Standard Deviation",
     "level": "chapter",
     "page": 23
   },
   {
-    "title": "22 Homework: Comparing Estimators",
+    "title": "Introduction",
     "level": "chapter",
     "page": 24
   },
   {
-    "title": "23 Bias and Coverage",
+    "title": "Why Bias Matters",
     "level": "chapter",
     "page": 25
   },
   {
-    "title": "24 Practice Midterm 1",
+    "title": "Problem 1",
     "level": "chapter",
     "page": 26
   },
   {
-    "title": "Distributional Approximation",
+    "title": "part-breather",
     "level": "part",
     "page": 27
   },
   {
-    "title": "25 Why the CLT Works — Stein’s Method",
+    "title": "Overview",
     "level": "chapter",
     "page": 28
   },
   {
-    "title": "26 When Normal Breaks Down — Poisson Approximation and Quality Control",
+    "title": "Quality Control: The Brewery Problem",
     "level": "chapter",
     "page": 29
   },
   {
-    "title": "27 Stein’s Method and Poisson Approximation",
+    "title": "Review",
     "level": "chapter",
     "page": 30
   },
   {
-    "title": "Two-Sample Problems",
+    "title": "part2-two-sample",
     "level": "part",
     "page": 31
   },
   {
-    "title": "28 Comparing Two Groups",
+    "title": "Examples and Introduction",
     "level": "chapter",
     "page": 32
   },
   {
-    "title": "29 Homework: Bias with Two Groups",
+    "title": "Setup",
     "level": "chapter",
     "page": 33
   },
   {
-    "title": "30 Homework: Sample Size Calculation for Two-Sample Problems",
+    "title": "Summary",
     "level": "chapter",
     "page": 34
   },
   {
-    "title": "31 Potential Outcomes and Randomization",
+    "title": "Treatment was assigned by household, so the household is the unit here.",
     "level": "chapter",
     "page": 35
   },
   {
-    "title": "32 Homework: Causality",
+    "title": "Summary",
     "level": "chapter",
     "page": 36
   },
   {
-    "title": "33 Sampling and Randomization",
+    "title": "This completed potential-outcome population is a teaching simulation. The age",
     "level": "chapter",
     "page": 37
   },
   {
-    "title": "34 Observational Studies and Confounding",
+    "title": "What Randomization Bought Us",
     "level": "chapter",
     "page": 38
   },
   {
-    "title": "35 Models",
+    "title": "From Designs to Models",
     "level": "chapter",
     "page": 39
   },
   {
-    "title": "36 Practice Midterm 2",
+    "title": "Problem 1",
     "level": "chapter",
     "page": 40
   },
