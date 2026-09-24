@@ -701,6 +701,12 @@ window.Quarto = {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-programming-reference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Programming Reference</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
@@ -719,7 +725,10 @@ window.Quarto = {
   <li><a href="#an-exercise" id="toc-an-exercise" class="nav-link" data-scroll-target="#an-exercise">An Exercise</a>
   <ul class="collapse">
   <li><a href="#bootstrapping-by-hand" id="toc-bootstrapping-by-hand" class="nav-link" data-scroll-target="#bootstrapping-by-hand">Bootstrapping by Hand</a></li>
-  <li><a href="#simulating-a-few-more-draws" id="toc-simulating-a-few-more-draws" class="nav-link" data-scroll-target="#simulating-a-few-more-draws">Simulating a Few More Draws</a></li>
+  <li><a href="#simulating-a-few-more-draws" id="toc-simulating-a-few-more-draws" class="nav-link" data-scroll-target="#simulating-a-few-more-draws">Simulating a Few More Draws</a>
+  <ul class="collapse">
+  <li><a href="#programming-the-bootstrap" id="toc-programming-the-bootstrap" class="nav-link" data-scroll-target="#programming-the-bootstrap">Programming the bootstrap</a></li>
+  </ul></li>
   <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a></li>
   <li><a href="#the-picture" id="toc-the-picture" class="nav-link" data-scroll-target="#the-picture">The Picture</a></li>
   </ul></li>
@@ -746,7 +755,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item" data-source-line="160"><a href="../chapters/chapter-bootstrap.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item" data-source-line="171"><a href="../chapters/chapter-bootstrap.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></h1>
 </div>
@@ -771,11 +780,11 @@ window.Quarto = {
 <p>$$ \newcommand{X}{} \newcommand{Y}{} </p>
 <p>$$</p>
 </div>
-<p>To calibrate an interval estimate, we add ‘arms’ of equal length to our point estimate. We choose the arm length so that, in 95% of surveys done like ours, the estimation target is within them. We can’t choose that length without the sampling distribution of our point estimate, and we don’t have it. So we estimate it. That’s what <span class="quarto-unresolved-ref">?sec-calibration-with-the-binomial</span> does: plug a sample frequency <span class="math inline">\hat\theta</span> into the Binomial formula from <span class="quarto-unresolved-ref">?sec-sampling-with-replacement</span> and read the width off the result.</p>
+<p>To calibrate an interval estimate, we add ‘arms’ of equal length to our point estimate. We choose the arm length so that, in 95% of surveys done like ours, the estimation target is within them. We can’t choose that length without the sampling distribution of our point estimate, and we don’t have it. So we estimate it. That’s what <a href="chapter-calibration-with-the-binomial.html" class="quarto-xref"><span>Chapter 12</span></a> does: plug a sample frequency <span class="math inline">\hat\theta</span> into the Binomial formula from <a href="chapter-sampling-with-replacement.html" class="quarto-xref"><span>Chapter 9</span></a> and read the width off the result.</p>
 <p><span class="math display">
 \hat P\p*{\sum_{i=1}^n Y_i = s} = \binom{n}{s} \hat\theta^{s} (1-\hat\theta)^{n-s}
 </span></p>
-<p data-source-line="258">Both of the sampling distributions we’ve worked out came to us as a <em>parametric form</em>. By parametric form, I mean a formula in terms of some parameters. That tells us what parameters we need to estimate to estimate the sampling distribution. Sampling with replacement, the Binomial’s one parameter is the population frequency <span class="math inline">\theta</span>, which is what we’re trying to estimate anyway. Sampling without replacement, <span class="quarto-unresolved-ref">?sec-sampling-without-replacement</span>, it’s the Hypergeometric, and there are two parameters we don’t know—the population size <span class="math inline">m</span> and the number of ones <span class="math inline">m_1</span>—so we plug in <span class="math inline">m\hat\theta</span> for the second.</p>
+<p data-source-line="269">Both of the sampling distributions we’ve worked out came to us as a <em>parametric form</em>. By parametric form, I mean a formula in terms of some parameters. That tells us what parameters we need to estimate to estimate the sampling distribution. Sampling with replacement, the Binomial’s one parameter is the population frequency <span class="math inline">\theta</span>, which is what we’re trying to estimate anyway. Sampling without replacement, <a href="chapter-sampling-without-replacement.html" class="quarto-xref"><span>Chapter 11</span></a>, it’s the Hypergeometric, and there are two parameters we don’t know—the population size <span class="math inline">m</span> and the number of ones <span class="math inline">m_1</span>—so we plug in <span class="math inline">m\hat\theta</span> for the second.</p>
 <p>That’s what we’re about to give up.</p>
 </section>
 <section id="an-exercise" class="level1">
@@ -788,7 +797,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/plot-exercise-sample-1.svg?v=1790066093076" class="img-fluid figure-img" alt="Six binary survey responses plotted by respondent index: three zeros followed by three ones."></p>
+<p><img src="chapter-bootstrap_files/figure-html/plot-exercise-sample-1.svg?v=1790275487801" class="img-fluid figure-img" alt="Six binary survey responses plotted by respondent index: three zeros followed by three ones."></p>
 </figure>
 </div>
 </div>
@@ -825,14 +834,24 @@ Y_i  &amp;  0 &amp; 0 &amp; 0 &amp; 1 &amp; 1 &amp; 1 &amp; 0.5 \\
 <h2 class="anchored" data-anchor-id="simulating-a-few-more-draws">Simulating a Few More Draws</h2>
 <p>If you have access to a computer, you can simulate many more draws.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>draws <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span> <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(.) { </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  Jstar <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>nexercise, nexercise, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  Ystar <span class="ot">=</span> Yexercise[Jstar]</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(Ystar)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>computer.tally <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(draws)) <span class="sc">|&gt;</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">theta.hat=</span>draws, <span class="at">count=</span>Freq)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>resample <span class="ot">=</span> <span class="cf">function</span>(Y) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  Jstar <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">seq_along</span>(Y), <span class="fu">length</span>(Y), <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  Y[Jstar]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>estimator <span class="ot">=</span> <span class="cf">function</span>(Y) <span class="fu">mean</span>(Y)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>draws <span class="ot">=</span> <span class="fu">rep</span>(<span class="fu">list</span>(Yexercise), <span class="dv">10000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(resample) <span class="sc">|&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_vec</span>(estimator) <span class="sc">|&gt;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with_seed</span>()</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>computer.tally <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(draws)) <span class="sc">|&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">theta.hat=</span>draws, <span class="at">count=</span>Freq)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<section id="programming-the-bootstrap" class="level3">
+<h3 class="anchored" data-anchor-id="programming-the-bootstrap">Programming the bootstrap</h3>
+<p>The bootstrap pipeline has the same three parts as the sampling-distribution pipeline: repeat a source, draw from it, and calculate an estimator. The difference is the source and the drawing function. A sampling distribution uses the population and <code>draw.sample()</code>; a bootstrap distribution uses the observed sample and <code>resample()</code>.</p>
+<p>Naming <code>resample</code> and <code>estimator</code> makes that substitution visible in the code. The <a href="../chapters/chapter-programming-reference.html#sampling-and-bootstrap-distributions">programming reference</a> places the two pipelines side by side.</p>
+</section>
 </section>
 <section id="discussion" class="level2">
 <h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
@@ -850,7 +869,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEi
 <div id="fig-bootstrap-vs-binomial" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Simulated bootstrap distribution of the mean of six binary responses overlaid on the matching Binomial distribution; the two bar series coincide.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bootstrap-vs-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-bootstrap_files/figure-html/fig-bootstrap-vs-binomial-1.svg?v=1790066093076" id="fig-bootstrap-vs-binomial" class="img-fluid figure-img" alt="Simulated bootstrap distribution of the mean of six binary responses overlaid on the matching Binomial distribution; the two bar series coincide.">
+<img src="chapter-bootstrap_files/figure-html/fig-bootstrap-vs-binomial-1.svg?v=1790275487801" id="fig-bootstrap-vs-binomial" class="img-fluid figure-img" alt="Simulated bootstrap distribution of the mean of six binary responses overlaid on the matching Binomial distribution; the two bar series coincide.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-bootstrap-vs-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;14.1
@@ -915,7 +934,7 @@ Figure&nbsp;14.1
 <section id="the-picture" class="level2">
 <h2 class="anchored" data-anchor-id="the-picture">The Picture</h2>
 <p>What we just did draws as a rectangle.</p>
-<p data-source-line="437"><span class="math display">
+<p data-source-line="463"><span class="math display">
 \begin{array}{ccc}
 \underset{\textstyle\text{drawing from the population}}{\text{sampling distribution}}
 &amp; = &amp;
@@ -926,14 +945,14 @@ Figure&nbsp;14.1
 \text{Binomial}(n, \hat\theta)\big/n
 \end{array}
 </span></p>
-<p>The top edge is the derivation from <span class="quarto-unresolved-ref">?sec-sampling-with-replacement</span>: sampling with replacement, the sample frequency is Binomial. The right edge is our estimate—one approximation, <span class="math inline">\hat\theta</span> in place of <span class="math inline">\theta</span>. The bottom edge is the exercise you just did: the bootstrap sampling distribution <em>is</em> the plug-in estimate. And the left edge is the one we care about: does the bootstrap estimate the real sampling distribution? Follow the other three edges around the rectangle and you have the answer. The left edge inherits the right edge’s error, and only that.</p>
+<p>The top edge is the derivation from <a href="chapter-sampling-with-replacement.html" class="quarto-xref"><span>Chapter 9</span></a>: sampling with replacement, the sample frequency is Binomial. The right edge is our estimate—one approximation, <span class="math inline">\hat\theta</span> in place of <span class="math inline">\theta</span>. The bottom edge is the exercise you just did: the bootstrap sampling distribution <em>is</em> the plug-in estimate. And the left edge is the one we care about: does the bootstrap estimate the real sampling distribution? Follow the other three edges around the rectangle and you have the answer. The left edge inherits the right edge’s error, and only that.</p>
 </section>
 </section>
 <section id="sec-bootstrap" class="level1">
-<h1 data-source-line="452">The Bootstrap</h1>
+<h1 data-source-line="478">The Bootstrap</h1>
 <section id="the-bootstrap-interpretation-in-our-turnout-poll" class="level2">
 <h2 class="anchored" data-anchor-id="the-bootstrap-interpretation-in-our-turnout-poll">The Bootstrap Interpretation in Our Turnout Poll</h2>
-<div id="fig-bootstrap-maps" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-labels="Population,Sample,Bootstrap Sample" data-mode="steps" data-layout="sidebar">
+<div id="fig-bootstrap-maps" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-mode="steps" data-layout="sidebar" data-labels="Population,Sample,Bootstrap Sample">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bootstrap-maps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
@@ -941,7 +960,7 @@ Figure&nbsp;14.1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/show-population-map-1.svg?v=1790066093076" class="img-fluid figure-img" alt="Map of Georgia's registered-voter population represented by many small, faint points."></p>
+<p><img src="chapter-bootstrap_files/figure-html/show-population-map-1.svg?v=1790275487801" class="img-fluid figure-img" alt="Map of Georgia's registered-voter population represented by many small, faint points."></p>
 </figure>
 </div>
 </div>
@@ -952,7 +971,7 @@ Figure&nbsp;14.1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/show-sample-map-1.svg?v=1790066093076" class="img-fluid figure-img" alt="Map of a random sample from Georgia's registered-voter population; sampled people appear as points sized by how often selected."></p>
+<p><img src="chapter-bootstrap_files/figure-html/show-sample-map-1.svg?v=1790275487801" class="img-fluid figure-img" alt="Map of a random sample from Georgia's registered-voter population; sampled people appear as points sized by how often selected."></p>
 </figure>
 </div>
 </div>
@@ -963,7 +982,7 @@ Figure&nbsp;14.1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/show-bootstrap-map-1.svg?v=1790066093076" class="img-fluid figure-img" alt="Map of a bootstrap sample drawn from the original sample; repeated selections produce visibly different point sizes."></p>
+<p><img src="chapter-bootstrap_files/figure-html/show-bootstrap-map-1.svg?v=1790275487801" class="img-fluid figure-img" alt="Map of a bootstrap sample drawn from the original sample; repeated selections produce visibly different point sizes."></p>
 </figure>
 </div>
 </div>
@@ -996,7 +1015,7 @@ Y_i  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
 <p><span class="math display">
 \begin{array}{r|rrrr|r}
 i    &amp;   1 &amp; 2 &amp; \dots &amp; 625 &amp; \bar{Y}_{625}^*  \\
-Y_i^*  &amp;  1 &amp; 0 &amp; \dots &amp; 0 &amp; 0.67 \\
+Y_i^*  &amp;  1 &amp; 1 &amp; \dots &amp; 0 &amp; 0.72 \\
 \end{array}
 </span></p>
 </div><div class="column">
@@ -1020,17 +1039,22 @@ y_j^*  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
 <section id="the-bootstrap-is-nonparametric" class="level2">
 <h2 class="anchored" data-anchor-id="the-bootstrap-is-nonparametric">The Bootstrap is Nonparametric</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>bootstrap.samples <span class="ot">=</span> <span class="fu">array</span>(<span class="at">dim=</span><span class="dv">10000</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(rr <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>) {</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    Y.star <span class="ot">=</span> Y[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, n, <span class="at">replace=</span><span class="cn">TRUE</span>)]</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    bootstrap.samples[rr] <span class="ot">=</span> <span class="fu">mean</span>(Y.star) </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>resample <span class="ot">=</span> <span class="cf">function</span>(Y) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  J.star <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">seq_along</span>(Y), <span class="fu">length</span>(Y), <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  Y[J.star]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>estimator <span class="ot">=</span> <span class="cf">function</span>(Y) <span class="fu">mean</span>(Y)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>bootstrap.samples <span class="ot">=</span> <span class="fu">rep</span>(<span class="fu">list</span>(Y), <span class="dv">10000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(resample) <span class="sc">|&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_vec</span>(estimator) <span class="sc">|&gt;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with_seed</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/plot-bootstrap-vs-binomial-1.svg?v=1790066093076" alt="Bootstrap distribution of the turnout sample proportion shown as bars and overlaid by the matching plug-in Binomial probability curve." height="400" class="figure-img"></p>
+<p><img src="chapter-bootstrap_files/figure-html/plot-bootstrap-vs-binomial-1.svg?v=1790275487801" alt="Bootstrap distribution of the turnout sample proportion shown as bars and overlaid by the matching plug-in Binomial probability curve." height="400" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1057,18 +1081,22 @@ H_i  &amp;  1 &amp; 4 &amp; \dots &amp; 2 &amp; 2.8 \\
 <section id="the-sampling-distribution-of-average-vote-history" class="level2">
 <h2 class="anchored" data-anchor-id="the-sampling-distribution-of-average-vote-history">The Sampling Distribution of Average Vote History</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mean.history.samples <span class="ot">=</span> <span class="fu">array</span>(<span class="at">dim=</span><span class="dv">10000</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(rr <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>) {</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    I <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>m, n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    Hsam <span class="ot">=</span> h[I]</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    mean.history.samples[rr] <span class="ot">=</span> <span class="fu">mean</span>(Hsam)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>draw.sample <span class="ot">=</span> <span class="cf">function</span>(h) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  I <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">seq_along</span>(h), n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  h[I]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>history.estimator <span class="ot">=</span> <span class="cf">function</span>(H) <span class="fu">mean</span>(H)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>mean.history.samples <span class="ot">=</span> <span class="fu">rep</span>(<span class="fu">list</span>(h), <span class="dv">10000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(draw.sample) <span class="sc">|&gt;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_vec</span>(history.estimator) <span class="sc">|&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with_seed</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/plot-history-histogram-1.svg?v=1790066093076" class="img-fluid figure-img" alt="Actual sampling distribution of average five-election vote history, with the population mean, central 95 percent, and calibrated intervals marked."></p>
+<p><img src="chapter-bootstrap_files/figure-html/plot-history-histogram-1.svg?v=1790275487801" class="img-fluid figure-img" alt="Actual sampling distribution of average five-election vote history, with the population mean, central 95 percent, and calibrated intervals marked."></p>
 </figure>
 </div>
 </div>
@@ -1078,19 +1106,22 @@ H_i  &amp;  1 &amp; 4 &amp; \dots &amp; 2 &amp; 2.8 \\
 <section id="the-bootstrap-sampling-distribution-of-average-vote-history" class="level2">
 <h2 class="anchored" data-anchor-id="the-bootstrap-sampling-distribution-of-average-vote-history">The Bootstrap Sampling Distribution of Average Vote History</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>history.bootstrap.samples <span class="ot">=</span> <span class="fu">array</span>(<span class="at">dim=</span><span class="dv">10000</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(rr <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>) {</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    I <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    Hstar <span class="ot">=</span> H[I]</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    history.bootstrap.samples[rr] <span class="ot">=</span> <span class="fu">mean</span>(Hstar)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>resample <span class="ot">=</span> <span class="cf">function</span>(H) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  I <span class="ot">=</span> <span class="fu">sample</span>(<span class="fu">seq_along</span>(H), <span class="fu">length</span>(H), <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  H[I]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>history.bootstrap.samples <span class="ot">=</span> <span class="fu">rep</span>(<span class="fu">list</span>(H), <span class="dv">10000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(resample) <span class="sc">|&gt;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_vec</span>(history.estimator) <span class="sc">|&gt;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with_seed</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/plot-actual-vs-bootstrap-history-1.svg?v=1790066093076" class="img-fluid figure-img" alt="Actual sampling distribution of average vote history with the population mean, one sampled estimate, and an interval using the bootstrap width."></p>
+<p><img src="chapter-bootstrap_files/figure-html/plot-actual-vs-bootstrap-history-1.svg?v=1790275487801" class="img-fluid figure-img" alt="Actual sampling distribution of average vote history with the population mean, one sampled estimate, and an interval using the bootstrap width."></p>
 <figcaption>The actual sampling distribution</figcaption>
 </figure>
 </div>
@@ -1098,7 +1129,7 @@ H_i  &amp;  1 &amp; 4 &amp; \dots &amp; 2 &amp; 2.8 \\
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="chapter-bootstrap_files/figure-html/plot-actual-vs-bootstrap-history-2.svg?v=1790066093076" class="img-fluid figure-img" alt="Bootstrap sampling distribution of average vote history centered at the observed sample mean, with its central interval shaded red."></p>
+<p><img src="chapter-bootstrap_files/figure-html/plot-actual-vs-bootstrap-history-2.svg?v=1790275487801" class="img-fluid figure-img" alt="Bootstrap sampling distribution of average vote history centered at the observed sample mean, with its central interval shaded red."></p>
 <figcaption>The bootstrap sampling distribution</figcaption>
 </figure>
 </div>
@@ -1127,20 +1158,20 @@ H_i  &amp;  1 &amp; 4 &amp; \dots &amp; 2 &amp; 2.8 \\
 </section>
 <section id="scope-of-the-bootstrap" class="level1">
 <h1>Scope of the Bootstrap</h1>
-<p>The bootstrap resamples with replacement, no matter how the sample itself was drawn. So what it estimates is the with-replacement sampling distribution—the plug-in Binomial. But suppose our poll had sampled <strong>without replacement</strong>. Then the real sampling distribution is the Hypergeometric from <span class="quarto-unresolved-ref">?sec-sampling-without-replacement</span>:</p>
+<p>The bootstrap resamples with replacement, no matter how the sample itself was drawn. So what it estimates is the with-replacement sampling distribution—the plug-in Binomial. But suppose our poll had sampled <strong>without replacement</strong>. Then the real sampling distribution is the Hypergeometric from <a href="chapter-sampling-without-replacement.html" class="quarto-xref"><span>Chapter 11</span></a>:</p>
 <p><span class="math display">
 P_\theta(\hat\theta = t) = \binom{n}{nt}\,
 \frac{\bigl[m_1(m_1-1)\ldots(m_1-nt+1)\bigr]\,\bigl[m_0(m_0-1)\ldots(m_0-n(1-t)+1)\bigr]}{m(m-1)\ldots(m-n+1)}
 \quad\text{ for }\quad m_1 = m\theta, \ \ m_0 = m(1-\theta).
 </span></p>
-<p data-source-line="460">Same two stages as before, but calls use people up, so each factor falls as its response repeats. If we knew we’d sampled without replacement, and knew <span class="math inline">m</span>, we could plug <span class="math inline">\hat\theta</span> into this instead. The question for the bootstrap is how far apart these two distributions really are.</p>
+<p data-source-line="486">Same two stages as before, but calls use people up, so each factor falls as its response repeats. If we knew we’d sampled without replacement, and knew <span class="math inline">m</span>, we could plug <span class="math inline">\hat\theta</span> into this instead. The question for the bootstrap is how far apart these two distributions really are.</p>
 <section id="sec-binom-hyper-comparison" class="level2">
-<h2 class="anchored" data-anchor-id="sec-binom-hyper-comparison" data-source-line="462">Comparing Sampling with and without Replacement</h2>
-<p data-source-line="464">Each panel shows the distribution of the estimated population proportion. Rows change the number of calls <span class="math inline">n</span>; columns change the population size <span class="math inline">m</span>. The diagonal keeps <span class="math inline">n/m=1/5</span>. Use the tabs to change the population proportion <span class="math inline">\theta_1</span>.</p>
+<h2 class="anchored" data-anchor-id="sec-binom-hyper-comparison" data-source-line="488">Comparing Sampling with and without Replacement</h2>
+<p data-source-line="490">Each panel shows the distribution of the estimated population proportion. Rows change the number of calls <span class="math inline">n</span>; columns change the population size <span class="math inline">m</span>. The diagonal keeps <span class="math inline">n/m=1/5</span>. Use the tabs to change the population proportion <span class="math inline">\theta_1</span>.</p>
 <ol type="1">
-<li data-source-line="466"><strong>Across a row:</strong> keep the number of calls fixed. What changes as the population grows? What stays the same?</li>
-<li data-source-line="467"><strong>Down the diagonal:</strong> increase the number of calls and the population size together. What changes when the fraction sampled stays the same?</li>
-<li data-source-line="468"><strong>Between tabs:</strong> what changes as the population proportion moves away from one half? How do the last two tabs compare?</li>
+<li data-source-line="492"><strong>Across a row:</strong> keep the number of calls fixed. What changes as the population grows? What stays the same?</li>
+<li data-source-line="493"><strong>Down the diagonal:</strong> increase the number of calls and the population size together. What changes when the fraction sampled stays the same?</li>
+<li data-source-line="494"><strong>Between tabs:</strong> what changes as the population proportion moves away from one half? How do the last two tabs compare?</li>
 </ol>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Even: <span class="math inline">\theta_1=0.5</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Mid: <span class="math inline">\theta_1=0.7</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Extreme-ish: <span class="math inline">\theta_1=0.9</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">Flipped: <span class="math inline">\theta_1=0.1</span></a></li></ul>
@@ -1151,7 +1182,7 @@ P_\theta(\hat\theta = t) = \binom{n}{nt}\,
 <div id="fig-binom-vs-hyper" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Binomial and Hypergeometric sample-proportion probabilities with population proportion 0.5. The nine panels cross sample sizes 10, 20, 40 with population sizes 50, 100, 200. Both axes and panel locations remain fixed across all four tabs.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-vs-hyper-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-bootstrap_files/figure-html/fig-binom-vs-hyper-1.svg?v=1790066093076" id="fig-binom-vs-hyper" class="img-fluid figure-img" alt="Binomial and Hypergeometric sample-proportion probabilities with population proportion 0.5. The nine panels cross sample sizes 10, 20, 40 with population sizes 50, 100, 200. Both axes and panel locations remain fixed across all four tabs.">
+<img src="chapter-bootstrap_files/figure-html/fig-binom-vs-hyper-1.svg?v=1790275487801" id="fig-binom-vs-hyper" class="img-fluid figure-img" alt="Binomial and Hypergeometric sample-proportion probabilities with population proportion 0.5. The nine panels cross sample sizes 10, 20, 40 with population sizes 50, 100, 200. Both axes and panel locations remain fixed across all four tabs.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-vs-hyper-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;17.1
@@ -1167,7 +1198,7 @@ Figure&nbsp;17.1
 <div id="fig-binom-hyper-mid" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The same nine-panel Binomial and Hypergeometric comparison with population proportion 0.7; sample-size rows, population-size columns, and axes match the other tabs.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-hyper-mid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-bootstrap_files/figure-html/fig-binom-hyper-mid-1.svg?v=1790066093076" id="fig-binom-hyper-mid" class="img-fluid figure-img" alt="The same nine-panel Binomial and Hypergeometric comparison with population proportion 0.7; sample-size rows, population-size columns, and axes match the other tabs.">
+<img src="chapter-bootstrap_files/figure-html/fig-binom-hyper-mid-1.svg?v=1790275487801" id="fig-binom-hyper-mid" class="img-fluid figure-img" alt="The same nine-panel Binomial and Hypergeometric comparison with population proportion 0.7; sample-size rows, population-size columns, and axes match the other tabs.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-hyper-mid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;17.2
@@ -1183,7 +1214,7 @@ Figure&nbsp;17.2
 <div id="fig-binom-hyper-extreme" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The same nine-panel comparison with population proportion 0.9. The sample proportions cluster toward one. Axes and panel locations match the other tabs.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-hyper-extreme-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-bootstrap_files/figure-html/fig-binom-hyper-extreme-1.svg?v=1790066093076" id="fig-binom-hyper-extreme" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.9. The sample proportions cluster toward one. Axes and panel locations match the other tabs.">
+<img src="chapter-bootstrap_files/figure-html/fig-binom-hyper-extreme-1.svg?v=1790275487801" id="fig-binom-hyper-extreme" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.9. The sample proportions cluster toward one. Axes and panel locations match the other tabs.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-hyper-extreme-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;17.3
@@ -1199,7 +1230,7 @@ Figure&nbsp;17.3
 <div id="fig-binom-hyper-flipped" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The same nine-panel comparison with population proportion 0.1. The probabilities mirror the 0.9 tab around a sample proportion of one half. Axes and panel locations remain fixed.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-hyper-flipped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-bootstrap_files/figure-html/fig-binom-hyper-flipped-1.svg?v=1790066093076" id="fig-binom-hyper-flipped" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.1. The probabilities mirror the 0.9 tab around a sample proportion of one half. Axes and panel locations remain fixed.">
+<img src="chapter-bootstrap_files/figure-html/fig-binom-hyper-flipped-1.svg?v=1790275487801" id="fig-binom-hyper-flipped" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.1. The probabilities mirror the 0.9 tab around a sample proportion of one half. Axes and panel locations remain fixed.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-hyper-flipped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;17.4
@@ -1211,9 +1242,8 @@ Figure&nbsp;17.4
 </div>
 </div>
 </div>
-<p data-source-line="559">The Hypergeometric looks a lot like the Binomial when <span class="math inline">n</span> is small relative to <span class="math inline">m</span>. That’s because sampling without replacement is almost like sampling with replacement when you’re unlikely to pick the same person twice anyway. When <span class="math inline">n</span> is a meaningful fraction of <span class="math inline">m</span>, the Hypergeometric is narrower—you get better precision by not wasting calls on people you’ve already talked to.</p>
-<p data-source-line="561">If you called everybody you’d know <span class="math inline">\theta_1</span> exactly, and there’d be nothing left to be uncertain about.</p>
-<p><span id="tlda-incremental-publish-proof-20260922" hidden=""></span></p>
+<p data-source-line="585">The Hypergeometric looks a lot like the Binomial when <span class="math inline">n</span> is small relative to <span class="math inline">m</span>. That’s because sampling without replacement is almost like sampling with replacement when you’re unlikely to pick the same person twice anyway. When <span class="math inline">n</span> is a meaningful fraction of <span class="math inline">m</span>, the Hypergeometric is narrower—you get better precision by not wasting calls on people you’ve already talked to.</p>
+<p data-source-line="587">If you called everybody you’d know <span class="math inline">\theta_1</span> exactly, and there’d be nothing left to be uncertain about.</p>
 
 
 <script type="webr-data">
