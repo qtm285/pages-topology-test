@@ -588,6 +588,147 @@
     "map": "references.qmd"
   },
   {
+    "file": "book/decks/chapter-social-pressure-experiment-slides.html",
+    "width": 1290,
+    "height": 1000,
+    "title": "Introduction — Slides",
+    "slides": [
+      {
+        "index": 0,
+        "indexh": 0,
+        "indexv": 0,
+        "title": "Introduction",
+        "id": "title-slide"
+      },
+      {
+        "index": 1,
+        "indexh": 1,
+        "indexv": 0,
+        "title": "Plan for Today",
+        "id": "plan-for-today"
+      },
+      {
+        "index": 2,
+        "indexh": 2,
+        "indexv": 0,
+        "title": "Style",
+        "id": "style"
+      },
+      {
+        "index": 3,
+        "indexh": 3,
+        "indexv": 0,
+        "title": "What This Class Is About",
+        "id": "what-this-class-is-about"
+      },
+      {
+        "index": 4,
+        "indexh": 3,
+        "indexv": 1,
+        "title": "The Social Pressure Experiment",
+        "id": "the-social-pressure-experiment"
+      },
+      {
+        "index": 5,
+        "indexh": 3,
+        "indexv": 2,
+        "title": "A Missed Opportunity?",
+        "id": "a-missed-opportunity"
+      },
+      {
+        "index": 6,
+        "indexh": 3,
+        "indexv": 3,
+        "title": "Your Imaginary Mailer Campaign",
+        "id": "your-imaginary-mailer-campaign"
+      },
+      {
+        "index": 7,
+        "indexh": 3,
+        "indexv": 4,
+        "title": "Step 1a. Individual-Level Prediction",
+        "id": "step-1a.-individual-level-prediction"
+      },
+      {
+        "index": 8,
+        "indexh": 3,
+        "indexv": 5,
+        "title": "Step 1b. Summarizing Our Predictions",
+        "id": "step-1b.-summarizing-our-predictions"
+      },
+      {
+        "index": 9,
+        "indexh": 3,
+        "indexv": 6,
+        "title": "Step 2. Inference",
+        "id": "step-2.-inference"
+      },
+      {
+        "index": 10,
+        "indexh": 3,
+        "indexv": 7,
+        "title": "Step 3. Causality",
+        "id": "step-3.-causality"
+      },
+      {
+        "index": 11,
+        "indexh": 4,
+        "indexv": 0,
+        "title": "The Syllabus",
+        "id": "the-syllabus"
+      },
+      {
+        "index": 12,
+        "indexh": 5,
+        "indexv": 0,
+        "title": "Letters",
+        "id": "letters"
+      },
+      {
+        "index": 13,
+        "indexh": 5,
+        "indexv": 1,
+        "title": "Slide 14",
+        "id": "section-2"
+      },
+      {
+        "index": 14,
+        "indexh": 5,
+        "indexv": 2,
+        "title": "Slide 15",
+        "id": "section-3"
+      },
+      {
+        "index": 15,
+        "indexh": 5,
+        "indexv": 3,
+        "title": "Slide 16",
+        "id": "section-4"
+      },
+      {
+        "index": 16,
+        "indexh": 5,
+        "indexv": 4,
+        "title": "Slide 17",
+        "id": "section-5"
+      },
+      {
+        "index": 17,
+        "indexh": 6,
+        "indexv": 0,
+        "title": "Terminology",
+        "id": "sec-terminology"
+      }
+    ],
+    "variant": "slides",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "decks/chapter-social-pressure-experiment-slides.qmd"
+    },
+    "map": "chapters/chapter-social-pressure-experiment.qmd"
+  },
+  {
     "file": "book/decks/chapter-sampling-slides.html",
     "width": 1290,
     "height": 1000,
