@@ -10,6 +10,7 @@
       "format": "qmd",
       "file": "index.qmd"
     },
+    "working": true,
     "map": "index.qmd"
   },
   {
@@ -23,6 +24,7 @@
       "format": "qmd",
       "file": "chapters/chapter-social-pressure-experiment.qmd"
     },
+    "working": true,
     "map": "chapters/chapter-social-pressure-experiment.qmd"
   },
   {
@@ -36,10 +38,11 @@
       "format": "qmd",
       "file": "homework/homework-setup.qmd"
     },
+    "working": true,
     "map": "homework/homework-setup.qmd"
   },
   {
-    "file": "book/homework/homework-descriptive-solutions.html",
+    "file": "book/homework/homework-descriptive.html",
     "width": 800,
     "height": 1200,
     "title": "3 Homework: Basic Descriptive Statistics",
@@ -49,7 +52,22 @@
       "format": "qmd",
       "file": "homework/homework-descriptive.qmd"
     },
+    "working": true,
     "map": "homework/homework-descriptive.qmd"
+  },
+  {
+    "file": "book/part1-one-sample.html",
+    "width": 800,
+    "height": 1200,
+    "title": "One-Sample Problems",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "part1-one-sample.qmd"
+    },
+    "working": true,
+    "map": "part1-one-sample.qmd"
   },
   {
     "file": "book/chapters/chapter-sampling.html",
@@ -62,6 +80,7 @@
       "format": "qmd",
       "file": "chapters/chapter-sampling.qmd"
     },
+    "working": true,
     "map": "chapters/chapter-sampling.qmd"
   },
   {
@@ -75,10 +94,11 @@
       "format": "qmd",
       "file": "chapters/chapter-point-and-interval-estimates.qmd"
     },
+    "working": true,
     "map": "chapters/chapter-point-and-interval-estimates.qmd"
   },
   {
-    "file": "book/homework/homework-calibration-solutions.html",
+    "file": "book/homework/homework-calibration.html",
     "width": 800,
     "height": 1200,
     "title": "6 Homework: The Idea of Calibration",
@@ -88,6 +108,7 @@
       "format": "qmd",
       "file": "homework/homework-calibration.qmd"
     },
+    "working": true,
     "map": "homework/homework-calibration.qmd"
   },
   {
@@ -101,6 +122,7 @@
       "format": "qmd",
       "file": "chapters/chapter-calibration-binary.qmd"
     },
+    "working": true,
     "map": "chapters/chapter-calibration-binary.qmd"
   },
   {
@@ -114,6 +136,7 @@
       "format": "qmd",
       "file": "chapters/chapter-sampling-with-replacement.qmd"
     },
+    "working": true,
     "map": "chapters/chapter-sampling-with-replacement.qmd"
   },
   {
@@ -127,6 +150,7 @@
       "format": "qmd",
       "file": "homework/homework-calibration-binary.qmd"
     },
+    "working": true,
     "map": "homework/homework-calibration-binary.qmd"
   },
   {
@@ -140,46 +164,92 @@
       "format": "qmd",
       "file": "chapters/chapter-sampling-without-replacement.qmd"
     },
+    "working": true,
     "map": "chapters/chapter-sampling-without-replacement.qmd"
+  },
+  {
+    "file": "book/chapters/chapter-calibration-with-the-binomial.html",
+    "width": 800,
+    "height": 1200,
+    "title": "11 Calibration using the Binomial Distribution",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-calibration-with-the-binomial.qmd"
+    },
+    "working": true,
+    "map": "chapters/chapter-calibration-with-the-binomial.qmd"
   },
   {
     "file": "book/chapters/chapter-bootstrap.html",
     "width": 800,
     "height": 1200,
-    "title": "13 Calibrating Interval Estimates using the Bootstrap",
+    "title": "12 Calibrating Interval Estimates using the Bootstrap",
     "format": "qmd",
     "source": {
       "type": "project-source",
       "format": "qmd",
       "file": "chapters/chapter-bootstrap.qmd"
     },
+    "working": true,
     "map": "chapters/chapter-bootstrap.qmd"
   },
   {
-    "file": "book/homework/homework-random-variables-and-moments.html",
+    "file": "book/homework/homework-bootstrap.html",
     "width": 800,
     "height": 1200,
-    "title": "12 Homework — Random Variables, Moments, and the Standard Deviation",
+    "title": "13 Homework: Bootstrap",
     "format": "qmd",
     "source": {
       "type": "project-source",
       "format": "qmd",
-      "file": "homework/homework-random-variables-and-moments.qmd"
+      "file": "homework/homework-bootstrap.qmd"
     },
-    "map": "homework/homework-random-variables-and-moments.qmd"
+    "working": true,
+    "map": "homework/homework-bootstrap.qmd"
   },
   {
     "file": "book/chapters/chapter-random-variables-and-moments.html",
     "width": 800,
     "height": 1200,
-    "title": "15 Random Variables and Moments",
+    "title": "14 Random Variables and Moments",
     "format": "qmd",
     "source": {
       "type": "project-source",
       "format": "qmd",
       "file": "chapters/chapter-random-variables-and-moments.qmd"
     },
+    "working": true,
     "map": "chapters/chapter-random-variables-and-moments.qmd"
+  },
+  {
+    "file": "book/homework/homework-sample-size-coverage.html",
+    "width": 800,
+    "height": 1200,
+    "title": "15 Homework: Sample Size Calculation and Coverage",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-sample-size-coverage.qmd"
+    },
+    "working": true,
+    "map": "homework/homework-sample-size-coverage.qmd"
+  },
+  {
+    "file": "book/homework/homework-random-variables-and-moments.html",
+    "width": 800,
+    "height": 1200,
+    "title": "16 Homework — Random Variables, Moments, and the Standard Deviation",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-random-variables-and-moments.qmd"
+    },
+    "working": true,
+    "map": "homework/homework-random-variables-and-moments.qmd"
   },
   {
     "file": "book/chapters/chapter-standard-deviation.html",
@@ -192,6 +262,7 @@
       "format": "qmd",
       "file": "chapters/chapter-standard-deviation.qmd"
     },
+    "working": true,
     "map": "chapters/chapter-standard-deviation.qmd"
   },
   {
@@ -205,7 +276,64 @@
       "format": "qmd",
       "file": "chapters/chapter-normal-approximation.qmd"
     },
+    "working": true,
     "map": "chapters/chapter-normal-approximation.qmd"
+  },
+  {
+    "file": "book/homework/homework-markov-chebyshev.html",
+    "width": 800,
+    "height": 1200,
+    "title": "19 Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-markov-chebyshev.qmd"
+    },
+    "working": true,
+    "map": "homework/homework-markov-chebyshev.qmd"
+  },
+  {
+    "file": "book/chapters/chapter-probability-review.html",
+    "width": 800,
+    "height": 1200,
+    "title": "20 Probability Review",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-probability-review.qmd"
+    },
+    "working": true,
+    "map": "chapters/chapter-probability-review.qmd"
+  },
+  {
+    "file": "book/chapters/chapter-variance-and-sample-size.html",
+    "width": 800,
+    "height": 1200,
+    "title": "21 Variance, Standard Deviation, and Sample Size",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-variance-and-sample-size.qmd"
+    },
+    "working": true,
+    "map": "chapters/chapter-variance-and-sample-size.qmd"
+  },
+  {
+    "file": "book/homework/homework-comparing-estimators.html",
+    "width": 800,
+    "height": 1200,
+    "title": "22 Homework: Comparing Estimators",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-comparing-estimators.qmd"
+    },
+    "working": true,
+    "map": "homework/homework-comparing-estimators.qmd"
   },
   {
     "file": "book/chapters/chapter-bias-and-coverage.html",
@@ -218,7 +346,984 @@
       "format": "qmd",
       "file": "chapters/chapter-bias-and-coverage.qmd"
     },
+    "working": true,
     "map": "chapters/chapter-bias-and-coverage.qmd"
+  },
+  {
+    "file": "book/exams/practice-midterm-1.html",
+    "width": 800,
+    "height": 1200,
+    "title": "24 Practice Midterm 1",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "exams/practice-midterm-1.qmd"
+    },
+    "working": true,
+    "map": "exams/practice-midterm-1.qmd"
+  },
+  {
+    "file": "book/part-breather.html",
+    "width": 800,
+    "height": 1200,
+    "title": "Distributional Approximation",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "part-breather.qmd"
+    },
+    "working": true,
+    "map": "part-breather.qmd"
+  },
+  {
+    "file": "book/chapters/chapter-stein-normal.html",
+    "width": 800,
+    "height": 1200,
+    "title": "25 Why the CLT Works — Stein’s Method",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-stein-normal.qmd"
+    },
+    "working": true,
+    "map": "chapters/chapter-stein-normal.qmd"
+  },
+  {
+    "file": "book/chapters/chapter-poisson-approximation.html",
+    "width": 800,
+    "height": 1200,
+    "title": "26 When Normal Breaks Down — Poisson Approximation and Quality Control",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-poisson-approximation.qmd"
+    },
+    "working": true,
+    "map": "chapters/chapter-poisson-approximation.qmd"
+  },
+  {
+    "file": "book/chapters/chapter-stein-poisson.html",
+    "width": 800,
+    "height": 1200,
+    "title": "27 Stein’s Method and Poisson Approximation",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-stein-poisson.qmd"
+    },
+    "working": true,
+    "map": "chapters/chapter-stein-poisson.qmd"
+  },
+  {
+    "file": "book/part2-two-sample.html",
+    "width": 800,
+    "height": 1200,
+    "title": "Two-Sample Problems",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "part2-two-sample.qmd"
+    },
+    "working": true,
+    "map": "part2-two-sample.qmd"
+  },
+  {
+    "file": "book/chapters/chapter-comparing-two-groups.html",
+    "width": 800,
+    "height": 1200,
+    "title": "28 Comparing Two Groups",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-comparing-two-groups.qmd"
+    },
+    "working": true,
+    "map": "chapters/chapter-comparing-two-groups.qmd"
+  },
+  {
+    "file": "book/homework/homework-bias-two-groups.html",
+    "width": 800,
+    "height": 1200,
+    "title": "29 Homework: Bias with Two Groups",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-bias-two-groups.qmd"
+    },
+    "working": true,
+    "map": "homework/homework-bias-two-groups.qmd"
+  },
+  {
+    "file": "book/homework/homework-sample-size-two-sample.html",
+    "width": 800,
+    "height": 1200,
+    "title": "30 Homework: Sample Size Calculation for Two-Sample Problems",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-sample-size-two-sample.qmd"
+    },
+    "working": true,
+    "map": "homework/homework-sample-size-two-sample.qmd"
+  },
+  {
+    "file": "book/chapters/chapter-potential-outcomes-randomization.html",
+    "width": 800,
+    "height": 1200,
+    "title": "31 Potential Outcomes and Randomization",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-potential-outcomes-randomization.qmd"
+    },
+    "working": true,
+    "map": "chapters/chapter-potential-outcomes-randomization.qmd"
+  },
+  {
+    "file": "book/homework/homework-causality.html",
+    "width": 800,
+    "height": 1200,
+    "title": "32 Homework: Causality",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-causality.qmd"
+    },
+    "working": true,
+    "map": "homework/homework-causality.qmd"
+  },
+  {
+    "file": "book/chapters/chapter-sampling-and-randomization.html",
+    "width": 800,
+    "height": 1200,
+    "title": "33 Sampling and Randomization",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-sampling-and-randomization.qmd"
+    },
+    "working": true,
+    "map": "chapters/chapter-sampling-and-randomization.qmd"
+  },
+  {
+    "file": "book/chapters/chapter-observational-confounding.html",
+    "width": 800,
+    "height": 1200,
+    "title": "34 Observational Studies and Confounding",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-observational-confounding.qmd"
+    },
+    "working": true,
+    "map": "chapters/chapter-observational-confounding.qmd"
+  },
+  {
+    "file": "book/chapters/chapter-models.html",
+    "width": 800,
+    "height": 1200,
+    "title": "35 Models",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-models.qmd"
+    },
+    "working": true,
+    "map": "chapters/chapter-models.qmd"
+  },
+  {
+    "file": "book/exams/practice-midterm-2.html",
+    "width": 800,
+    "height": 1200,
+    "title": "36 Practice Midterm 2",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "exams/practice-midterm-2.qmd"
+    },
+    "working": true,
+    "map": "exams/practice-midterm-2.qmd"
+  },
+  {
+    "file": "book/chapters/chapter-programming-reference.html",
+    "width": 800,
+    "height": 1200,
+    "title": "37 Programming Reference",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-programming-reference.qmd"
+    },
+    "working": true,
+    "map": "chapters/chapter-programming-reference.qmd"
+  },
+  {
+    "file": "book/references.html",
+    "width": 800,
+    "height": 1200,
+    "title": "References",
+    "format": "qmd",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "references.qmd"
+    },
+    "working": true,
+    "map": "references.qmd"
+  },
+  {
+    "file": "book/decks/chapter-sampling-slides.html",
+    "width": 1290,
+    "height": 1000,
+    "title": "Sampling — Slides",
+    "slides": [
+      {
+        "index": 0,
+        "indexh": 0,
+        "indexv": 0,
+        "title": "Sampling",
+        "id": "title-slide"
+      },
+      {
+        "index": 1,
+        "indexh": 1,
+        "indexv": 0,
+        "title": "Slide 2",
+        "id": ""
+      },
+      {
+        "index": 2,
+        "indexh": 2,
+        "indexv": 0,
+        "title": "Surveys",
+        "id": "surveys"
+      },
+      {
+        "index": 3,
+        "indexh": 2,
+        "indexv": 1,
+        "title": "What A Population Looks Like",
+        "id": "what-a-population-looks-like"
+      },
+      {
+        "index": 4,
+        "indexh": 2,
+        "indexv": 2,
+        "title": "What We’re Estimating",
+        "id": "what-were-estimating"
+      },
+      {
+        "index": 5,
+        "indexh": 2,
+        "indexv": 3,
+        "title": "Estimating It",
+        "id": ""
+      },
+      {
+        "index": 6,
+        "indexh": 2,
+        "indexv": 4,
+        "title": "Estimating It",
+        "id": "estimating-it"
+      },
+      {
+        "index": 7,
+        "indexh": 2,
+        "indexv": 5,
+        "title": "Slide 8",
+        "id": ""
+      },
+      {
+        "index": 8,
+        "indexh": 2,
+        "indexv": 6,
+        "title": "Slide 9",
+        "id": ""
+      },
+      {
+        "index": 9,
+        "indexh": 2,
+        "indexv": 7,
+        "title": "Slide 10",
+        "id": "section"
+      },
+      {
+        "index": 10,
+        "indexh": 2,
+        "indexv": 8,
+        "title": "Convenience Sampling",
+        "id": "convenience-sampling"
+      },
+      {
+        "index": 11,
+        "indexh": 2,
+        "indexv": 9,
+        "title": "Sampling with Replacement",
+        "id": "sampling-with-replacement"
+      },
+      {
+        "index": 12,
+        "indexh": 2,
+        "indexv": 10,
+        "title": "Sampling without Replacement",
+        "id": "sampling-without-replacement"
+      },
+      {
+        "index": 13,
+        "indexh": 2,
+        "indexv": 11,
+        "title": "Which do you think works best?",
+        "id": "which-do-you-think-works-best"
+      },
+      {
+        "index": 14,
+        "indexh": 2,
+        "indexv": 12,
+        "title": "Fake Data Simulation",
+        "id": "fake-data-simulation"
+      },
+      {
+        "index": 15,
+        "indexh": 2,
+        "indexv": 13,
+        "title": "Slide 16",
+        "id": ""
+      },
+      {
+        "index": 16,
+        "indexh": 2,
+        "indexv": 14,
+        "title": "Slide 17",
+        "id": ""
+      },
+      {
+        "index": 17,
+        "indexh": 2,
+        "indexv": 15,
+        "title": "Slide 18",
+        "id": ""
+      },
+      {
+        "index": 18,
+        "indexh": 2,
+        "indexv": 16,
+        "title": "Slide 19",
+        "id": ""
+      },
+      {
+        "index": 19,
+        "indexh": 2,
+        "indexv": 17,
+        "title": "Slide 20",
+        "id": ""
+      },
+      {
+        "index": 20,
+        "indexh": 2,
+        "indexv": 18,
+        "title": "Slide 21",
+        "id": ""
+      },
+      {
+        "index": 21,
+        "indexh": 2,
+        "indexv": 19,
+        "title": "Slide 22",
+        "id": ""
+      },
+      {
+        "index": 22,
+        "indexh": 2,
+        "indexv": 20,
+        "title": "Slide 23",
+        "id": ""
+      },
+      {
+        "index": 23,
+        "indexh": 3,
+        "indexv": 0,
+        "title": "Experiments",
+        "id": "experiments"
+      },
+      {
+        "index": 24,
+        "indexh": 3,
+        "indexv": 1,
+        "title": "Slide 25",
+        "id": ""
+      },
+      {
+        "index": 25,
+        "indexh": 3,
+        "indexv": 2,
+        "title": "Slide 26",
+        "id": ""
+      },
+      {
+        "index": 26,
+        "indexh": 3,
+        "indexv": 3,
+        "title": "Slide 27",
+        "id": ""
+      },
+      {
+        "index": 27,
+        "indexh": 3,
+        "indexv": 4,
+        "title": "Slide 28",
+        "id": ""
+      },
+      {
+        "index": 28,
+        "indexh": 3,
+        "indexv": 5,
+        "title": "Slide 29",
+        "id": ""
+      },
+      {
+        "index": 29,
+        "indexh": 3,
+        "indexv": 6,
+        "title": "Slide 30",
+        "id": ""
+      },
+      {
+        "index": 30,
+        "indexh": 3,
+        "indexv": 7,
+        "title": "Slide 31",
+        "id": ""
+      }
+    ],
+    "variant": "slides",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "decks/chapter-sampling-slides.qmd"
+    },
+    "map": "chapters/chapter-sampling.qmd"
+  },
+  {
+    "file": "book/decks/chapter-point-and-interval-estimates-slides.html",
+    "width": 1290,
+    "height": 1000,
+    "title": "Point and Interval Estimates — Slides",
+    "slides": [
+      {
+        "index": 0,
+        "indexh": 0,
+        "indexv": 0,
+        "title": "Point and Interval Estimates",
+        "id": "title-slide"
+      },
+      {
+        "index": 1,
+        "indexh": 1,
+        "indexv": 0,
+        "title": "Review",
+        "id": "review"
+      },
+      {
+        "index": 2,
+        "indexh": 1,
+        "indexv": 1,
+        "title": "Friday’s Lab",
+        "id": "fridays-lab"
+      },
+      {
+        "index": 3,
+        "indexh": 1,
+        "indexv": 2,
+        "title": "Sampling Code",
+        "id": "sampling-code"
+      },
+      {
+        "index": 4,
+        "indexh": 1,
+        "indexv": 3,
+        "title": "Sampling Distribution",
+        "id": "sampling-distribution"
+      },
+      {
+        "index": 5,
+        "indexh": 1,
+        "indexv": 4,
+        "title": "Fake Data Simulation",
+        "id": "fake-data-simulation"
+      },
+      {
+        "index": 6,
+        "indexh": 1,
+        "indexv": 5,
+        "title": "Visualizing the Sampling Distribution",
+        "id": "visualizing-the-sampling-distribution"
+      },
+      {
+        "index": 7,
+        "indexh": 1,
+        "indexv": 6,
+        "title": "Sampling Distributions in Real Studies",
+        "id": "sampling-distributions-in-real-studies"
+      },
+      {
+        "index": 8,
+        "indexh": 1,
+        "indexv": 7,
+        "title": "What Do We Do with a Sampling Distribution?",
+        "id": "what-do-we-do-with-a-sampling-distribution"
+      },
+      {
+        "index": 9,
+        "indexh": 2,
+        "indexv": 0,
+        "title": "Polling",
+        "id": "polling"
+      },
+      {
+        "index": 10,
+        "indexh": 2,
+        "indexv": 1,
+        "title": "Context",
+        "id": "context"
+      },
+      {
+        "index": 11,
+        "indexh": 2,
+        "indexv": 2,
+        "title": "Polling Results",
+        "id": "polling-results"
+      },
+      {
+        "index": 12,
+        "indexh": 2,
+        "indexv": 3,
+        "title": "Sample Versus Population",
+        "id": "sample-versus-population"
+      },
+      {
+        "index": 13,
+        "indexh": 2,
+        "indexv": 4,
+        "title": "Success!",
+        "id": "success"
+      },
+      {
+        "index": 14,
+        "indexh": 2,
+        "indexv": 5,
+        "title": "Review: Connecting Sample and Population",
+        "id": "review-connecting-sample-and-population"
+      },
+      {
+        "index": 15,
+        "indexh": 2,
+        "indexv": 6,
+        "title": "Our Poll",
+        "id": "our-poll"
+      },
+      {
+        "index": 16,
+        "indexh": 2,
+        "indexv": 7,
+        "title": "Our First Friend’s Poll",
+        "id": "our-first-friends-poll"
+      },
+      {
+        "index": 17,
+        "indexh": 2,
+        "indexv": 8,
+        "title": "Our Second Friend’s Poll",
+        "id": "our-second-friends-poll"
+      },
+      {
+        "index": 18,
+        "indexh": 2,
+        "indexv": 9,
+        "title": "The Sampling Distribution of our Estimate",
+        "id": "the-sampling-distribution-of-our-estimate"
+      },
+      {
+        "index": 19,
+        "indexh": 2,
+        "indexv": 10,
+        "title": "The Sampling Distribution in R",
+        "id": "the-sampling-distribution-in-r"
+      },
+      {
+        "index": 20,
+        "indexh": 2,
+        "indexv": 11,
+        "title": "Annotating the Sampling Distribution Histogram",
+        "id": "annotating-the-sampling-distribution-histogram"
+      },
+      {
+        "index": 21,
+        "indexh": 2,
+        "indexv": 12,
+        "title": "Revisiting our Questions",
+        "id": "revisiting-our-questions"
+      },
+      {
+        "index": 22,
+        "indexh": 2,
+        "indexv": 13,
+        "title": "Interval Estimation",
+        "id": "interval-estimation"
+      },
+      {
+        "index": 23,
+        "indexh": 2,
+        "indexv": 14,
+        "title": "Interval Estimation: Our Friends’ Polls",
+        "id": "interval-estimation-our-friends-polls"
+      },
+      {
+        "index": 24,
+        "indexh": 2,
+        "indexv": 15,
+        "title": "Interval Estimation: 100 Polls",
+        "id": "interval-estimation-100-polls"
+      },
+      {
+        "index": 25,
+        "indexh": 2,
+        "indexv": 16,
+        "title": "Coverage Probability and Sampling Distributions",
+        "id": "coverage-probability-and-sampling-distributions"
+      },
+      {
+        "index": 26,
+        "indexh": 2,
+        "indexv": 17,
+        "title": "Calculating Coverage",
+        "id": "calculating-coverage"
+      },
+      {
+        "index": 27,
+        "indexh": 2,
+        "indexv": 18,
+        "title": "The Coverage Probability",
+        "id": "the-coverage-probability"
+      },
+      {
+        "index": 28,
+        "indexh": 2,
+        "indexv": 19,
+        "title": "Ad-hoc Interval Estimates",
+        "id": "ad-hoc-interval-estimates"
+      },
+      {
+        "index": 29,
+        "indexh": 2,
+        "indexv": 20,
+        "title": "Calibrated Interval Estimates",
+        "id": "calibrated-interval-estimates"
+      },
+      {
+        "index": 30,
+        "indexh": 2,
+        "indexv": 21,
+        "title": "Using the Sampling Distribution for Calibration",
+        "id": "using-the-sampling-distribution-for-calibration"
+      },
+      {
+        "index": 31,
+        "indexh": 2,
+        "indexv": 22,
+        "title": "Using the Sampling Distribution for Calibration",
+        "id": "using-the-sampling-distribution-for-calibration-1"
+      },
+      {
+        "index": 32,
+        "indexh": 2,
+        "indexv": 23,
+        "title": "A Problem",
+        "id": "a-problem"
+      },
+      {
+        "index": 33,
+        "indexh": 3,
+        "indexv": 0,
+        "title": "Communication",
+        "id": "communication"
+      },
+      {
+        "index": 34,
+        "indexh": 3,
+        "indexv": 1,
+        "title": "Why Confidence Intervals?",
+        "id": "why-confidence-intervals"
+      },
+      {
+        "index": 35,
+        "indexh": 3,
+        "indexv": 2,
+        "title": "Don’t Make this Mistake",
+        "id": "dont-make-this-mistake"
+      }
+    ],
+    "variant": "slides",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "decks/chapter-point-and-interval-estimates-slides.qmd"
+    },
+    "map": "chapters/chapter-point-and-interval-estimates.qmd"
+  },
+  {
+    "file": "book/decks/chapter-calibration-binary-slides.html",
+    "width": 1290,
+    "height": 1000,
+    "title": "Calibrating Interval Estimates with Binary Observations — Slides",
+    "slides": [
+      {
+        "index": 0,
+        "indexh": 0,
+        "indexv": 0,
+        "title": "Calibrating Interval Estimates with Binary Observations",
+        "id": "title-slide"
+      },
+      {
+        "index": 1,
+        "indexh": 1,
+        "indexv": 0,
+        "title": "Sampling and Calibration Review",
+        "id": "sampling-and-calibration-review"
+      },
+      {
+        "index": 2,
+        "indexh": 1,
+        "indexv": 1,
+        "title": "Before the Election",
+        "id": "before-the-election"
+      },
+      {
+        "index": 3,
+        "indexh": 1,
+        "indexv": 2,
+        "title": "After the Election",
+        "id": "after-the-election"
+      },
+      {
+        "index": 4,
+        "indexh": 1,
+        "indexv": 3,
+        "title": "The Competition",
+        "id": "the-competition"
+      },
+      {
+        "index": 5,
+        "indexh": 1,
+        "indexv": 4,
+        "title": "Calibration using the Sampling Distribution",
+        "id": "calibration-using-the-sampling-distribution"
+      },
+      {
+        "index": 6,
+        "indexh": 1,
+        "indexv": 5,
+        "title": "Question",
+        "id": "question"
+      },
+      {
+        "index": 7,
+        "indexh": 1,
+        "indexv": 6,
+        "title": "Calibration in Reality",
+        "id": "calibration-in-reality"
+      },
+      {
+        "index": 8,
+        "indexh": 2,
+        "indexv": 0,
+        "title": "Probability Review",
+        "id": "probability-review"
+      },
+      {
+        "index": 9,
+        "indexh": 2,
+        "indexv": 1,
+        "title": "Warm-up: Card Probabilities",
+        "id": "warm-up-card-probabilities"
+      },
+      {
+        "index": 10,
+        "indexh": 2,
+        "indexv": 2,
+        "title": "Two Cards with Replacement",
+        "id": "two-cards-with-replacement"
+      },
+      {
+        "index": 11,
+        "indexh": 2,
+        "indexv": 3,
+        "title": "Thinking about Marginalization",
+        "id": "thinking-about-marginalization"
+      },
+      {
+        "index": 12,
+        "indexh": 2,
+        "indexv": 4,
+        "title": "Starting Simple",
+        "id": "starting-simple"
+      },
+      {
+        "index": 13,
+        "indexh": 2,
+        "indexv": 5,
+        "title": "Finding the Distribution of Y_1 in a Small Population",
+        "id": "finding-the-distribution-of-y_1-in-a-small-population"
+      },
+      {
+        "index": 14,
+        "indexh": 2,
+        "indexv": 6,
+        "title": "Finding the Distribution of Y_1 in a Large Population",
+        "id": "finding-the-distribution-of-y_1-in-a-large-population"
+      },
+      {
+        "index": 15,
+        "indexh": 2,
+        "indexv": 7,
+        "title": "Exercise: Two Calls to A Small Population",
+        "id": "sec-two-calls-to-small"
+      },
+      {
+        "index": 16,
+        "indexh": 2,
+        "indexv": 8,
+        "title": "From Sampling to Coin Flip Sums: Two Responses",
+        "id": "sec-sampling-to-sums-two"
+      },
+      {
+        "index": 17,
+        "indexh": 2,
+        "indexv": 9,
+        "title": "From Sampling to Coin Flip Sums: n Responses.",
+        "id": "from-sampling-to-coin-flip-sums-n-responses."
+      },
+      {
+        "index": 18,
+        "indexh": 2,
+        "indexv": 10,
+        "title": "The Binomial Distribution",
+        "id": "the-binomial-distribution"
+      },
+      {
+        "index": 19,
+        "indexh": 2,
+        "indexv": 11,
+        "title": "Payoff",
+        "id": "payoff"
+      },
+      {
+        "index": 20,
+        "indexh": 3,
+        "indexv": 0,
+        "title": "Sampling without Replacement",
+        "id": "sampling-without-replacement"
+      },
+      {
+        "index": 21,
+        "indexh": 3,
+        "indexv": 1,
+        "title": "Warm-up: Card Probabilities without Replacement",
+        "id": "warm-up-card-probabilities-without-replacement"
+      },
+      {
+        "index": 22,
+        "indexh": 3,
+        "indexv": 2,
+        "title": "The Pattern",
+        "id": "the-pattern"
+      },
+      {
+        "index": 23,
+        "indexh": 3,
+        "indexv": 3,
+        "title": "Marginalization",
+        "id": "marginalization"
+      },
+      {
+        "index": 24,
+        "indexh": 3,
+        "indexv": 4,
+        "title": "The Hypergeometric Distribution",
+        "id": "the-hypergeometric-distribution"
+      },
+      {
+        "index": 25,
+        "indexh": 4,
+        "indexv": 0,
+        "title": "Calibration using the Binomial Distribution",
+        "id": "calibration-using-the-binomial-distribution"
+      },
+      {
+        "index": 26,
+        "indexh": 4,
+        "indexv": 1,
+        "title": "Looking Back on Your Success",
+        "id": "looking-back-on-your-success"
+      },
+      {
+        "index": 27,
+        "indexh": 4,
+        "indexv": 2,
+        "title": "Calibration Comparison",
+        "id": "calibration-comparison"
+      },
+      {
+        "index": 28,
+        "indexh": 4,
+        "indexv": 3,
+        "title": "Our Competitors’ Calibration",
+        "id": "our-competitors-calibration"
+      },
+      {
+        "index": 29,
+        "indexh": 4,
+        "indexv": 4,
+        "title": "All of Our Competitors",
+        "id": "all-of-our-competitors"
+      },
+      {
+        "index": 30,
+        "indexh": 4,
+        "indexv": 5,
+        "title": "Why Does it Work?",
+        "id": "why-does-it-work"
+      },
+      {
+        "index": 31,
+        "indexh": 4,
+        "indexv": 6,
+        "title": "The Estimate Works. Why Does it Work?",
+        "id": "the-estimate-works.-why-does-it-work"
+      }
+    ],
+    "variant": "slides",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "decks/chapter-calibration-binary-slides.qmd"
+    },
+    "map": "chapters/chapter-calibration-binary.qmd"
   },
   {
     "file": "book/decks/chapter-bootstrap-slides.html",
@@ -263,115 +1368,199 @@
       },
       {
         "index": 5,
-        "indexh": 1,
-        "indexv": 4,
-        "title": "Sampling without Replacement",
-        "id": "sampling-without-replacement"
-      },
-      {
-        "index": 6,
         "indexh": 2,
         "indexv": 0,
         "title": "An Exercise",
         "id": "an-exercise"
       },
       {
-        "index": 7,
+        "index": 6,
         "indexh": 2,
         "indexv": 1,
         "title": "A Survey",
         "id": "a-survey"
       },
       {
-        "index": 8,
+        "index": 7,
         "indexh": 2,
         "indexv": 2,
-        "title": "Simulating a Few More Draws",
-        "id": "simulating-a-few-more-draws"
+        "title": "Our Sample",
+        "id": "our-sample"
+      },
+      {
+        "index": 8,
+        "indexh": 2,
+        "indexv": 3,
+        "title": "One Bootstrap Sample",
+        "id": "one-bootstrap-sample"
       },
       {
         "index": 9,
         "indexh": 2,
-        "indexv": 3,
-        "title": "Our Tally",
-        "id": "our-tally"
+        "indexv": 4,
+        "title": "Simulating a Few More Draws",
+        "id": "simulating-a-few-more-draws"
       },
       {
         "index": 10,
         "indexh": 2,
-        "indexv": 4,
-        "title": "Compared to the Binomial Estimate",
-        "id": "compared-to-the-binomial-estimate"
+        "indexv": 5,
+        "title": "Our Tally",
+        "id": "our-tally"
       },
       {
         "index": 11,
+        "indexh": 2,
+        "indexv": 6,
+        "title": "A Rough Histogram",
+        "id": "a-rough-histogram"
+      },
+      {
+        "index": 12,
+        "indexh": 2,
+        "indexv": 7,
+        "title": "A Fine Histogram",
+        "id": "a-fine-histogram"
+      },
+      {
+        "index": 13,
+        "indexh": 2,
+        "indexv": 8,
+        "title": "The Estimate",
+        "id": "the-estimate"
+      },
+      {
+        "index": 14,
+        "indexh": 2,
+        "indexv": 9,
+        "title": "Our Draws Against It",
+        "id": "our-draws-against-it"
+      },
+      {
+        "index": 15,
+        "indexh": 2,
+        "indexv": 10,
+        "title": "The Picture",
+        "id": "the-picture"
+      },
+      {
+        "index": 16,
         "indexh": 3,
         "indexv": 0,
         "title": "The Bootstrap",
         "id": "the-bootstrap"
       },
       {
-        "index": 12,
+        "index": 17,
         "indexh": 3,
         "indexv": 1,
         "title": "The Bootstrap Interpretation in Our Turnout Poll",
         "id": "the-bootstrap-interpretation-in-our-turnout-poll"
       },
       {
-        "index": 13,
+        "index": 18,
         "indexh": 3,
         "indexv": 2,
         "title": "Bootstrapping",
         "id": "bootstrapping"
       },
       {
-        "index": 14,
+        "index": 19,
         "indexh": 3,
         "indexv": 3,
         "title": "The Bootstrap is Nonparametric",
         "id": "the-bootstrap-is-nonparametric"
       },
       {
-        "index": 15,
+        "index": 20,
         "indexh": 4,
         "indexv": 0,
         "title": "Beyond Binary Responses",
         "id": "beyond-binary-responses"
       },
       {
-        "index": 16,
+        "index": 21,
         "indexh": 4,
         "indexv": 1,
         "title": "Vote History",
         "id": "vote-history"
       },
       {
-        "index": 17,
+        "index": 22,
         "indexh": 4,
         "indexv": 2,
         "title": "No Parametric Form This Time",
         "id": "no-parametric-form-this-time"
       },
       {
-        "index": 18,
+        "index": 23,
         "indexh": 4,
         "indexv": 3,
         "title": "The Sampling Distribution of Average Vote History",
         "id": "the-sampling-distribution-of-average-vote-history"
       },
       {
-        "index": 19,
+        "index": 24,
         "indexh": 4,
         "indexv": 4,
         "title": "The Bootstrap Sampling Distribution of Average Vote History",
         "id": "the-bootstrap-sampling-distribution-of-average-vote-history"
       },
       {
-        "index": 20,
+        "index": 25,
         "indexh": 4,
         "indexv": 5,
         "title": "But We Can’t Argue That It Should",
         "id": "but-we-cant-argue-that-it-should"
+      },
+      {
+        "index": 26,
+        "indexh": 4,
+        "indexv": 6,
+        "title": "The Picture, Broken",
+        "id": "the-picture-broken"
+      },
+      {
+        "index": 27,
+        "indexh": 5,
+        "indexv": 0,
+        "title": "Scope of the Bootstrap",
+        "id": "scope-of-the-bootstrap"
+      },
+      {
+        "index": 28,
+        "indexh": 5,
+        "indexv": 1,
+        "title": "When the Poll Is Without Replacement",
+        "id": "when-the-poll-is-without-replacement"
+      },
+      {
+        "index": 29,
+        "indexh": 5,
+        "indexv": 2,
+        "title": "The Shapes",
+        "id": "the-shapes"
+      },
+      {
+        "index": 30,
+        "indexh": 5,
+        "indexv": 3,
+        "title": "Walking the Edge",
+        "id": "walking-the-edge"
+      },
+      {
+        "index": 31,
+        "indexh": 5,
+        "indexv": 4,
+        "title": "A Drop in the Ocean",
+        "id": "a-drop-in-the-ocean"
+      },
+      {
+        "index": 32,
+        "indexh": 5,
+        "indexv": 5,
+        "title": "Conservative Anyway",
+        "id": "conservative-anyway"
       }
     ],
     "variant": "slides",
@@ -381,5 +1570,371 @@
       "file": "decks/chapter-bootstrap-slides.qmd"
     },
     "map": "chapters/chapter-bootstrap.qmd"
+  },
+  {
+    "file": "book/decks/chapter-random-variables-and-moments-slides.html",
+    "width": 1290,
+    "height": 1000,
+    "title": "FMLTD — Slides",
+    "slides": [
+      {
+        "index": 0,
+        "indexh": 0,
+        "indexv": 0,
+        "title": "FMLTD",
+        "id": "title-slide"
+      },
+      {
+        "index": 1,
+        "indexh": 1,
+        "indexv": 0,
+        "title": "Setup",
+        "id": "setup"
+      },
+      {
+        "index": 2,
+        "indexh": 2,
+        "indexv": 0,
+        "title": "What We Need to Explain",
+        "id": "what-we-need-to-explain"
+      },
+      {
+        "index": 3,
+        "indexh": 2,
+        "indexv": 1,
+        "title": "Same Center, Different Widths",
+        "id": "same-center-different-widths"
+      },
+      {
+        "index": 4,
+        "indexh": 2,
+        "indexv": 2,
+        "title": "How Does Width Change with Sample Size?",
+        "id": "how-does-width-change-with-sample-size"
+      },
+      {
+        "index": 5,
+        "indexh": 2,
+        "indexv": 3,
+        "title": "Two Ways Forward",
+        "id": "two-ways-forward"
+      },
+      {
+        "index": 6,
+        "indexh": 3,
+        "indexv": 0,
+        "title": "Moments",
+        "id": "moments"
+      },
+      {
+        "index": 7,
+        "indexh": 3,
+        "indexv": 1,
+        "title": "Count the Dots",
+        "id": "count-the-dots"
+      },
+      {
+        "index": 8,
+        "indexh": 3,
+        "indexv": 2,
+        "title": "Comparing Distributions",
+        "id": "comparing-distributions"
+      },
+      {
+        "index": 9,
+        "indexh": 3,
+        "indexv": 3,
+        "title": "Expectation and Location",
+        "id": "expectation-and-location"
+      },
+      {
+        "index": 10,
+        "indexh": 3,
+        "indexv": 4,
+        "title": "Spread",
+        "id": "spread"
+      },
+      {
+        "index": 11,
+        "indexh": 3,
+        "indexv": 5,
+        "title": "Sampling, Means, and Variances",
+        "id": "sampling-means-and-variances"
+      },
+      {
+        "index": 12,
+        "indexh": 3,
+        "indexv": 6,
+        "title": "Expectations",
+        "id": "expectations"
+      },
+      {
+        "index": 13,
+        "indexh": 3,
+        "indexv": 7,
+        "title": "Expectations",
+        "id": "expectations-1"
+      },
+      {
+        "index": 14,
+        "indexh": 4,
+        "indexv": 0,
+        "title": "Properties of Expectations",
+        "id": "properties-of-expectations"
+      },
+      {
+        "index": 15,
+        "indexh": 4,
+        "indexv": 1,
+        "title": "Linearity of Expectations",
+        "id": "linearity-of-expectations"
+      },
+      {
+        "index": 16,
+        "indexh": 5,
+        "indexv": 0,
+        "title": "Implications for Sample Means",
+        "id": "implications-for-sample-means"
+      },
+      {
+        "index": 17,
+        "indexh": 5,
+        "indexv": 1,
+        "title": "Bias",
+        "id": "bias"
+      },
+      {
+        "index": 18,
+        "indexh": 5,
+        "indexv": 2,
+        "title": "What Made the Sample Mean Unbiased?",
+        "id": "what-made-the-sample-mean-unbiased"
+      },
+      {
+        "index": 19,
+        "indexh": 6,
+        "indexv": 0,
+        "title": "Variance of a Sample Mean",
+        "id": "variance-of-a-sample-mean"
+      },
+      {
+        "index": 20,
+        "indexh": 6,
+        "indexv": 1,
+        "title": "Factorization of Products of Independent Random Variables",
+        "id": "factorization-of-products-of-independent-random-variables"
+      },
+      {
+        "index": 21,
+        "indexh": 6,
+        "indexv": 2,
+        "title": "The Standard Deviation of a Proportion",
+        "id": "the-standard-deviation-of-a-proportion"
+      },
+      {
+        "index": 22,
+        "indexh": 6,
+        "indexv": 3,
+        "title": "Now We Can Explain the Width Curve",
+        "id": "now-we-can-explain-the-width-curve"
+      },
+      {
+        "index": 23,
+        "indexh": 6,
+        "indexv": 4,
+        "title": "The Standard Deviation of a Proportion",
+        "id": "the-standard-deviation-of-a-proportion-1"
+      },
+      {
+        "index": 24,
+        "indexh": 6,
+        "indexv": 5,
+        "title": "What Changed When We Changed the Sampling Mechanism?",
+        "id": "what-changed-when-we-changed-the-sampling-mechanism"
+      },
+      {
+        "index": 25,
+        "indexh": 7,
+        "indexv": 0,
+        "title": "Appendix: The Nightmare Way",
+        "id": "appendix-the-nightmare-way"
+      },
+      {
+        "index": 26,
+        "indexh": 7,
+        "indexv": 1,
+        "title": "Start from the Fully Marginalized Table",
+        "id": "start-from-the-fully-marginalized-table"
+      },
+      {
+        "index": 27,
+        "indexh": 7,
+        "indexv": 2,
+        "title": "Walk Back to the Response Sequences",
+        "id": "walk-back-to-the-response-sequences"
+      },
+      {
+        "index": 28,
+        "indexh": 7,
+        "indexv": 3,
+        "title": "Walk Back to the Calls",
+        "id": "walk-back-to-the-calls"
+      },
+      {
+        "index": 29,
+        "indexh": 7,
+        "indexv": 4,
+        "title": "What the Shortcut Reused",
+        "id": "what-the-shortcut-reused"
+      },
+      {
+        "index": 30,
+        "indexh": 7,
+        "indexv": 5,
+        "title": "Squaring Sums",
+        "id": "sec-squaring-sums"
+      }
+    ],
+    "variant": "slides",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "decks/chapter-random-variables-and-moments-slides.qmd"
+    },
+    "map": "chapters/chapter-random-variables-and-moments.qmd"
+  },
+  {
+    "file": "book/decks/chapter-normal-approximation-slides.html",
+    "width": 1290,
+    "height": 1000,
+    "title": "Normal Approximation and Sample Size Calculation — Slides",
+    "slides": [
+      {
+        "index": 0,
+        "indexh": 0,
+        "indexv": 0,
+        "title": "Normal Approximation and Sample Size Calculation",
+        "id": "title-slide"
+      },
+      {
+        "index": 1,
+        "indexh": 1,
+        "indexv": 0,
+        "title": "Review",
+        "id": "review"
+      },
+      {
+        "index": 2,
+        "indexh": 1,
+        "indexv": 1,
+        "title": "The Bootstrap",
+        "id": "the-bootstrap"
+      },
+      {
+        "index": 3,
+        "indexh": 1,
+        "indexv": 2,
+        "title": "Bootstrapping Proportions",
+        "id": "bootstrapping-proportions"
+      },
+      {
+        "index": 4,
+        "indexh": 1,
+        "indexv": 3,
+        "title": "An Important Limitation of the Bootstrap",
+        "id": "an-important-limitation-of-the-bootstrap"
+      },
+      {
+        "index": 5,
+        "indexh": 2,
+        "indexv": 0,
+        "title": "Normal Approximation",
+        "id": "normal-approximation"
+      },
+      {
+        "index": 6,
+        "indexh": 2,
+        "indexv": 1,
+        "title": "The Normal Distribution",
+        "id": "the-normal-distribution"
+      },
+      {
+        "index": 7,
+        "indexh": 2,
+        "indexv": 2,
+        "title": "Normal Approximation",
+        "id": "normal-approximation-1"
+      },
+      {
+        "index": 8,
+        "indexh": 2,
+        "indexv": 3,
+        "title": "Exact, Guaranteed, Approximate",
+        "id": "exact-guaranteed-approximate"
+      },
+      {
+        "index": 9,
+        "indexh": 2,
+        "indexv": 4,
+        "title": "Calibration Using Normal Approximation",
+        "id": "calibration-using-normal-approximation"
+      },
+      {
+        "index": 10,
+        "indexh": 2,
+        "indexv": 5,
+        "title": "When This Works",
+        "id": "when-this-works"
+      },
+      {
+        "index": 11,
+        "indexh": 3,
+        "indexv": 0,
+        "title": "Normal Approximation in Context",
+        "id": "normal-approximation-in-context"
+      },
+      {
+        "index": 12,
+        "indexh": 3,
+        "indexv": 1,
+        "title": "A Proportion when Sampling with Replacement",
+        "id": "a-proportion-when-sampling-with-replacement"
+      },
+      {
+        "index": 13,
+        "indexh": 3,
+        "indexv": 2,
+        "title": "A Proportion when Sampling without Replacement",
+        "id": "a-proportion-when-sampling-without-replacement"
+      },
+      {
+        "index": 14,
+        "indexh": 3,
+        "indexv": 3,
+        "title": "Using Normal Approximation",
+        "id": "using-normal-approximation"
+      },
+      {
+        "index": 15,
+        "indexh": 4,
+        "indexv": 0,
+        "title": "Appendix",
+        "id": "appendix"
+      },
+      {
+        "index": 16,
+        "indexh": 4,
+        "indexv": 1,
+        "title": "Why Continuous Distribution is a Blessing",
+        "id": "sec-a-blessing"
+      }
+    ],
+    "variant": "slides",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "decks/chapter-normal-approximation-slides.qmd"
+    },
+    "map": "chapters/chapter-normal-approximation.qmd"
   }
 ]

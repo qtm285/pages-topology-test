@@ -2,91 +2,289 @@
   {
     "title": "Prediction, Inference, and Causality I",
     "level": "part",
-    "page": 1
+    "page": 1,
+    "chapterRoot": "index.qmd"
   },
   {
     "title": "1 The Social Pressure Experiment",
     "level": "chapter",
-    "page": 2
+    "page": 2,
+    "chapterRoot": "chapters/chapter-social-pressure-experiment.qmd"
   },
   {
     "title": "2 Homework: Setting Up",
     "level": "chapter",
-    "page": 3
+    "page": 3,
+    "chapterRoot": "homework/homework-setup.qmd"
   },
   {
     "title": "3 Homework: Basic Descriptive Statistics",
     "level": "chapter",
-    "page": 4
+    "page": 4,
+    "chapterRoot": "homework/homework-descriptive.qmd"
+  },
+  {
+    "title": "One-Sample Problems",
+    "level": "part",
+    "page": 5,
+    "chapterRoot": "part1-one-sample.qmd"
   },
   {
     "title": "4 Sampling",
     "level": "chapter",
-    "page": 5
+    "page": 6,
+    "chapterRoot": "chapters/chapter-sampling.qmd"
+  },
+  {
+    "title": "Sampling — Slides",
+    "level": "section",
+    "page": 43,
+    "deckOf": "chapters/chapter-sampling.qmd"
   },
   {
     "title": "5 Point and Interval Estimates",
     "level": "chapter",
-    "page": 6
+    "page": 7,
+    "chapterRoot": "chapters/chapter-point-and-interval-estimates.qmd"
+  },
+  {
+    "title": "Point and Interval Estimates — Slides",
+    "level": "section",
+    "page": 44,
+    "deckOf": "chapters/chapter-point-and-interval-estimates.qmd"
   },
   {
     "title": "6 Homework: The Idea of Calibration",
     "level": "chapter",
-    "page": 7
+    "page": 8,
+    "chapterRoot": "homework/homework-calibration.qmd"
   },
   {
     "title": "7 Calibrating Interval Estimates with Binary Observations",
     "level": "chapter",
-    "page": 8
+    "page": 9,
+    "chapterRoot": "chapters/chapter-calibration-binary.qmd"
+  },
+  {
+    "title": "Calibrating Interval Estimates with Binary Observations — Slides",
+    "level": "section",
+    "page": 45,
+    "deckOf": "chapters/chapter-calibration-binary.qmd"
   },
   {
     "title": "8 Sampling with Replacement and the Binomial Distribution",
     "level": "chapter",
-    "page": 9
+    "page": 10,
+    "chapterRoot": "chapters/chapter-sampling-with-replacement.qmd"
   },
   {
     "title": "9 Homework: Calibration with Binary Outcomes",
     "level": "chapter",
-    "page": 10
+    "page": 11,
+    "chapterRoot": "homework/homework-calibration-binary.qmd"
   },
   {
     "title": "10 Sampling without Replacement and the Hypergeometric Distribution",
     "level": "chapter",
-    "page": 11
+    "page": 12,
+    "chapterRoot": "chapters/chapter-sampling-without-replacement.qmd"
   },
   {
-    "title": "12 Homework — Random Variables, Moments, and the Standard Deviation",
+    "title": "11 Calibration using the Binomial Distribution",
     "level": "chapter",
-    "page": 13
+    "page": 13,
+    "chapterRoot": "chapters/chapter-calibration-with-the-binomial.qmd"
   },
   {
-    "title": "13 Calibrating Interval Estimates using the Bootstrap",
+    "title": "12 Calibrating Interval Estimates using the Bootstrap",
     "level": "chapter",
-    "page": 12
+    "page": 14,
+    "chapterRoot": "chapters/chapter-bootstrap.qmd"
   },
   {
     "title": "Calibrating Interval Estimates using the Bootstrap — Slides",
     "level": "section",
-    "page": 18
+    "page": 46,
+    "deckOf": "chapters/chapter-bootstrap.qmd"
   },
   {
-    "title": "15 Random Variables and Moments",
+    "title": "13 Homework: Bootstrap",
     "level": "chapter",
-    "page": 14
+    "page": 15,
+    "chapterRoot": "homework/homework-bootstrap.qmd"
+  },
+  {
+    "title": "14 Random Variables and Moments",
+    "level": "chapter",
+    "page": 16,
+    "chapterRoot": "chapters/chapter-random-variables-and-moments.qmd"
+  },
+  {
+    "title": "FMLTD — Slides",
+    "level": "section",
+    "page": 47,
+    "deckOf": "chapters/chapter-random-variables-and-moments.qmd"
+  },
+  {
+    "title": "15 Homework: Sample Size Calculation and Coverage",
+    "level": "chapter",
+    "page": 17,
+    "chapterRoot": "homework/homework-sample-size-coverage.qmd"
+  },
+  {
+    "title": "16 Homework — Random Variables, Moments, and the Standard Deviation",
+    "level": "chapter",
+    "page": 18,
+    "chapterRoot": "homework/homework-random-variables-and-moments.qmd"
   },
   {
     "title": "17 The Standard Deviation is Standard",
     "level": "chapter",
-    "page": 15
+    "page": 19,
+    "chapterRoot": "chapters/chapter-standard-deviation.qmd"
   },
   {
     "title": "18 Normal Approximation",
     "level": "chapter",
-    "page": 16
+    "page": 20,
+    "chapterRoot": "chapters/chapter-normal-approximation.qmd"
+  },
+  {
+    "title": "Normal Approximation and Sample Size Calculation — Slides",
+    "level": "section",
+    "page": 48,
+    "deckOf": "chapters/chapter-normal-approximation.qmd"
+  },
+  {
+    "title": "19 Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators",
+    "level": "chapter",
+    "page": 21,
+    "chapterRoot": "homework/homework-markov-chebyshev.qmd"
+  },
+  {
+    "title": "20 Probability Review",
+    "level": "chapter",
+    "page": 22,
+    "chapterRoot": "chapters/chapter-probability-review.qmd"
+  },
+  {
+    "title": "21 Variance, Standard Deviation, and Sample Size",
+    "level": "chapter",
+    "page": 23,
+    "chapterRoot": "chapters/chapter-variance-and-sample-size.qmd"
+  },
+  {
+    "title": "22 Homework: Comparing Estimators",
+    "level": "chapter",
+    "page": 24,
+    "chapterRoot": "homework/homework-comparing-estimators.qmd"
   },
   {
     "title": "23 Bias and Coverage",
     "level": "chapter",
-    "page": 17
+    "page": 25,
+    "chapterRoot": "chapters/chapter-bias-and-coverage.qmd"
+  },
+  {
+    "title": "24 Practice Midterm 1",
+    "level": "chapter",
+    "page": 26,
+    "chapterRoot": "exams/practice-midterm-1.qmd"
+  },
+  {
+    "title": "Distributional Approximation",
+    "level": "part",
+    "page": 27,
+    "chapterRoot": "part-breather.qmd"
+  },
+  {
+    "title": "25 Why the CLT Works — Stein’s Method",
+    "level": "chapter",
+    "page": 28,
+    "chapterRoot": "chapters/chapter-stein-normal.qmd"
+  },
+  {
+    "title": "26 When Normal Breaks Down — Poisson Approximation and Quality Control",
+    "level": "chapter",
+    "page": 29,
+    "chapterRoot": "chapters/chapter-poisson-approximation.qmd"
+  },
+  {
+    "title": "27 Stein’s Method and Poisson Approximation",
+    "level": "chapter",
+    "page": 30,
+    "chapterRoot": "chapters/chapter-stein-poisson.qmd"
+  },
+  {
+    "title": "Two-Sample Problems",
+    "level": "part",
+    "page": 31,
+    "chapterRoot": "part2-two-sample.qmd"
+  },
+  {
+    "title": "28 Comparing Two Groups",
+    "level": "chapter",
+    "page": 32,
+    "chapterRoot": "chapters/chapter-comparing-two-groups.qmd"
+  },
+  {
+    "title": "29 Homework: Bias with Two Groups",
+    "level": "chapter",
+    "page": 33,
+    "chapterRoot": "homework/homework-bias-two-groups.qmd"
+  },
+  {
+    "title": "30 Homework: Sample Size Calculation for Two-Sample Problems",
+    "level": "chapter",
+    "page": 34,
+    "chapterRoot": "homework/homework-sample-size-two-sample.qmd"
+  },
+  {
+    "title": "31 Potential Outcomes and Randomization",
+    "level": "chapter",
+    "page": 35,
+    "chapterRoot": "chapters/chapter-potential-outcomes-randomization.qmd"
+  },
+  {
+    "title": "32 Homework: Causality",
+    "level": "chapter",
+    "page": 36,
+    "chapterRoot": "homework/homework-causality.qmd"
+  },
+  {
+    "title": "33 Sampling and Randomization",
+    "level": "chapter",
+    "page": 37,
+    "chapterRoot": "chapters/chapter-sampling-and-randomization.qmd"
+  },
+  {
+    "title": "34 Observational Studies and Confounding",
+    "level": "chapter",
+    "page": 38,
+    "chapterRoot": "chapters/chapter-observational-confounding.qmd"
+  },
+  {
+    "title": "35 Models",
+    "level": "chapter",
+    "page": 39,
+    "chapterRoot": "chapters/chapter-models.qmd"
+  },
+  {
+    "title": "36 Practice Midterm 2",
+    "level": "chapter",
+    "page": 40,
+    "chapterRoot": "exams/practice-midterm-2.qmd"
+  },
+  {
+    "title": "37 Programming Reference",
+    "level": "chapter",
+    "page": 41,
+    "chapterRoot": "chapters/chapter-programming-reference.qmd"
+  },
+  {
+    "title": "References",
+    "level": "chapter",
+    "page": 42,
+    "chapterRoot": "references.qmd"
   }
 ]

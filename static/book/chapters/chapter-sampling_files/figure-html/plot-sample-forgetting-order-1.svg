@@ -47,9 +47,9 @@
 <polyline points='39.55,346.64 39.55,5.48 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' />
 <polyline points='258.11,346.64 258.11,5.48 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' />
 <polyline points='476.66,346.64 476.66,5.48 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' />
-<circle cx='39.55' cy='331.13' r='4.62' style='stroke-width: 0.71; stroke: #0000FF; fill: #0000FF;' />
-<circle cx='258.11' cy='20.99' r='4.62' style='stroke-width: 0.71; stroke: #0000FF; fill: #0000FF;' />
-<circle cx='476.66' cy='20.99' r='4.62' style='stroke-width: 0.71; stroke: #0000FF; fill: #0000FF;' />
+<circle cx='39.55' cy='20.99' r='4.62' style='stroke-width: 0.71; stroke: #0000FF; fill: #0000FF;' />
+<circle cx='258.11' cy='331.13' r='4.62' style='stroke-width: 0.71; stroke: #0000FF; fill: #0000FF;' />
+<circle cx='476.66' cy='331.13' r='4.62' style='stroke-width: 0.71; stroke: #0000FF; fill: #0000FF;' />
 </g>
 <g clip-path='url(#cpMC4wMHw1MDQuMDB8MC4wMHwzNjAuMDA=)'>
 <text x='11.59' y='334.16' text-anchor='middle' style='font-size: 8.80px;fill: #AAAAAA; font-family: "Arimo";' textLength='12.22px' lengthAdjust='spacingAndGlyphs'>0/3</text>

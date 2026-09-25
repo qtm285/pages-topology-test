@@ -6,6 +6,7 @@
     "chapters/chapter-social-pressure-experiment.qmd",
     "homework/homework-setup.qmd",
     "homework/homework-descriptive.qmd",
+    "part1-one-sample.qmd",
     "chapters/chapter-sampling.qmd",
     "chapters/chapter-point-and-interval-estimates.qmd",
     "homework/homework-calibration.qmd",
@@ -13,22 +14,52 @@
     "chapters/chapter-sampling-with-replacement.qmd",
     "homework/homework-calibration-binary.qmd",
     "chapters/chapter-sampling-without-replacement.qmd",
+    "chapters/chapter-calibration-with-the-binomial.qmd",
     "chapters/chapter-bootstrap.qmd",
-    "homework/homework-random-variables-and-moments.qmd",
+    "homework/homework-bootstrap.qmd",
     "chapters/chapter-random-variables-and-moments.qmd",
+    "homework/homework-sample-size-coverage.qmd",
+    "homework/homework-random-variables-and-moments.qmd",
     "chapters/chapter-standard-deviation.qmd",
     "chapters/chapter-normal-approximation.qmd",
-    "chapters/chapter-bias-and-coverage.qmd"
+    "homework/homework-markov-chebyshev.qmd",
+    "chapters/chapter-probability-review.qmd",
+    "chapters/chapter-variance-and-sample-size.qmd",
+    "homework/homework-comparing-estimators.qmd",
+    "chapters/chapter-bias-and-coverage.qmd",
+    "exams/practice-midterm-1.qmd",
+    "part-breather.qmd",
+    "chapters/chapter-stein-normal.qmd",
+    "chapters/chapter-poisson-approximation.qmd",
+    "chapters/chapter-stein-poisson.qmd",
+    "part2-two-sample.qmd",
+    "chapters/chapter-comparing-two-groups.qmd",
+    "homework/homework-bias-two-groups.qmd",
+    "homework/homework-sample-size-two-sample.qmd",
+    "chapters/chapter-potential-outcomes-randomization.qmd",
+    "homework/homework-causality.qmd",
+    "chapters/chapter-sampling-and-randomization.qmd",
+    "chapters/chapter-observational-confounding.qmd",
+    "chapters/chapter-models.qmd",
+    "exams/practice-midterm-2.qmd",
+    "chapters/chapter-programming-reference.qmd",
+    "references.qmd"
   ],
   "decks": [
-    "decks/chapter-bootstrap-slides.qmd"
+    "decks/chapter-sampling-slides.qmd",
+    "decks/chapter-point-and-interval-estimates-slides.qmd",
+    "decks/chapter-calibration-binary-slides.qmd",
+    "decks/chapter-bootstrap-slides.qmd",
+    "decks/chapter-random-variables-and-moments-slides.qmd",
+    "decks/chapter-normal-approximation-slides.qmd"
   ],
   "assets": [
     "homework/handouts/homework-setup-handout.zip",
     "homework/handouts/homework-descriptive-handout.zip",
     "homework/handouts/homework-calibration-handout.zip",
     "homework/handouts/homework-calibration-binary-handout.zip",
-    "homework/handouts/homework-random-variables-and-moments-handout.zip"
+    "homework/handouts/homework-bootstrap-handout.zip",
+    "homework/handouts/homework-sample-size-coverage-handout.zip"
   ],
   "links": [
     "chapters/chapter-social-pressure-experiment.html",
@@ -47,8 +78,12 @@
     "chapters/chapter-sampling-without-replacement.html",
     "chapters/chapter-bootstrap.html",
     "decks/chapter-bootstrap-slides.html",
-    "homework/homework-random-variables-and-moments.html",
-    "homework/handouts/homework-random-variables-and-moments-handout.zip",
+    "homework/homework-bootstrap.html",
+    "homework/handouts/homework-bootstrap-handout.zip",
+    "chapters/chapter-random-variables-and-moments.html",
+    "chapters/chapter-standard-deviation.html",
+    "homework/homework-sample-size-coverage.html",
+    "homework/handouts/homework-sample-size-coverage-handout.zip",
     "chapters/chapter-social-pressure-experiment.qmd",
     "chapters/chapter-sampling.qmd",
     "chapters/chapter-point-and-interval-estimates.qmd",
@@ -69,6 +104,7 @@
     "chapters/chapter-sampling-and-randomization.qmd",
     "chapters/chapter-comparing-two-groups.qmd",
     "chapters/chapter-observational-confounding.qmd",
-    "chapters/chapter-models.qmd"
+    "chapters/chapter-models.qmd",
+    "chapters/chapter-programming-reference.qmd"
   ]
 }
