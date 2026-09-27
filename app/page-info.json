@@ -588,147 +588,6 @@
     "map": "references.qmd"
   },
   {
-    "file": "book/decks/chapter-social-pressure-experiment-slides.html",
-    "width": 1290,
-    "height": 1000,
-    "title": "Introduction — Slides",
-    "slides": [
-      {
-        "index": 0,
-        "indexh": 0,
-        "indexv": 0,
-        "title": "Introduction",
-        "id": "title-slide"
-      },
-      {
-        "index": 1,
-        "indexh": 1,
-        "indexv": 0,
-        "title": "Plan for Today",
-        "id": "plan-for-today"
-      },
-      {
-        "index": 2,
-        "indexh": 2,
-        "indexv": 0,
-        "title": "Style",
-        "id": "style"
-      },
-      {
-        "index": 3,
-        "indexh": 3,
-        "indexv": 0,
-        "title": "What This Class Is About",
-        "id": "what-this-class-is-about"
-      },
-      {
-        "index": 4,
-        "indexh": 3,
-        "indexv": 1,
-        "title": "The Social Pressure Experiment",
-        "id": "the-social-pressure-experiment"
-      },
-      {
-        "index": 5,
-        "indexh": 3,
-        "indexv": 2,
-        "title": "A Missed Opportunity?",
-        "id": "a-missed-opportunity"
-      },
-      {
-        "index": 6,
-        "indexh": 3,
-        "indexv": 3,
-        "title": "Your Imaginary Mailer Campaign",
-        "id": "your-imaginary-mailer-campaign"
-      },
-      {
-        "index": 7,
-        "indexh": 3,
-        "indexv": 4,
-        "title": "Step 1a. Individual-Level Prediction",
-        "id": "step-1a.-individual-level-prediction"
-      },
-      {
-        "index": 8,
-        "indexh": 3,
-        "indexv": 5,
-        "title": "Step 1b. Summarizing Our Predictions",
-        "id": "step-1b.-summarizing-our-predictions"
-      },
-      {
-        "index": 9,
-        "indexh": 3,
-        "indexv": 6,
-        "title": "Step 2. Inference",
-        "id": "step-2.-inference"
-      },
-      {
-        "index": 10,
-        "indexh": 3,
-        "indexv": 7,
-        "title": "Step 3. Causality",
-        "id": "step-3.-causality"
-      },
-      {
-        "index": 11,
-        "indexh": 4,
-        "indexv": 0,
-        "title": "The Syllabus",
-        "id": "the-syllabus"
-      },
-      {
-        "index": 12,
-        "indexh": 5,
-        "indexv": 0,
-        "title": "Letters",
-        "id": "letters"
-      },
-      {
-        "index": 13,
-        "indexh": 5,
-        "indexv": 1,
-        "title": "Slide 14",
-        "id": "section-2"
-      },
-      {
-        "index": 14,
-        "indexh": 5,
-        "indexv": 2,
-        "title": "Slide 15",
-        "id": "section-3"
-      },
-      {
-        "index": 15,
-        "indexh": 5,
-        "indexv": 3,
-        "title": "Slide 16",
-        "id": "section-4"
-      },
-      {
-        "index": 16,
-        "indexh": 5,
-        "indexv": 4,
-        "title": "Slide 17",
-        "id": "section-5"
-      },
-      {
-        "index": 17,
-        "indexh": 6,
-        "indexv": 0,
-        "title": "Terminology",
-        "id": "sec-terminology"
-      }
-    ],
-    "variant": "slides",
-    "source": {
-      "type": "project-source",
-      "format": "qmd",
-      "file": "decks/chapter-social-pressure-experiment-slides.qmd"
-    },
-    "map": "chapters/chapter-social-pressure-experiment.qmd"
-  },
-  {
     "file": "book/decks/chapter-sampling-slides.html",
     "width": 1290,
     "height": 1000,
@@ -1716,13 +1575,13 @@
     "file": "book/decks/chapter-random-variables-and-moments-slides.html",
     "width": 1290,
     "height": 1000,
-    "title": "FMLTD — Slides",
+    "title": "Random Variables and Moments — Slides",
     "slides": [
       {
         "index": 0,
         "indexh": 0,
         "indexv": 0,
-        "title": "FMLTD",
+        "title": "Random Variables and Moments",
         "id": "title-slide"
       },
       {
@@ -1750,186 +1609,214 @@
         "index": 4,
         "indexh": 2,
         "indexv": 2,
-        "title": "How Does Width Change with Sample Size?",
-        "id": "how-does-width-change-with-sample-size"
+        "title": "Why Location and Spread Both Matter",
+        "id": "why-location-and-spread-both-matter"
       },
       {
         "index": 5,
         "indexh": 2,
         "indexv": 3,
+        "title": "How Does Width Change with Sample Size?",
+        "id": "how-does-width-change-with-sample-size"
+      },
+      {
+        "index": 6,
+        "indexh": 2,
+        "indexv": 4,
         "title": "Two Ways Forward",
         "id": "two-ways-forward"
       },
       {
-        "index": 6,
+        "index": 7,
         "indexh": 3,
         "indexv": 0,
         "title": "Moments",
         "id": "moments"
       },
       {
-        "index": 7,
-        "indexh": 3,
-        "indexv": 1,
-        "title": "Count the Dots",
-        "id": "count-the-dots"
-      },
-      {
         "index": 8,
         "indexh": 3,
-        "indexv": 2,
-        "title": "Comparing Distributions",
-        "id": "comparing-distributions"
-      },
-      {
-        "index": 9,
-        "indexh": 3,
-        "indexv": 3,
+        "indexv": 1,
         "title": "Expectation and Location",
         "id": "expectation-and-location"
       },
       {
+        "index": 9,
+        "indexh": 3,
+        "indexv": 2,
+        "title": "Variance Is an Expectation",
+        "id": "variance-is-an-expectation"
+      },
+      {
         "index": 10,
         "indexh": 3,
-        "indexv": 4,
+        "indexv": 3,
         "title": "Spread",
         "id": "spread"
       },
       {
         "index": 11,
         "indexh": 3,
-        "indexv": 5,
-        "title": "Sampling, Means, and Variances",
-        "id": "sampling-means-and-variances"
+        "indexv": 4,
+        "title": "Comparing Distributions",
+        "id": "comparing-distributions"
       },
       {
         "index": 12,
         "indexh": 3,
-        "indexv": 6,
-        "title": "Expectations",
-        "id": "expectations"
+        "indexv": 5,
+        "title": "Binary Moments on One Picture",
+        "id": "binary-moments-on-one-picture"
       },
       {
         "index": 13,
         "indexh": 3,
+        "indexv": 6,
+        "title": "Sampling, Means, and Variances",
+        "id": "sampling-means-and-variances"
+      },
+      {
+        "index": 14,
+        "indexh": 3,
         "indexv": 7,
+        "title": "Expectations",
+        "id": "expectations"
+      },
+      {
+        "index": 15,
+        "indexh": 3,
+        "indexv": 8,
         "title": "Expectations",
         "id": "expectations-1"
       },
       {
-        "index": 14,
+        "index": 16,
+        "indexh": 3,
+        "indexv": 9,
+        "title": "Start With Sampling With Replacement",
+        "id": "start-with-sampling-with-replacement"
+      },
+      {
+        "index": 17,
         "indexh": 4,
         "indexv": 0,
         "title": "Properties of Expectations",
         "id": "properties-of-expectations"
       },
       {
-        "index": 15,
+        "index": 18,
         "indexh": 4,
         "indexv": 1,
         "title": "Linearity of Expectations",
         "id": "linearity-of-expectations"
       },
       {
-        "index": 16,
+        "index": 19,
         "indexh": 5,
         "indexv": 0,
         "title": "Implications for Sample Means",
         "id": "implications-for-sample-means"
       },
       {
-        "index": 17,
+        "index": 20,
         "indexh": 5,
         "indexv": 1,
         "title": "Bias",
         "id": "bias"
       },
       {
-        "index": 18,
+        "index": 21,
         "indexh": 5,
         "indexv": 2,
         "title": "What Made the Sample Mean Unbiased?",
         "id": "what-made-the-sample-mean-unbiased"
       },
       {
-        "index": 19,
+        "index": 22,
         "indexh": 6,
         "indexv": 0,
         "title": "Variance of a Sample Mean",
         "id": "variance-of-a-sample-mean"
       },
       {
-        "index": 20,
+        "index": 23,
         "indexh": 6,
         "indexv": 1,
         "title": "Factorization of Products of Independent Random Variables",
         "id": "factorization-of-products-of-independent-random-variables"
       },
       {
-        "index": 21,
+        "index": 24,
         "indexh": 6,
         "indexv": 2,
+        "title": "The Key Move: Square the Sum Into a Matrix",
+        "id": "the-key-move-square-the-sum-into-a-matrix"
+      },
+      {
+        "index": 25,
+        "indexh": 6,
+        "indexv": 3,
         "title": "The Standard Deviation of a Proportion",
         "id": "the-standard-deviation-of-a-proportion"
       },
       {
-        "index": 22,
+        "index": 26,
         "indexh": 6,
-        "indexv": 3,
+        "indexv": 4,
         "title": "Now We Can Explain the Width Curve",
         "id": "now-we-can-explain-the-width-curve"
       },
       {
-        "index": 23,
+        "index": 27,
         "indexh": 6,
-        "indexv": 4,
+        "indexv": 5,
         "title": "The Standard Deviation of a Proportion",
         "id": "the-standard-deviation-of-a-proportion-1"
       },
       {
-        "index": 24,
+        "index": 28,
         "indexh": 6,
-        "indexv": 5,
+        "indexv": 6,
         "title": "What Changed When We Changed the Sampling Mechanism?",
         "id": "what-changed-when-we-changed-the-sampling-mechanism"
       },
       {
-        "index": 25,
+        "index": 29,
         "indexh": 7,
         "indexv": 0,
         "title": "Appendix: The Nightmare Way",
         "id": "appendix-the-nightmare-way"
       },
       {
-        "index": 26,
+        "index": 30,
         "indexh": 7,
         "indexv": 1,
         "title": "Start from the Fully Marginalized Table",
         "id": "start-from-the-fully-marginalized-table"
       },
       {
-        "index": 27,
+        "index": 31,
         "indexh": 7,
         "indexv": 2,
         "title": "Walk Back to the Response Sequences",
         "id": "walk-back-to-the-response-sequences"
       },
       {
-        "index": 28,
+        "index": 32,
         "indexh": 7,
         "indexv": 3,
         "title": "Walk Back to the Calls",
         "id": "walk-back-to-the-calls"
       },
       {
-        "index": 29,
+        "index": 33,
         "indexh": 7,
         "indexv": 4,
         "title": "What the Shortcut Reused",
         "id": "what-the-shortcut-reused"
       },
       {
-        "index": 30,
+        "index": 34,
         "indexh": 7,
         "indexv": 5,
         "title": "Squaring Sums",

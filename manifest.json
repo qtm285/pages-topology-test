@@ -17,8 +17,8 @@
       ],
       "pages": 48,
       "createdAt": "2026-09-16T20:28:53.789Z",
-      "lastBuild": "2026-09-25T05:21:43.653Z",
-      "buildStatus": "building",
+      "lastBuild": "2026-09-26T20:18:49.794Z",
+      "buildStatus": "success",
       "renderedFormat": "html",
       "sourceFormat": "qmd",
       "renderer": "quarto",
@@ -73,15 +73,15 @@
         "app/book/decks/chapter-random-variables-and-moments-slides.html",
         "app/book/decks/chapter-normal-approximation-slides.html"
       ],
-      "lastBuildSuccess": "2026-09-25T05:21:43.653Z",
-      "lastEditedBy": "fleet:a7846781",
-      "lastEditedByAt": 1790111960409,
+      "lastBuildSuccess": "2026-09-26T20:18:49.794Z",
+      "lastEditedBy": "fleet:fff36f47",
+      "lastEditedByAt": 1790452530701,
       "classSiteUrl": "https://qtm285.github.io/static",
       "previewUrl": "https://pic.cormorant-matrix.ts.net:10000/static",
       "sourceSyncRefusals": [],
-      "buildPhase": "build",
-      "sourceRevision": "fcbc696d9e314d49deba5b9ad0056e40e6b091aa",
-      "acceptSeq": 30761,
+      "buildPhase": null,
+      "sourceRevision": "6fea46aad1fc54c7c9212a86dfc2cb87dc7f9722",
+      "acceptSeq": 30906,
       "referencedSourcePaths": []
     }
   }

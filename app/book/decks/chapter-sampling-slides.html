@@ -1,5 +1,274 @@
 <!DOCTYPE html>
 <html lang="en"><head>
+<script>
+(function () {
+  var MAX_FIELD = 2000;
+  var params = new URLSearchParams(window.location.search);
+  var shapeId = params.get('_tldaShape') || '';
+
+  function clip(value) {
+    if (value === undefined || value === null) return undefined;
+    var s = typeof value === 'string' ? value : String(value);
+    if (!s) return undefined;
+    return s.length > MAX_FIELD ? s.slice(0, MAX_FIELD) + '…[+' + (s.length - MAX_FIELD) + ']' : s;
+  }
+
+  // sendBeacon survives a dying page; keepalive fetch is the fallback.
+  function send(ns, msg, data) {
+    var payload = {
+      ts: new Date().toISOString(),
+      level: 'error',
+      ns: ns,
+      msg: msg,
+      data: Object.assign({ url: location.href, shapeId: shapeId }, data),
+    };
+    try {
+      var body = JSON.stringify(payload);
+      if (navigator.sendBeacon &&
+          navigator.sendBeacon('/api/log', new Blob([body], { type: 'application/json' }))) return;
+      fetch('/api/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: body,
+        keepalive: true,
+      }).catch(function () {
+        // Nowhere left to report a failed report, and rethrowing would be
+        // caught by the rejection handler below and posted, which loops.
+      });
+    } catch (e) {
+      // Circular payload, or no Blob. Called FROM the error handlers, so a
+      // throw here re-enters them and buries the original fault.
+    }
+  }
+
+  function tell(report) {
+    try {
+      window.parent.postMessage({ type: 'tlda-doc-health', shapeId: shapeId, report: report }, '*');
+    } catch (e) {
+      // Served standalone, so no parent is listening. Supported, not a fault:
+      // the report has already gone to /api/log.
+    }
+  }
+
+  // KaTeX render errors, caught at render time inside the wrapper. This runs in
+  // <head> before the page's own math block, so it installs first and Quarto's
+  // hardcoded non-throwing loop renders through it. Setting throwOnError here
+  // turns a silent literal-text render into a throw the catch reports — the
+  // throw is the signal. It never looks at the page.
+  var katexReported = {};
+  function reportKatexError(tex, err) {
+    try {
+      var detail = clip(err && err.message);
+      if (!detail) return;
+      // One report per distinct error per page load: a single broken macro
+      // used fifty times is one defect, not fifty cards.
+      if (katexReported[detail]) return;
+      katexReported[detail] = true;
+      send('katex-error', 'KaTeX render error', {
+        error: detail,
+        tex: clip(tex),
+      });
+    } catch (e) {
+      // Called FROM the render path, so a throw here re-enters the wrapper
+      // and buries the original fault.
+    }
+  }
+
+  function installKatexHook() {
+    try {
+      if (!window.katex || !window.katex.render || window.__tldaKatexHooked) return false;
+      var inner = window.katex.render.bind(window.katex);
+      window.katex.render = function (tex, el, opts) {
+        opts = opts || {};
+        // Quarto hardcodes the non-throwing options in its own template and
+        // the schema accepts only method+url, so this cannot be configuration.
+        // Callers that set it explicitly keep their own value.
+        if (opts.throwOnError === undefined || opts.throwOnError === false) opts.throwOnError = true;
+        try {
+          return inner(tex, el, opts);
+        } catch (err) {
+          reportKatexError(tex, err);
+          // Paint what KaTeX would have painted had it not thrown: callers
+          // and page layout see the same shape as a non-throwing render.
+          try {
+            var fallbackOpts = {};
+            for (var k in opts) fallbackOpts[k] = opts[k];
+            fallbackOpts.throwOnError = false;
+            return inner(tex, el, fallbackOpts);
+          } catch (e2) {
+            return el;
+          }
+        }
+      };
+      window.__tldaKatexHooked = true;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // katex.min.js is deferred, so it may not exist yet when this head script
+  // runs. Poll briefly; give up quietly if KaTeX never loads (MathJax page).
+  (function waitForKatex(tries) {
+    if (installKatexHook()) return;
+    if (tries > 0) setTimeout(function () { waitForKatex(tries - 1); }, 250);
+  })(40);
+  window.__tldaKatexHookInstall = installKatexHook;
+
+  window.addEventListener('error', function (event) {
+    try {
+      // 'error' also fires for failed subresources, where target is the element
+      // rather than window. Unlike crashBeacon.ts these are kept — a macros.js
+      // that 404s is the fault we are looking for — but under their own kind.
+      var target = event.target;
+      if (target && target !== window) {
+        var src = target.src || target.href;
+        if (!src) return;
+        send('doc-fault', 'subresource failed to load', {
+          kind: 'subresource',
+          source: clip(src),
+          tag: target.tagName,
+        });
+        return;
+      }
+      send('doc-fault', event.message || 'error', {
+        kind: 'error',
+        message: clip(event.message),
+        stack: clip(event.error && event.error.stack),
+        source: clip(event.filename),
+        line: event.lineno,
+        column: event.colno,
+      });
+    } catch (e) {
+      // This IS the error handler: a throw here fires 'error' again and
+      // recurses. Reading event.target cross-origin can throw.
+    }
+  }, true);
+
+  window.addEventListener('unhandledrejection', function (event) {
+    try {
+      var reason = event.reason;
+      send('doc-fault', 'unhandled rejection', {
+        kind: 'unhandledrejection',
+        message: clip((reason && reason.message) || reason),
+        stack: clip(reason && reason.stack),
+      });
+    } catch (e) {
+      // A rejection can carry a getter that throws when read, and throwing
+      // here rejects again and re-enters this handler.
+    }
+  });
+
+  function probeMath() {
+    var rendered = document.querySelectorAll('.katex, mjx-container').length;
+    var errored = document.querySelectorAll('.katex-error, mjx-merror').length;
+    // Source delimiters still in the text mean the renderer never ran over
+    // them. The backslash is a charcode, not an escape: this script rides
+    // inside a template literal, so every backslash here is read twice and a
+    // written escape ships wrong while looking right.
+    var BS = String.fromCharCode(92);
+    var body = document.body ? (document.body.innerText || '') : '';
+    var residue = (body.split(BS + '(').length - 1) + (body.split(BS + '[').length - 1);
+
+    if (errored > 0) {
+      var sample = document.querySelector('.katex-error, mjx-merror');
+      return {
+        state: 'broken',
+        why: 'math rendered with errors',
+        errored: errored,
+        rendered: rendered,
+        // KaTeX's title names the undefined control sequence; the count alone
+        // does not tell a reader what to fix.
+        detail: clip(sample && (sample.getAttribute('title') || sample.textContent)),
+      };
+    }
+    if (rendered === 0 && residue > 0) {
+      return { state: 'broken', why: 'math present but nothing rendered it', residue: residue, rendered: 0 };
+    }
+    if (rendered === 0) return { state: 'absent', why: 'no math on this page' };
+    return {
+      state: 'ok',
+      rendered: rendered,
+      engine: window.katex ? 'katex' : (window.MathJax ? 'mathjax' : 'unknown'),
+      macros: window.__tldaKatexMacros ? Object.keys(window.__tldaKatexMacros).length : 0,
+    };
+  }
+
+  function probeWebR() {
+    // The markers are a div with id webr-N and class exercise-cell, beside a
+    // script of type webr-N-contents. Match those and nothing broader:
+    // .cell-code .sourceCode is every static code listing on every Quarto page.
+    //
+    // No backticks in this comment — it lives inside a template literal, and one
+    // backtick closes it and takes the module down.
+    var cells = document.querySelectorAll('div.exercise-cell[id^="webr-"]');
+    if (cells.length === 0) return { state: 'absent', why: 'no webR cells on this page' };
+    // The div ships EMPTY and the runtime mounts into it, so liveness is
+    // readable from the DOM alone: no children means a student cannot run it.
+    var live = 0;
+    for (var i = 0; i < cells.length; i++) if (cells[i].childElementCount > 0) live++;
+    if (live === 0) return { state: 'broken', why: 'webR never mounted any cell', cells: cells.length, live: 0 };
+    if (live < cells.length) {
+      return { state: 'broken', why: 'some webR cells never mounted', cells: cells.length, live: live };
+    }
+    return { state: 'ok', cells: cells.length, live: live };
+  }
+
+  function probeReveal() {
+    if (!document.querySelector('.reveal')) return { state: 'absent', why: 'not a deck' };
+    if (!window.Reveal || typeof window.Reveal.isReady !== 'function' || !window.Reveal.isReady()) {
+      return { state: 'broken', why: 'reveal never initialised' };
+    }
+    return { state: 'ok', slides: document.querySelectorAll('.reveal .slides section').length };
+  }
+
+  // Without this a throwing probe takes check() down: no report, no badge, and
+  // a page that reads as healthy. 'unknown' never folds into 'ok'.
+  function attempt(name, probe) {
+    try {
+      return probe();
+    } catch (e) {
+      return { state: 'unknown', why: 'the ' + name + ' check could not run', error: clip(e && e.message) };
+    }
+  }
+
+  function check() {
+    var report = {
+      math: attempt('math', probeMath),
+      webr: attempt('webR', probeWebR),
+      reveal: attempt('reveal', probeReveal),
+    };
+    var names = ['math', 'webr', 'reveal'];
+    var broken = names.filter(function (k) { return report[k].state === 'broken'; });
+    var unknown = names.filter(function (k) { return report[k].state === 'unknown'; });
+    report.broken = broken;
+    report.unknown = unknown;
+    // Reported either way: a check that only speaks when unhappy is
+    // indistinguishable from one that never ran.
+    tell(report);
+    if (broken.length || unknown.length) {
+      send('doc-capability',
+        'document capability check: ' +
+          (broken.length ? 'failed ' + broken.join(', ') : '') +
+          (broken.length && unknown.length ? '; ' : '') +
+          (unknown.length ? 'could not measure ' + unknown.join(', ') : ''),
+        report);
+    }
+    return report;
+  }
+
+  // After load plus a settle window: MathJax typesets asynchronously and webR
+  // mounts after its wasm load, so probing earlier reports every page broken.
+  function schedule() { setTimeout(check, 1500); }
+  if (document.readyState === 'complete') schedule();
+  else window.addEventListener('load', schedule);
+
+  // Reads the result out. Deliberately not a fault injector: a detector proved
+  // against a failure it staged for itself was measured on a fixture.
+  window.__tldaDocHealthCheck = check;
+})();
+</script>
+
 <script>/*!
  * clipboard.js v2.0.11
  * https://clipboardjs.com/
@@ -27077,6 +27346,24 @@ window.onload = function() {
 </script>
 </head>
 <body class="quarto-light">
+<div class="tlda-chapter-title">
+  <div class="tlda-chapter-title-text">Sampling — Slides</div>
+</div>
+<style>
+.tlda-chapter-title {
+  padding: 40px 0 32px;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 32px;
+}
+.tlda-chapter-title-text {
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  color: #222;
+}
+</style>
   <div class="reveal">
     <div class="slides">
 
@@ -29382,4 +29669,912 @@ window.QuartoSupport = function () {
       </script>
     
 
+
+<script>
+(function() {
+  // Read shape ID from query string
+  var params = new URLSearchParams(window.location.search);
+  var shapeId = params.get('_tldaShape') || '';
+  var tldaWheelOwner = 'page';
+  var tldaWheelViewportId = '';
+
+  function tldaMeasureRenderedLines() {
+    // In a Reveal deck after a scroll-view goto, section.present stays on the
+    // title slide while the address moves; getCurrentSlide() reads the
+    // addressed slide. Measure that first (the hidden!==root guard below keeps
+    // its slide-level aria-hidden text measurable); present, then main/body,
+    // preserve every non-deck path exactly.
+    var addressed = null;
+    try {
+      if (typeof Reveal !== 'undefined' && Reveal.getCurrentSlide) {
+        var slide = Reveal.getCurrentSlide();
+        if (slide && slide.tagName === 'SECTION') addressed = slide;
+      }
+    } catch (e) { /* pre-init Reveal: fall through to present */ }
+    var root = addressed ||
+      document.querySelector('.reveal .slides section.present') ||
+      document.querySelector('main') || document.body;
+    var blocks = [];
+    var candidates = root.querySelectorAll('h1, h2, h3, h4, li, p');
+    for (var blockIndex = 0; blockIndex < candidates.length; blockIndex++) {
+      var block = candidates[blockIndex];
+      if (block.closest('svg') || block.querySelector('svg')) continue;
+      var style = getComputedStyle(block);
+      if (style.display === 'none' || style.visibility === 'hidden') continue;
+      var words = [];
+      var walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+      var node;
+      while ((node = walker.nextNode())) {
+        var hidden = node.parentElement ? node.parentElement.closest('[aria-hidden="true"]') : null;
+        if (hidden && hidden !== root) continue;
+        var pattern = /\S+/g;
+        var match;
+        while ((match = pattern.exec(node.textContent || ''))) {
+          var range = document.createRange();
+          range.setStart(node, match.index);
+          range.setEnd(node, match.index + match[0].length);
+          var rects = Array.from(range.getClientRects()).filter(function(rect) {
+            return rect.width > 1 && rect.height > 1;
+          });
+          if (!rects.length) continue;
+          words.push({
+            word: match[0],
+            center: rects[0].top + rects[0].height / 2,
+            height: rects[0].height,
+          });
+        }
+      }
+      var lines = [];
+      words.forEach(function(word) {
+        var line = lines.find(function(candidate) {
+          return Math.abs(candidate.center - word.center) < word.height * 0.5;
+        });
+        if (!line) {
+          line = { center: word.center, words: [] };
+          lines.push(line);
+        }
+        line.words.push(word.word);
+      });
+      if (lines.length) {
+        blocks.push({
+          tag: block.tagName.toLowerCase(),
+          id: block.id || null,
+          text: (block.textContent || '').replace(/\s+/g, ' ').trim(),
+          lines: lines.map(function(line) { return line.words.join(' '); }),
+        });
+      }
+    }
+    return { url: window.location.href, title: document.title, blocks: blocks };
+  }
+
+  window.addEventListener('message', function(event) {
+    if (event.data?.type !== 'tlda-measure-rendered-lines') return;
+    var requestId = event.data.requestId || null;
+    Promise.resolve(document.fonts?.ready).then(function() {
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          var target = event.source || window.parent;
+          target.postMessage({
+            type: 'tlda-rendered-lines',
+            shapeId: shapeId,
+            requestId: requestId,
+            measurement: tldaMeasureRenderedLines(),
+          }, '*');
+        });
+      });
+    });
+  });
+
+
+  // Strip Quarto navigation elements for clean embedding
+  function stripNav() {
+    var selectors = [
+      '#quarto-sidebar',
+      '#quarto-margin-sidebar',
+      '.navbar',
+      '#quarto-header',
+      '#quarto-back-to-top',
+      '.nav-footer',
+      '#quarto-overlay',
+      '#quarto-search',
+      '.page-navigation',
+      '.quarto-title-breadcrumbs',
+    ];
+    selectors.forEach(function(sel) {
+      var el = document.querySelector(sel);
+      if (el) el.remove();
+    });
+    // Hide the first h1 — redundant with the injected title card
+    var firstH1 = document.querySelector('h1');
+    if (firstH1) firstH1.style.display = 'none';
+    // Make content full-width (remove sidebar offset)
+    var main = document.querySelector('#quarto-content');
+    if (main) {
+      main.style.marginLeft = '0';
+      main.style.paddingLeft = '0';
+    }
+    var content = document.querySelector('.page-columns');
+    if (content) {
+      content.style.display = 'block';
+    }
+    // Add padding to approximate default article margins (1in each side at 800/612 scale)
+    document.body.style.margin = '0';
+    document.body.style.padding = '0 90px';
+    document.body.style.overflow = 'visible';
+    document.body.style.background = 'transparent';
+    document.documentElement.style.background = 'transparent';
+
+    // Dark mode: toggle via postMessage from parent, only change backgrounds
+    // and default text color — leave semantic colors (plots, colored text) alone
+    window.addEventListener('message', function(e) {
+      if (e.data?.type === 'tlda-dark-mode') {
+        document.documentElement.classList.toggle('tlda-dark', !!e.data.dark);
+      }
+      if (e.data?.type === 'tlda-wheel-owner') {
+        tldaWheelOwner = e.data.owner === 'clip' ? 'clip' : 'page';
+        tldaWheelViewportId = tldaWheelOwner === 'clip' ? (e.data.viewportId || '') : '';
+      }
+      if (e.data?.type === 'tlda-scroll-to-id') {
+        var el = document.getElementById(e.data.id);
+        if (el) {
+          // Report element position back to parent for camera scrolling
+          var rect = el.getBoundingClientRect();
+          var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+          window.parent.postMessage({
+            type: 'tlda-element-position',
+            shapeId: shapeId,
+            id: e.data.id,
+            offsetTop: rect.top + scrollY,
+            offsetLeft: rect.left,
+            height: rect.height,
+          }, '*');
+          // Flash the element briefly
+          el.style.outline = '2px solid rgba(255, 100, 100, 0.6)';
+          el.style.outlineOffset = '4px';
+          setTimeout(function() { el.style.outline = ''; el.style.outlineOffset = ''; }, 2000);
+        }
+      }
+      if (e.data?.type === 'tlda-figure-transform') {
+        var wrapper = document.querySelector('[data-figure-idx="' + e.data.figureIdx + '"]');
+        if (!wrapper) return;
+        var svg = wrapper.querySelector('svg');
+        if (!svg) return;
+        svg.style.transformOrigin = '0 0';
+        svg.style.transform = 'scale(' + e.data.zoom + ') translate(' + e.data.panX + 'px, ' + e.data.panY + 'px)';
+      }
+    });
+    // Prevent iframe from capturing wheel/touch scroll events (Safari ignores
+    // pointer-events:none on iframes for scroll gestures).
+    // Forward to parent so TLDraw still scrolls when text-select tool is active.
+    function tldaAllowsInternalScroll(target) {
+      return !!(target && target.closest && target.closest('.tlda-scroll'));
+    }
+    document.addEventListener('wheel', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      e.preventDefault();
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: tldaWheelOwner === 'clip' ? 'tlda-clip-wheel' : 'tlda-wheel',
+          shapeId: shapeId,
+          viewportId: tldaWheelViewportId,
+          deltaX: e.deltaX, deltaY: e.deltaY, deltaMode: e.deltaMode,
+          clientX: e.clientX, clientY: e.clientY,
+          ctrlKey: e.ctrlKey, metaKey: e.metaKey,
+        }, '*');
+      }
+    }, { passive: false });
+    var tldaLastTouch = null;
+    function tldaTouchCenter(touches) {
+      var x = 0, y = 0;
+      for (var i = 0; i < touches.length; i++) {
+        x += touches[i].clientX;
+        y += touches[i].clientY;
+      }
+      return { x: x / touches.length, y: y / touches.length };
+    }
+    document.addEventListener('touchstart', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) {
+        tldaLastTouch = null;
+        return;
+      }
+      if (!e.touches || e.touches.length < 2) {
+        tldaLastTouch = null;
+        return;
+      }
+      tldaLastTouch = tldaTouchCenter(e.touches);
+      tldaPostTouches(e);
+    }, { passive: true });
+    // Send the touches themselves, not a scroll derived from them.
+    //
+    // This used to post the centroid delta as a WHEEL event, and that was the
+    // judder: a wheel carries translation and nothing else, so a pinch inside a
+    // page could only ever pan. Skip: "the slide seemed to refuse pinch
+    // gestures, and they comply with drag gestures but they vibrate while you
+    // do them." Pan arrived by one mechanism with its own timing while the
+    // scale it implied was thrown away.
+    //
+    // The parent already converts this frame's CSS pixels to screen pixels for
+    // the wheel path, and it owns the same pan/zoom classifier the canvas uses.
+    // So hand it the raw points and let one classifier read them, wherever the
+    // fingers happen to be.
+    function tldaPostTouches(e) {
+      if (window.parent === window) return;
+      var pts = [];
+      for (var i = 0; i < e.touches.length; i++) {
+        pts.push({ id: e.touches[i].identifier, x: e.touches[i].clientX, y: e.touches[i].clientY });
+      }
+      window.parent.postMessage({
+        type: 'tlda-touches',
+        shapeId: shapeId,
+        viewportId: tldaWheelViewportId,
+        points: pts,
+      }, '*');
+    }
+    document.addEventListener('touchmove', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      if (!e.touches || e.touches.length < 2) return;
+      e.preventDefault();
+      tldaPostTouches(e);
+    }, { passive: false });
+    document.addEventListener('touchend', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+    document.addEventListener('touchcancel', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+
+    function tldaElementFromNode(node) {
+      if (!node) return null;
+      return node.nodeType === 1 ? node : node.parentElement;
+    }
+    function tldaSelectionLine(range) {
+      var node = tldaElementFromNode(range.commonAncestorContainer) || tldaElementFromNode(range.startContainer);
+      while (node && node !== document.body && node !== document.documentElement) {
+        if (node.id) {
+          var m = String(node.id).match(/^line-(\d+)$/);
+          if (m) return parseInt(m[1], 10);
+        }
+        node = node.parentElement;
+      }
+      return null;
+    }
+    function tldaPostTextSelection() {
+      if (window.parent === window) return;
+      var sel = window.getSelection && window.getSelection();
+      var text = sel ? String(sel.toString() || '').trim() : '';
+      if (!sel || sel.rangeCount === 0 || !text) return;
+      var range = sel.getRangeAt(0);
+      var rect = range.getBoundingClientRect();
+      if (!rect || (rect.width <= 0 && rect.height <= 0)) return;
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      window.parent.postMessage({
+        type: 'tlda-text-selection',
+        shapeId: shapeId,
+        text: text,
+        line: tldaSelectionLine(range),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      }, '*');
+    }
+    document.addEventListener('selectionchange', function() {
+      setTimeout(tldaPostTextSelection, 0);
+    });
+    document.addEventListener('pointerup', tldaPostTextSelection, true);
+
+    function docLinkPayload(el) {
+      var rect = el.getBoundingClientRect();
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      return {
+        type: '',
+        shapeId: shapeId,
+        refType: el.dataset.refType || '',
+        refValue: el.dataset.refValue || '',
+        refLabel: el.dataset.refLabel || '',
+        refFile: el.dataset.refFile || '',
+        refLine: el.dataset.refLine || '',
+        text: (el.textContent || '').trim(),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      };
+    }
+
+    document.addEventListener('mouseover', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link || link.classList.contains('doc-link-unresolved')) return;
+      var payload = docLinkPayload(link);
+      payload.type = 'tlda-doc-link-hover';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+    }, true);
+
+    document.addEventListener('mouseout', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link) return;
+      var related = e.relatedTarget;
+      if (related && related.closest && related.closest('.doc-link') === link) return;
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'tlda-doc-link-out', shapeId: shapeId }, '*');
+      }
+    }, true);
+
+    function postDocLinkClick(e, docLink) {
+      if (!docLink || docLink.classList.contains('doc-link-unresolved')) return false;
+      e.preventDefault();
+      var payload = docLinkPayload(docLink);
+      payload.type = 'tlda-doc-link-click';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+      return true;
+    }
+
+    document.addEventListener('pointerdown', function(e) {
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      postDocLinkClick(e, docLink);
+    }, true);
+
+    // Intercept link clicks — route navigation through parent canvas
+    document.addEventListener('click', function(e) {
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      if (postDocLinkClick(e, docLink)) return;
+      var a = e.target.closest('a[href]');
+      if (!a) return;
+      // Download links must retain the browser's native file-download behavior.
+      if (a.hasAttribute('download')) return;
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('javascript:') || href.startsWith('mailto:')) return;
+      // External links: open in new tab
+      if (/^https?:\/\//.test(href) && !href.includes(window.location.host)) {
+        e.preventDefault();
+        window.open(href, '_blank');
+        return;
+      }
+      e.preventDefault();
+      // Parse href: same-host full URLs, relative paths, or bare anchors
+      // Same-host full URLs (Quarto cross-refs like "http://host/docs/name/...#fig-id")
+      // → treat as in-page anchor if they point to this same iframe URL
+      var parsed = href;
+      if (/^https?:\/\//.test(href) && href.includes(window.location.host)) {
+        // Same document (matching path): keep just the hash portion.
+        // Cross-chapter path: keep the full path so the parent chapter
+        // matcher can find the target shape; keep any hash as the anchor.
+        // (A bare cross-chapter URL with no hash used to be reduced to the
+        // empty string here, shipping targetFile/targetPath/anchor all null
+        // — so no target shape ever resolved and the parent fell back to
+        // centering the current page top.)
+        var hashIdx = href.indexOf('#');
+        try {
+          var linkUrl = new URL(href, window.location.href);
+          var selfUrl = new URL(window.location.href);
+          if (linkUrl.pathname === selfUrl.pathname) {
+            parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
+          } else {
+            parsed = linkUrl.pathname + (hashIdx >= 0 ? href.slice(hashIdx) : '');
+          }
+        } catch (parseErr) {
+          parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
+        }
+      }
+      var parts = parsed.split('#');
+      var targetFile = (parts[0] || '').replace(/^\.\//,'').replace(/^.*\//,'') || null;
+      // Strip query params from targetFile (e.g. "file.html?_tldaShape=..." -> "file.html")
+      if (targetFile) targetFile = targetFile.split('?')[0] || null;
+      var anchor = parts[1] || null;
+      // targetFile is a basename and stays one — every existing consumer matches
+      // on it. targetPath keeps the whole path, which is what you need to OPEN a
+      // document of this project that has no shape on the canvas yet, and
+      // targetTitle is what the link called it.
+      var targetPath = parts[0] || null;
+      var targetTitle = ((a.textContent || '').trim()) || null;
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'tlda-navigate',
+          shapeId: shapeId,
+          targetFile: targetFile,
+          targetPath: targetPath,
+          targetTitle: targetTitle,
+          anchor: anchor,
+        }, '*');
+      }
+    }, true);
+    // Hide WebR loading spinners (bracket chars) but keep the container visible
+    // so code editors and outputs remain accessible
+    var style = document.createElement('style');
+    style.textContent = [
+      '.ojs-in-a-box-waiting-for-module-import::before, .ojs-in-a-box-waiting-for-module-import::after { display: none !important; }',
+      '.ojs-in-a-box-waiting-for-module-import > .ojs-in-a-box-turn-off-waiter { display: none !important; }',
+      '.panel-tabset > .nav-tabs { background: #fff; position: relative; z-index: 2; }',
+      '.cm-editor { max-width: 100% !important; overflow-x: auto !important; }',
+      '.cm-line { overflow-wrap: anywhere; }',
+      '.cell-output img, .cell-output svg { max-width: 100%; height: auto; }',
+      '.tlda-output-source { margin: 0.65rem 0 0; font-size: 0.9rem; }',
+      '.tlda-output-source > summary { cursor: pointer; color: var(--bs-link-color, #315a9a); }',
+      '.tlda-output-source > pre { margin: 0.5rem 0 0; padding: 0.75rem; overflow-x: auto; background: rgba(127,127,127,0.08); border-radius: 6px; }',
+      '.image-toggle-sidebar div.inlined-svg > svg { max-width: 100%; height: auto; }',
+      '.spinner-grow, .spinner-border { opacity: 0.3; }',
+      '.exercise-loading-indicator { font-size: 12px; opacity: 0.5; }',
+      '.image-toggle .image-toggle-controls { display: none !important; }',
+      '.image-toggle-sidebar .image-toggle-steps > * { margin-bottom: 1em; padding: 0.5em 0.75em; border-radius: 6px; border-left: 3px solid rgba(100, 100, 200, 0.12); font-size: 0.95em; line-height: 1.5; cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease; }',
+      '.image-toggle-sidebar .image-toggle-steps > *:hover { background: rgba(100, 100, 200, 0.06); }',
+      '.image-toggle-sidebar .image-toggle-steps > *.scrolly-active { border-left-color: rgba(80, 100, 200, 0.6); background: rgba(100, 100, 200, 0.06); }',
+      // Dark mode: CSS invert on html element, counter-rotate semantic color classes.
+      // invert(0.92) lands body text at soft off-white; semantic color counter-filter
+      // uses invert(0.92) which isn't a perfect identity but keeps colors recognizable.
+      'html.tlda-dark { filter: invert(0.92) hue-rotate(180deg); background: #fff; }',
+      // Counter-filter for semantic color classes (text labeled "the red curve" must stay red)
+      // Applying the same filter undoes the parent: invert(invert(x)) = x
+      'html.tlda-dark .twocolor-red, html.tlda-dark .twocolor-green, html.tlda-dark .groupa, html.tlda-dark .groupb, html.tlda-dark .midnight, html.tlda-dark .polla, html.tlda-dark .pink, html.tlda-dark .pollb, html.tlda-dark .teal, html.tlda-dark .pollc, html.tlda-dark .polld, html.tlda-dark .magenta, html.tlda-dark .counterfactual, html.tlda-dark .green, html.tlda-dark .cyan, html.tlda-dark .population, html.tlda-dark .blue, html.tlda-dark .sample, html.tlda-dark .red, html.tlda-dark .purple, html.tlda-dark .target, html.tlda-dark .shadedred, html.tlda-dark .todofix { filter: invert(0.92) hue-rotate(180deg); }',
+      // Counter-filter for semantic colors in inline SVG plots (tagged by inline-svg.lua)
+      'html.tlda-dark .darkmode-invariant { filter: invert(0.92) hue-rotate(180deg); }',
+    ].join('\n');
+    document.head.appendChild(style);
+  }
+
+  // Hide WebR cells when WebR runtime is not available.
+  // With live-html format, WebR is embedded — don't call this.
+  function processWebRCells() {
+    var pres = document.querySelectorAll('pre[class="{webr}"]');
+    pres.forEach(function(pre) {
+      var cell = pre.closest('.cell');
+      if (cell) cell.style.display = 'none';
+      else pre.style.display = 'none';
+    });
+  }
+
+  // Report height to parent
+  function reportHeight() {
+    // Prefer <main> bottom to avoid hidden Quarto sidebar/nav inflating height
+    var main = document.querySelector('main');
+    var h;
+    if (main) {
+      var rect = main.getBoundingClientRect();
+      h = Math.ceil(rect.bottom + window.scrollY);
+    } else {
+      h = Math.max(
+        document.body.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.scrollHeight
+      );
+    }
+    if (h > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-resize',
+        shapeId: shapeId,
+        height: h,
+      }, '*');
+    }
+  }
+
+  // Report anchor Y positions for navigation (headings, figures, tables, sections)
+  // An element inside an inactive tab pane reports offsetTop 0 (the pane is
+  // display:none, which collapses the whole offset chain), so the position
+  // would register as the top of the document instead of the real location.
+  // Measure those elements with their pane chain temporarily activated and
+  // restored in the same synchronous pass, so no paint happens in between.
+  // Note: toggling the Bootstrap active class (not inline display) is what
+  // makes the pane visible — the hiding rule targets panes without the
+  // active class, which outranks any inline display value.
+  function measureWithHiddenPanesShown(el, measure) {
+    var reveal = [];
+    var node = el;
+    while (node && node !== document.body && node !== document.documentElement) {
+      if (node.classList && node.classList.contains('tab-pane') &&
+          !node.classList.contains('active')) {
+        reveal.push(node);
+      }
+      node = node.parentElement;
+    }
+    if (reveal.length === 0) return measure();
+    reveal.forEach(function(pane) {
+      pane.classList.add('active');
+    });
+    var value;
+    try {
+      value = measure();
+    } finally {
+      reveal.forEach(function(pane) {
+        pane.classList.remove('active');
+      });
+    }
+    return value;
+  }
+  function reportHeadings() {
+    var elements = document.querySelectorAll('[id]');
+    var positions = {};
+    elements.forEach(function(el) {
+      var id = el.id;
+      if (!id) return;
+      positions[id] = measureWithHiddenPanesShown(el, function() {
+        var y = 0;
+        var node = el;
+        while (node) {
+          y += node.offsetTop || 0;
+          node = node.offsetParent;
+        }
+        return y;
+      });
+    });
+    if (Object.keys(positions).length > 0 && window.parent !== window) {
+      var outline = Array.prototype.slice.call(document.querySelectorAll('h1,h2,h3,h4')).map(function(heading) {
+        var owner = heading.id ? heading : heading.closest('[id]');
+        var titleNode = heading.cloneNode(true);
+        titleNode.querySelectorAll('a.anchorjs-link, a[aria-label="Anchor"]').forEach(function(anchor) { anchor.remove(); });
+        return {
+          id: owner ? owner.id : '',
+          title: (titleNode.textContent || '').trim(),
+          level: parseInt(heading.tagName.slice(1), 10),
+        };
+      }).filter(function(entry) { return entry.id && entry.title; });
+      window.parent.postMessage({
+        type: 'tlda-headings',
+        shapeId: shapeId,
+        positions: positions,
+        outline: outline,
+      }, '*');
+    }
+  }
+
+  // Report figure positions and hide originals (replaced by TLDraw shapes on canvas)
+  var figuresReported = false;
+  function getOffsetY(el) {
+    var y = 0;
+    while (el) {
+      y += el.offsetTop || 0;
+      el = el.offsetParent;
+    }
+    return y;
+  }
+  function getOffsetX(el) {
+    var x = 0;
+    while (el) {
+      x += el.offsetLeft || 0;
+      el = el.offsetParent;
+    }
+    return x;
+  }
+
+  function reportFigures() {
+    var result = [];
+    var globalIdx = 0;
+
+    // 1. Old-style: <figure> with <img src="...svg">
+    var figures = document.querySelectorAll('figure.figure, figure.quarto-float');
+    figures.forEach(function(fig) {
+      var img = fig.querySelector('img[src$=".svg"]');
+      if (!img) return;
+      if (fig.closest('.image-toggle')) return;
+      var tabPane = fig.closest('.tab-pane');
+      if (tabPane && !tabPane.classList.contains('active')) return;
+      var rect = fig.getBoundingClientRect();
+      if (rect.height < 10) return;
+      img.style.visibility = 'hidden';
+      var tabset = fig.closest('.panel-tabset');
+      result.push({
+        svgUrl: img.src,
+        offsetY: getOffsetY(fig),
+        w: rect.width,
+        h: rect.height,
+        id: img.id || fig.id || null,
+        caption: (fig.querySelector('figcaption') || {}).textContent || null,
+        index: globalIdx++,
+        group: tabset ? (tabset.id || 'tabset-' + tabset.dataset.group || null) : null,
+      });
+    });
+
+    // 2. Inline SVGs from the inline-svg Lua filter
+    // The overlay is a transparent glass pane — content stays in the iframe for styling.
+    // Each wrapper gets a data-figure-idx for targeted transform messages.
+    var inlineSvgs = document.querySelectorAll('div.inlined-svg > svg');
+    inlineSvgs.forEach(function(svg) {
+      var wrapper = svg.parentElement;
+      if (wrapper.closest('.image-toggle')) return;
+      var tabPane = wrapper.closest('.tab-pane');
+      if (tabPane && !tabPane.classList.contains('active')) return;
+      // Fix case-sensitive viewBox attribute (svglite outputs lowercase "viewbox")
+      // and make SVG scale responsively within its container
+      if (!svg.getAttribute('viewBox') && svg.getAttribute('viewbox')) {
+        svg.setAttribute('viewBox', svg.getAttribute('viewbox'));
+      }
+      if (!svg.getAttribute('viewBox')) {
+        var w = svg.getAttribute('width'), h = svg.getAttribute('height');
+        if (w && h) svg.setAttribute('viewBox', '0 0 ' + parseFloat(w) + ' ' + parseFloat(h));
+      }
+      svg.style.width = '100%';
+      svg.style.height = 'auto';
+      svg.removeAttribute('width');
+      svg.removeAttribute('height');
+      var wrapperRect = wrapper.getBoundingClientRect();
+      if (wrapperRect.height < 10) return;
+      // Tag wrapper for transform messages and set up clipping
+      wrapper.dataset.figureIdx = String(globalIdx);
+      wrapper.style.overflow = 'hidden';
+      var tabset = wrapper.closest('.panel-tabset');
+      var figEl = wrapper.closest('figure');
+      result.push({
+        svgUrl: '',
+        inline: true,
+        offsetX: getOffsetX(wrapper),
+        offsetY: getOffsetY(wrapper),
+        w: wrapperRect.width,
+        h: wrapperRect.height,
+        id: (figEl && figEl.id) || wrapper.id || null,
+        caption: figEl ? (figEl.querySelector('figcaption') || {}).textContent || null : null,
+        index: globalIdx++,
+        group: tabset ? (tabset.id || 'tabset-' + (tabset.dataset.group || globalIdx)) : null,
+      });
+    });
+
+    if (result.length > 0 && window.parent !== window) {
+      window.parent.postMessage({ type: 'tlda-figures', shapeId: shapeId, figures: result }, '*');
+      figuresReported = true;
+    }
+  }
+
+  function reportMermaidDiagrams() {
+    var placeholders = document.querySelectorAll('.tlda-mermaid-placeholder[data-tlda-mermaid-id]');
+    if (placeholders.length === 0 || window.parent === window) return;
+    var diagrams = [];
+    placeholders.forEach(function(el) {
+      var rect = el.getBoundingClientRect();
+      if (rect.height < 10) return;
+      var sourceEl = el.querySelector('template[data-tlda-mermaid-source]');
+      var source = sourceEl ? ((sourceEl.content && sourceEl.content.textContent) || sourceEl.textContent || '') : '';
+      if (!source.trim()) return;
+      diagrams.push({
+        id: el.getAttribute('data-tlda-mermaid-id'),
+        source: source,
+        offsetX: getOffsetX(el),
+        offsetY: getOffsetY(el),
+        w: rect.width,
+        h: rect.height,
+        docWidth: Math.max(document.body.scrollWidth, document.documentElement.scrollWidth, 800),
+      });
+    });
+    if (diagrams.length > 0) {
+      window.parent.postMessage({ type: 'tlda-mermaid-diagrams', shapeId: shapeId, diagrams: diagrams }, '*');
+    }
+  }
+
+  // Report scrollytelling region metadata to parent for overlay rendering.
+  // The overlay shows the figure in a floating panel; step text stays inline.
+  // Note: image-toggle.js (Quarto extension) restructures the DOM before this
+  // runs — sidebar toggles get wrapped in .image-toggle-sidebar with step text
+  // moved into .image-toggle-steps. Cells get .image-toggle-cell class.
+  function reportScrollyRegions() {
+    var containers = document.querySelectorAll('.image-toggle');
+    if (containers.length === 0) return;
+
+    function getOffsetY(el) {
+      var y = 0;
+      while (el) { y += el.offsetTop || 0; el = el.offsetParent; }
+      return y;
+    }
+
+    var regions = [];
+    containers.forEach(function(container, idx) {
+      var containerY = getOffsetY(container);
+      var labels = (container.getAttribute('data-labels') || '').split(',').map(function(s) { return s.trim(); });
+      var stepSel = container.getAttribute('data-steps');
+
+      // Find images: image-toggle.js wraps cells in .image-toggle-stack > .image-toggle-cell
+      // With inline SVGs (from the Lua filter), there are no <img> tags — serialize SVGs to blob URLs.
+      var cells = container.querySelectorAll('.image-toggle-cell');
+      var imgUrls = Array.from(cells).map(function(cell) {
+        var img = cell.querySelector('img');
+        if (img) return img.src;
+        var inlineSvg = cell.querySelector('div.inlined-svg > svg');
+        if (inlineSvg) {
+          var serialized = new XMLSerializer().serializeToString(inlineSvg);
+          return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(serialized)));
+        }
+        return '';
+      });
+
+      // Find step text elements — location depends on layout:
+      // Sidebar: moved into .image-toggle-sidebar > .image-toggle-steps
+      // Non-sidebar: still siblings of the container
+      var stepTextEls = [];
+      var sidebar = container.closest('.image-toggle-sidebar');
+      if (sidebar) {
+        var stepsCol = sidebar.querySelector('.image-toggle-steps');
+        if (stepsCol && stepSel) {
+          stepTextEls = Array.from(stepsCol.querySelectorAll(stepSel));
+        }
+      } else if (stepSel) {
+        var sibling = container.nextElementSibling;
+        while (sibling) {
+          if (sibling.matches && sibling.matches(stepSel)) {
+            stepTextEls.push(sibling);
+          } else if (stepTextEls.length > 0) {
+            break;
+          }
+          sibling = sibling.nextElementSibling;
+        }
+      }
+
+      // Build steps array
+      var numSteps = Math.max(imgUrls.length, stepTextEls.length, labels.length);
+      if (numSteps === 0) return;
+
+      var steps = [];
+      for (var s = 0; s < numSteps; s++) {
+        var stepEl = stepTextEls[s];
+        var stepY = stepEl ? getOffsetY(stepEl) : containerY;
+        // Extract bold lead-in as label, remainder as text
+        var stepLabel = labels[s] || ('Step ' + (s + 1));
+        var stepText = '';
+        if (stepEl) {
+          var strong = stepEl.querySelector('strong, b');
+          if (strong) {
+            stepLabel = strong.textContent.replace(/[.s]+$/, '');
+            // Get text after the bold element
+            var clone = stepEl.cloneNode(true);
+            var boldClone = clone.querySelector('strong, b');
+            if (boldClone) boldClone.remove();
+            stepText = clone.textContent.trim();
+          } else {
+            stepText = stepEl.textContent.trim();
+          }
+        }
+        steps.push({
+          y: stepY,
+          label: stepLabel,
+          imageUrl: imgUrls[s] || imgUrls[0] || '',
+          text: stepText,
+        });
+      }
+
+      // Click step text → switch figure + highlight active step
+      var cellArr = Array.from(cells);
+      var stepArr = Array.from(stepTextEls);
+      // Mark first step as active initially
+      if (stepArr.length > 0) {
+        var activeIdx = cellArr.findIndex(function(c) { return c.classList.contains('active'); });
+        if (activeIdx >= 0 && activeIdx < stepArr.length) {
+          stepArr[activeIdx].classList.add('scrolly-active');
+        }
+      }
+      for (var s2 = 0; s2 < stepArr.length; s2++) {
+        (function(stepIdx) {
+          stepArr[stepIdx].addEventListener('click', function() {
+            for (var c = 0; c < cellArr.length; c++) {
+              cellArr[c].classList.toggle('active', c === stepIdx);
+            }
+            for (var t = 0; t < stepArr.length; t++) {
+              stepArr[t].classList.toggle('scrolly-active', t === stepIdx);
+            }
+          });
+        })(s2);
+      }
+
+      // Region bounds: top of container to bottom of last step element
+      var startY = containerY;
+      var endY = containerY + (container.offsetHeight || 200);
+      // For sidebar, use the sidebar wrapper bounds
+      if (sidebar) {
+        startY = getOffsetY(sidebar);
+        endY = startY + sidebar.offsetHeight;
+      }
+      if (stepTextEls.length > 0) {
+        var lastEl = stepTextEls[stepTextEls.length - 1];
+        var lastY = getOffsetY(lastEl) + lastEl.offsetHeight;
+        if (lastY > endY) endY = lastY;
+      }
+
+      regions.push({
+        id: container.id || ('scrolly-' + idx),
+        startY: startY,
+        endY: endY,
+        steps: steps,
+      });
+    });
+
+    if (regions.length > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-scrolly-regions',
+        shapeId: shapeId,
+        regions: regions,
+      }, '*');
+    }
+  }
+
+  // Strip nav on DOMContentLoaded, then measure
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      stripNav();
+      // processWebRCells(); // Disabled — live-html includes WebR runtime
+      // Early reports for fast anchor resolution, later reports for MathJax accuracy
+      setTimeout(reportHeight, 200);
+      setTimeout(reportHeight, 500);
+      setTimeout(reportHeight, 2000);
+      setTimeout(reportHeight, 5000);
+      setTimeout(reportHeadings, 200);
+      setTimeout(reportHeadings, 1000);
+      setTimeout(reportHeadings, 3000);
+      setTimeout(reportHeadings, 6000);
+      setTimeout(reportScrollyRegions, 200);
+      setTimeout(reportScrollyRegions, 1000);
+      setTimeout(reportScrollyRegions, 3000);
+      setTimeout(reportFigures, 500);
+      setTimeout(reportFigures, 2000);
+      setTimeout(reportFigures, 5000);
+      setTimeout(reportMermaidDiagrams, 500);
+      setTimeout(reportMermaidDiagrams, 2000);
+      setTimeout(reportMermaidDiagrams, 5000);
+    });
+  } else {
+    stripNav();
+    processWebRCells();
+    setTimeout(reportHeight, 100);
+    setTimeout(reportHeight, 2000);
+    setTimeout(reportHeadings, 500);
+    setTimeout(reportHeadings, 2500);
+    setTimeout(reportScrollyRegions, 500);
+    setTimeout(reportScrollyRegions, 2500);
+    setTimeout(reportFigures, 500);
+    setTimeout(reportFigures, 2000);
+    setTimeout(reportMermaidDiagrams, 500);
+    setTimeout(reportMermaidDiagrams, 2000);
+  }
+
+  // Observe DOM mutations (webR output, MathJax rendering, etc.)
+  var lastHeight = 0;
+  var debounceTimer = null;
+  var observer = new MutationObserver(function() {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      var h = document.body.scrollHeight;
+      if (Math.abs(h - lastHeight) > 10) {
+        lastHeight = h;
+        reportHeight();
+        reportHeadings();
+        reportScrollyRegions();
+        if (!figuresReported) reportFigures();
+        reportMermaidDiagrams();
+      }
+    }, 300);
+  });
+
+  // Start observing once DOM is ready
+  function startObserver() {
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: false,
+    });
+  }
+
+  if (document.body) {
+    startObserver();
+  } else {
+    document.addEventListener('DOMContentLoaded', startObserver);
+  }
+})();
+</script>
 </body></html>
