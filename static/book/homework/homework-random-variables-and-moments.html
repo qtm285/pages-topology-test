@@ -459,16 +459,160 @@ window.Quarto = {
 <p>An <strong>estimator</strong> is a random variable: its value depends on the random sample. An <strong>estimate</strong> is the value we calculate from the sample we observed. We use the same distinction for an <strong>interval estimator</strong> and an <strong>interval estimate</strong>. When we say an unbiased estimator is centered at the target, we mean that its expectation is the target. A particular estimate need not equal the target.</p>
 <section id="the-rules" class="level1">
 <h1>The Rules</h1>
-<p>We’ve been using the rules of probability and expectation all semester without ever writing them down. Collecting probabilities over a grid, pulling a constant out of an average, replacing a probability by the average of an indicator — each one was used where it was needed and then left behind. This section states them and asks you to do something with each one. None of the proofs here is longer than three lines; the point is to know exactly what you’re entitled to, and what you’re not.</p>
-<section id="probabilities" class="level2">
-<h2 class="anchored" data-anchor-id="probabilities">Probabilities</h2>
-<p>A random variable’s distribution assigns a number <span class="math inline">\(P(X=x)\)</span> to each value <span class="math inline">\(x\)</span> it can take. Two properties define it. Every one of those numbers is at least zero, and they sum to one over all the values. <span class="math display">\[
-P(X=x)\ge0 \qqtext{ for every } x, \qquad \sum_x P(X=x) = 1.
-\]</span> Everything else about probabilities follows from these two and one more rule. If two things cannot both happen, the probability that one of them does is the sum of their probabilities. That’s <em>disjoint additivity</em>. For a set <span class="math inline">\(S\)</span> of values, since <span class="math inline">\(X\)</span> cannot take two values at once, <span class="math display">\[
-P(X \in S) = \sum_{x \in S} P(X=x).
+<p>We’ve been using the rules of probability and expectation all semester without ever writing them down. Here they are, against something we actually did: the two calls to the population <span class="math inline">\(0,0,0,1\)</span> from the chapter. Each row is a call sequence, colored by the pair of responses it produces.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;" data-quarto-table-cell-role="th">J1</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">J2</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Y1</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Y2</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">With replacement</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Without replacement</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Probabilities.</strong> Each row of the table is one call sequence, and the two right-hand columns are its probability under each sampling scheme. Three rules.</p>
+<ol type="1">
+<li><em>Nonnegative.</em> Every entry in a probability column is at least zero. The impossible call sequences without replacement, <span class="math inline">\((1,1)\)</span>, <span class="math inline">\((2,2)\)</span>, <span class="math inline">\((3,3)\)</span>, <span class="math inline">\((4,4)\)</span>, have probability <span class="math inline">\(0\)</span>, not less.</li>
+<li><em>Sums to one.</em> Each probability column adds to one: sixteen entries of <span class="math inline">\(1/16\)</span> with replacement, twelve entries of <span class="math inline">\(1/12\)</span> and four zeros without. Exactly one call sequence happens.</li>
+<li><em>Disjoint additivity.</em> No two call sequences can both happen. So the probability that one of a set of them happens is the sum of their entries. The rows <span class="math inline">\((1,4)\)</span> and <span class="math inline">\((4,1)\)</span> add to <span class="math inline">\(1/16+1/16=1/8\)</span> with replacement and <span class="math inline">\(1/12+1/12=1/6\)</span> without. Adding all nine rows of the <span class="math inline">\((0,0)\)</span> color gives <span class="math inline">\(9/16\)</span> with replacement, and the six of them that are possible without replacement give <span class="math inline">\(6/12=1/2\)</span>. That is the probability that both responses are zero, and it is the marginalization we did in the chapter.</li>
+</ol>
+<p>In symbols, for a random variable <span class="math inline">\(X\)</span> and a set <span class="math inline">\(S\)</span> of its values, <span class="math display">\[
+P(X=x) \ge 0, \qquad \sum_x P(X=x) = 1, \qquad P(X \in S) = \sum_{x \in S} P(X=x).
 \]</span></p>
-<div id="exr-rules-probability" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 1 (What Follows From Those)</strong></span> &nbsp;</p>
+<div id="exr-rules-table" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 1 (Reading the Table)</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -480,13 +624,14 @@ P(X \in S) = \sum_{x \in S} P(X=x).
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
 <ol type="1">
-<li>Show that <span class="math inline">\(P(X \ne x) = 1 - P(X=x)\)</span>. Which of the two properties above did you use, and where?</li>
-<li>We’ve calculated the distribution of a total <span class="math inline">\(S = Y_1+Y_2\)</span> by listing the response sequences and adding the probabilities of all the sequences with the same total. Write that calculation as an application of disjoint additivity. What plays the role of <span class="math inline">\(S\)</span> in the display above?</li>
+<li>Add the rows for the call sequences <span class="math inline">\((1,4)\)</span> and <span class="math inline">\((4,1)\)</span>. What is that the probability of? Do it with replacement and without.</li>
+<li>Add every row of the color for the response pair <span class="math inline">\((0,0)\)</span>. What is that the probability of, under each scheme?</li>
+<li>Add every row. What do you get, and why?</li>
 </ol>
 </div>
 </div>
 </div>
-<div id="ans-exr-rules-probability" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div id="ans-exr-rules-table" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -499,7 +644,6 @@ P(X \in S) = \sum_{x \in S} P(X=x).
 <p><em>(your answer here)</em></p>
 </div>
 </div>
-</section>
 <section id="expectations" class="level2">
 <h2 class="anchored" data-anchor-id="expectations">Expectations</h2>
 <p>The expectation of <span class="math inline">\(X\)</span> is its probability-weighted average, <span class="math inline">\(\mathop{\mathrm{E}}[X] = \sum_x x P(X=x)\)</span>. Three rules govern it, and we’ve proved or used all three.</p>
