@@ -791,7 +791,7 @@ window.Quarto = {
   <li><a href="#problem-2" id="toc-problem-2" class="nav-link" data-scroll-target="#problem-2">Problem 2</a></li>
   <li><a href="#problem-3" id="toc-problem-3" class="nav-link" data-scroll-target="#problem-3">Problem 3</a></li>
   <li><a href="#problem-4" id="toc-problem-4" class="nav-link" data-scroll-target="#problem-4">Problem 4</a></li>
-  <li><a href="#sec-appendix-plots" id="toc-sec-appendix-plots" class="nav-link" data-scroll-target="#sec-appendix-plots">Appendix</a></li>
+  <li><a href="#problem-5" id="toc-problem-5" class="nav-link" data-scroll-target="#problem-5">Problem 5</a></li>
   </ul>
 </nav>
     </div>
@@ -897,75 +897,14 @@ window.Quarto = {
 </section>
 <section id="problem-2" class="level1">
 <h1>Problem 2</h1>
-<p>You have a sample <span class="math inline">Y_1,Y_2...,Y_n</span> drawn with replacement from a population with mean <span class="math inline">\mu</span> and standard deviation <span class="math inline">\sigma</span>. The usual estimate for <span class="math inline">\mu</span> is the sample mean <span class="math inline">\bar{Y}_0 = \frac{1}{n}\sum_{i=1}^n Y_i</span>. But one of your coworkers has a clever idea to reduce variance—instead of dividing by <span class="math inline">n</span>, they divide by <span class="math inline">n+10</span>. This is their estimator: <span class="math inline">\bar{Y}_{10} = \frac{1}{n+10}\sum_{i=1}^n Y_i</span>. You try to convince them it’s a bad idea by being a bit hyperbolic—you argue that if that’s a good idea, then why not divide by <span class="math inline">n+100</span>? They, unfortunately, <em>love</em> this idea. You now have to explain why this is a bad idea. <strong>There are some plots in Appendix <a href="#sec-appendix-plots" class="quarto-xref"><span>Chapter 26</span></a> that may help.</strong></p>
-<p>Your coworker has calculated formulas for the bias and standard deviation of the ‘divide by <span class="math inline">n+k</span> estimator’ <span class="math inline">\bar{Y}_k=\frac{1}{n+k}\sum_{i=1}^n Y_i</span>. <span class="math display">
-\begin{aligned}
-\mathop{\mathrm{E}}[\bar{Y}_k] - \mu &amp;= -\frac{k}{n+k}\mu \\
-\mathop{\mathrm{sd}}[\bar{Y}_k] &amp;= \frac{\sigma}{\sqrt{n}} \times \frac{n}{n+k}.
-\end{aligned}
-</span></p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Formula Derivation. Optional Reading.
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p><span class="math display">
-\begin{aligned}
-\mathop{\mathrm{E}}\sb*{\bar{Y}_k} - \mu
-&amp;= \mathop{\mathrm{E}}\sb*{\frac{n}{n+k}\bar Y_0} - \mu \\
-&amp;= \frac{n}{n+k}\mathop{\mathrm{E}}[\bar Y_0] - \mu \\
-&amp;=\frac{n}{n+k}\mu - \mu \\
-&amp;= \p*{\frac{n}{n+k} - 1}\mu \\
-&amp;= \p*{\frac{n}{n+k} - \frac{n+k}{n+k}}\mu \\
-&amp;= -\frac{k}{n+k}\mu \\
-&amp; \\
-\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb*{\bar{Y}_k}
-&amp;= \mathop{\mathrm{\mathop{\mathrm{V}}}}\sb*{\frac{n}{n+k} \bar {Y}_0} \\
-&amp;= \p*{\frac{n}{n+k}}^2 V[\bar{Y}_0] \\
-&amp;= \frac{n^2}{(n+k)^2} \frac{\sigma^2}{n} \\
-&amp;= \frac{ n\sigma^2}{(n+k)^2}=\frac{\sigma^2}{n} \times \frac{n^2}{(n+k)^2}
-\end{aligned}
-</span></p>
-</div>
-</div>
-</div>
-<p>And they’ve drawn the sampling distribution of <span class="pollb"><span class="math inline">\bar{Y}_0</span></span>, <span class="pollc"><span class="math inline">\bar{Y}_{10}</span></span>, and <span class="polld"><span class="math inline">\bar{Y}_{100}</span></span> (top, middle, and bottom rows respectively) for sample sizes <span class="math inline">n=100</span> and <span class="math inline">n=10,000</span> (left and right columns respectively) <em>for <span class="math inline">\mu=0</span> and <span class="math inline">\sigma=1</span></em>. The solid line is the estimator’s expected value <span class="math inline">\mathop{\mathrm{E}}[\bar{Y}_k]</span>, the dashed lines are <span class="math inline">\mathop{\mathrm{E}}[\bar Y_k] \pm \mathop{\mathrm{sd}}[\bar Y_k]</span>, and the dotted lines are <span class="math inline">\mathop{\mathrm{E}}[\bar Y_k] \pm 2 \mathop{\mathrm{sd}}[\bar Y_k]</span>.</p>
-<div class="cell quarto-layout-panel" data-layout-nrow="3" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="practice-midterm-1_files/figure-html/plot-shrinkage-normals-1.svg" class="img-fluid" alt="Six sampling distributions of the divide-by-n-plus-k estimator for k equal to 0, 10, and 100 (rows) at n equal to 100 and 10,000 (columns), all centered at zero, each narrower than the one above it."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="practice-midterm-1_files/figure-html/plot-shrinkage-normals-2.svg" class="img-fluid" alt="Six sampling distributions of the divide-by-n-plus-k estimator for k equal to 0, 10, and 100 (rows) at n equal to 100 and 10,000 (columns), all centered at zero, each narrower than the one above it."></p>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="practice-midterm-1_files/figure-html/plot-shrinkage-normals-3.svg" class="img-fluid" alt="Six sampling distributions of the divide-by-n-plus-k estimator for k equal to 0, 10, and 100 (rows) at n equal to 100 and 10,000 (columns), all centered at zero, each narrower than the one above it."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="practice-midterm-1_files/figure-html/plot-shrinkage-normals-4.svg" class="img-fluid" alt="Six sampling distributions of the divide-by-n-plus-k estimator for k equal to 0, 10, and 100 (rows) at n equal to 100 and 10,000 (columns), all centered at zero, each narrower than the one above it."></p>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="practice-midterm-1_files/figure-html/plot-shrinkage-normals-5.svg" class="img-fluid" alt="Six sampling distributions of the divide-by-n-plus-k estimator for k equal to 0, 10, and 100 (rows) at n equal to 100 and 10,000 (columns), all centered at zero, each narrower than the one above it."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="practice-midterm-1_files/figure-html/plot-shrinkage-normals-6.svg" class="img-fluid" alt="Six sampling distributions of the divide-by-n-plus-k estimator for k equal to 0, 10, and 100 (rows) at n equal to 100 and 10,000 (columns), all centered at zero, each narrower than the one above it."></p>
-</div>
-</div>
-</div>
-<p>On the basis of those drawings, your coworker proposes using <span class="math inline">\bar{Y}_{100}</span> to estimate <span class="math inline">\mu</span>.</p>
-<div id="exr-2a" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 23.1</strong></span> &nbsp;</p>
+<!-- Written by agent birthday-present, 2026-10-10, from Skip's spec: with/without replacement plus the run design on a 1 0 1 0 circle. The question sentence is Skip's, dictated 2026-10-10 7:5x AM. Not Skip's text otherwise. -->
+<p>A population of <span class="math inline">m=200</span> people is arranged in a circle, and their responses alternate as you go around it: <span class="math inline">1, 0, 1, 0, \ldots</span>. So the proportion of 1s in the population is <span class="math inline">\theta=1/2</span>. We’ll compare three ways of drawing a sample of <span class="math inline">n=100</span> people from it. In each case, we estimate <span class="math inline">\theta</span> by the proportion of 1s in the sample, <span class="math inline">\hat\theta=\frac{1}{100}\sum_{i=1}^{100} Y_i</span>, and report the interval estimate <span class="math inline">\hat\theta \pm 1.96\sqrt{\hat\theta(1-\hat\theta)/n}</span>.</p>
+<ol type="1">
+<li>Draw 100 people uniformly at random <em>with</em> replacement.</li>
+<li>Draw 100 people uniformly at random <em>without</em> replacement.</li>
+<li>Choose one starting person uniformly at random, and take that person and the next 99 people around the circle.</li>
+</ol>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -976,16 +915,11 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p>Suppose your sample size is <span class="math inline">n=100</span>. Explain why your coworker’s original proposal to use <span class="math inline">\bar Y_{10}</span> and your hyperbolic suggestion to use <span class="math inline">\bar Y_{100}</span> are <em>appears</em>, from the drawings, to be a way to increase precision without increasing bias. To explain why this is misleading, describe what happens in the case that <span class="math inline">\mu=11/10</span> and <span class="math inline">\sigma=1</span> by doing the following.</p>
-<ul>
-<li>Modifying the drawings to show the sampling distributions in this new case.</li>
-<li>Stating an approximation to the coverage of each of the confidence intervals <span class="math inline">\bar{Y}_{k} \pm 1.96\ \text{se}</span> for <span class="math inline">k=0</span>, <span class="math inline">k=10</span>, and <span class="math inline">k=100</span>.</li>
-</ul>
-<p><em>Tip</em>. You can ‘change the location’ of the distributions in the drawing above by changing the labels on the x-axis.</p>
+<p>One of these intervals has coverage of roughly 95%, one has noticeably more, and one has noticeably less. Which is which? Explain.</p>
 </div>
 </div>
 </div>
-<div id="ans-exr-2a" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div id="ans-q3" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -1001,39 +935,20 @@ window.Quarto = {
 </section>
 <section id="problem-3" class="level1">
 <h1>Problem 3</h1>
-<!-- Written by agent birthday-present, 2026-10-10, from Skip's spec: with/without replacement plus the run design on a 1 0 1 0 circle, with a picture to interpret. Not Skip's text. -->
-<p>A population of <span class="math inline">m=200</span> people is arranged in a circle, and their responses alternate as you go around it: <span class="math inline">1, 0, 1, 0, \ldots</span>. So the proportion of 1s in the population is <span class="math inline">\theta=1/2</span>. We’ll compare three ways of drawing a sample of <span class="math inline">n=100</span> people from it. In each case, we estimate <span class="math inline">\theta</span> by the proportion of 1s in the sample, <span class="math inline">\hat\theta=\frac{1}{100}\sum_{i=1}^{100} Y_i</span>.</p>
-<ol type="1">
-<li>Draw 100 people uniformly at random <em>with</em> replacement.</li>
-<li>Draw 100 people uniformly at random <em>without</em> replacement.</li>
-<li>Choose one starting person uniformly at random, and take that person and the next 99 people around the circle.</li>
-</ol>
-<p>The plots below show the sampling distribution of <span class="math inline">\hat\theta</span> under each of these three designs. They’re in scrambled order.</p>
-<div class="cell quarto-layout-panel" data-layout-ncol="3">
+<!-- Written by agent birthday-present, 2026-10-10. The setup is a rewording of Skip's practice-final Problem 5 part 3 with the sample mean in place of the treatment effect; Part B's question and answer are his, verbatim. Not Skip's text. -->
+<p>A coworker has a sample of <span class="math inline">n=100</span> household incomes <span class="math inline">Y_1 \ldots Y_{100}</span>, drawn with replacement from a population, and wants a 95% interval estimate for the population’s mean income. They bootstrap: they draw <span class="math inline">10{,}000</span> samples of size 100 with replacement <em>from their sample</em>, take the mean <span class="math inline">\bar Y^\star</span> of each, and report <span class="math inline">\bar Y \pm 1.96\,\text{se}</span>, where <span class="math inline">\text{se}</span> is the standard deviation of these bootstrap means. They’ve done everything right. But their boss, who has a habit of correcting people without taking the time to understand what they’re doing, glances at it and says:</p>
+<p>For the pictures, take the sample to be simulated from a log-normal income population with median <span class="math inline">60{,}000</span> and log-scale standard deviation <span class="math inline">0.5</span>.</p>
+<blockquote class="blockquote">
+<p>You forgot to divide by <span class="math inline">\sqrt n</span>. Rookie mistake.</p>
+</blockquote>
+<p>To sort this out, your coworker draws two pictures on the same axis: the distribution of the incomes in their sample on the left, and the bootstrap distribution of <span class="math inline">\bar Y^\star</span> on the right.</p>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="practice-midterm-1_files/figure-html/plot-three-designs-1.svg" class="img-fluid figure-img" alt="Bar plot of a sampling distribution of theta hat, narrow and centered at one half, nearly all mass between .4 and .6."></p>
-<figcaption>a</figcaption>
-</figure>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="practice-midterm-1_files/figure-html/plot-bootstrap-width-1.svg" class="img-fluid" alt="Histogram of 100 simulated log-normal household incomes, from about 20 thousand to 200 thousand dollars, with the sample mean marked by a vertical line."></p>
 </div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="practice-midterm-1_files/figure-html/plot-three-designs-2.svg" class="img-fluid figure-img" alt="Bar plot of a sampling distribution of theta hat consisting of a single bar at one half."></p>
-<figcaption>b</figcaption>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="practice-midterm-1_files/figure-html/plot-three-designs-3.svg" class="img-fluid figure-img" alt="Bar plot of a sampling distribution of theta hat, centered at one half and wider than plot a, with mass from about .35 to .65."></p>
-<figcaption>c</figcaption>
-</figure>
-</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="practice-midterm-1_files/figure-html/plot-bootstrap-width-2.svg" class="img-fluid" alt="Histogram of 10,000 bootstrap sample means, tightly clustered around the sample mean on the same narrowed dollar axis."></p>
 </div>
 </div>
 </div>
@@ -1048,7 +963,7 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p>Match each design to its plot, e.g.&nbsp;“with replacement: a”. Explain how you can tell.</p>
+<p>Is the boss right? Say what each picture is a picture of, and explain why the standard deviation of the picture on the right is, or isn’t, the right standard error for an interval estimate of the mean income.</p>
 </div>
 </div>
 </div>
@@ -1076,7 +991,9 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p>For each of the three designs, a friend reports the interval estimate <span class="math inline">\hat\theta \pm 1.96\sqrt{\hat\theta(1-\hat\theta)/n}</span>, which here is about <span class="math inline">\hat\theta \pm .10</span>. Using the plots, say roughly what coverage this interval has under each design: about 95%, noticeably more than 95%, or 100%. Explain.</p>
+<p>Your coworker wants to end their explanation with a flourish: “If you want to think of the standard deviation of <span class="math inline">Y_1 \ldots Y_n</span>—the one you’d divide by <span class="math inline">\sqrt n</span>—in bootstrap terms, it’s the bootstrap standard deviation of an estimator you’d never actually use. It’s the standard deviation of …”</p>
+<p>Finish the sentence. What simple estimator has bootstrap standard deviation <span class="math inline">\sigma=\sqrt{\frac{1}{n}\sum\{Y_i - \bar Y\}^2}</span>, the same standard deviation as the sample <span class="math inline">Y_1 \ldots Y_n</span>?</p>
+<p><em>Tip</em>. There’s more than one. Any one you can think of is fine.</p>
 </div>
 </div>
 </div>
@@ -1093,46 +1010,17 @@ window.Quarto = {
 <p><em>(your answer here)</em></p>
 </div>
 </div>
-<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Exercise</span>Part C
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Your friend concludes that the run design is the best of the three, since it gets the right answer every time, and plans to use it for their next survey, of a different population. Is that a good idea? Say what the usual formula <span class="math inline">\sqrt{\hat\theta(1-\hat\theta)/n}</span> assumes about the sample, and what the spread of <span class="math inline">\hat\theta</span> under the run design actually depends on.</p>
-</div>
-</div>
-</div>
-<div id="ans-q6" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Answer</span>Template
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><em>(your answer here)</em></p>
-</div>
-</div>
 </section>
 <section id="problem-4" class="level1">
 <h1>Problem 4</h1>
 <!-- Written by agent birthday-present, 2026-10-10, from Skip's spec (chat 2026-10-09 7:19 PM): the rms difference between two surveys run the same way on the same population, with a picture instead of the phrase "two draws from the sampling distribution". Not Skip's text. -->
-<p>Two polling firms each survey the same population in exactly the same way, independently of one another: each calls 100 of Georgia’s registered voters, drawn with replacement, and reports the proportion who say they’ll turn out. The plot on the left shows what a single survey of this kind produces, with two particular surveys marked and the actual turnout rate <span class="math inline">\theta</span> drawn in green. The plot on the right shows the same thing for a different pair of firms whose surveys are both biased in the same way.</p>
-<div class="cell quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="practice-midterm-1_files/figure-html/plot-two-surveys-1.svg" class="img-fluid" alt="Sampling distribution of a turnout survey: a bar chart centered on the green target line, with two highlighted dots for two particular surveys and a double-headed arrow between them."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="practice-midterm-1_files/figure-html/plot-two-surveys-2.svg" class="img-fluid" alt="The same sampling distribution shifted to the right of the green target line; the two highlighted dots move with it and the arrow between them is unchanged."></p>
+<p>Two polling firms each survey the same population in exactly the same way, independently of one another: each calls 1,000 of Georgia’s registered voters, drawn with replacement, and reports the proportion who say they’ll turn out. The plot below shows what a single survey of this kind produces, with two particular surveys marked and the actual turnout rate <span class="math inline">\theta</span> drawn in green.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="practice-midterm-1_files/figure-html/plot-two-surveys-1.svg" class="img-fluid figure-img" alt="Sampling distribution of a turnout survey of 1,000 voters: a histogram centered on the green target line at .7, with two highlighted dots for particular surveys and a double-headed arrow between them."></p>
+</figure>
 </div>
 </div>
 </div>
@@ -1151,7 +1039,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="ans-q7" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div id="ans-q6" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -1175,39 +1063,11 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p>In the plot on the right, every survey run this way overstates turnout by about 6 percentage points. Does your answer to Part A change? Explain in a sentence.</p>
+<p>The two firms report estimates 6 percentage points apart. Is that a surprising amount of disagreement?</p>
 </div>
 </div>
 </div>
-<div id="ans-q8" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Answer</span>Template
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><em>(your answer here)</em></p>
-</div>
-</div>
-<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Exercise</span>Part C
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>The two firms report estimates 6 percentage points apart. Each polled 100 people, and turnout is around 70%. Is that a surprising amount of disagreement?</p>
-</div>
-</div>
-</div>
-<div id="ans-q9" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div id="ans-q7" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -1221,25 +1081,108 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="sec-appendix-plots" class="level1">
-<h1>Appendix</h1>
-<div id="fig-coverage" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-coverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="practice-midterm-1_files/figure-html/plot-coverage-vs-bias-ratio-1.svg" class="img-fluid figure-img" alt="Coverage of a 95 percent interval as a function of the bias over standard deviation ratio, from minus 6 to 6: about .95 at zero, falling to about .5 at ratio 2 and near zero by ratio 4."></p>
-</figure>
+<section id="problem-5" class="level1">
+<h1>Problem 5</h1>
+<p>You have a sample <span class="math inline">Y_1,Y_2...,Y_n</span> drawn with replacement from a population with mean <span class="math inline">\mu</span> and standard deviation <span class="math inline">\sigma</span>. The usual estimate for <span class="math inline">\mu</span> is the sample mean <span class="math inline">\bar{Y}_0 = \frac{1}{n}\sum_{i=1}^n Y_i</span>. But one of your coworkers has a clever idea to reduce variance—instead of dividing by <span class="math inline">n</span>, they divide by <span class="math inline">n+10</span>. This is their estimator: <span class="math inline">\bar{Y}_{10} = \frac{1}{n+10}\sum_{i=1}^n Y_i</span>. You try to convince them it’s a bad idea by being a bit hyperbolic—you argue that if that’s a good idea, then why not divide by <span class="math inline">n+100</span>? They, unfortunately, <em>love</em> this idea. You now have to explain why this is a bad idea.</p>
+<p>Your coworker has calculated formulas for the bias and standard deviation of the ‘divide by <span class="math inline">n+k</span> estimator’ <span class="math inline">\bar{Y}_k=\frac{1}{n+k}\sum_{i=1}^n Y_i</span>. <span class="math display">
+\begin{aligned}
+\mathop{\mathrm{E}}[\bar{Y}_k] - \mu &amp;= -\frac{k}{n+k}\mu \\
+\mathop{\mathrm{sd}}[\bar{Y}_k] &amp;= \frac{\sigma}{\sqrt{n}} \times \frac{n}{n+k}.
+\end{aligned}
+</span></p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Formula Derivation. Optional Reading.
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math display">
+\begin{aligned}
+\mathop{\mathrm{E}}\sb*{\bar{Y}_k} - \mu
+&amp;= \mathop{\mathrm{E}}\sb*{\frac{n}{n+k}\bar Y_0} - \mu \\
+&amp;= \frac{n}{n+k}\mathop{\mathrm{E}}[\bar Y_0] - \mu \\
+&amp;=\frac{n}{n+k}\mu - \mu \\
+&amp;= \p*{\frac{n}{n+k} - 1}\mu \\
+&amp;= \p*{\frac{n}{n+k} - \frac{n+k}{n+k}}\mu \\
+&amp;= -\frac{k}{n+k}\mu \\
+&amp; \\
+\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb*{\bar{Y}_k}
+&amp;= \mathop{\mathrm{\mathop{\mathrm{V}}}}\sb*{\frac{n}{n+k} \bar {Y}_0} \\
+&amp;= \p*{\frac{n}{n+k}}^2 V[\bar{Y}_0] \\
+&amp;= \frac{n^2}{(n+k)^2} \frac{\sigma^2}{n} \\
+&amp;= \frac{ n\sigma^2}{(n+k)^2}=\frac{\sigma^2}{n} \times \frac{n^2}{(n+k)^2}
+\end{aligned}
+</span></p>
 </div>
 </div>
 </div>
+<p>And they’ve drawn the sampling distribution of <span class="pollb"><span class="math inline">\bar{Y}_0</span></span>, <span class="pollc"><span class="math inline">\bar{Y}_{10}</span></span>, and <span class="polld"><span class="math inline">\bar{Y}_{100}</span></span> (top, middle, and bottom rows respectively) for sample sizes <span class="math inline">n=100</span> and <span class="math inline">n=10,000</span> (left and right columns respectively) <em>for <span class="math inline">\mu=0</span> and <span class="math inline">\sigma=1</span></em>. The solid line is the estimator’s expected value <span class="math inline">\mathop{\mathrm{E}}[\bar{Y}_k]</span>, the dashed lines are <span class="math inline">\mathop{\mathrm{E}}[\bar Y_k] \pm \mathop{\mathrm{sd}}[\bar Y_k]</span>, and the dotted lines are <span class="math inline">\mathop{\mathrm{E}}[\bar Y_k] \pm 2 \mathop{\mathrm{sd}}[\bar Y_k]</span>.</p>
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-layout-nrow="3">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="practice-midterm-1_files/figure-html/plot-shrinkage-normals-1.svg" class="img-fluid" alt="Six sampling distributions of the divide-by-n-plus-k estimator for k equal to 0, 10, and 100 (rows) at n equal to 100 and 10,000 (columns), all centered at zero, each narrower than the one above it."></p>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-coverage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26.1: The coverage of a 95% confidence interval <span class="math inline">\hat\theta \pm 1.96\ \mathop{\mathrm{sd}}[\hat\theta]</span> when <span class="math inline">\hat\theta</span> has a normal sampling distribution as a function of the bias/standard deviation ratio.
-</figcaption>
-</figure>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="practice-midterm-1_files/figure-html/plot-shrinkage-normals-2.svg" class="img-fluid" alt="Six sampling distributions of the divide-by-n-plus-k estimator for k equal to 0, 10, and 100 (rows) at n equal to 100 and 10,000 (columns), all centered at zero, each narrower than the one above it."></p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="practice-midterm-1_files/figure-html/plot-shrinkage-normals-3.svg" class="img-fluid" alt="Six sampling distributions of the divide-by-n-plus-k estimator for k equal to 0, 10, and 100 (rows) at n equal to 100 and 10,000 (columns), all centered at zero, each narrower than the one above it."></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="practice-midterm-1_files/figure-html/plot-shrinkage-normals-4.svg" class="img-fluid" alt="Six sampling distributions of the divide-by-n-plus-k estimator for k equal to 0, 10, and 100 (rows) at n equal to 100 and 10,000 (columns), all centered at zero, each narrower than the one above it."></p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="practice-midterm-1_files/figure-html/plot-shrinkage-normals-5.svg" class="img-fluid" alt="Six sampling distributions of the divide-by-n-plus-k estimator for k equal to 0, 10, and 100 (rows) at n equal to 100 and 10,000 (columns), all centered at zero, each narrower than the one above it."></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="practice-midterm-1_files/figure-html/plot-shrinkage-normals-6.svg" class="img-fluid" alt="Six sampling distributions of the divide-by-n-plus-k estimator for k equal to 0, 10, and 100 (rows) at n equal to 100 and 10,000 (columns), all centered at zero, each narrower than the one above it."></p>
+</div>
+</div>
+</div>
+<p>On the basis of those drawings, your coworker proposes using <span class="math inline">\bar{Y}_{100}</span> to estimate <span class="math inline">\mu</span>.</p>
+<div id="exr-2a" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 26.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Suppose your sample size is <span class="math inline">n=100</span>. Explain why your coworker’s original proposal to use <span class="math inline">\bar Y_{10}</span> and your hyperbolic suggestion to use <span class="math inline">\bar Y_{100}</span> <em>appear</em>, from the drawings, to be a way to increase precision without increasing bias. To explain why this is misleading, describe what happens in the case that <span class="math inline">\mu=11/10</span> and <span class="math inline">\sigma=1</span> by doing the following.</p>
+<ul>
+<li>Modifying the drawings to show the sampling distributions in this new case.</li>
+<li>Stating an approximation to the coverage of each of the confidence intervals <span class="math inline">\bar{Y}_{k} \pm 1.96\ \mathop{\mathrm{sd}}[\bar{Y}_k]</span> for <span class="math inline">k=0</span>, <span class="math inline">k=10</span>, and <span class="math inline">k=100</span>.</li>
+</ul>
+<p><em>Tip</em>. You can ‘change the location’ of the distributions in the drawing above by changing the labels on the x-axis.</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-2a" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
 </div>
 
 
