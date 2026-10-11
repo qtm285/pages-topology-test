@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en"><head>
+<!DOCTYPE html><html lang="en"><head>
 <script src="chapter-normal-approximation-slides_files/libs/clipboard/clipboard.min.js"></script>
 <script src="chapter-normal-approximation-slides_files/libs/quarto-html/tabby.min.js"></script>
 <script src="chapter-normal-approximation-slides_files/libs/quarto-html/popper.min.js"></script>
@@ -36,7 +35,7 @@
     }
   </style>
   <link rel="stylesheet" href="chapter-normal-approximation-slides_files/libs/revealjs/dist/theme/quarto-7302623cebb49f2c16f5fb89f378febd.css">
-  <script defer="" src="../katex-assets/dist/katex.min.js"></script>
+  <script defer="" src="../_assets/mv1yhypm-1/katex-assets/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
  var mathElements = document.getElementsByClassName("math");
  var macros = [];
@@ -51,7 +50,7 @@
    });
 }}});
   </script>
-  <link rel="stylesheet" href="../katex-assets/dist/katex.min.css">
+  <link rel="stylesheet" href="../_assets/mv1yhypm-1/katex-assets/dist/katex.min.css">
   <link href="chapter-normal-approximation-slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="chapter-normal-approximation-slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="chapter-normal-approximation-slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -606,223 +605,67 @@
 </section>
 <section>
 <section id="review" class="title-slide slide level1 center">
-<h1>Review</h1>
+<h1 data-source-line="11">Review</h1>
+
+</section>
+<section id="the-bootstrap" class="slide level2 scrollable">
+<h2 data-source-line="13">The Bootstrap</h2>
 <div class="hidden">
 <p>$$ \newcommand{X}{} \newcommand{Y}{} % A hex digit after # inside a macro body is eaten by build-time expansion, so digit-leading hexes spell # via . </p>
 <p>$$</p>
 </div>
-</section>
-<section id="where-we-left-off-exact-and-guaranteed" class="slide level2 scrollable">
-<h2>Where We Left Off: Exact and Guaranteed</h2>
-<div class="columns">
+
+<div class="columns" data-source-line="18">
 <div class="column">
-<p>Sampling with replacement</p>
-<div class="r-stack">
-<div class="fragment fade-out" data-fragment-index="0">
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-intcomp-binom-0" class="quarto-float quarto-figure quarto-figure-center" alt="Binomial sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 1 of 3.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-intcomp-binom-0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-intcomp-binom-0-1.svg" id="fig-intcomp-binom-0" alt="Binomial sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 1 of 3.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-intcomp-binom-0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="fragment current-visible" data-fragment-index="0">
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-intcomp-binom-1" class="quarto-float quarto-figure quarto-figure-center" alt="Binomial sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 2 of 3.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-intcomp-binom-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-intcomp-binom-1-1.svg" id="fig-intcomp-binom-1" alt="Binomial sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 2 of 3.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-intcomp-binom-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="fragment" data-fragment-index="1">
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-intcomp-binom-2" class="quarto-float quarto-figure quarto-figure-center" alt="Binomial sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 3 of 3.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-intcomp-binom-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-intcomp-binom-2-1.svg" id="fig-intcomp-binom-2" alt="Binomial sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 3 of 3.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-intcomp-binom-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</div>
+<p>The Sample <span class="math display">
+\begin{array}{r|rrrr|r}
+i    &amp;   1 &amp; 2 &amp; \dots &amp; 625 &amp; \bar{Y}_{625}  \\
+Y_i  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
+\end{array}
+</span></p>
+<p data-source-line="33">The Bootstrap Sample</p>
+<p><span class="math display">
+\begin{array}{r|rrrr|r}
+i    &amp;   1 &amp; 2 &amp; \dots &amp; 625 &amp; \bar{Y}_{625}^*  \\
+Y_i^*  &amp;  1 &amp; 0 &amp; \dots &amp; 1 &amp; 0.68 \\
+\end{array}
+</span></p>
 </div><div class="column">
-<p>Sampling without replacement</p>
-<div class="r-stack">
-<div class="fragment fade-out" data-fragment-index="0">
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-intcomp-hyper-0" class="quarto-float quarto-figure quarto-figure-center" alt="Hypergeometric sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 1 of 3.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-intcomp-hyper-0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-intcomp-hyper-0-1.svg" id="fig-intcomp-hyper-0" alt="Hypergeometric sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 1 of 3.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-intcomp-hyper-0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="fragment current-visible" data-fragment-index="0">
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-intcomp-hyper-1" class="quarto-float quarto-figure quarto-figure-center" alt="Hypergeometric sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 2 of 3.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-intcomp-hyper-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-intcomp-hyper-1-1.svg" id="fig-intcomp-hyper-1" alt="Hypergeometric sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 2 of 3.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-intcomp-hyper-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="fragment" data-fragment-index="1">
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-intcomp-hyper-2" class="quarto-float quarto-figure quarto-figure-center" alt="Hypergeometric sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 3 of 3.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-intcomp-hyper-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-intcomp-hyper-2-1.svg" id="fig-intcomp-hyper-2" alt="Hypergeometric sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 3 of 3.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-intcomp-hyper-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</div>
+<p>The Population</p>
+<p><span class="math display">
+\begin{array}{r|rrrr|r}
+j &amp; 1 &amp; 2 &amp; \dots &amp;   7.23M &amp; \bar{y}_{7.23M}  \\
+y_{j} &amp; 1 &amp; 1 &amp; \dots &amp; 1   &amp; 0.70  \\
+\end{array}
+</span></p>
+<p>The ‘Bootstrap Population’ — The Sample <span class="math display">
+\begin{array}{r|rrrr|r}
+j        &amp;   1 &amp; 2 &amp; \dots &amp; 625 &amp; \bar{y}^*_{625}  \\
+y_j^*  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
+\end{array}
+</span></p>
 </div></div>
-<p>We now have three ways to calibrate an interval estimate.</p>
+<ul>
+<li>Last class, we looked at a general method for estimating sampling distributions: bootstrapping.
 <ol type="1">
-<li><span class="pink"><strong>Exact.</strong></span>
-<ul>
-<li>Needs the whole sampling distribution.</li>
-<li>We have it for binary responses, sampled with or without replacement.</li>
-<li>Outside that, a pain.</li>
-</ul></li>
-<li><span class="teal"><strong>Chebyshev.</strong></span>
-<ul>
-<li>Needs only the standard deviation.</li>
-<li>Conservative. Who wants to deny themselves precision that’s really there?</li>
-</ul></li>
-<li><strong>The bootstrap.</strong>
-<ul>
-<li>Works, often.</li>
-<li>Not when sampling without replacement, unless <span class="math inline">n</span> is tiny relative to <span class="math inline">m</span>.</li>
-<li>A thing you do, not a thing that helps you understand.</li>
-</ul></li>
-</ol>
-</section>
-<section id="the-bootstrap" class="slide level2 scrollable">
-<h2>The Bootstrap</h2>
-<div class="r-stack">
-<div class="fragment fade-out" data-fragment-index="0">
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-bootstrap-dot-1" class="quarto-float quarto-figure quarto-figure-center" alt="Sampling distribution of the turnout proportion in gray with one hundred sample means floating over it. Sample 1 is highlighted in its color with its bootstrap sampling distribution drawn over the actual one, the middle 95 percent of it shaded, and an interval of that width on the dot.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-bootstrap-dot-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-bootstrap-dot-1-1.svg" id="fig-bootstrap-dot-1" alt="Sampling distribution of the turnout proportion in gray with one hundred sample means floating over it. Sample 1 is highlighted in its color with its bootstrap sampling distribution drawn over the actual one, the middle 95 percent of it shaded, and an interval of that width on the dot.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-bootstrap-dot-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="fragment current-visible" data-fragment-index="0">
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-bootstrap-dot-2" class="quarto-float quarto-figure quarto-figure-center" alt="Sampling distribution of the turnout proportion in gray with one hundred sample means floating over it. Sample 2 is highlighted in its color with its bootstrap sampling distribution drawn over the actual one, the middle 95 percent of it shaded, and an interval of that width on the dot.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-bootstrap-dot-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-bootstrap-dot-2-1.svg" id="fig-bootstrap-dot-2" alt="Sampling distribution of the turnout proportion in gray with one hundred sample means floating over it. Sample 2 is highlighted in its color with its bootstrap sampling distribution drawn over the actual one, the middle 95 percent of it shaded, and an interval of that width on the dot.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-bootstrap-dot-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="fragment" data-fragment-index="1">
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-bootstrap-dot-3" class="quarto-float quarto-figure quarto-figure-center" alt="Sampling distribution of the turnout proportion in gray with one hundred sample means floating over it. Sample 3 is highlighted in its color with its bootstrap sampling distribution drawn over the actual one, the middle 95 percent of it shaded, and an interval of that width on the dot.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-bootstrap-dot-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-bootstrap-dot-3-1.svg" id="fig-bootstrap-dot-3" alt="Sampling distribution of the turnout proportion in gray with one hundred sample means floating over it. Sample 3 is highlighted in its color with its bootstrap sampling distribution drawn over the actual one, the middle 95 percent of it shaded, and an interval of that width on the dot.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-bootstrap-dot-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</div>
-<ul>
-<li>The bootstrap. A general method for estimating sampling distributions.
-<ol type="1">
-<li>Draw a sample of size <span class="math inline">n</span> from your sample. <em>A bootstrap sample.</em></li>
-<li>Calculate your estimator on it. <em>A bootstrap estimate.</em></li>
-<li>Repeat. <em>The bootstrap sampling distribution.</em></li>
+<li>Draw a sample of size <span class="math inline">n</span> from your sample. That’s <em>a bootstrap sample</em>.</li>
+<li>Calculate your estimator using that sample. That’s <em>a bootstrap estimate</em>.</li>
+<li>Repeat to get draws from the distribution of bootstrap estimates. That’s <em>the bootstrap sampling distribution</em>.</li>
 </ol></li>
-<li>This simulates sampling with replacement.
+<li>It’s a <em>nonparametric estimate</em>. We’re approximating the sampling distribution without using its parametric form.</li>
+<li>This is useful because we usually don’t know its parametric form.
 <ul>
-<li>Not sampling without. There’s no natural analog.</li>
-</ul></li>
-<li>Great for what we <em>have learned</em> after we have data.
-<ul>
-<li>Not for what we <em>can learn</em> before we have it.</li>
-</ul></li>
-<li>Today: a tool for that. <em>Normal approximation.</em>
-<ul>
-<li>And a job for it: <em>sample size calculation</em>. Choosing <span class="math inline">n</span> so your interval is as narrow as you want.</li>
+<li>Estimating the proportion of 1s in a population of binary outcomes is a special case in which we do.</li>
+<li>But complicating things even a little, e.g.&nbsp;estimating a difference in proportions, changes that.</li>
 </ul></li>
 </ul>
-</section></section>
-<section>
-<section id="normal-approximation" class="title-slide slide level1 center">
-<h1>Normal Approximation</h1>
-
 </section>
-<section id="the-normal-distribution" class="slide level2 scrollable">
-<h2>The Normal Distribution</h2>
-<div class="zoom-free">
-<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<section id="bootstrapping-proportions" class="slide level2">
+<h2 data-source-line="73">Bootstrapping Proportions</h2>
+
+
+
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="75">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-4-1.svg"></p>
@@ -832,33 +675,86 @@ Figure&nbsp;9
 </div>
 </div>
 </div>
+<ul>
+<li>When we’re estimating a proportion, the <span class="teal">bootstrap sampling distribution</span> is <em>exactly the same</em> as<br>
+the parametric estimate we get by plugging the sample proportion into the Binomial distribution’s formula.
+<ul>
+<li>That’s good when we’ve sampled with replacement, so our <span class="red">sampling distribution is actually Binomial</span>.</li>
+<li>It’s less good when we’ve sampled without replacement, so our <span class="blue">sampling distribution is Hypergeometric</span>.</li>
+</ul></li>
+<li>Using this equivalence, we’ve talked a lot about how the bootstrap works in this special case.</li>
+</ul>
+</section>
+<section id="an-important-limitation-of-the-bootstrap" class="slide level2">
+<h2 data-source-line="155">An Important Limitation of the Bootstrap</h2>
+
+
+<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-5-1.svg" class="r-stretch" data-source-line="158"><ul>
+<li>The bootstrap is a great method for understand what we <em>have learned</em> after we have data.
+<ul>
+<li>It’s easy to use and we usually get good calibration.</li>
+</ul></li>
+<li>But it’s also important to be able to reason about what we <em>can learn</em> before we have data.
+<ul>
+<li>For this, the bootstrap is not very helpful.</li>
+</ul></li>
+<li>Today, we’ll talk about that. To do it, we’ll introduce a new tool: <em>normal approximation</em>.</li>
+<li>And we’ll use it for an important ‘before data reasoning’ task: sample size calculation.
+<ul>
+<li>This is using what you know—or are willing to assume—to choose the size of your study.</li>
+<li>In particular, to choose it so your confidence intervals are as narrow as you want them to be.</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="normal-approximation" class="title-slide slide level1 center">
+<h1 data-source-line="172">Normal Approximation</h1>
+
+</section>
+<section id="the-normal-distribution" class="slide level2 scrollable">
+<h2 data-source-line="174">The Normal Distribution</h2>
+<div class="zoom-free">
+
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="177">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-6-1.svg"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-6-2.svg"></p>
+</div>
+</div>
+</div>
 </div>
 <ul>
-<li><p>The normal distribution is a parametric family of distributions involving two parameters.</p>
+<li><p data-source-line="193">The normal distribution is a parametric family of distributions involving two parameters.</p>
 <ol type="1">
 <li>Its mean, <span class="math inline">\theta</span>.</li>
 <li>Its standard deviation, <span class="math inline">\sigma</span>.</li>
 </ol></li>
-<li><p>We say a random variable <span class="math inline">X</span> is normally distributed with mean <span class="math inline">\theta</span> and standard deviation <span class="math inline">\sigma</span> …</p></li>
+<li><p data-source-line="196">We say a random variable <span class="math inline">X</span> is normally distributed with mean <span class="math inline">\theta</span> and standard deviation <span class="math inline">\sigma</span> …</p></li>
 <li><p>… if the probability that it’s in an interval <span class="math inline">[a,b]</span> is given by this integral of its <em>probability density</em>. <span class="math display">
 P_{\theta,\sigma}(X \in [a,b]) = \int_a^b  f_{\theta,\sigma}(x)dx \qfor f_{\theta, \sigma}(x) = \frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\theta)^2}{2\sigma^2}}
 </span></p></li>
-<li><p>We have to talk about the probability that it’s ‘in an interval’ rather than that it ‘takes a value’ because …</p></li>
-<li><p>… the probability it actually takes on any particular value is <span class="math inline">x</span> zero: it’s an integral from <span class="math inline">x</span> to <span class="math inline">x</span>.</p></li>
+<li><p data-source-line="203">We have to talk about the probability that it’s ‘in an interval’ rather than that it ‘takes a value’ because …</p></li>
+<li><p data-source-line="204">… the probability it actually takes on any particular value is <span class="math inline">x</span> zero: it’s an integral from <span class="math inline">x</span> to <span class="math inline">x</span>.</p></li>
+<li><p>This seems like an annoyance, but given what the normal distribution is actually used for, it’s a blessing.<a href="#/footnotes" class="footnote-ref" id="fnref1" role="doc-noteref" data-footnote-href="#/fn1" onclick=""><sup>1</sup></a> </p></li>
 </ul>
-</section>
+<aside></aside></section>
 <section id="normal-approximation-1" class="slide level2">
-<h2>Normal Approximation</h2>
-<div class="cell quarto-layout-panel" data-layout-ncol="3">
+<h2 data-source-line="205">Normal Approximation</h2>
+
+
+<div class="cell quarto-layout-panel" data-layout-ncol="3" data-source-line="208">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-6-1.svg"></p>
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-8-1.svg"></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-6-2.svg"></p>
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-8-2.svg"></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-6-3.svg"></p>
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-8-3.svg"></p>
 </div>
 </div>
 </div>
@@ -879,28 +775,42 @@ P_{\theta,\sigma}(X \in [a,b]) = \int_a^b  f_{\theta,\sigma}(x)dx \qfor f_{\thet
 <div class="callout callout-note no-icon callout-titled callout-style-simple">
 <div class="callout-body">
 <div class="callout-title">
-<p><strong>The Central Limit Theorem</strong></p>
+<p data-source-line="266"><strong>The Central Limit Theorem</strong></p>
 </div>
 <div class="callout-content">
-<p>The sampling distribution of a mean of independent random variables, <span class="math inline">\color{#404040}\frac{1}{n}\sum\limits_{i=1}^n X_i</span>, gets arbitrarily close to its normal approximation<br>
+<p data-source-line="267">The sampling distribution of a mean of independent random variables, <span class="math inline">\color{#404040}\frac{1}{n}\sum\limits_{i=1}^n X_i</span>, gets arbitrarily close to its normal approximation<br>
 as the number of random variables <span class="math inline">\color{#404040}n</span> increases to infinity.</p>
-<p><em>Caveats</em>.</p>
-<ul>
-<li>Finite variance. Without it, there is no normal limit.</li>
-<li>No single term dominates. Each one’s share of the mean’s variance has to be infinitesimal as <span class="math inline">\color{#404040}n \to \infty</span>.</li>
-<li>Independence, or close to it. Dependence changes the variance, and enough of it changes the shape.</li>
-</ul>
+<p><em>Caveat</em>. This is only true if each random variable contributes infinitesimally to the mean, i.e.&nbsp;<span class="math inline">\color{#404040}\max_{i\le n} X_i/n \to 0</span> as <span class="math inline">\color{#404040}n \to \infty</span>.</p>
 </div>
 </div>
 </div>
 </section>
-<section id="the-width-of-normal-distributions" class="slide level2">
-<h2>The Width of Normal Distributions</h2>
-<div class="cell">
+<section id="exact-guaranteed-approximate" class="slide level2 scrollable">
+<h2 data-source-line="275">Exact, Guaranteed, Approximate</h2>
+<ul>
+<li>For a sample proportion, we can now put three answers to the same question on one line.
+<ol type="1">
+<li><strong>Exact:</strong> use Binomial probabilities for sampling with replacement and Hypergeometric probabilities for sampling without replacement.
+<ul>
+<li>This needs the whole distribution and the sampling design.</li>
+</ul></li>
+<li><strong>Guaranteed:</strong> use Chebyshev. This needs only the mean and variance, but the interval is wide.</li>
+<li><strong>Approximate:</strong> use the normal distribution with the same mean and standard deviation.
+<ul>
+<li>This adds shape information and produces the familiar narrow interval.</li>
+</ul></li>
+</ol></li>
+<li>The standard deviation is the common yardstick.
+<ul>
+<li data-source-line="285">What changes is how much we claim to know about the distribution around it. ## The Width of Normal Distributions</li>
+</ul></li>
+</ul>
+
+<div class="cell" data-source-line="287">
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-7-1.svg" height="300"></p>
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-9-1.svg" height="300"></p>
 </figure>
 </div>
 </div>
@@ -913,11 +823,7 @@ as the number of random variables <span class="math inline">\color{#404040}n</sp
 <li>To include 95.4% of draws, you go out 2 standard deviations.</li>
 <li>To include 99.7% of draws, you go out 3 standard deviations.</li>
 </ul></li>
-<li>To get almost exactly 95% of draws, we go out 1.96 standard deviations: <span class="math inline">\theta \pm 1.96\sigma</span>.
-<ul>
-<li>Chebyshev got us 95% at <span class="math inline">\sqrt{20} \approx 4.5</span> standard deviations. The normal gets it at <span class="math inline">1.96</span>.</li>
-<li>Same standard deviation. An interval <span class="math inline">2.3\times</span> narrower.</li>
-</ul></li>
+<li>To get almost exactly 95% of draws, we go out 1.96 standard deviations: <span class="math inline">\theta \pm 1.96\sigma</span>.</li>
 <li>Two is close enough in practice, but we tend to write 1.96 anyway.
 <ul>
 <li>It’s a signal about what we’re doing. You can get a 2 anywhere in a calculation.</li>
@@ -926,13 +832,15 @@ as the number of random variables <span class="math inline">\color{#404040}n</sp
 </ul>
 </section>
 <section id="calibration-using-normal-approximation" class="slide level2">
-<h2>Calibration Using Normal Approximation</h2>
-<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<h2 data-source-line="322">Calibration Using Normal Approximation</h2>
+
+
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="324">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-9-1.svg"></p>
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-11-1.svg"></p>
 <figcaption>The (Binomial) sampling distribution and its normal approximation.</figcaption>
 </figure>
 </div>
@@ -940,7 +848,7 @@ as the number of random variables <span class="math inline">\color{#404040}n</sp
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-9-2.svg"></p>
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-11-2.svg"></p>
 <figcaption>Binomial and normal estimates of the sampling distribution.</figcaption>
 </figure>
 </div>
@@ -965,20 +873,21 @@ as the number of random variables <span class="math inline">\color{#404040}n</sp
 </ul></li>
 <li>Above left, you can see two interval estimates superimposed on the sampling distribution of a sample proportion.
 <ul>
-<li>The <span class="red">red one</span> is calibrated using the binomial as before.</li>
-<li>The <span class="blue">blue one</span> is calibrated using normal approximation.</li>
+<li>The red one is calibrated using the binomial as before.</li>
+<li>The blue one is calibrated using normal approximation.</li>
 </ul></li>
-<li>Above right, you can see the <span class="red">binomial</span> and <span class="blue">normal</span> sampling distribution estimates these are based on.</li>
+<li>Above right, you can see the binomial and normal sampling distribution estimates these are based on.</li>
 </ul>
 </section>
 <section id="when-this-works" class="slide level2 scrollable">
-<h2>When This Works</h2>
-<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<h2 data-source-line="396">When This Works</h2>
+
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="398">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-10-1.svg"></p>
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-12-1.svg"></p>
 <figcaption>The (Binomial) sampling distribution and its normal approximation.</figcaption>
 </figure>
 </div>
@@ -986,52 +895,59 @@ as the number of random variables <span class="math inline">\color{#404040}n</sp
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-10-2.svg"></p>
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-12-2.svg"></p>
 <figcaption>Binomial and normal estimates of the sampling distribution.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 </div>
-<div style="text-align: center">
-<p>This works if three things are true.</p>
-</div>
+<ul>
+<li>This all works if three things are true.</li>
+</ul>
 <ol type="1">
-<li>The sampling distribution needs to be in the right place, i.e.&nbsp;centered on the estimation target.
+<li>The sampling distribution needs to be in the right place, i.e.&nbsp;centered on the estimation target.</li>
+<li>The sampling distribution needs to be approximately normal.</li>
+<li>The estimated sampling distribution has approximately the right width.</li>
+</ol>
 <ul>
-<li>This is called <em>unbiasedness</em> of our point estimator.</li>
+<li>The first is called <em>unbiasedness</em> of our point estimator.
+<ul>
 <li>Most of the estimators we’ll talk about in this class are unbiased or almost unbiased.</li>
+<li>We’ll check this for the sample proportion in a minute.</li>
 </ul></li>
-<li>The sampling distribution needs to be approximately normal.
+<li>The second is something that the CLT tells us tends to happen, especially for large <span class="math inline">n</span>.
 <ul>
-<li>The CLT tells us this tends to happen, especially for large <span class="math inline">n</span>.</li>
-<li>We’ll talk about how accurate it is next week. For most of the estimators we’ll study, you can take it as a given.</li>
+<li>Talking about the accuracy of normal approximation is interesting, but beyond the scope of this class.</li>
+<li>I’d need at least a couple weeks to teach you about what’s going on there.</li>
+<li>But you can take it as a given for most of the estimators we’ll study.</li>
 </ul></li>
-<li>The estimated sampling distribution has approximately the right width.
+<li>The third amounts to getting a good estimate of our point estimator’s standard deviation.
 <ul>
-<li>This amounts to getting a good estimate of our point estimator’s standard deviation.</li>
-<li>We’ll work on this, again for the sample proportion, later today. And for other estimators throughout the semester.</li>
+<li>We’ll work on this, again for the sample proportion, later today.</li>
+<li>And we’ll talk about this for other estimators throughout the semester.</li>
 <li>It is, however, a bit of a pain. That’s one reason you might prefer the bootstrap.</li>
 </ul></li>
-</ol>
+</ul>
 </section></section>
 <section>
 <section id="normal-approximation-in-context" class="title-slide slide level1 center">
-<h1>Normal Approximation in Context</h1>
+<h1 data-source-line="427">Normal Approximation in Context</h1>
 
 </section>
 <section id="a-proportion-when-sampling-with-replacement" class="slide level2">
-<h2>A Proportion when Sampling with Replacement</h2>
-<div class="cell quarto-layout-panel" data-layout-ncol="3">
+<h2 data-source-line="429">A Proportion when Sampling with Replacement</h2>
+
+<div class="cell quarto-layout-panel" data-layout-ncol="3" data-source-line="431">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-11-1.svg"></p>
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-13-1.svg"></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-11-2.svg"></p>
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-13-2.svg"></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-11-3.svg"></p>
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-13-3.svg"></p>
 </div>
 </div>
 </div>
@@ -1040,7 +956,6 @@ as the number of random variables <span class="math inline">\color{#404040}n</sp
 <ul>
 <li>And we can estimate that distribution by plugging our sample proportion into the Binomial formula.</li>
 <li>But its normal approximation tends to be very good, so we can get away with estimating that instead.</li>
-<li>Its standard deviation is the one we worked out last class.</li>
 </ul></li>
 </ul>
 <p><span class="math display">
@@ -1058,30 +973,31 @@ as the number of random variables <span class="math inline">\color{#404040}n</sp
 </ul>
 </section>
 <section id="a-proportion-when-sampling-without-replacement" class="slide level2">
-<h2>A Proportion when Sampling without Replacement</h2>
-<div class="cell quarto-layout-panel" data-layout-ncol="3">
+<h2 data-source-line="457">A Proportion when Sampling without Replacement</h2>
+
+<div class="cell quarto-layout-panel" data-layout-ncol="3" data-source-line="459">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-12-1.svg"></p>
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-14-1.svg"></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-12-2.svg"></p>
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-14-2.svg"></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-12-3.svg"></p>
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-14-3.svg"></p>
 </div>
 </div>
 </div>
 <ul>
-<li>Sampling <em>without</em> replacement from a binary population, our sample proportion is Hypergeometric.
+<li>When we sample from a binary population <em>without</em> replacement, our sample proportion’s distribution is Hypergeometric.
 <ul>
-<li>We can estimate it by plugging our sample proportion into the Hypergeometric formula.</li>
-<li>But again, its normal approximation is very good, so we can estimate that instead.</li>
+<li>And we can estimate that distribution by plugging our sample proportion into the Hypergeometric formula.</li>
+<li>But again, its normal approximation tends to be very good, so we can get away with estimating that instead.</li>
 </ul></li>
-<li>This shows where we go wrong using the Binomial—or equivalently the bootstrap.
+<li>When we do this, we can see where we go wrong when use use the Binomial—or equivalently the bootstrap.
 <ul>
-<li>When <span class="math inline">\color{#404040}n</span> is a meaningful fraction of <span class="math inline">\color{#404040}m</span>, the Binomial is too wide.</li>
-<li>Its standard deviation is the Binomial’s times <span class="math inline">\color{#404040}\sqrt{\frac{m-n}{m-1}}</span>. A homework problem.</li>
+<li>When our sample size <span class="math inline">\color{#404040}n</span> is a meaningful fraction of our population size <span class="math inline">\color{#404040}m</span>, the Binomial is too wide.</li>
+<li>The Hypergeometric’s standard deviation differs from the Binomial’s by a factor of <span class="math inline">\color{#404040}\sqrt{\frac{m-n}{m-1}}</span>.</li>
 <li>When we’re sampling half our population, i.e.&nbsp;<span class="math inline">n=m/2</span>, that’s roughly <span class="math inline">\color{#404040}\sqrt{1/2} \approx .7</span>.</li>
 </ul></li>
 </ul>
@@ -1094,488 +1010,180 @@ as the number of random variables <span class="math inline">\color{#404040}n</sp
 <ul>
 <li>Pictured: three Hypergeometric distributions with their normal approximations.
 <ul>
-<li>Sample proportions for samples of size <span class="pollb">10</span>, <span class="pollc">30</span>, and <span class="polld">90</span> …</li>
-<li>… drawn without replacement from a binary population twice the size with <span class="math inline">\color{#404040}\theta=.5</span>.</li>
-</ul></li>
-</ul>
-</section>
-<section id="a-mean-when-sampling-with-replacement" class="slide level2">
-<h2>A Mean when Sampling with Replacement</h2>
-<div class="cell quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-vote-history-normal-1" class="quarto-float quarto-figure quarto-figure-center" alt="Histogram of the 625 sampled voters' vote histories, 0 through 5 elections, with a point at the sample mean and arms one sample standard deviation to either side.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-vote-history-normal-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-vote-history-normal-1.svg" id="fig-vote-history-normal-1" alt="Histogram of the 625 sampled voters' vote histories, 0 through 5 elections, with a point at the sample mean and arms one sample standard deviation to either side.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-vote-history-normal-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;10
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-vote-history-normal-2" class="quarto-float quarto-figure quarto-figure-center" alt="Histogram of ten thousand sample means of vote history drawn from the population, with the normal approximation drawn over it in blue.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-vote-history-normal-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-vote-history-normal-2.svg" id="fig-vote-history-normal-2" alt="Histogram of ten thousand sample means of vote history drawn from the population, with the normal approximation drawn over it in blue.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-vote-history-normal-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;11
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<ul>
-<li>Not special to proportions. Take the average vote history <span class="math inline">\bar H_n</span>.</li>
-<li>Its standard deviation is the population standard deviation over <span class="math inline">\sqrt{n}</span>. Plug in the sample’s.</li>
-</ul>
-<p><span class="math display">
-\begin{aligned}
-\text{normal approximation}     &amp; \ f_{\mu,\sigma_n}(x) \qfor \sigma_n^2 = \frac{\sigma_H^2}{n} \qqtext{for} \sigma_H^2 = \frac{1}{m}\sum_{j=1}^m (h_j - \mu)^2 \\
-\text{corresponding estimate}   &amp; \ f_{\bar H_n, \hat \sigma_n}(x) \qfor \hat\sigma_n^2 = \frac{\hat\sigma_H^2}{n} \qqtext{for} \hat\sigma_H^2 = \frac{1}{n}\sum_{i=1}^n (H_i - \bar H_n)^2.
-\end{aligned}
-</span></p>
-<ul>
-<li>Pictured: left, the 625 sampled voters’ vote histories with <span class="math inline">\bar H_n</span> and the sample standard deviation.
-<ul>
-<li>Right, the sampling distribution of <span class="math inline">\bar H_n</span> over draws from the population, with its normal approximation.</li>
+<li>These are the distribution of the sample proportion when we draw a samples of size <span class="pollb">10</span>, <span class="pollc">30</span>, and <span class="polld">90</span> …</li>
+<li>… without replacement from a binary population twice the size in which the proportion of ones is <span class="math inline">\color{#404040}\theta=.5</span>.</li>
 </ul></li>
 </ul>
 </section>
 <section id="using-normal-approximation" class="slide level2">
-<h2>Using Normal Approximation</h2>
-<div class="cell quarto-layout-panel" data-layout-ncol="3">
-<div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<div id="fig-using-normal-approx-strip-1" class="quarto-float quarto-figure quarto-figure-center" alt="Binomial distribution and normal approximation for the sample proportion from 10 fair draws.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-using-normal-approx-strip-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-using-normal-approx-strip-1.svg" id="fig-using-normal-approx-strip-1" alt="Binomial distribution and normal approximation for the sample proportion from 10 fair draws.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-using-normal-approx-strip-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<div id="fig-using-normal-approx-strip-2" class="quarto-float quarto-figure quarto-figure-center" alt="Binomial distribution and normal approximation for the sample proportion from 30 fair draws.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-using-normal-approx-strip-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-using-normal-approx-strip-2.svg" id="fig-using-normal-approx-strip-2" alt="Binomial distribution and normal approximation for the sample proportion from 30 fair draws.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-using-normal-approx-strip-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;13
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<div id="fig-using-normal-approx-strip-3" class="quarto-float quarto-figure quarto-figure-center" alt="Binomial distribution and normal approximation for the sample proportion from 90 fair draws.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-using-normal-approx-strip-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-using-normal-approx-strip-3.svg" id="fig-using-normal-approx-strip-3" alt="Binomial distribution and normal approximation for the sample proportion from 90 fair draws.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-using-normal-approx-strip-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;14
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
+<h2 data-source-line="501">Using Normal Approximation</h2>
 <span class="math display">\begin{aligned}
 &amp;f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n} &amp;&amp; \text{a proportion when sampling with replacement} \\
 &amp;f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n} \times \frac{m-n}{m-1} &amp;&amp; \text{a proportion when sampling without replacement} \\
-&amp;f_{\bar H_n, \hat \sigma_n}(x) \qfor \hat\sigma_n^2 = \frac{1}{n} \times \frac{1}{n}\sum_{i=1}^n (H_i - \bar H_n)^2 &amp;&amp; \text{a mean when sampling with replacement}
+&amp;f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \mu(1)\{1-\hat \mu(1)\}}{N_1} + \frac{\hat \mu(0)\{1-\hat \mu(0)\}}{N_0} &amp;&amp; \text{a difference in proportions when sampling with replacement}
 \end{aligned}</span>
+
 <ul>
-<li>What makes all this work is that we’re using good estimates of our estimator’s standard deviation.
+<li data-source-line="503">What makes all this work is that we’re using good estimates of our estimator’s standard deviation.
 <ul>
 <li>If we have a formula for the estimator’s standard deviation, this is usuallly not so hard.</li>
 <li>We estimate whatever population summaries show up in the formula and plug them in.</li>
 </ul></li>
+<li>But we do need to do a bit of work to get that formula. We’ll do that in a few minutes.</li>
+<li>This involves calculating expectations, so we’ll start there.</li>
 </ul>
 </section></section>
 <section>
-<section id="sample-size-calculation" class="title-slide slide level1 center">
-<h1>Sample Size Calculation</h1>
+<section id="closing-exercise" class="title-slide slide level1 center">
+<h1 data-source-line="517">Closing Exercise</h1>
 
 </section>
-<section id="an-interval-for-turnout-in-2020" class="slide level2">
-<h2>An Interval for Turnout in 2020</h2>
-<div class="cell">
+<section id="sample-size-for-the-nsw-treated-mean" class="slide level2">
+<h2 data-source-line="519">Sample Size for the NSW Treated Mean</h2>
+<p data-source-line="521">The NSW data contain 185 treated participants. We want to estimate their population’s mean 1978 income. Use these observations as a pilot: their income SD estimates the population income SD we need for planning another sample.</p>
+
+<div class="cell" data-source-line="523">
 <div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-13-1.svg" height="300"></p>
-</figure>
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["n"],"name":[1],"type":["int"],"align":["right"]},{"label":["mean"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"185","2":"6349.14","3":"7867.4"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
 </div>
 </div>
-</div>
-<ul>
-<li>Let’s compare our two approaches to calibration in our turnout poll.</li>
-</ul>
-<p><span class="math display">
-\begin{aligned}
-\textcolor{red}{\text{binomial interval}} &amp;= 0.6800  \pm 0.0368  \\
-\textcolor{blue}{\text{normal interval}}    &amp;= 0.6800  \pm 0.0366
-\end{aligned}
-</span></p>
-<ul>
-<li>We have to go out to 4 digits, way beyond what’s statistically meaningful, to see any difference in these intervals.
-<ul>
-<li>Our interval estimate—either one—is telling you might be off by a few hundredths.</li>
-<li>Who cares about another couple ten-thousandths at the edge of the interval?</li>
-</ul></li>
-</ul>
-</section>
-<section id="thinking-speculatively-about-intervals" class="slide level2">
-<h2>Thinking Speculatively About Intervals</h2>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-14-1.svg" height="300"></p>
-</figure>
-</div>
-</div>
-</div>
-<ul>
-<li>Suppose we’re not satisfied with this level of precision, so we’re going to collect more data.</li>
-<li>Suppose we want our interval to be <span class="math inline">\pm .01</span> instead of <span class="math inline">\pm 0.037</span>.</li>
-<li>How many people, in total, do we need to call? We can use the normal approximation to figure that out.</li>
-</ul>
-<p><span class="math display">
-\hat \theta \pm 1.96\sigma_n \qfor \sigma_n = \sqrt{\frac{\theta (1-\theta)}{n}} \qqtext{ is } \hat\theta \pm .01 \qqtext{if} 1.96\sqrt{\frac{\theta (1-\theta)}{n}} = .01
-</span></p>
-<ul>
-<li>Now all we have to do is solve for <span class="math inline">n</span>. And, since we don’t know <span class="math inline">\theta</span>, use our best guess, <span class="math inline">\hat\theta=0.68</span>.</li>
-</ul>
-<div class="fragment">
-<p><span class="math display">
-n = \frac{1.96^2 \ \hat\theta (1-\hat\theta)}{.01^2} \approx 8000
-</span></p>
 </div>
 </section>
-<section id="the-easy-version" class="slide level2">
-<h2>The Easy Version</h2>
-<ul>
-<li>There’s a trick to this. Let’s compare the interval width we have to the one we want.</li>
-</ul>
-<p><span class="math display">
-\begin{aligned}
-\pm 0.037 &amp;= \pm 1.96\hat\sigma_{625} \qfor \hat\sigma_{625} = \sqrt{\frac{\hat\theta (1-\hat\theta)}{625}}  \\
-\pm 0.01 &amp;= \pm 1.96\hat\sigma_{n} \qfor \hat\sigma_{n} = \sqrt{\frac{\hat\theta (1-\hat\theta)}{n}}   
-\end{aligned}
-</span></p>
-<ul>
-<li>All that changes in this formula is the sample size. And the <em>sample size ratio</em> falls out of the interval width ratio.</li>
-</ul>
-<p><span class="math display">
-\frac{0.037}{.01}
-= \frac{1.96\hat\sigma_{625}}{1.96\hat\sigma_n}
-= \frac{\sqrt{\frac{\hat\theta (1-\hat\theta)}{625}}}{\sqrt{\frac{\hat\theta (1-\hat\theta)}{n}}}
-= \sqrt{\frac{n}{625}}
-\qqtext{ so } n = 625\left(\frac{0.037}{.01}\right)^2 \approx 8000
-</span></p>
-<ul>
-<li>To get the new sample size, multiply …
-<ul>
-<li>the sample size we have</li>
-<li>the square of the desired ratio of the interval widths.</li>
-</ul></li>
-<li>To double precision, quadruple the sample size. To triple it, increase it 9x.</li>
-<li>To get another digit, i.e.&nbsp;increase precision 10x, increase the sample size 100x.</li>
-</ul>
-</section>
-<section id="starting-from-scratch" class="slide level2">
-<h2>Starting from Scratch</h2>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-binomials-across-thetas" class="quarto-float quarto-figure quarto-figure-center" height="300px" alt="Nine binomial sampling distributions of the sample proportion for population proportions from 0.1 through 0.9 at n = 625, each with its calibrated 95 percent interval drawn as a horizontal belt; the belt is widest at one half.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-binomials-across-thetas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-binomials-across-thetas-1.svg" id="fig-binomials-across-thetas" alt="Nine binomial sampling distributions of the sample proportion for population proportions from 0.1 through 0.9 at n = 625, each with its calibrated 95 percent interval drawn as a horizontal belt; the belt is widest at one half." height="300">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binomials-across-thetas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;15
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<ul>
-<li><p>What do we do if we don’t have any data yet?</p>
-<ul>
-<li>Then we don’t have a ‘current interval width’ to compare to the ‘desired interval width’.</li>
-<li>And we don’t have a sample proportion <span class="math inline">\hat\theta</span> to plug in for the population proportion <span class="math inline">\theta</span>.</li>
-</ul></li>
-<li><p>But we can still use the formula we worked out earlier to get somewhere. <span class="math display">
-1.96\sqrt{\frac{\theta (1-\theta)}{n}} = .01 \qqtext{so} n = \frac{1.96^2 \ \theta (1-\theta)}{.01^2}
-</span></p></li>
-<li><p>We don’t have an estimate of <span class="math inline">\theta</span>, but we do know it’s between 0 and 1. And, consequently, so is <span class="math inline">\theta(1-\theta)</span>.</p></li>
-<li><p>So we know that if we just substitute <span class="math inline">1</span> into our formula, we’ll get a number that’s bigger than we need.</p></li>
-</ul>
-<p><span class="math display">
-n &lt; n' = \frac{1.96^2 \cdot 1}{.01^2} \approx 38400
-</span></p>
-<ul>
-<li><p>That’s a bit excessive. In fact, we can substitute in <span class="math inline">1/4</span> instead of <span class="math inline">1</span>. <span class="math display">
-n &lt; n' = \frac{1.96^2 \cdot 1/4}{.01^2} \approx 9600
-</span></p></li>
-<li><p>Much better. That’s pretty close to the number we got <em>with</em> preliminary data.</p></li>
-</ul>
-</section>
-<section id="why-can-we-use-14" class="slide level2">
-<h2>Why Can We Use 1/4?</h2>
-<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<section id="one-draw-and-the-average-of-185" class="slide level2">
+<h2 data-source-line="539">One Draw, and the Average of 185</h2>
+
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="541">
 <div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-why-a-quarter-1" class="quarto-float quarto-figure quarto-figure-center" alt="Nine binomial sampling distributions for population proportions from 0.1 through 0.9 with their 95 percent belts, widest at one half.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-why-a-quarter-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-why-a-quarter-1.svg" id="fig-why-a-quarter-1" alt="Nine binomial sampling distributions for population proportions from 0.1 through 0.9 with their 95 percent belts, widest at one half.">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/nsw-sample-vs-bootstrap-1.svg" alt="Left: the 185 treated incomes, piled at zero with a long right tail past sixty thousand dollars; the dotted 95% band reaches below zero. Right: ten thousand bootstrap means, a symmetric mound about six hundred dollars wide."></p>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-why-a-quarter-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;16
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-why-a-quarter-2" class="quarto-float quarto-figure quarto-figure-center" alt="Curve of the Bernoulli variance theta times one minus theta from zero to one; largest at theta equal to one half.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-why-a-quarter-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-why-a-quarter-2.svg" id="fig-why-a-quarter-2" alt="Curve of the Bernoulli variance theta times one minus theta from zero to one; largest at theta equal to one half.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-why-a-quarter-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;17
-</figcaption>
-</figure>
-</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/nsw-sample-vs-bootstrap-2.svg" alt="Left: the 185 treated incomes, piled at zero with a long right tail past sixty thousand dollars; the dotted 95% band reaches below zero. Right: ten thousand bootstrap means, a symmetric mound about six hundred dollars wide."></p>
 </div>
 </div>
 </div>
 <ul>
-<li><p>Here’s the claim. Why is it true? <span class="math display">
-n := \frac{1.96^2 \ \theta (1-\theta)}{.01^2} &lt; n' := \frac{1.96^2 \ \times 1/4}{.01^2}
-</span></p></li>
-<li><p><strong>Hint.</strong> Look at the graph of <span class="math inline">f(x) = x(1-x)</span> above.</p></li>
-</ul>
-<div class="fragment">
+<li>On the left, one draw: incomes piled at zero with a long right tail, SD 7867.4 dollars.</li>
+<li>On the right, the average of 185 of them, SD 571.11 dollars — narrower by about <span class="math inline">\sqrt{185}</span>, which is the <a href="https://qtm285.github.io/static/book/chapters/chapter-standard-deviation.html"><span class="math inline">\sigma/\sqrt{n}</span> we calculated for a sample mean</a>.</li>
+<li>The left is skewed and its dotted 95% band runs below zero, which no income does. The right is a symmetric mound.
 <ul>
-<li>Because <span class="math inline">1/4</span> is the biggest <span class="math inline">\theta (1-\theta)</span> gets for <span class="math inline">\theta \in [0,1]</span>.</li>
-<li>And it happens, for what it’s worth, when <span class="math inline">\theta = 1/2</span>.</li>
-<li>That is, we’ll have the least precision — at a given sample size — when the proportion we’re estimating is 1/2.</li>
+<li>That is the thing worth seeing: the average is close to normal even though one draw is nothing like it.</li>
+</ul></li>
 </ul>
+<p>For independent draws, the <a href="https://qtm285.github.io/static/book/chapters/chapter-standard-deviation.html">SD of the sample mean</a> is the population income SD divided by the square root of the sample size. Using the pilot SD <span class="math inline">s</span>, the planned width of a 95% normal interval is <span class="math display">
+w_n = 2 \times 1.96 \times \frac{s}{\sqrt{n}}.
+</span></p>
+</section>
+<section id="plan-the-sample" class="slide level2 scrollable">
+<h2 data-source-line="577">Plan the Sample</h2>
+<div class="callout callout-exercise no-icon callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong></strong></p>
+</div>
+<div class="callout-content">
+<div class="callout-exercise">
+<p>Use the pilot SD to plan the total size of a new sample.</p>
+<ol type="1">
+<li>How many observations do you need for a planned interval width of 2,000 dollars?</li>
+<li>How many do you need for a width of 1,000 dollars?</li>
+<li>Why does halving the width require four times as many observations?</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-solution no-icon callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Solution</strong></p>
+</div>
+<div class="callout-content">
+<div class="callout-solution" data-collapse="true">
+<p>Solving the width inequality and rounding up, the required total sample size is <span class="math display">
+n \ge \left(\frac{2 \times 1.96 \times s}{w}\right)^2.
+</span> With the pilot SD of 7,867.40 dollars, widths of 2,000 and 1,000 dollars require 238 and 952 observations. Halving <span class="math inline">w</span> doubles the quantity being squared, so it multiplies the sample size by four.</p>
+
+<div class="cell" data-source-line="594">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/nsw-planning-plot-1.svg" alt="Planned 95 percent interval width for the NSW treated mean income against planned sample size; dashed guides mark 238 observations for a width of 2,000 dollars and 952 observations for a width of 1,000 dollars."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This is a planning calculation using an estimated SD and a normal approximation. It does not guarantee the width or coverage of a future realized interval.</p>
+</div>
+</div>
+</div>
 </div>
 </section></section>
 <section>
-<section id="case-study" class="title-slide slide level1 center">
-<h1>Case Study</h1>
-<p>The NSW Experiment</p>
-</section>
-<section id="the-national-supported-work-demonstration" class="slide level2">
-<h2>The National Supported Work Demonstration</h2>
-<div class="cell quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-nsw-side-by-side-1" class="quarto-float quarto-figure quarto-figure-center" alt="Histogram of 1978 income for the 185 treated NSW participants with the sample mean marked and dashed and dotted lines at the middle 68 and 95 percent.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-nsw-side-by-side-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-nsw-side-by-side-1.svg" id="fig-nsw-side-by-side-1" alt="Histogram of 1978 income for the 185 treated NSW participants with the sample mean marked and dashed and dotted lines at the middle 68 and 95 percent.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-nsw-side-by-side-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;18
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-nsw-side-by-side-2" class="quarto-float quarto-figure quarto-figure-center" alt="Histogram of ten thousand bootstrap sample means of treated income with the same annotations and the blue 95 percent interval.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-nsw-side-by-side-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-nsw-side-by-side-2.svg" id="fig-nsw-side-by-side-2" alt="Histogram of ten thousand bootstrap sample means of treated income with the same annotations and the blue 95 percent interval.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-nsw-side-by-side-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;19
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th><span class="math inline">n</span></th>
-<th><span class="math inline">\hat \mu</span></th>
-<th>sample SD</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>185</td>
-<td>6300</td>
-<td>7900</td>
-</tr>
-</tbody>
-</table>
-<div class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">The Program</a></li><li><a href="#tabset-1-2">The Result</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1">
-<ul>
-<li>The National Supported Work Demonstration was an experimental program in the 1970s that provided job training and other services.</li>
-<li>Here ‘experimental’ doesn’t just mean untested. It was run as a big experiment.</li>
-<li>From a population of eligible people, they drew a sample of size 445 to participate.</li>
-<li>To help estimate the impact of the program, participants were randomized into two groups.
-<ul>
-<li>The ‘treated’ group received the training and services.</li>
-<li>The ‘control’ group did not.</li>
-</ul></li>
-<li>Today we’ll look at the treated group only: 185 people.</li>
-</ul>
-</div>
-<div id="tabset-1-2">
-<ul>
-<li>A year or two after the program ended, they looked at the incomes of the people who’d been treated.
-<ul>
-<li>The average within the sample was about $6300 per year. In 1978 dollars.</li>
-<li>A dollar in 1978 was worth about what $5 is today.</li>
-<li>So adjusting for inflation, that’s an in-sample average of about $31700.</li>
-</ul></li>
-<li>But the sample was relatively small. And, as a result, the interval estimate is pretty wide.</li>
-</ul>
-<p><span class="math display">
-\begin{aligned}
-\mu
-&amp;\in 6300 \pm 1100 \approx [5200, \ 7500]
-&amp;&amp;\qqtext{is a 95\% confidence interval in 1978 dollars} \\
-&amp;\in 31700 \pm 5600 \approx [26100, \ 37400]
-&amp;&amp;\qqtext{adjusted for inflation}
-\end{aligned}
-</span></p>
-</div>
-</div>
-</div>
-</section>
-<section id="activities" class="slide level2">
-<h2>Activities</h2>
-<div class="cell quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-nsw-side-by-side-again-1" class="quarto-float quarto-figure quarto-figure-center" alt="Histogram of 1978 income for the 185 treated NSW participants with the sample mean marked and dashed and dotted lines at the middle 68 and 95 percent.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-nsw-side-by-side-again-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-nsw-side-by-side-again-1.svg" id="fig-nsw-side-by-side-again-1" alt="Histogram of 1978 income for the 185 treated NSW participants with the sample mean marked and dashed and dotted lines at the middle 68 and 95 percent.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-nsw-side-by-side-again-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;20
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-nsw-side-by-side-again-2" class="quarto-float quarto-figure quarto-figure-center" alt="Histogram of ten thousand bootstrap sample means of treated income with the same annotations and the blue 95 percent interval.">
-<figure class="quarto-float quarto-float-fig">
-<div aria-describedby="fig-nsw-side-by-side-again-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-nsw-side-by-side-again-2.svg" id="fig-nsw-side-by-side-again-2" alt="Histogram of ten thousand bootstrap sample means of treated income with the same annotations and the blue 95 percent interval.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-nsw-side-by-side-again-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;21
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th><span class="math inline">n</span></th>
-<th><span class="math inline">\hat \mu</span></th>
-<th>sample SD</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>185</td>
-<td>6300</td>
-<td>7900</td>
-</tr>
-</tbody>
-</table>
-<div class="panel-tabset">
-<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Warm-Up</a></li><li><a href="#tabset-2-2">Resizing</a></li></ul>
-<div class="tab-content">
-<div id="tabset-2-1">
-<ul>
-<li>Use the information in this table and <a href="#/using-normal-approximation">the formulas</a> to calculate a 95% interval based on normal approximation.</li>
-<li>Compare it to the interval we got using the bootstrap sampling distribution for calibration.</li>
-</ul>
-</div>
-<div id="tabset-2-2">
-<ul>
-<li>Suppose we want to know the population mean to within $500 (1978 dollars).</li>
-<li>How can we resize our study to make that happen?</li>
-<li>We could run a second wave, drawing more people from the same population exactly as before, to get a larger sample like the one we have.</li>
-<li>What sample size would we need to be able to get a 95% confidence interval this accurate?</li>
-</ul>
-</div>
-</div>
-</div>
-</section>
-<section id="solutions-and-discussion" class="slide level2">
-<h2>Solutions and Discussion</h2>
+<section id="appendix" class="title-slide slide level1 center">
+<h1 data-source-line="625">Appendix</h1>
 
-<img data-src="chapter-normal-approximation-slides_files/figure-revealjs/fig-nsw-two-intervals-1.svg" id="fig-nsw-two-intervals" alt="The bootstrap histogram of treated mean income with the normal approximation drawn over it. Two interval bars: the blue bootstrap interval and the red normal-approximation interval, nearly the same length." class="r-stretch quarto-figure-center"><p class="caption">
-Figure&nbsp;22
-</p><div class="fragment">
+</section>
+<section id="sec-a-blessing" class="slide level2">
+<h2 data-source-line="627">Why Continuous Distribution is a Blessing</h2>
+<div class="r-stack">
+<div class="fragment fade-out" data-fragment-index="0">
+
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="631">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-15-1.svg"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-15-2.svg"></p>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="650">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-16-1.svg"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="chapter-normal-approximation-slides_files/figure-revealjs/unnamed-chunk-16-2.svg"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
 <ul>
-<li><strong>Warm-Up.</strong> <span class="math inline">\hat\mu \pm 1.96\,\hat\sigma_n</span>, with <span class="math inline">\hat\sigma_n</span> the sample standard deviation over <span class="math inline">\sqrt{n}</span>.
+<li>Think about what happens when you tried to compare binomial distributions for different sample sizes <span class="math inline">n</span>.</li>
+<li>If you’re lucky, and your sample sizess are all multiples of each other, then the probability shown in one wide bar<br>
+gets split up into several narrow bars when sample size increases.
 <ul>
-<li><span class="math inline">6300 \pm 1.96 \times 7900/\sqrt{185} \approx 6300 \pm 1100</span>. The bootstrap gave <span class="math inline">\pm 1100</span>.</li>
+<li>E.g., how the probability in the bar <span class="math inline">\color{#EF476F}5/10</span>] gets split into <span class="math inline">\color{#118AB2}14/30</span>, <span class="math inline">\color{#118AB2}15/30</span>, and <span class="math inline">\color{#118AB2}16/30</span> …</li>
+<li>… and then into <span class="math inline">\color{#06D6A0}42/90 \ldots 48/90</span> as sample size goes from <span class="math inline">\color{#EF476F}10</span> to <span class="math inline">\color{#118AB2}30</span> to <span class="math inline">\color{#06D6A0}90</span>.</li>
+<li>That’s what’s going on in the plot on the left. What we see on the right is worse.</li>
+</ul></li>
+<li>If your sample sizes aren’t multiples, we don’t just split up one wide bar’s probability into several narrow ones.
+<ul>
+<li>For the narrow bars we see straddling two wide bars, we have to ‘merge’ probability from two wide bars.</li>
+<li>It’s a mess. And using bars hides the worst of it.</li>
+<li>Most of the points that have mass for one <span class="math inline">n</span> will have none for the others.</li>
+<li>It’s not possible to have a sample mean of <span class="math inline">5/10</span> with a sample size of <span class="math inline">25</span>. It’s the wrong denominator.
+<ul>
+<li>Probability mass at <span class="math inline">\hat\theta = 1/2</span> can go from maximal for <span class="math inline">n=10</span> to zero for <span class="math inline">n=25</span> …</li>
+<li>… even if the population mean is the same: always <span class="math inline">\theta=1/2</span>. That happens in the right plot.</li>
+</ul></li>
+</ul></li>
+<li>Using an approximation with zero mass at any particular point, like the normal distribution, lets us avoid all this.
+<ul>
+<li>We do have to integrate whenever we want to calculate a probability.</li>
+<li>But we can easily compare the probabilities of the same interval at different sample sizes.</li>
+<li>In a sense, all the ‘splitting’ and ‘merging’ is built into the approximation.</li>
 </ul></li>
 </ul>
-</div>
-<div class="fragment">
-<ul>
-<li><strong>Resizing, the hard way.</strong> Just like the turnout poll: we want <span class="math inline">\pm 500</span> instead of <span class="math inline">\pm 1130</span>.</li>
-</ul>
-<p><span class="math display">
-\hat\mu \pm 1.96\hat\sigma_n \qfor \hat\sigma_n = \frac{\hat\sigma_Y}{\sqrt{n}} \qqtext{ is } \hat\mu \pm 500 \qqtext{if} 1.96\frac{\hat\sigma_Y}{\sqrt{n}} = 500
-</span></p>
-<ul>
-<li>Now all we have to do is solve for <span class="math inline">n</span>, using the sample standard deviation <span class="math inline">\hat\sigma_Y = 7900</span>.</li>
-</ul>
-<p><span class="math display">
-n = \frac{1.96^2 \ \hat\sigma_Y^2}{500^2} \approx 950
-</span></p>
-</div>
-<div class="fragment">
-<ul>
-<li><strong>Resizing, the easy way.</strong> Compare the interval width we have to the one we want.</li>
-</ul>
-<p><span class="math display">
-\begin{aligned}
-\pm 1130 &amp;= \pm 1.96\hat\sigma_{185} \qfor \hat\sigma_{185} = \frac{\hat\sigma_Y}{\sqrt{185}} \\
-\pm 500 &amp;= \pm 1.96\hat\sigma_n \qfor \hat\sigma_n = \frac{\hat\sigma_Y}{\sqrt{n}}
-\end{aligned}
-</span></p>
-<ul>
-<li>All that changes is the sample size. The <em>sample size ratio</em> falls out of the interval width ratio.</li>
-</ul>
-<p><span class="math display">
-\frac{1130}{500} = \frac{1.96\hat\sigma_{185}}{1.96\hat\sigma_n} = \sqrt{\frac{n}{185}}
-\qqtext{ so } n = 185\left(\frac{1130}{500}\right)^2 \approx 950
-</span></p>
-</div>
 
 <script type="ojs-module-contents">
 eyJjb250ZW50cyI6W119
@@ -1592,6 +1200,12 @@ eyJjb250ZW50cyI6W119
 W10=
 </script>
 </section></section>
+<section id="footnotes" class="footnotes footnotes-end-of-document smaller scrollable" role="doc-endnotes"><h2>Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>See <a href="#/sec-a-blessing" class="quarto-xref">Slide&nbsp;5.1</a> if you’re curious about what I mean by that.</p></li>
+</ol>
+</section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
