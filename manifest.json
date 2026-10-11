@@ -2,7 +2,7 @@
   "documents": {
     "qtm285-book": {
       "name": "qtm285-book",
-      "title": "Prediction, Inference, and Causality",
+      "title": "Prediction, Inference, and Causality I",
       "mainFile": "index.qmd",
       "format": "qmd",
       "documentRoots": [
@@ -11,78 +11,171 @@
           "format": "qmd"
         },
         {
-          "path": "scratch/rv-storyboard.md",
-          "format": "markdown"
+          "path": "chapters/chapter-social-pressure-experiment.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "homework/homework-setup.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "homework/homework-descriptive.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-sampling.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-point-and-interval-estimates.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "homework/homework-descriptive.solutions.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "homework/homework-calibration.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-calibration-binary.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-sampling-with-replacement.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "homework/homework-calibration.solutions.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "homework/homework-calibration-binary.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-sampling-without-replacement.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-bootstrap.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "homework/homework-bootstrap.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-random-variables-and-moments.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-concentration.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "homework/homework-bootstrap.solutions.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "homework/homework-random-variables-and-moments.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-normal-approximation.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "homework/homework-random-variables-and-moments.solutions.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "homework/homework-comparing-estimators.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "exams/practice-midterm-1.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-programming-reference.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "homework/homework-calibration-binary.solutions.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "decks/chapter-social-pressure-experiment-slides.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "decks/chapter-sampling-slides.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "decks/chapter-point-and-interval-estimates-slides.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "decks/chapter-calibration-binary-slides.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "decks/chapter-bootstrap-slides.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "decks/chapter-random-variables-and-moments-slides.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "decks/chapter-standard-deviation-slides.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "decks/chapter-normal-approximation-slides.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "decks/chapter-bias-and-coverage-slides.qmd",
+          "format": "qmd"
         }
       ],
-      "pages": 48,
-      "createdAt": "2026-09-16T20:28:53.789Z",
-      "lastBuild": "2026-09-26T20:18:49.794Z",
-      "buildStatus": "success",
-      "renderedFormat": "html",
-      "sourceFormat": "qmd",
-      "renderer": "quarto",
-      "documentFormat": "html",
+      "pages": 24,
       "pageFiles": [
-        "app/book/index.html",
-        "app/book/chapters/chapter-social-pressure-experiment.html",
-        "app/book/homework/homework-setup.html",
-        "app/book/homework/homework-descriptive.html",
-        "app/book/part1-one-sample.html",
-        "app/book/chapters/chapter-sampling.html",
-        "app/book/chapters/chapter-point-and-interval-estimates.html",
-        "app/book/homework/homework-calibration.html",
-        "app/book/chapters/chapter-calibration-binary.html",
-        "app/book/chapters/chapter-sampling-with-replacement.html",
-        "app/book/homework/homework-calibration-binary.html",
-        "app/book/chapters/chapter-sampling-without-replacement.html",
-        "app/book/chapters/chapter-calibration-with-the-binomial.html",
-        "app/book/chapters/chapter-bootstrap.html",
-        "app/book/homework/homework-bootstrap.html",
-        "app/book/chapters/chapter-random-variables-and-moments.html",
-        "app/book/homework/homework-sample-size-coverage.html",
-        "app/book/homework/homework-random-variables-and-moments.html",
-        "app/book/chapters/chapter-standard-deviation.html",
-        "app/book/chapters/chapter-normal-approximation.html",
-        "app/book/homework/homework-markov-chebyshev.html",
-        "app/book/chapters/chapter-probability-review.html",
-        "app/book/chapters/chapter-variance-and-sample-size.html",
-        "app/book/homework/homework-comparing-estimators.html",
-        "app/book/chapters/chapter-bias-and-coverage.html",
-        "app/book/exams/practice-midterm-1.html",
-        "app/book/part-breather.html",
-        "app/book/chapters/chapter-stein-normal.html",
-        "app/book/chapters/chapter-poisson-approximation.html",
-        "app/book/chapters/chapter-stein-poisson.html",
-        "app/book/part2-two-sample.html",
-        "app/book/chapters/chapter-comparing-two-groups.html",
-        "app/book/homework/homework-bias-two-groups.html",
-        "app/book/homework/homework-sample-size-two-sample.html",
-        "app/book/chapters/chapter-potential-outcomes-randomization.html",
-        "app/book/homework/homework-causality.html",
-        "app/book/chapters/chapter-sampling-and-randomization.html",
-        "app/book/chapters/chapter-observational-confounding.html",
-        "app/book/chapters/chapter-models.html",
-        "app/book/exams/practice-midterm-2.html",
-        "app/book/chapters/chapter-programming-reference.html",
-        "app/book/references.html",
-        "app/book/decks/chapter-sampling-slides.html",
-        "app/book/decks/chapter-point-and-interval-estimates-slides.html",
-        "app/book/decks/chapter-calibration-binary-slides.html",
-        "app/book/decks/chapter-bootstrap-slides.html",
-        "app/book/decks/chapter-random-variables-and-moments-slides.html",
-        "app/book/decks/chapter-normal-approximation-slides.html"
+        "index.html",
+        "chapters/chapter-social-pressure-experiment.html",
+        "homework/homework-setup.html",
+        "homework/homework-descriptive.html",
+        "chapters/chapter-sampling.html",
+        "chapters/chapter-point-and-interval-estimates.html",
+        "homework/homework-calibration.html",
+        "chapters/chapter-calibration-binary.html",
+        "chapters/chapter-sampling-with-replacement.html",
+        "homework/homework-calibration-binary.html",
+        "chapters/chapter-sampling-without-replacement.html",
+        "chapters/chapter-bootstrap.html",
+        "homework/homework-bootstrap.html",
+        "chapters/chapter-random-variables-and-moments.html",
+        "chapters/chapter-concentration.html",
+        "homework/homework-random-variables-and-moments.html",
+        "chapters/chapter-normal-approximation.html",
+        "homework/homework-comparing-estimators.html",
+        "exams/practice-midterm-1.html",
+        "chapters/chapter-programming-reference.html",
+        "decks/chapter-calibration-binary-slides.html",
+        "decks/chapter-bootstrap-slides.html",
+        "decks/chapter-normal-approximation-slides.html",
+        "decks/chapter-bias-and-coverage-slides.html"
       ],
-      "lastBuildSuccess": "2026-09-26T20:18:49.794Z",
-      "lastEditedBy": "fleet:fff36f47",
-      "lastEditedByAt": 1790452530701,
       "classSiteUrl": "https://qtm285.github.io/static",
-      "previewUrl": "https://pic.cormorant-matrix.ts.net:10000/static",
-      "sourceSyncRefusals": [],
-      "buildPhase": null,
-      "sourceRevision": "6fea46aad1fc54c7c9212a86dfc2cb87dc7f9722",
-      "acceptSeq": 30906,
-      "referencedSourcePaths": []
+      "previewUrl": "https://imac.cormorant-matrix.ts.net:10000/static",
+      "buildStatus": "success",
+      "lastBuild": "2026-10-11T12:44:25.664Z",
+      "lastBuildSuccess": "2026-10-11T12:44:25.664Z",
+      "linkedAt": "2026-10-11T12:44:25.664Z"
     }
   }
 }
