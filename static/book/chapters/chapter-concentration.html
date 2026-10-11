@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -7,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>21&nbsp; Concentration – Prediction, Inference, and Causality</title>
+<title>20&nbsp; Concentration – Prediction, Inference, and Causality</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,29 +25,29 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<script src="../_assets/mv3shnyq-1/site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../_assets/mv3shnyq-1/site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../_assets/mv3shnyq-1/site_libs/clipboard/clipboard.min.js"></script>
+<script src="../_assets/mv3shnyq-1/site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../_assets/mv3shnyq-1/site_libs/quarto-search/fuse.min.js"></script>
+<script src="../_assets/mv3shnyq-1/site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../exams/practice-midterm-1.html" rel="next">
 <link href="../chapters/chapter-bias-and-coverage.html" rel="prev">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-6fe1715721786a838a92806728cb6c53.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
-<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
-<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
-<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script src="../_assets/mv3shnyq-1/site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../_assets/mv3shnyq-1/site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../_assets/mv3shnyq-1/site_libs/quarto-html/popper.min.js"></script>
+<script src="../_assets/mv3shnyq-1/site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../_assets/mv3shnyq-1/site_libs/quarto-html/anchor.min.js"></script>
+<link href="../_assets/mv3shnyq-1/site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../_assets/mv3shnyq-1/site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../_assets/mv3shnyq-1/site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../_assets/mv3shnyq-1/site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../_assets/mv3shnyq-1/site_libs/bootstrap/bootstrap-6fe1715721786a838a92806728cb6c53.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../_assets/mv3shnyq-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../_assets/mv3shnyq-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../_assets/mv3shnyq-1/site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../_assets/mv3shnyq-1/site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -76,10 +75,10 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
-<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
-<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script type="module" src="../_assets/mv3shnyq-1/site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../_assets/mv3shnyq-1/site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../_assets/mv3shnyq-1/site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../_assets/mv3shnyq-1/site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script>
 // GENERATED by bin/generate-katex-macros.mjs from the tlda repo's
 // shared/katex-base-macros.mjs. Do not edit here -- edit the source and
@@ -526,7 +525,7 @@ window.__tldaKatexMacros = {
 
 </script>
 
-  <script defer="" src="../katex-assets/dist/katex.min.js"></script>
+  <script defer="" src="../_assets/mv3shnyq-1/katex-assets/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
  var mathElements = document.getElementsByClassName("math");
  var macros = [];
@@ -541,7 +540,7 @@ window.__tldaKatexMacros = {
    });
 }}});
   </script>
-  <link rel="stylesheet" href="../katex-assets/dist/katex.min.css">
+  <link rel="stylesheet" href="../_assets/mv3shnyq-1/katex-assets/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -581,7 +580,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-moments.html">1.2 Moments and approximate calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-concentration.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Concentration</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-moments.html">1.2 Moments and approximate calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-concentration.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Concentration</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -735,38 +734,32 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-standard-deviation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Chebyshev’s Inequality and Variance</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-normal-approximation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Normal Approximation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-bias-and-coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-concentration.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Concentration</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Concentration</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
   </div>
 </li>
       </ul>
@@ -774,7 +767,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-programming-reference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Programming Reference</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Programming Reference</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -793,31 +786,39 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#an-expectation-alone-bounds-a-probability-markovs-inequality" id="toc-an-expectation-alone-bounds-a-probability-markovs-inequality" class="nav-link active" data-scroll-target="#an-expectation-alone-bounds-a-probability-markovs-inequality">An Expectation Alone Bounds a Probability: Markov’s Inequality</a>
+  <li data-source-line="66"><a href="#an-expectation-alone-bounds-a-probability-markovs-inequality" id="toc-an-expectation-alone-bounds-a-probability-markovs-inequality" class="nav-link active" data-scroll-target="#an-expectation-alone-bounds-a-probability-markovs-inequality">An Expectation Alone Bounds a Probability: Markov’s Inequality</a>
   <ul class="collapse">
-  <li><a href="#recall-indicators" id="toc-recall-indicators" class="nav-link" data-scroll-target="#recall-indicators">Recall: Indicators</a></li>
-  <li><a href="#how-much-can-lie-above-t" id="toc-how-much-can-lie-above-t" class="nav-link" data-scroll-target="#how-much-can-lie-above-t">How Much Can Lie Above <span class="math inline">t</span>?</a></li>
-  <li><a href="#averages-keep-the-order" id="toc-averages-keep-the-order" class="nav-link" data-scroll-target="#averages-keep-the-order">Averages Keep the Order</a></li>
-  <li><a href="#markovs-inequality" id="toc-markovs-inequality" class="nav-link" data-scroll-target="#markovs-inequality">Markov’s Inequality</a></li>
-  <li><a href="#versatility" id="toc-versatility" class="nav-link" data-scroll-target="#versatility">Versatility</a></li>
-  <li><a href="#why-must-x-be-nonnegative" id="toc-why-must-x-be-nonnegative" class="nav-link" data-scroll-target="#why-must-x-be-nonnegative">Why Must <span class="math inline">X</span> Be Nonnegative?</a></li>
-  <li><a href="#for-a-sample-mean" id="toc-for-a-sample-mean" class="nav-link" data-scroll-target="#for-a-sample-mean">For a Sample Mean</a></li>
-  <li><a href="#markov-asks-how-big.-so-ask-how-far." id="toc-markov-asks-how-big.-so-ask-how-far." class="nav-link" data-scroll-target="#markov-asks-how-big.-so-ask-how-far.">Markov Asks How Big. So Ask How Far.</a></li>
+  <li data-source-line="68"><a href="#recall-indicators" id="toc-recall-indicators" class="nav-link" data-scroll-target="#recall-indicators">Recall: Indicators</a></li>
+  <li data-source-line="87"><a href="#how-much-can-lie-above-t" id="toc-how-much-can-lie-above-t" class="nav-link" data-scroll-target="#how-much-can-lie-above-t">How Much Can Lie Above <span class="math inline">t</span>?</a></li>
+  <li data-source-line="129"><a href="#averages-keep-the-order" id="toc-averages-keep-the-order" class="nav-link" data-scroll-target="#averages-keep-the-order">Averages Keep the Order</a></li>
+  <li data-source-line="142"><a href="#markovs-inequality" id="toc-markovs-inequality" class="nav-link" data-scroll-target="#markovs-inequality">Markov’s Inequality</a></li>
+  <li data-source-line="155"><a href="#versatility" id="toc-versatility" class="nav-link" data-scroll-target="#versatility">Versatility</a></li>
+  <li data-source-line="233"><a href="#why-must-x-be-nonnegative" id="toc-why-must-x-be-nonnegative" class="nav-link" data-scroll-target="#why-must-x-be-nonnegative">Why Must <span class="math inline">X</span> Be Nonnegative?</a></li>
+  <li data-source-line="257"><a href="#for-a-sample-mean" id="toc-for-a-sample-mean" class="nav-link" data-scroll-target="#for-a-sample-mean">For a Sample Mean</a></li>
   </ul></li>
-  <li><a href="#chebyshevs-inequality" id="toc-chebyshevs-inequality" class="nav-link" data-scroll-target="#chebyshevs-inequality">Chebyshev’s inequality</a>
+  <li data-source-line="307"><a href="#chebyshevs-inequality" id="toc-chebyshevs-inequality" class="nav-link" data-scroll-target="#chebyshevs-inequality">Chebyshev’s inequality</a>
   <ul class="collapse">
-  <li><a href="#from-distance-to-squared-distance" id="toc-from-distance-to-squared-distance" class="nav-link" data-scroll-target="#from-distance-to-squared-distance">From distance to squared distance</a></li>
+  <li data-source-line="324"><a href="#from-distance-to-squared-distance" id="toc-from-distance-to-squared-distance" class="nav-link" data-scroll-target="#from-distance-to-squared-distance">From distance to squared distance</a></li>
   </ul></li>
-  <li><a href="#how-narrow-can-the-right-interval-be" id="toc-how-narrow-can-the-right-interval-be" class="nav-link" data-scroll-target="#how-narrow-can-the-right-interval-be">How narrow can the right interval be?</a></li>
+  <li data-source-line="418"><a href="#calibrating-intervals-with-variance" id="toc-calibrating-intervals-with-variance" class="nav-link" data-scroll-target="#calibrating-intervals-with-variance">Calibrating intervals with variance</a>
+  <ul class="collapse">
+  <li data-source-line="422"><a href="#standard-deviation-is-standard" id="toc-standard-deviation-is-standard" class="nav-link" data-scroll-target="#standard-deviation-is-standard">Standard deviation is standard</a></li>
+  <li data-source-line="446"><a href="#compare-the-intervals" id="toc-compare-the-intervals" class="nav-link" data-scroll-target="#compare-the-intervals">Compare the intervals</a></li>
+  </ul></li>
+  <li data-source-line="511"><a href="#a-sample-of-eight" id="toc-a-sample-of-eight" class="nav-link" data-scroll-target="#a-sample-of-eight">A sample of eight</a>
+  <ul class="collapse">
+  <li data-source-line="529"><a href="#extra-credit-markov-on-the-fourth-moment" id="toc-extra-credit-markov-on-the-fourth-moment" class="nav-link" data-scroll-target="#extra-credit-markov-on-the-fourth-moment">Extra credit: Markov on the fourth moment</a></li>
+  </ul></li>
+  <li data-source-line="555"><a href="#how-narrow-can-the-right-interval-be" id="toc-how-narrow-can-the-right-interval-be" class="nav-link" data-scroll-target="#how-narrow-can-the-right-interval-be">How narrow can the right interval be?</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-moments.html">1.2 Moments and approximate calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-concentration.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Concentration</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-moments.html">1.2 Moments and approximate calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-concentration.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Concentration</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Concentration</span></h1>
+<h1 class="title"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Concentration</span></h1>
 </div>
 
 
@@ -834,72 +835,115 @@ window.Quarto = {
 </header>
 
 
-<div class="hidden">
+
+
+
+
+
+<div class="hidden" data-source-line="1" data-source-file="chapters/shared/shared-code.qmd">
 <p>$$ \newcommand{X}{} \newcommand{Y}{} % A hex digit after # inside a macro body is eaten by build-time expansion, so digit-leading hexes spell # via . </p>
-<p>$$</p>
+
+
+
+
+
+
+
+<p data-source-line="122" data-source-file="shared/shared-style.qmd">$$</p>
 </div>
-<p>This chapter is optional and nothing in it is on an exam. That is what lets it go further than the rest: these are the bounds you reach for when the sample is small enough that a normal approximation would be dishonest.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p data-source-line="181" data-source-file="shared/shared-style.qmd">This chapter is optional and nothing in it is on an exam. It’s a breather.</p>
+<p data-source-line="56">We’ve calibrated interval estimates using exact sampling distributions. And using approximations to them: the bootstrap and the normal approximation. Do you really need a distributional approximation to do calibration? The answer is no. What you need are concentration inequalities: bounds on how far an estimate can land from the thing it estimates. For these, you don’t need its whole distribution, just a few facts about it, like its mean and variance.</p>
+<p data-source-line="63">The normal approximation happens pretty fast. But what do you do for real if you have a sample size of eight?</p>
 <section id="an-expectation-alone-bounds-a-probability-markovs-inequality" class="level1">
-<h1>An Expectation Alone Bounds a Probability: Markov’s Inequality</h1>
-<section id="recall-indicators" class="level3">
-<h3 class="anchored" data-anchor-id="recall-indicators">Recall: Indicators</h3>
-<div class="cell">
+<h1 data-source-line="66">An Expectation Alone Bounds a Probability: Markov’s Inequality</h1>
+<section id="recall-indicators" class="level2">
+<h2 class="anchored" data-anchor-id="recall-indicators" data-source-line="68">Recall: Indicators</h2>
+
+<div class="cell" data-source-line="70">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-concentration_files/figure-html/means-recall-indicator-plot-1.svg" class="img-fluid figure-img" alt="A histogram of vote history with equal-area dots and the region at four and above shaded blue, beside the step function drawn on its own axes."></p>
+<p><img src="chapter-concentration_files/figure-html/means-recall-indicator-plot-1.svg" class="img-fluid figure-img" alt="A histogram of vote history with equal-area dots, the region at four and above shaded blue, and the step function drawn in blue over the histogram."></p>
 </figure>
 </div>
 </div>
 </div>
-<p>The indicator is 1 for the points inside the blue region and 0 for the points outside. The mean of the indicators is the fraction of points inside. That is the tool from the last section, used on an event of the form <span class="math inline">X\ge t</span>: <span class="math display">
+
+<p data-source-line="80">The indicator is 1 for the points inside the blue region and 0 for the points outside. The mean of the indicators is the fraction of points inside. That is the tool from <a href="chapter-mean-and-variance-of-an-average.qmd">Means, Variances, and Sample Averages</a>, used on an event of the form <span class="math inline">X\ge t</span>: <span class="math display">
 \mathop{\mathrm{E}}[1_{\ge t}(X)]=P(X\ge t).
 </span></p>
 </section>
-<section id="how-much-can-lie-above-t" class="level3">
-<h3 class="anchored" data-anchor-id="how-much-can-lie-above-t">How Much Can Lie Above <span class="math inline">t</span>?</h3>
-<p>Suppose <span class="math inline">X\ge0</span> and we know <span class="math inline">\mathop{\mathrm{E}}[X]</span>. For <span class="math inline">t&gt;0</span>, how large can <span class="math inline">P(X\ge t)</span> be?</p>
-<div class="cell">
+<section id="how-much-can-lie-above-t" class="level2">
+<h2 class="anchored" data-anchor-id="how-much-can-lie-above-t" data-source-line="87">How Much Can Lie Above <span class="math inline">t</span>?</h2>
+<p data-source-line="89">Suppose <span class="math inline">X\ge0</span> and we know <span class="math inline">\mathop{\mathrm{E}}[X]</span>. For <span class="math inline">t&gt;0</span>, how large can <span class="math inline">P(X\ge t)</span> be?</p>
+
+<div class="cell" data-source-line="91">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-concentration_files/figure-html/means-bound-step-plot-1.svg" class="img-fluid figure-img" alt="The same histogram with dot areas zero below four and one at four and above."></p>
+<p><img src="chapter-concentration_files/figure-html/means-bound-step-plot-1.svg" class="img-fluid figure-img" alt="The same histogram with dot areas zero below four and one at four and above, and the step function drawn over it."></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Each dot’s area is now the value of the indicator at that dot: zero below <span class="math inline">t</span>, one at or above it, and the step function beside the histogram is what that draws. The indicator counts the tail. Can we bound it using a multiple of <span class="math inline">x</span>?</p>
-<div class="cell">
+<p data-source-line="101">Each dot’s area is now the value of the indicator at that dot: zero below <span class="math inline">t</span>, one at or above it, and the blue step drawn over the histogram is what that draws. The indicator counts the tail. Can we bound it using a multiple of <span class="math inline">x</span>?</p>
+
+<div class="cell" data-source-line="105">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-concentration_files/figure-html/means-bound-ramp-plot-1.svg" class="img-fluid figure-img" alt="The same histogram with dot areas proportional to the value divided by four, and the ramp drawn on its own axes."></p>
+<p><img src="chapter-concentration_files/figure-html/means-bound-ramp-plot-1.svg" class="img-fluid figure-img" alt="The same histogram with dot areas proportional to the value divided by four, and the ramp drawn over it."></p>
 </figure>
 </div>
 </div>
 </div>
-<p>For <span class="math inline">x\ge0</span>, the ramp <span class="math inline">u_t(x)=x/t</span> stays above the indicator: <span class="math display">
+
+<p data-source-line="115">For <span class="math inline">x\ge0</span>, the ramp <span class="math inline">u_t(x)=x/t</span> stays above the indicator: <span class="math display">
 1_{\ge t}(x)\le u_t(x).
 </span></p>
-<p>The horizontal axis still shows <span class="math inline">x</span>. Height now shows the value represented by shade and dot area. For every nonnegative <span class="math inline">x</span>, <span class="math display">
+
+<p data-source-line="120">The horizontal axis still shows <span class="math inline">x</span>. Height now shows the value represented by shade and dot area. For every nonnegative <span class="math inline">x</span>, <span class="math display">
 \begin{aligned}
 x\ge t &amp;: \quad 1_{\ge t}(x)=1\le x/t,\\
 0\le x&lt;t &amp;: \quad 1_{\ge t}(x)=0\le x/t.
 \end{aligned}
 </span></p>
 </section>
-<section id="averages-keep-the-order" class="level3">
-<h3 class="anchored" data-anchor-id="averages-keep-the-order">Averages Keep the Order</h3>
-<p>If <span class="math inline">a(x)\le b(x)</span> for every possible value <span class="math inline">x</span> of <span class="math inline">X</span>, then <span class="math display">
+<section id="averages-keep-the-order" class="level2">
+<h2 class="anchored" data-anchor-id="averages-keep-the-order" data-source-line="129">Averages Keep the Order</h2>
+
+<p data-source-line="131">If <span class="math inline">a(x)\le b(x)</span> for every possible value <span class="math inline">x</span> of <span class="math inline">X</span>, then <span class="math display">
 \mathop{\mathrm{E}}[a(X)]\le \mathop{\mathrm{E}}[b(X)].
 </span> The proof is just the definition of expectation. Every difference <span class="math inline">b(x)-a(x)</span> is nonnegative, and every probability is nonnegative, so <span class="math display">
 \mathop{\mathrm{E}}[b(X)]-\mathop{\mathrm{E}}[a(X)]
 =\sum_x \{b(x)-a(x)\}P(X=x)\ge 0.
 </span></p>
 </section>
-<section id="markovs-inequality" class="level3">
-<h3 class="anchored" data-anchor-id="markovs-inequality">Markov’s Inequality</h3>
-<p>For every nonnegative random variable <span class="math inline">X</span> and <span class="math inline">t&gt;0</span>, <span class="math display">
+<section id="markovs-inequality" class="level2">
+<h2 class="anchored" data-anchor-id="markovs-inequality" data-source-line="142">Markov’s Inequality</h2>
+
+<p data-source-line="144">For every nonnegative random variable <span class="math inline">X</span> and <span class="math inline">t&gt;0</span>, <span class="math display">
 \begin{aligned}
 P(X\ge t)
 &amp;\overset{\texttip{\small{\text{?}}}{probability as expectation}}{=}\mathop{\mathrm{E}}[1_{\ge t}(X)]\\
@@ -909,10 +953,12 @@ P(X\ge t)
 \end{aligned}
 </span></p>
 </section>
-<section id="versatility" class="level3">
-<h3 class="anchored" data-anchor-id="versatility">Versatility</h3>
-<p>Back to the question we left standing at the start: does the expectation tell us where the distribution is <em>located</em>, i.e.&nbsp;where draws are likely to be? If not, why is that useful? Here are three shapes with the same picture drawn on each — a single bump, then flips, then two bumps — with the ramp shade across the panel, the green line at the mean, and the cutoff at <span class="math inline">t</span> dotted.</p>
-<div class="cell">
+<section id="versatility" class="level2">
+<h2 class="anchored" data-anchor-id="versatility" data-source-line="155">Versatility</h2>
+<p data-source-line="157">Back to a question from Means, Variances, and Sample Averages: does the expectation tell us where the distribution is <em>located</em>, i.e.&nbsp;where draws are likely to be? If not, why is that useful? Here are three shapes with the same picture drawn on each — a single bump, then flips, then two bumps — with the ramp shade across the panel, the green line at the mean, and the cutoff at <span class="math inline">t</span> dotted.</p>
+
+
+<div class="cell" data-source-line="163">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -921,7 +967,8 @@ P(X\ge t)
 </div>
 </div>
 </div>
-<div class="cell">
+
+<div class="cell" data-source-line="209">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -930,7 +977,8 @@ P(X\ge t)
 </div>
 </div>
 </div>
-<div class="cell">
+
+<div class="cell" data-source-line="219">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -939,10 +987,10 @@ P(X\ge t)
 </div>
 </div>
 </div>
-<p>On the flips and on the two bumps the mean is nowhere a dot lands. This is not location in the traditional sense, and Markov’s inequality still works: the bound needs the mean and nonnegativity, and neither of those asks where the draws are.</p>
+<p data-source-line="229">On the flips and on the two bumps the mean is nowhere a dot lands. This is not location in the traditional sense, and Markov’s inequality still works: the bound needs the mean and nonnegativity, and neither of those asks where the draws are.</p>
 </section>
-<section id="why-must-x-be-nonnegative" class="level3">
-<h3 class="anchored" data-anchor-id="why-must-x-be-nonnegative">Why Must <span class="math inline">X</span> Be Nonnegative?</h3>
+<section id="why-must-x-be-nonnegative" class="level2">
+<h2 class="anchored" data-anchor-id="why-must-x-be-nonnegative" data-source-line="233">Why Must <span class="math inline">X</span> Be Nonnegative?</h2>
 <div class="callout callout-style-simple callout-exercise no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -958,8 +1006,9 @@ P(X\ge t)
 </div>
 </div>
 </div>
-<p>Here is one.</p>
-<div class="cell">
+<p data-source-line="240">Here is one.</p>
+
+<div class="cell" data-source-line="242">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -968,74 +1017,96 @@ P(X\ge t)
 </div>
 </div>
 </div>
-<p>For this centered variable <span class="math inline">Z</span>, <span class="math display">
+
+<p data-source-line="252">For this centered variable <span class="math inline">Z</span>, <span class="math display">
 \mathop{\mathrm{E}}[Z]=0,\qquad P(Z\ge1)=\frac{36}{240}&gt;0=\frac{\mathop{\mathrm{E}}[Z]}1.
 </span></p>
 </section>
-<section id="for-a-sample-mean" class="level3">
-<h3 class="anchored" data-anchor-id="for-a-sample-mean">For a Sample Mean</h3>
-<p>The sample proportion <span class="math inline">\hat\theta</span> is nonnegative and its expectation is <span class="math inline">\theta</span>, so Markov applies to it directly. Take the threshold <span class="math inline">t=20\theta</span>, <span class="math display">
-P(\hat\theta\ge 20\theta)\le\frac{\mathop{\mathrm{E}}[\hat\theta]}{20\theta}=\frac{\theta}{20\theta}=\frac1{20}.
-</span> So with probability at least <span class="math inline">95\%</span> our estimate came in below <span class="math inline">20\theta</span>, and rearranging that gives a lower bound on the population proportion, <span class="math display">
-\theta\ge 0.05\,\hat\theta.
-</span> At <span class="math inline">\hat\theta=0.7</span> that is <span class="math inline">\theta\ge 0.035</span>. The bound is one-sided, and nothing in it mentions <span class="math inline">n</span>.</p>
-<p>Beside it, the one-sided bound you get from the bootstrap or the binomial. Each picture below is one sample size — twenty, eighty, then three hundred twenty observations per sample. The bars are the sampling distribution of <span class="math inline">\hat\theta</span>, the dots are a hundred estimates drawn from it, and five of those estimates are drawn with their lower bounds: Markov’s in midnight and the plug-in bound in pink. “How bad might this be for us” is a legit question.</p>
-<div class="cell">
+<section id="for-a-sample-mean" class="level2">
+<h2 class="anchored" data-anchor-id="for-a-sample-mean" data-source-line="257">For a Sample Mean</h2>
+
+<p data-source-line="259">Can we use Markov to calibrate an interval for a population mean? Consider a binary response with population frequency <span class="math inline">\theta</span> and sample frequency <span class="math inline">\hat\theta</span>, using uniform sampling as above. We know <span class="math inline">\mathop{\mathrm{E}}[\hat\theta]=\theta</span>, and <span class="math inline">\hat\theta</span> is nonnegative, so Markov applies to it. Taking the threshold <span class="math inline">t=20\theta</span>, <span class="math display">
+P(\hat\theta\ge20\theta)\le\frac{\theta}{20\theta}=0.05.
+</span> So with probability at least <span class="math inline">95\%</span>, our sample frequency is below <span class="math inline">20\theta</span>. That is a statement about <span class="math inline">\hat\theta</span>, which we observe; it rearranges into one about <span class="math inline">\theta</span>, which we do not. <span class="math display">
+\theta\ge0.05\hat\theta \qqtext{ with probability at least } 95\%
+</span> If our observed frequency is <span class="math inline">0.7</span>, we learn that <span class="math inline">\theta\ge0.035</span>. A frequency cannot exceed one, so our guaranteed <span class="math inline">95\%</span> interval is <span class="math inline">[0.035,1]</span>. We have ruled out almost nothing.</p>
+<p data-source-line="269">That’s a one-sided interval, like the ones in the power deck. Markov bounds the probability of landing far <em>above</em> the mean, so what we get is a lower bound on <span class="math inline">\theta</span>.</p>
+<p data-source-line="271">Compare it with a one-sided interval calibrated using the binomial. For binary responses, resampling from the observed sample produces the binomial model with its success probability set to <span class="math inline">\hat\theta</span>. That one narrows as the sample grows. The Markov interval above does not: the expectation of the sample frequency remains <span class="math inline">\theta</span> for every sample size.</p>
+
+
+<p data-source-line="1" data-source-file="chapters/moments-calibration-data.qmd">The panels show the same construction for three sample sizes. Each purple dot is a sample frequency. For one highlighted sample, the <span class="pink">one-sided bootstrap/binomial interval is pink</span>; the dark interval is Markov’s. The green line is the population frequency. Both intervals use the same sample.</p>
+
+<div class="cell" data-source-line="278">
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="chapter-concentration_files/figure-html/means-mcal-20-plot-1.svg" class="img-fluid figure-img" alt="One hundred samples as dots with their one-sided intervals, Markov's reaching almost to zero and the plug-in bound much shorter."></p>
+<div id="fig-means-calibration-20" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-means-calibration-20-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-concentration_files/figure-html/fig-means-calibration-20-1.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-calibration-20-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;21.1: 20 observations
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell">
+
+<div class="cell" data-source-line="287">
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="chapter-concentration_files/figure-html/means-mcal-80-plot-1.svg" class="img-fluid figure-img" alt="The same display at eighty draws per sample, with the plug-in intervals shorter and the Markov intervals unchanged."></p>
+<div id="fig-means-calibration-80" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-means-calibration-80-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-concentration_files/figure-html/fig-means-calibration-80-1.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-calibration-80-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;21.2: 80 observations
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<div class="cell">
+
+<div class="cell" data-source-line="296">
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="chapter-concentration_files/figure-html/means-mcal-320-plot-1.svg" class="img-fluid figure-img" alt="The same display at three hundred twenty draws per sample, with the plug-in intervals shorter again and the Markov intervals unchanged."></p>
+<div id="fig-means-calibration-320" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-means-calibration-320-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-concentration_files/figure-html/fig-means-calibration-320-1.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-calibration-320-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;21.3: 320 observations
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Bounding <span class="math inline">1-\hat\theta</span> instead gives a bound on the other side: transforming to nonnegative. That’s a homework trick.</p>
-</section>
-<section id="markov-asks-how-big.-so-ask-how-far." class="level3">
-<h3 class="anchored" data-anchor-id="markov-asks-how-big.-so-ask-how-far.">Markov Asks How Big. So Ask How Far.</h3>
-<p>Markov does not care about sample size. The resolution is not hard — Markov simply doesn’t ask the question of how concentrated things are, how far things are from the mean. It just asks how big. So ask.</p>
+<p data-source-line="305">The Markov guarantee is valid without knowing the full sampling distribution, and even without independence. The bootstrap/binomial calibration uses more information and is much more informative here; its plug-in calibration is not itself a distribution-free guarantee. Our one-sided interval says that <span class="math inline">\theta</span> is not much smaller than what we observed, and nothing at all about its being much larger. To get both sides out of Markov we would have to apply it to a quantity that is large whenever our error is large in <em>either</em> direction. Squared error is such a quantity, and that’s where we go next.</p>
 </section>
 </section>
 <section id="chebyshevs-inequality" class="level1">
-<h1>Chebyshev’s inequality</h1>
-<p>We do not need a new inequality. Markov’s applies to any nonnegative random variable, and above we fed it our estimate. That gave one side only, a bound on landing far above the mean and nothing about landing far below:</p>
-<div class="cell">
+<h1 data-source-line="307">Chebyshev’s inequality</h1>
+<p data-source-line="309">We do not need a new inequality. Markov’s applies to any nonnegative random variable, and above we fed it our estimate. That gave one side only, a bound on landing far above the mean and nothing about landing far below:</p>
+
+<div class="cell" data-source-line="311">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-concentration_files/figure-html/recall-one-sided-plot-1.svg" class="img-fluid figure-img" alt="The town's residents and their vote-history histogram with only the upper tail shaded blue, beside the indicator function that selects it."></p>
+<p><img src="chapter-concentration_files/figure-html/recall-one-sided-plot-1.svg" class="img-fluid figure-img" alt="The town's residents and their vote-history histogram with only the upper tail shaded blue."></p>
 </figure>
 </div>
 </div>
 </div>
-<p>The distance from the mean is different. Write <span class="math inline">Z=X-\mathop{\mathrm{E}}[X]</span> for the centered outcome. The distance is large when our estimate lands far above the mean and also when it lands far below, so bounding its size bounds both sides at once. And Markov will take it, because a distance is never negative.</p>
-<p>There are two obvious ways to turn our error into a distance. We can take the absolute value, <span class="math inline">|Z|</span>, or we can square it. Absolute values are unpleasant to calculate with — they do not come apart when we add things up, and adding things up is most of what we do here. Squaring is just arithmetic by comparison. So let’s square, and we will see shortly why squaring, of all the options, is the one that pays.</p>
+<p data-source-line="320">The distance from the mean is different. Write <span class="math inline">Z=X-\mathop{\mathrm{E}}[X]</span> for the centered outcome. The distance is large when our estimate lands far above the mean and also when it lands far below, so bounding its size bounds both sides at once. And Markov will take it, because a distance is never negative.</p>
+<p data-source-line="322">There are two obvious ways to turn our error into a distance. We can take the absolute value, <span class="math inline">|Z|</span>, or we can square it. Absolute values are unpleasant to calculate with — they do not come apart when we add things up, and adding things up is most of what we do here. Squaring is just arithmetic by comparison. So let’s square.</p>
 <section id="from-distance-to-squared-distance" class="level2">
-<h2 class="anchored" data-anchor-id="from-distance-to-squared-distance">From distance to squared distance</h2>
-<p>The events <span class="math inline">|Z|\ge t</span> and <span class="math inline">Z^2\ge t^2</span> select exactly the same observations. We want to bound the probability that <span class="math inline">X</span> is far from its mean. In the first picture, select the observations at distance at least <span class="math inline">t</span> on either side. Fold the negative side onto the positive side; those same observations are now above <span class="math inline">t</span>. Square the distances and the threshold.</p>
-<div id="fig-chebyshev-transformation" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-mode="steps" data-labels="Signed distances,Fold,Square" data-layout="sidebar" data-steps=".fig-chebyshev-transformation-step">
+<h2 class="anchored" data-anchor-id="from-distance-to-squared-distance" data-source-line="324">From distance to squared distance</h2>
+<p data-source-line="326">The events <span class="math inline">|Z|\ge t</span> and <span class="math inline">Z^2\ge t^2</span> select exactly the same observations. We want to bound the probability that <span class="math inline">X</span> is far from its mean. In the first picture, select the observations at distance at least <span class="math inline">t</span> on either side. Fold the negative side onto the positive side; those same observations are now above <span class="math inline">t</span>. Square the distances and the threshold.</p>
+<div id="fig-chebyshev-transformation" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-steps=".fig-chebyshev-transformation-step" data-mode="steps" data-labels="Signed distances,Fold,Square" data-layout="sidebar">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-chebyshev-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
-<div class="cell">
+
+<div class="cell" data-source-line="330">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1046,7 +1117,8 @@ P(\hat\theta\ge 20\theta)\le\frac{\mathop{\mathrm{E}}[\hat\theta]}{20\theta}=\fr
 </div>
 </div>
 <div>
-<div class="cell">
+
+<div class="cell" data-source-line="339">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1057,7 +1129,8 @@ P(\hat\theta\ge 20\theta)\le\frac{\mathop{\mathrm{E}}[\hat\theta]}{20\theta}=\fr
 </div>
 </div>
 <div>
-<div class="cell">
+
+<div class="cell" data-source-line="348">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1069,7 +1142,7 @@ P(\hat\theta\ge 20\theta)\le\frac{\mathop{\mathrm{E}}[\hat\theta]}{20\theta}=\fr
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-chebyshev-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.1
+Figure&nbsp;22.1
 </figcaption>
 </figure>
 </div>
@@ -1082,16 +1155,18 @@ Figure&nbsp;23.1
 <div class="fig-chebyshev-transformation-step">
 <p><strong>Square.</strong> Square every absolute distance and square the threshold. The same observations are now at or above <span class="math inline">t^2</span>, and every value is nonnegative.</p>
 </div>
-<p>Chebyshev’s inequality is Markov’s inequality applied to squared distance: for <span class="math inline">t&gt;0</span>, <span class="math display">
+
+<p data-source-line="370">Chebyshev’s inequality is Markov’s inequality applied to squared distance: for <span class="math inline">t&gt;0</span>, <span class="math display">
 P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
 \le\frac{\mathop{\mathrm{E}}[(X-\mathop{\mathrm{E}}[X])^2]}{t^2}.
 </span></p>
-<p>The first two pictures changed the event’s description without changing which observations it contains. The indicator-to-ramp comparison bounds its probability:</p>
-<div id="fig-chebyshev-area-comparison" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-mode="steps" data-labels="Indicator average,Ramp average" data-layout="sidebar" data-steps=".fig-chebyshev-area-comparison-step">
+<p data-source-line="376">The first two pictures changed the event’s description without changing which observations it contains. The indicator-to-ramp comparison bounds its probability:</p>
+<div id="fig-chebyshev-area-comparison" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-steps=".fig-chebyshev-area-comparison-step" data-mode="steps" data-labels="Indicator average,Ramp average" data-layout="sidebar">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-chebyshev-area-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
-<div class="cell">
+
+<div class="cell" data-source-line="380">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1102,7 +1177,8 @@ P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
 </div>
 </div>
 <div>
-<div class="cell">
+
+<div class="cell" data-source-line="389">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1114,7 +1190,7 @@ P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-chebyshev-area-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.2
+Figure&nbsp;22.2
 </figcaption>
 </figure>
 </div>
@@ -1124,7 +1200,8 @@ Figure&nbsp;23.2
 <div class="fig-chebyshev-area-comparison-step">
 <p><strong>Ramp average.</strong> Replace the indicator by squared distance divided by <span class="math inline">t^2</span>. Every value is at least as large, so its average bounds the indicator average: <span class="math inline">\mathop{\mathrm{E}}[1_{\ge t^2}(Z^2)]\le\mathop{\mathrm{E}}[Z^2/t^2]</span>.</p>
 </div>
-<p>Putting those together, <span class="math display">
+
+<p data-source-line="407">Putting those together, <span class="math display">
 \begin{aligned}
 P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
 &amp;=P(Z^2\ge t^2)\\
@@ -1135,11 +1212,140 @@ P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
 </span></p>
 </section>
 </section>
+<section id="calibrating-intervals-with-variance" class="level1">
+<h1 data-source-line="418">Calibrating intervals with variance</h1>
+<p data-source-line="420">Measure distance in multiples of <span class="math inline">\sigma</span>.</p>
+<section id="standard-deviation-is-standard" class="level2">
+<h2 class="anchored" data-anchor-id="standard-deviation-is-standard" data-source-line="422">Standard deviation is standard</h2>
+
+<p data-source-line="424">Write <span class="math inline">\sigma=\operatorname{sd}(X)&gt;0</span>. Chebyshev implies <span class="math display">
+P\left(|X-\mathop{\mathrm{E}}[X]|\ge k\sigma\right)\le\frac1{k^2}.
+</span> The bound has the same form for every distribution with finite variance. If <span class="math inline">\sigma=0</span>, <span class="math inline">X</span> equals its expectation with probability one and there is no deviation to bound.</p>
+
+<div class="cell" data-source-line="430">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-concentration_files/figure-html/chebyshev-sd-scaling-plot-1.svg" class="img-fluid figure-img" alt="A distribution with dotted lines a multiple of the standard deviation either side of the mean, the probability outside them shaded."></p>
+</figure>
+</div>
+</div>
+</div>
+<p data-source-line="438">Measuring the deviation in standard deviations is what makes the bound usable: the width scales with <span class="math inline">\sigma</span>, and the probability outside it does not depend on the distribution at all.</p>
+
+<p data-source-line="440">So how many standard deviations include at least <span class="math inline">95\%</span> of a distribution’s probability? Solve <span class="math inline">1/k^2=0.05</span> to get <span class="math inline">k=\sqrt{20}</span>. For an unbiased estimator <span class="math inline">\hat\mu</span>, that makes <span class="math display">
+[\hat\mu-\sqrt{20}\operatorname{sd}(\hat\mu),\;\hat\mu+\sqrt{20}\operatorname{sd}(\hat\mu)]
+</span> an interval covering <span class="math inline">\mu</span> with probability at least <span class="math inline">95\%</span>. For an independent sample mean, <span class="math inline">\operatorname{sd}(\hat\mu)=\sigma/\sqrt n</span>, so the width shrinks like <span class="math inline">1/\sqrt n</span> — which is what Markov’s bound never did.</p>
+</section>
+<section id="compare-the-intervals" class="level2">
+<h2 class="anchored" data-anchor-id="compare-the-intervals" data-source-line="446">Compare the intervals</h2>
+<p data-source-line="448">Return to the bootstrap and binomial intervals. The Chebyshev intervals remain wider than the binomial calibration, but they shrink as sample size grows. Squaring the centered estimator exposed the information the direct Markov calculation missed.</p>
+
+<p data-source-line="450">The samples are the same ones. Each picture below is one sample size — twenty, eighty, then three hundred twenty observations per sample — with the sampling distribution drawn as bars, a hundred estimates as dots over it, and five of those estimates drawn with their intervals: <span class="pink">pink</span> for the bootstrap/binomial calibration and <span class="teal">blue</span> for Chebyshev.</p>
+
+<div class="cell" data-source-line="463">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-concentration_files/figure-html/variance-calibration-20-plot-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+
+<div class="cell" data-source-line="471">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-concentration_files/figure-html/variance-calibration-80-plot-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+
+<div class="cell" data-source-line="479">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-concentration_files/figure-html/variance-calibration-320-plot-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p data-source-line="487">In this comparison we know the population and use its true variance. The guarantee just proved depends on that variance; replacing it with an estimate requires another argument. The bootstrap/binomial intervals use the observed frequency in their calibration, as in <a href="../chapters/chapter-calibration-with-the-binomial.html">Calibration using the Binomial Distribution</a>.</p>
+<p data-source-line="489">Now compare exact and guaranteed intervals under sampling without replacement. The estimator has a different variance, so the Chebyshev interval changes. The probability argument does not: independence was used to calculate a variance, not in Chebyshev’s inequality itself.</p>
+
+<p data-source-line="1" data-source-file="chapters/moments-intervals-data.qmd">Here the <span class="pink">pink interval</span> is calibrated from the exact sampling distribution, and the <span class="teal">blue interval</span> uses Chebyshev. Both use the same estimate on each row, with replacement first and then without.</p>
+
+<div class="cell" data-source-line="495">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-concentration_files/figure-html/variance-exact-binomial-plot-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+
+<div class="cell" data-source-line="503">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-concentration_files/figure-html/variance-exact-hypergeometric-plot-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="a-sample-of-eight" class="level1">
+<h1 data-source-line="511">A sample of eight</h1>
+<p data-source-line="513">Back to the question we started with. Make eight calls, with replacement, to a population where half say Yes, so <span class="math inline">\theta=1/2</span> and <span class="math inline">\sigma^2=1/4</span>. Here are three ways to get a <span class="math inline">95\%</span> interval for <span class="math inline">\theta</span>, and how often each one actually covers it.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>half-width</th>
+<th>actual coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>normal approximation, <span class="math inline">1.96\,\sigma/\sqrt n</span></td>
+<td><span class="math inline">0.346</span></td>
+<td><span class="math inline">93.0\%</span></td>
+</tr>
+<tr class="even">
+<td>exact, from the binomial</td>
+<td><span class="math inline">0.375</span></td>
+<td><span class="math inline">99.2\%</span></td>
+</tr>
+<tr class="odd">
+<td>Chebyshev, <span class="math inline">\sqrt{20}\,\sigma/\sqrt n</span></td>
+<td><span class="math inline">0.791</span></td>
+<td><span class="math inline">100\%</span></td>
+</tr>
+</tbody>
+</table>
+<p data-source-line="523">The normal approximation is narrow and wrong: it claims <span class="math inline">95\%</span> and delivers <span class="math inline">93\%</span>, and nothing in the procedure tells you so. Chebyshev is right and useless: its interval is wider than the range <span class="math inline">\hat\theta</span> can take. The exact interval covers <span class="math inline">99.2\%</span> rather than <span class="math inline">95\%</span> because with eight calls coverage moves in steps; you can’t buy exactly <span class="math inline">95\%</span> from a discrete distribution.</p>
+<section id="extra-credit-markov-on-the-fourth-moment" class="level2">
+<h2 class="anchored" data-anchor-id="extra-credit-markov-on-the-fourth-moment" data-source-line="529">Extra credit: Markov on the fourth moment</h2>
+
+<p data-source-line="531">Chebyshev is Markov applied to the squared error. Apply it to the fourth power instead: <span class="math display">
+P(|\hat\theta-\theta|\ge t)\le\frac{\mathop{\mathrm{E}}[(\hat\theta-\theta)^4]}{t^4}.
+</span> To calculate <span class="math inline">\mathop{\mathrm{E}}[(\hat\theta-\theta)^4]</span>, expand the fourth power of <span class="math inline">\frac1n\sum_i Z_i</span> the way we expanded the square. With independent calls, a term <span class="math inline">\mathop{\mathrm{E}}[Z_iZ_jZ_kZ_l]</span> is zero unless its indices pair up: all four the same, which happens <span class="math inline">n</span> ways, or two different pairs, which happens <span class="math inline">3n(n-1)</span> ways. So <span class="math display">
+\mathop{\mathrm{E}}[(\hat\theta-\theta)^4]=\frac{n\,\mathop{\mathrm{E}}[Z^4]+3n(n-1)\sigma^4}{n^4},
+</span> and for binary responses <span class="math inline">\sigma^2=\theta(1-\theta)</span> and <span class="math inline">\mathop{\mathrm{E}}[Z^4]=\theta(1-\theta)(1-3\theta+3\theta^2)</span>.</p>
+<p data-source-line="546">With eight calls and <span class="math inline">\theta=1/2</span> that is <span class="math inline">11/4096</span>, so the <span class="math inline">95\%</span> half-width is <span class="math inline">(11/4096 \div 0.05)^{1/4}=0.481</span>. It covers <span class="math inline">99.2\%</span>, like the exact interval, and it is about a quarter wider. Unlike the exact interval, it needs only two moments, and it is a guarantee at every sample size. The bound shrinks like <span class="math inline">1/n^2</span>, where Chebyshev’s shrinks like <span class="math inline">1/n</span>.</p>
+<p data-source-line="552">This calculation used independence to kill the terms that don’t pair up, so it is for sampling with replacement.</p>
+</section>
+</section>
 <section id="how-narrow-can-the-right-interval-be" class="level1">
-<h1>How narrow can the right interval be?</h1>
-<p>Chebyshev tells us a width that is sufficient. Can the moments also tell us how narrow a calibrated interval could be? Almost: we need two summaries of the absolute error, its mean and its mean square.</p>
-<p>Return to the two distance pictures. They follow the same centered observations <span class="math inline">Z</span>. The green lines mark two different averages: the average of <span class="math inline">|Z|</span> and the average of <span class="math inline">Z^2</span>.</p>
-<div class="cell quarto-layout-panel" data-layout="[[1,1]]">
+<h1 data-source-line="555">How narrow can the right interval be?</h1>
+<p data-source-line="557">Chebyshev tells us a width that is sufficient. Can the moments also tell us how narrow a calibrated interval could be? Almost: we need two summaries of the absolute error, its mean and its mean square.</p>
+<p data-source-line="559">Return to the two distance pictures. They follow the same centered observations <span class="math inline">Z</span>. The green lines mark two different averages: the average of <span class="math inline">|Z|</span> and the average of <span class="math inline">Z^2</span>.</p>
+
+<div class="cell quarto-layout-panel" data-layout="[[1,1]]" data-source-line="561">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <p><img src="chapter-concentration_files/figure-html/two-moment-comparison-plot-1.svg" class="img-fluid"></p>
@@ -1149,15 +1355,22 @@ P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
 </div>
 </div>
 </div>
-<p><strong>Average absolute distance.</strong> Every observation’s distance from the mean, averaged; the green line marks <span class="math inline">\mathop{\mathrm{E}}|Z|</span>. A point twice as far contributes twice as much.</p>
-<p><strong>Average squared distance.</strong> The same distances, squared before averaging; the green line marks <span class="math inline">\mathop{\mathrm{E}}[Z^2]</span>, the variance. Squaring makes far points count quadratically more — twice as far is four times the contribution — which is what makes this average sensitive to the largest errors.</p>
-<p>For a nonnegative random variable <span class="math inline">A</span> with finite, positive second moment, the <strong>Paley–Zygmund inequality</strong> implies, for <span class="math inline">0\le t&lt;\mathop{\mathrm{E}}[A]</span>, <span class="math display">
+<p data-source-line="571"><strong>Average absolute distance.</strong> Every observation’s distance from the mean, averaged; the green line marks <span class="math inline">\mathop{\mathrm{E}}|Z|</span>. A point twice as far contributes twice as much.</p>
+<p data-source-line="573"><strong>Average squared distance.</strong> The same distances, squared before averaging; the green line marks <span class="math inline">\mathop{\mathrm{E}}[Z^2]</span>, the variance. Squaring makes far points count quadratically more — twice as far is four times the contribution — which is what makes this average sensitive to the largest errors.</p>
+
+<p data-source-line="575">For a nonnegative random variable <span class="math inline">A</span> with finite, positive second moment, the <strong>Paley–Zygmund inequality</strong> implies, for <span class="math inline">0\le t&lt;\mathop{\mathrm{E}}[A]</span>, <span class="math display">
 P(A\ge t)\ge\frac{(\mathop{\mathrm{E}}[A]-t)^2}{\mathop{\mathrm{E}}[A^2]}.
 </span> Apply it to <span class="math inline">A=|\hat\mu-\mu|</span>. For an unbiased estimator, <span class="math inline">\mathop{\mathrm{E}}[A^2]</span> is its variance; <span class="math inline">\mathop{\mathrm{E}}[A]</span> is its mean absolute error. This supplies lower control of the tail using those two moments. A derivation using the indicator split and Cauchy–Schwarz is on <a href="https://en.wikipedia.org/wiki/Paley%E2%80%93Zygmund_inequality">Wikipedia</a>.</p>
-<p>For <span class="math inline">95\%</span> coverage, any symmetric half-width smaller than <span class="math display">
+
+<p data-source-line="581">For <span class="math inline">95\%</span> coverage, any symmetric half-width smaller than <span class="math display">
 \max\left\{0,\;\mathop{\mathrm{E}}[A]-\sqrt{0.05\mathop{\mathrm{E}}[A^2]}\right\}
 </span> misses more than <span class="math inline">5\%</span> of the probability. The dashed yellow intervals below mark that lower control of width; they are not another proposed <span class="math inline">95\%</span> interval. The exact calibrated widths lie between it and the sufficient Chebyshev widths.</p>
-<div class="cell">
+
+
+
+
+
+<div class="cell" data-source-line="1" data-source-file="chapters/moments-lower-bound.qmd">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1166,7 +1379,8 @@ P(A\ge t)\ge\frac{(\mathop{\mathrm{E}}[A]-t)^2}{\mathop{\mathrm{E}}[A^2]}.
 </div>
 </div>
 </div>
-<div class="cell">
+
+<div class="cell" data-source-line="599">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1175,12 +1389,13 @@ P(A\ge t)\ge\frac{(\mathop{\mathrm{E}}[A]-t)^2}{\mathop{\mathrm{E}}[A^2]}.
 </div>
 </div>
 </div>
-<p>Why is variance alone insufficient? Consider an error that is zero with probability <span class="math inline">95\%</span> and is <span class="math inline">-L</span> or <span class="math inline">L</span> with probability <span class="math inline">2.5\%</span> each. Its mean is zero and its variance is <span class="math inline">0.05L^2</span>. Push the two tails farther out: the variance grows, but the interval containing just zero still contains <span class="math inline">95\%</span> of the probability. A large variance need not mean that most errors are large.</p>
-<div id="fig-rare-large-errors" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-mode="steps" data-labels="Tail distance 1,Tail distance 2,Tail distance 4,Tail distance 8" data-layout="sidebar" data-steps=".fig-rare-large-errors-step">
+<p data-source-line="607">Why is variance alone insufficient? Consider an error that is zero with probability <span class="math inline">95\%</span> and is <span class="math inline">-L</span> or <span class="math inline">L</span> with probability <span class="math inline">2.5\%</span> each. Its mean is zero and its variance is <span class="math inline">0.05L^2</span>. Push the two tails farther out: the variance grows, but the interval containing just zero still contains <span class="math inline">95\%</span> of the probability. A large variance need not mean that most errors are large.</p>
+<div id="fig-rare-large-errors" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-steps=".fig-rare-large-errors-step" data-mode="steps" data-labels="Tail distance 1,Tail distance 2,Tail distance 4,Tail distance 8" data-layout="sidebar">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rare-large-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
-<div class="cell">
+
+<div class="cell" data-source-line="611">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1191,7 +1406,8 @@ P(A\ge t)\ge\frac{(\mathop{\mathrm{E}}[A]-t)^2}{\mathop{\mathrm{E}}[A^2]}.
 </div>
 </div>
 <div>
-<div class="cell">
+
+<div class="cell" data-source-line="620">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1202,7 +1418,8 @@ P(A\ge t)\ge\frac{(\mathop{\mathrm{E}}[A]-t)^2}{\mathop{\mathrm{E}}[A^2]}.
 </div>
 </div>
 <div>
-<div class="cell">
+
+<div class="cell" data-source-line="629">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1213,7 +1430,8 @@ P(A\ge t)\ge\frac{(\mathop{\mathrm{E}}[A]-t)^2}{\mathop{\mathrm{E}}[A^2]}.
 </div>
 </div>
 <div>
-<div class="cell">
+
+<div class="cell" data-source-line="638">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1225,7 +1443,7 @@ P(A\ge t)\ge\frac{(\mathop{\mathrm{E}}[A]-t)^2}{\mathop{\mathrm{E}}[A^2]}.
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-rare-large-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;24.1
+Figure&nbsp;25.1
 </figcaption>
 </figure>
 </div>
@@ -1241,7 +1459,7 @@ Figure&nbsp;24.1
 <div class="fig-rare-large-errors-step">
 <p><strong>Tail distance 8.</strong> Tails at <span class="math inline">\pm 8</span>; variance <span class="math inline">3.2</span>, sixty-four times the first. A large variance has not made the typical error large — which is the point: the variance alone cannot narrow a calibrated interval.</p>
 </div>
-<p>The lower-bound comparison therefore uses the mean absolute error as well as the variance. The binomial and hypergeometric examples let us calculate both, and place the exact calibrated width between the lower control and the sufficient Chebyshev width.</p>
+<p data-source-line="664">The lower-bound comparison therefore uses the mean absolute error as well as the variance. The binomial and hypergeometric examples let us calculate both, and place the exact calibrated width between the lower control and the sufficient Chebyshev width.</p>
 
 
 <script type="ojs-module-contents">
@@ -1714,12 +1932,12 @@ window._ojs.runtime.interpretFromScriptTags();
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../chapters/chapter-bias-and-coverage.html" class="pagination-link" aria-label="Bias and Coverage">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../exams/practice-midterm-1.html" class="pagination-link" aria-label="Practice Midterm 1">
-        <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

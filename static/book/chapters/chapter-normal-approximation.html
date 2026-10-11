@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -7,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>18&nbsp; Normal Approximation – Prediction, Inference, and Causality</title>
+<title>18&nbsp; Normal Approximation and Sample Size Calculation – Prediction, Inference, and Causality</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,29 +25,29 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<script src="../_assets/mv1xsv55-1/site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../_assets/mv1xsv55-1/site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../_assets/mv1xsv55-1/site_libs/clipboard/clipboard.min.js"></script>
+<script src="../_assets/mv1xsv55-1/site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../_assets/mv1xsv55-1/site_libs/quarto-search/fuse.min.js"></script>
+<script src="../_assets/mv1xsv55-1/site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../chapters/chapter-bias-and-coverage.html" rel="next">
 <link href="../homework/homework-random-variables-and-moments.html" rel="prev">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-6fe1715721786a838a92806728cb6c53.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
-<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
-<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
-<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script src="../_assets/mv1xsv55-1/site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../_assets/mv1xsv55-1/site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../_assets/mv1xsv55-1/site_libs/quarto-html/popper.min.js"></script>
+<script src="../_assets/mv1xsv55-1/site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../_assets/mv1xsv55-1/site_libs/quarto-html/anchor.min.js"></script>
+<link href="../_assets/mv1xsv55-1/site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../_assets/mv1xsv55-1/site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../_assets/mv1xsv55-1/site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../_assets/mv1xsv55-1/site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../_assets/mv1xsv55-1/site_libs/bootstrap/bootstrap-6fe1715721786a838a92806728cb6c53.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../_assets/mv1xsv55-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../_assets/mv1xsv55-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../_assets/mv1xsv55-1/site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../_assets/mv1xsv55-1/site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -76,10 +75,10 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
-<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
-<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script type="module" src="../_assets/mv1xsv55-1/site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../_assets/mv1xsv55-1/site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../_assets/mv1xsv55-1/site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../_assets/mv1xsv55-1/site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script>
 // GENERATED by bin/generate-katex-macros.mjs from the tlda repo's
 // shared/katex-base-macros.mjs. Do not edit here -- edit the source and
@@ -526,49 +525,6 @@ window.__tldaKatexMacros = {
 
 </script>
 
-  <script defer="" src="../katex-assets/dist/katex.min.js"></script>
-  <script>document.addEventListener("DOMContentLoaded", function () {
- var mathElements = document.getElementsByClassName("math");
- var macros = [];
- for (var i = 0; i < mathElements.length; i++) {
-  var texText = mathElements[i].firstChild;
-  if (mathElements[i].tagName == "SPAN") {
-   katex.render(texText.data, mathElements[i], {
-    displayMode: mathElements[i].classList.contains('display'),
-    throwOnError: false,
-    macros: macros,
-    fleqn: false
-   });
-}}});
-  </script>
-  <link rel="stylesheet" href="../katex-assets/dist/katex.min.css">
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -581,7 +537,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-moments.html">1.2 Moments and approximate calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-normal-approximation.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-moments.html">1.2 Moments and approximate calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-normal-approximation.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation and Sample Size Calculation</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -742,7 +698,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-normal-approximation.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation and Sample Size Calculation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -776,49 +732,15 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#review" id="toc-review" class="nav-link active" data-scroll-target="#review">Review</a>
-  <ul class="collapse">
-  <li><a href="#the-bootstrap" id="toc-the-bootstrap" class="nav-link" data-scroll-target="#the-bootstrap">The Bootstrap</a></li>
-  <li><a href="#bootstrapping-proportions" id="toc-bootstrapping-proportions" class="nav-link" data-scroll-target="#bootstrapping-proportions">Bootstrapping Proportions</a>
-  <ul class="collapse">
-  <li><a href="#programming-the-two-distributions" id="toc-programming-the-two-distributions" class="nav-link" data-scroll-target="#programming-the-two-distributions">Programming the two distributions</a></li>
-  </ul></li>
-  <li><a href="#an-important-limitation-of-the-bootstrap" id="toc-an-important-limitation-of-the-bootstrap" class="nav-link" data-scroll-target="#an-important-limitation-of-the-bootstrap">An Important Limitation of the Bootstrap</a></li>
-  </ul></li>
-  <li><a href="#sec-normal-approximation" id="toc-sec-normal-approximation" class="nav-link" data-scroll-target="#sec-normal-approximation">Normal Approximation</a>
-  <ul class="collapse">
-  <li><a href="#the-normal-distribution" id="toc-the-normal-distribution" class="nav-link" data-scroll-target="#the-normal-distribution">The Normal Distribution</a></li>
-  <li><a href="#normal-approximation" id="toc-normal-approximation" class="nav-link" data-scroll-target="#normal-approximation">Normal Approximation</a></li>
-  <li><a href="#exact-guaranteed-approximate" id="toc-exact-guaranteed-approximate" class="nav-link" data-scroll-target="#exact-guaranteed-approximate">Exact, Guaranteed, Approximate</a></li>
-  <li><a href="#the-width-of-normal-distributions" id="toc-the-width-of-normal-distributions" class="nav-link" data-scroll-target="#the-width-of-normal-distributions">The Width of Normal Distributions</a></li>
-  <li><a href="#calibration-using-normal-approximation" id="toc-calibration-using-normal-approximation" class="nav-link" data-scroll-target="#calibration-using-normal-approximation">Calibration Using Normal Approximation</a></li>
-  <li><a href="#when-this-works" id="toc-when-this-works" class="nav-link" data-scroll-target="#when-this-works">When This Works</a></li>
-  </ul></li>
-  <li><a href="#normal-approximation-in-context" id="toc-normal-approximation-in-context" class="nav-link" data-scroll-target="#normal-approximation-in-context">Normal Approximation in Context</a>
-  <ul class="collapse">
-  <li><a href="#a-proportion-when-sampling-with-replacement" id="toc-a-proportion-when-sampling-with-replacement" class="nav-link" data-scroll-target="#a-proportion-when-sampling-with-replacement">A Proportion when Sampling with Replacement</a></li>
-  <li><a href="#a-proportion-when-sampling-without-replacement" id="toc-a-proportion-when-sampling-without-replacement" class="nav-link" data-scroll-target="#a-proportion-when-sampling-without-replacement">A Proportion when Sampling without Replacement</a></li>
-  <li><a href="#using-normal-approximation" id="toc-using-normal-approximation" class="nav-link" data-scroll-target="#using-normal-approximation">Using Normal Approximation</a></li>
-  </ul></li>
-  <li><a href="#sample-size-for-the-nsw-treated-mean" id="toc-sample-size-for-the-nsw-treated-mean" class="nav-link" data-scroll-target="#sample-size-for-the-nsw-treated-mean">Sample Size for the NSW Treated Mean</a></li>
-  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix">Appendix</a>
-  <ul class="collapse">
-  <li><a href="#sec-a-blessing" id="toc-sec-a-blessing" class="nav-link" data-scroll-target="#sec-a-blessing">Why Continuous Distribution is a Blessing</a></li>
-  </ul></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-moments.html">1.2 Moments and approximate calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-normal-approximation.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-moments.html">1.2 Moments and approximate calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-normal-approximation.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation and Sample Size Calculation</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></h1>
+<h1 class="title"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation and Sample Size Calculation</span></h1>
 </div>
 
 
@@ -835,387 +757,11 @@ window.Quarto = {
 </header>
 
 
-<section id="review" class="level1">
-<h1>Review</h1>
 <div class="hidden">
 <p>$$ \newcommand{X}{} \newcommand{Y}{} % A hex digit after # inside a macro body is eaten by build-time expansion, so digit-leading hexes spell # via . </p>
 <p>$$</p>
 </div>
-<p>In the last chapter, we saw that the sample mean is an unbiased estimator of the population mean—and that this is true whether we’re estimating a proportion or a general mean. Now we need to work out how much our estimates vary from sample to sample. We’ll do this for proportions first, where the formulas are simplest, then use the same ideas for general means later.</p>
-<section id="the-bootstrap" class="level2">
-<h2 class="anchored" data-anchor-id="the-bootstrap">The Bootstrap</h2>
-<div class="columns">
-<div class="column">
-<p>The Sample <span class="math display">
-\begin{array}{r|rrrr|r}
-i    &amp;   1 &amp; 2 &amp; \dots &amp; 625 &amp; \bar{Y}_{625}  \\
-Y_i  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
-\end{array}
-</span></p>
-<p>The Bootstrap Sample</p>
-<p><span class="math display">
-\begin{array}{r|rrrr|r}
-i    &amp;   1 &amp; 2 &amp; \dots &amp; 625 &amp; \bar{Y}_{625}^*  \\
-Y_i^*  &amp;  1 &amp; 0 &amp; \dots &amp; 1 &amp; 0.68 \\
-\end{array}
-</span></p>
-</div><div class="column">
-<p>The Population</p>
-<p><span class="math display">
-\begin{array}{r|rrrr|r}
-j &amp; 1 &amp; 2 &amp; \dots &amp;   7.23M &amp; \bar{y}_{7.23M}  \\
-y_{j} &amp; 1 &amp; 1 &amp; \dots &amp; 1   &amp; 0.70  \\
-\end{array}
-</span></p>
-<p>The ‘Bootstrap Population’ — The Sample <span class="math display">
-\begin{array}{r|rrrr|r}
-j        &amp;   1 &amp; 2 &amp; \dots &amp; 625 &amp; \bar{y}^*_{625}  \\
-y_j^*  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
-\end{array}
-</span></p>
-</div>
-</div>
-<p>Last time, we looked at a general method for estimating sampling distributions: bootstrapping.</p>
-<ol type="1">
-<li>Draw a sample of size <span class="math inline">n</span> from your sample. That’s <em>a bootstrap sample</em>.</li>
-<li>Calculate your estimator using that sample. That’s <em>a bootstrap estimate</em>.</li>
-<li>Repeat to get draws from the distribution of bootstrap estimates. That’s <em>the bootstrap sampling distribution</em>.</li>
-</ol>
-<p>It’s a <em>nonparametric estimate</em>. We’re approximating the sampling distribution without using its parametric form. This is useful because we usually don’t know the parametric form. Estimating the proportion of 1s in a population of binary outcomes is a special case in which we do.</p>
-</section>
-<section id="bootstrapping-proportions" class="level2">
-<h2 class="anchored" data-anchor-id="bootstrapping-proportions">Bootstrapping Proportions</h2>
-<section id="programming-the-two-distributions" class="level3">
-<h3 class="anchored" data-anchor-id="programming-the-two-distributions">Programming the two distributions</h3>
-<p>These two pipelines differ in the same place as the sampling and bootstrap distributions in the reference chapter. <code>draw.proportion()</code> draws from the population; <code>bootstrap.proportion()</code> draws from the observed sample. Both return a one-row data frame, so <code>bind_rows()</code> collects the repeated results into the data frame used by the plot.</p>
-<div class="cell quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-binomial-vs-hypergeometric-1.svg" class="img-fluid figure-img" alt="The teal bootstrap distribution of a sample proportion closely overlaps the red exact Binomial sampling distribution when sampling with replacement."></p>
-<figcaption>Sampling with replacement</figcaption>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-binomial-vs-hypergeometric-2.svg" class="img-fluid figure-img" alt="The teal bootstrap distribution is wider than the blue exact Hypergeometric sampling distribution when sampling half of a finite population without replacement."></p>
-<figcaption>Sampling without replacement</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<p>When we’re estimating a proportion, the <span class="teal">bootstrap sampling distribution</span> is <em>exactly the same</em> as the parametric estimate we get by plugging the sample proportion into the Binomial distribution’s formula. That’s good when we’ve sampled with replacement, so our <span class="red">sampling distribution is actually Binomial</span>. It’s less good when we’ve sampled without replacement, so our <span class="blue">sampling distribution is Hypergeometric</span>.</p>
-</section>
-</section>
-<section id="an-important-limitation-of-the-bootstrap" class="level2">
-<h2 class="anchored" data-anchor-id="an-important-limitation-of-the-bootstrap">An Important Limitation of the Bootstrap</h2>
-<p>The bootstrap is a great method for understanding what we <em>have learned</em> after we have data. It’s easy to use and we usually get good calibration.</p>
-<p>But it’s also important to be able to reason about what we <em>can learn</em> before we have data. For this, the bootstrap is not very helpful.</p>
-<p>Today, we’ll talk about that. To do it, we’ll introduce a new tool: <em>normal approximation</em>. And we’ll use it for an important ‘before data reasoning’ task: sample size calculation. This is using what you know—or are willing to assume—to choose the size of your study. In particular, to choose it so your confidence intervals are as narrow as you want them to be.</p>
-</section>
-</section>
-<section id="sec-normal-approximation" class="level1">
-<h1>Normal Approximation</h1>
-<section id="the-normal-distribution" class="level2">
-<h2 class="anchored" data-anchor-id="the-normal-distribution">The Normal Distribution</h2>
-<div class="cell quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-normal-family-1.svg" class="img-fluid figure-img" alt="Three normal density curves have the same spread and different means at minus two, zero, and two; changing the mean shifts the curve horizontally without changing its shape."></p>
-<figcaption>Different means θ</figcaption>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-normal-family-2.svg" class="img-fluid figure-img" alt="Three normal density curves share mean zero and have standard deviations one-half, one, and two; larger standard deviation produces a wider, lower curve."></p>
-<figcaption>Different standard deviations σ</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<p>The normal distribution is a parametric family of distributions involving two parameters: its mean <span class="math inline">\theta</span> and its standard deviation <span class="math inline">\sigma</span>. We say a random variable <span class="math inline">X</span> is normally distributed with mean <span class="math inline">\theta</span> and standard deviation <span class="math inline">\sigma</span> if the probability that it’s in an interval <span class="math inline">[a,b]</span> is given by this integral of its <em>probability density</em>.</p>
-<p><span class="math display">
-P_{\theta,\sigma}(X \in [a,b]) = \int_a^b  f_{\theta,\sigma}(x)dx \qfor f_{\theta, \sigma}(x) = \frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\theta)^2}{2\sigma^2}}
-</span></p>
-<p>We have to talk about the probability that it’s ‘in an interval’ rather than that it ‘takes a value’ because the probability it actually takes on any particular value is zero—it’s an integral from <span class="math inline">x</span> to <span class="math inline">x</span>. This seems like an annoyance, but given what the normal distribution is actually used for, it’s a blessing.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-</section>
-<section id="normal-approximation" class="level2">
-<h2 class="anchored" data-anchor-id="normal-approximation">Normal Approximation</h2>
-<div id="fig-normal-approx" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-mode="steps" data-layout="sidebar" data-labels="n = 10,n = 30,n = 90">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-normal-approx-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-10-1.svg" class="img-fluid figure-img" alt="For ten fair coin flips, the discrete Binomial distribution of the sample proportion is visibly jagged while its overlaid normal approximation is smooth."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-30-1.svg" class="img-fluid figure-img" alt="For thirty fair coin flips, the discrete Binomial distribution of the sample proportion lies more closely along its overlaid normal approximation."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-90-1.svg" class="img-fluid figure-img" alt="For ninety fair coin flips, the narrow discrete Binomial distribution of the sample proportion closely follows its overlaid normal approximation."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-normal-approx-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;20.1
-</figcaption>
-</figure>
-</div>
-<p>A distribution’s normal approximation is a normal distribution with the same mean <span class="math inline">\theta</span> and standard deviation <span class="math inline">\sigma</span>. These show up everywhere because they’re easy to work with and the approximation tends to be good. Approximation is good, in particular, for the distribution of a mean of independent random variables. Or independent enough ones.</p>
-<p>Above, we see three Binomial distributions with their normal approximations: the distributions of the mean of <span class="pollb">10</span>, <span class="pollc">30</span>, and <span class="polld">90</span> coin flips. These approximations get increasingly accurate as the number of flips <span class="math inline">n</span> increases. That’s universal. It always happens with means. It’s called the <em>Central Limit Theorem</em>.</p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>The Central Limit Theorem
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The sampling distribution of a mean of independent random variables, <span class="math inline">\frac{1}{n}\sum_{i=1}^n X_i</span>, gets arbitrarily close to its normal approximation as the number of random variables <span class="math inline">n</span> increases to infinity.</p>
-<p><em>Caveat</em>. This is only true if each random variable contributes infinitesimally to the mean, i.e.&nbsp;<span class="math inline">\max_{i\le n} X_i/n \to 0</span> as <span class="math inline">n \to \infty</span>.</p>
-</div>
-</div>
-</section>
-<section id="exact-guaranteed-approximate" class="level2">
-<h2 class="anchored" data-anchor-id="exact-guaranteed-approximate">Exact, Guaranteed, Approximate</h2>
-<p>For a sample proportion, we can now put three answers to the same question on one line.</p>
-<ol type="1">
-<li><strong>Exact:</strong> use Binomial probabilities for sampling with replacement and Hypergeometric probabilities for sampling without replacement. This needs the whole distribution and the sampling design.</li>
-<li><strong>Guaranteed:</strong> use Chebyshev. This needs only the mean and variance, but the interval is wide.</li>
-<li><strong>Approximate:</strong> use the normal distribution with the same mean and standard deviation. This adds shape information and produces the familiar narrow interval.</li>
-</ol>
-<p>The standard deviation is the common yardstick. What changes is how much we claim to know about the distribution around it.</p>
-</section>
-<section id="the-width-of-normal-distributions" class="level2">
-<h2 class="anchored" data-anchor-id="the-width-of-normal-distributions">The Width of Normal Distributions</h2>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-normal-width-1.svg" class="img-fluid figure-img" alt="Standard normal density with vertical reference lines at the mean, one standard deviation on either side, and two standard deviations on either side. The central intervals contain progressively more of the distribution."></p>
-</figure>
-</div>
-</div>
-</div>
-<p>One thing that’s convenient about the normal distribution is that it’s easy to reason about. In particular, it’s easy to reason about the width of its middle <em>x</em>%.</p>
-<ul>
-<li>To include 68.3% of draws, you go out 1 standard deviation from its mean.</li>
-<li>To include 95.4% of draws, you go out 2 standard deviations.</li>
-<li>To include 99.7% of draws, you go out 3 standard deviations.</li>
-</ul>
-<p>To get almost exactly 95% of draws, we go out 1.96 standard deviations: <span class="math inline">\theta \pm 1.96\sigma</span>. Two is close enough in practice, but we tend to write 1.96 anyway. It’s a signal about what we’re doing. You can get a 2 anywhere in a calculation. When you see a 1.96, you know you’re talking about the middle 95% of the normal.</p>
-</section>
-<section id="calibration-using-normal-approximation" class="level2">
-<h2 class="anchored" data-anchor-id="calibration-using-normal-approximation">Calibration Using Normal Approximation</h2>
-<div class="cell quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-actual-vs-estimated-sampling-dist-1.svg" class="img-fluid figure-img" alt="The true Binomial sampling distribution and its normal approximation, with a simulated estimate marked and red exact-Binomial and blue normal-approximation intervals nearly overlapping."></p>
-<figcaption>The (Binomial) sampling distribution and its normal approximation.</figcaption>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-actual-vs-estimated-sampling-dist-2.svg" class="img-fluid figure-img" alt="Estimated Binomial and normal sampling distributions centered at the observed sample proportion, with their corresponding red and blue intervals nearly overlapping."></p>
-<figcaption>Binomial and normal estimates of the sampling distribution.</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<p>Calibrating interval estimates using normal approximation is easy. You estimate the standard deviation of your point estimator. You go out <span class="math inline">\pm</span> 1.96 (estimated) standard deviations from your point estimate.</p>
-<p><span class="math display">
-\text{interval estimate} = \hat\theta \pm 1.96 \hat\sigma
-</span></p>
-<p>We’re choosing our interval’s width essentially the same way we always have. We’re still using the middle 95% of an estimate of the sampling distribution. It just looks different because we have a convenient formula for that width.</p>
-<p>Above left, you can see two interval estimates superimposed on the sampling distribution of a sample proportion. The red one is calibrated using the binomial as before. The blue one is calibrated using normal approximation. Above right, you can see the binomial and normal sampling distribution estimates these are based on.</p>
-</section>
-<section id="when-this-works" class="level2">
-<h2 class="anchored" data-anchor-id="when-this-works">When This Works</h2>
-<p>This all works if three things are true.</p>
-<ol type="1">
-<li>The sampling distribution needs to be in the right place, i.e.&nbsp;centered on the estimation target.</li>
-<li>The sampling distribution needs to be approximately normal.</li>
-<li>The estimated sampling distribution has approximately the right width.</li>
-</ol>
-<p>The first is called <em>unbiasedness</em> of our point estimator. Most of the estimators we’ll talk about in this class are unbiased or almost unbiased. We’ll check this for the sample proportion in a minute.</p>
-<p>The second is something that the CLT tells us tends to happen, especially for large <span class="math inline">n</span>. Talking about the accuracy of normal approximation is interesting, but beyond the scope of this class. I’d need at least a couple weeks to teach you about what’s going on there. But you can take it as a given for most of the estimators we’ll study.</p>
-<p>The third amounts to getting a good estimate of our point estimator’s standard deviation. We’ll work on this, again for the sample proportion, later today. And we’ll talk about this for other estimators throughout the semester. It is, however, a bit of a pain. That’s one reason you might prefer the bootstrap.</p>
-</section>
-</section>
-<section id="normal-approximation-in-context" class="level1">
-<h1>Normal Approximation in Context</h1>
-<p>Let’s see how this plays out for our main example: estimating a proportion.</p>
-<section id="a-proportion-when-sampling-with-replacement" class="level2">
-<h2 class="anchored" data-anchor-id="a-proportion-when-sampling-with-replacement">A Proportion when Sampling with Replacement</h2>
-<div class="cell quarto-layout-panel" data-layout-ncol="3">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-with-replacement-1.svg" class="img-fluid" alt="Binomial distributions and normal approximations for sample proportions from 10 fair draws with replacement; the discrete bars remain visibly coarse."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-with-replacement-2.svg" class="img-fluid" alt="Binomial distributions and normal approximations for sample proportions from 30 fair draws with replacement; the bars follow the normal curve more closely."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-with-replacement-3.svg" class="img-fluid" alt="Binomial distributions and normal approximations for sample proportions from 90 fair draws with replacement; the narrow bars closely follow the normal curve."></p>
-</div>
-</div>
-</div>
-<p>When we sample from a binary population with replacement, our sample proportion’s distribution is Binomial. And we can estimate that distribution by plugging our sample proportion into the Binomial formula. But its normal approximation tends to be very good, so we can get away with estimating that instead.</p>
-<p><span class="math display">
-\begin{aligned}
-\text{normal approximation}     &amp; \ f_{\theta,\sigma}(x) \qfor  \sigma^2 = \frac{\theta(1-\theta)}{n} \\
-\text{corresponding estimate}   &amp; \ f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n}
-\end{aligned}
-</span></p>
-<p>Pictured: three Binomial distributions with their normal approximations. These are the distributions of the sample proportion when we draw samples of size <span class="pollb">10</span>, <span class="pollc">30</span>, and <span class="polld">90</span> with replacement from a binary population in which the proportion of ones is <span class="math inline">\theta=.5</span>.</p>
-</section>
-<section id="a-proportion-when-sampling-without-replacement" class="level2">
-<h2 class="anchored" data-anchor-id="a-proportion-when-sampling-without-replacement">A Proportion when Sampling without Replacement</h2>
-<div class="cell quarto-layout-panel" data-layout-ncol="3">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-hypergeometric-without-replacement-1.svg" class="img-fluid" alt="Hypergeometric distributions and normal approximations for sample proportions from 10 draws without replacement from a balanced population of 20; the discrete bars are coarse."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-hypergeometric-without-replacement-2.svg" class="img-fluid" alt="Hypergeometric distributions and normal approximations for sample proportions from 30 draws without replacement from a balanced population of 60; the bars follow the normal curve more closely."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
-<p><img src="chapter-normal-approximation_files/figure-html/plot-hypergeometric-without-replacement-3.svg" class="img-fluid" alt="Hypergeometric distributions and normal approximations for sample proportions from 90 draws without replacement from a balanced population of 180; the narrow bars closely follow the normal curve."></p>
-</div>
-</div>
-</div>
-<p>When we sample from a binary population <em>without</em> replacement, our sample proportion’s distribution is Hypergeometric. And we can estimate that distribution by plugging our sample proportion into the Hypergeometric formula. But again, its normal approximation tends to be very good, so we can get away with estimating that instead.</p>
-<p>When we do this, we can see where we go wrong when we use the Binomial—or equivalently the bootstrap. When our sample size <span class="math inline">n</span> is a meaningful fraction of our population size <span class="math inline">m</span>, the Binomial is too wide. The Hypergeometric’s standard deviation differs from the Binomial’s by a factor of <span class="math inline">\sqrt{\frac{m-n}{m-1}}</span>. When we’re sampling half our population, i.e.&nbsp;<span class="math inline">n=m/2</span>, that’s roughly <span class="math inline">\sqrt{1/2} \approx .7</span>.</p>
-<p><span class="math display">
-\begin{aligned}
-\text{normal approximation}     &amp; \ f_{\theta,\sigma}(x) \qfor \sigma^2 = \frac{\theta(1-\theta)}{n} \times  \frac{m-n}{m-1} \\
-\text{corresponding estimate}   &amp; \ f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n} \times \frac{m-n}{m-1}
-\end{aligned}
-</span></p>
-<p>Pictured: three Hypergeometric distributions with their normal approximations. These are the distribution of the sample proportion when we draw samples of size <span class="pollb">10</span>, <span class="pollc">30</span>, and <span class="polld">90</span> without replacement from a binary population twice the size in which the proportion of ones is <span class="math inline">\theta=.5</span>.</p>
-</section>
-<section id="using-normal-approximation" class="level2">
-<h2 class="anchored" data-anchor-id="using-normal-approximation">Using Normal Approximation</h2>
-<span class="math display">\begin{aligned}
-&amp;f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n} &amp;&amp; \text{a proportion when sampling with replacement} \\
-&amp;f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n} \times \frac{m-n}{m-1} &amp;&amp; \text{a proportion when sampling without replacement}
-\end{aligned}</span>
-<p>What makes all this work is that we’re using good estimates of our estimator’s standard deviation. If we have a formula for the estimator’s standard deviation, this is usually not so hard. We estimate whatever population summaries show up in the formula and plug them in.</p>
-<p>But we do need to do a bit of work to get that formula. The standard deviation of the sample proportion is <span class="math inline">\sqrt{\theta(1-\theta)/n}</span> when we sample with replacement and <span class="math inline">\sqrt{\theta(1-\theta)/n} \times \sqrt{(m-n)/(m-1)}</span> when we sample without replacement. You’ve already seen these formulas—they showed up in the normal approximations we just discussed. We’ll derive them after we’ve built up tools for working with expectations and variances.</p>
-</section>
-</section>
-<section id="sample-size-for-the-nsw-treated-mean" class="level1">
-<h1>Sample Size for the NSW Treated Mean</h1>
-<p>The NSW data contain 185 treated participants. We want to estimate their population’s mean 1978 income. Use these observations as a pilot: their income SD estimates the population income SD we need for planning another sample.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div data-pagedtable="false">
-  <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":["n"],"name":[1],"type":["int"],"align":["right"]},{"label":["mean"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"185","2":"6349.14","3":"7867.4"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-</div>
-</div>
-<p>For independent draws, the SD of the sample mean is the population income SD divided by the square root of the sample size. Using the pilot SD <span class="math inline">s</span>, the planned width of a 95% normal interval is <span class="math display">
-w_n = 2 \times 1.96 \times \frac{s}{\sqrt{n}}.
-</span></p>
-<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Exercise</span>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Use the pilot SD to plan the total size of a new sample.</p>
-<ol type="1">
-<li>How many observations do you need for a planned interval width of 2,000 dollars?</li>
-<li>How many do you need for a width of 1,000 dollars?</li>
-<li>Why does halving the width require four times as many observations?</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution" data-collapse="true">
-<p>Solving the width inequality and rounding up, the required total sample size is <span class="math display">
-n \ge \left(\frac{2 \times 1.96 \times s}{w}\right)^2.
-</span> With the pilot SD of 7,867.40 dollars, widths of 2,000 and 1,000 dollars require 238 and 952 observations. Halving <span class="math inline">w</span> doubles the quantity being squared, so it multiplies the sample size by four.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="chapter-normal-approximation_files/figure-html/nsw-planning-plot-1.svg" class="img-fluid figure-img" alt="Planned 95 percent interval width for the NSW treated mean income against planned sample size; dashed guides mark 238 observations for a width of 2,000 dollars and 952 observations for a width of 1,000 dollars."></p>
-</figure>
-</div>
-</div>
-</div>
-<p>This is a planning calculation using an estimated SD and a normal approximation. It does not guarantee the width or coverage of a future realized interval.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="appendix" class="level1">
-<h1>Appendix</h1>
-<p>Nothing here will show up on an exam.</p>
-<section id="sec-a-blessing" class="level2">
-<h2 class="anchored" data-anchor-id="sec-a-blessing">Why Continuous Distribution is a Blessing</h2>
-<p>Think about what happens when you tried to compare binomial distributions for different sample sizes <span class="math inline">n</span>. If you’re lucky, and your sample sizes are all multiples of each other, then the probability shown in one wide bar gets split up into several narrow bars when sample size increases. E.g., how the probability in the bar <span class="math inline">5/10</span> gets split into <span class="math inline">14/30</span>, <span class="math inline">15/30</span>, and <span class="math inline">16/30</span> and then into <span class="math inline">42/90 \ldots 48/90</span> as sample size goes from <span class="math inline">10</span> to <span class="math inline">30</span> to <span class="math inline">90</span>.</p>
-<p>If your sample sizes aren’t multiples, we don’t just split up one wide bar’s probability into several narrow ones. For the narrow bars we see straddling two wide bars, we have to ‘merge’ probability from two wide bars. It’s a mess. And using bars hides the worst of it. Most of the points that have mass for one <span class="math inline">n</span> will have none for the others. It’s not possible to have a sample mean of <span class="math inline">5/10</span> with a sample size of <span class="math inline">25</span>. It’s the wrong denominator. Probability mass at <span class="math inline">\hat\theta = 1/2</span> can go from maximal for <span class="math inline">n=10</span> to zero for <span class="math inline">n=25</span> even if the population mean is the same: always <span class="math inline">\theta=1/2</span>.</p>
-<p>Using an approximation with zero mass at any particular point, like the normal distribution, lets us avoid all this. We do have to integrate whenever we want to calculate a probability. But we can easily compare the probabilities of the same interval at different sample sizes. In a sense, all the ‘splitting’ and ‘merging’ is built into the approximation.</p>
+<p data-source-line="7">This chapter is a placeholder. It is not written yet.</p>
 
 
 <script type="ojs-module-contents">
@@ -1232,14 +778,6 @@ eyJjb250ZW50cyI6W119
 <script type="vfs-file">
 W10=
 </script>
-</section>
-</section>
-<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn1"><p>See <a href="#sec-a-blessing" class="quarto-xref"><span>Section 23.1</span></a> if you’re curious about what I mean by that.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section>
 
 </main> <!-- /main -->
 <script type="ojs-module-contents">
