@@ -1,0 +1,592 @@
+---
+title: "Means and Markov's Inequality"
+format: live-html
+ready: true
+---
+
+{{< include shared/shared-code.qmd >}}
+{{< include moments-population.qmd >}}
+{{< include moments-visuals.qmd >}}
+{{< include moments-location.qmd >}}
+{{< include moments-call-slices.qmd >}}
+
+# Marginalization {#sec-marginalization}
+
+We have done this before: list the calls, replace the person selected by that person's response, then add the responses. This is how we obtained the binomial and hypergeometric distributions. Here we revisit that calculation using grids alongside the tables.
+
+## From call sequences to response sequences
+
+Four people have responses $0,0,1,1$. We call twice. What is the distribution of the pair of responses?
+
+Let $J_i$ identify the person selected on call $i$, and let $Y_i$ be that person's response. The subscript $i$ is the call number: $J_1$ and $J_2$ are the first and second people called; $Y_1$ and $Y_2$ are their responses. The population is fixed, but these calls and responses are random variables because they depend on whom we select.
+
+```{r}
+#| label: fig-means-population
+#| echo: false
+#| fig-width: 7
+#| fig-height: 2.5
+pop4.bal.fig()
+```
+
+In each grid below, the row identifies the first person called and the column identifies the second. A cell is a call sequence. Its top line is the probability of that call sequence; the digits underneath are the responses in call order (for example, 01 means zero followed by one). With replacement, each of the sixteen cells has probability $1/16$. Without replacement, the diagonal is impossible and each of the twelve remaining cells has probability $1/12$.
+
+```{r}
+#| label: fig-means-call-sequences
+#| echo: false
+#| layout-ncol: 2
+#| fig-width: 5
+#| fig-height: 4
+#| fig-cap:
+#| - "With replacement"
+#| - "Without replacement"
+means.call.fig(c(0,0,1,1), "with")
+means.call.fig(c(0,0,1,1), "without")
+```
+
+Cells with the same response sequence have the same shading. That shading is unchanged across the two schemes: changing how we sample changes the probabilities, not the responses of the people called.
+
+```{r}
+#| label: means-call-sequence-table
+#| echo: false
+#| results: asis
+means.call.table(c(0,0,1,1))
+```
+
+For example, the response sequence $(0,0)$ comes from four call sequences: $(1,1)$, $(1,2)$, $(2,1)$, and $(2,2)$. With replacement, add four probabilities of $1/16$ to obtain $1/4$. Without replacement, $(1,1)$ and $(2,2)$ are impossible, leaving two probabilities of $1/12$, which sum to $1/6$.
+
+Doing this for each response sequence produces the distribution below.
+
+| Response sequence $(Y_1,Y_2)$ | With replacement | Without replacement |
+|---|---:|---:|
+| $(0,0)$ | $1/4$ | $1/6$ |
+| $(0,1)$ | $1/4$ | $1/3$ |
+| $(1,0)$ | $1/4$ | $1/3$ |
+| $(1,1)$ | $1/4$ | $1/6$ |
+
+The distribution of the sum follows from this table. Write $S=Y_1+Y_2$ for the total response. The two middle rows have the same total, so combine their probabilities:
+
+| Total $s$ | $P(S=s)$ with replacement | $P(S=s)$ without replacement |
+|---|---:|---:|
+| 0 | $1/4$ | $1/6$ |
+| 1 | $1/2$ | $2/3$ |
+| 2 | $1/4$ | $1/6$ |
+
+These operations are *marginalization*: collect all the possibilities that produce the value of interest and add their probabilities.
+
+## What if we only wanted one response?
+
+First find the distribution of one call, then replace the selected person by their response. We use the same call-sequence grids, but now we group cells by the person selected on just one call. For the first call, sum a row. For the second call, sum a column.
+
+::: {.panel-tabset}
+### First call: person 1
+
+```{r}
+#| label: fig-means-call1-person1
+#| echo: false
+#| layout-ncol: 2
+#| fig-width: 5
+#| fig-height: 4
+#| fig-cap:
+#| - "With replacement"
+#| - "Without replacement"
+means.call.fig(c(0,0,1,1), "with", selected.call=1, selected.person=1)
+means.call.fig(c(0,0,1,1), "without", selected.call=1, selected.person=1)
+```
+
+The highlighted row contains every call sequence with person 1 first. With replacement, its four probabilities sum to $4/16=1/4$. Without replacement, its diagonal cell has probability zero and the other three sum to $3/12=1/4$. Thus $P(J_1=1)=1/4$ under either scheme.
+
+### First call: person 2
+
+```{r}
+#| label: fig-means-call1-person2
+#| echo: false
+#| layout-ncol: 2
+#| fig-width: 5
+#| fig-height: 4
+#| fig-cap:
+#| - "With replacement"
+#| - "Without replacement"
+means.call.fig(c(0,0,1,1), "with", selected.call=1, selected.person=2)
+means.call.fig(c(0,0,1,1), "without", selected.call=1, selected.person=2)
+```
+
+Now sum the row for person 2. The impossible call sequence without replacement has moved to $(2,2)$, but the row total has not changed: it is again $4/16=1/4$ with replacement and $3/12=1/4$ without replacement. Thus $P(J_1=2)=1/4$ under either scheme.
+
+### Second call: person 1
+
+```{r}
+#| label: fig-means-call2-person1
+#| echo: false
+#| layout-ncol: 2
+#| fig-width: 5
+#| fig-height: 4
+#| fig-cap:
+#| - "With replacement"
+#| - "Without replacement"
+means.call.fig(c(0,0,1,1), "with", selected.call=2, selected.person=1)
+means.call.fig(c(0,0,1,1), "without", selected.call=2, selected.person=1)
+```
+
+For the second call, use a column instead. This column contains every sequence with person 1 second. Its probabilities sum to $1/4$ with or without replacement, so $P(J_2=1)=1/4$ under either scheme.
+:::
+
+Every row and column has the same total. The resulting marginal distributions of the two calls are therefore the same under both sampling schemes:
+
+| Person $j$ | $P(J_1=j)$ | $P(J_2=j)$ |
+|---|---:|---:|
+| 1 | $1/4$ | $1/4$ |
+| 2 | $1/4$ | $1/4$ |
+| 3 | $1/4$ | $1/4$ |
+| 4 | $1/4$ | $1/4$ |
+
+Now make the final step from calls to responses. People 1 and 2 respond zero; people 3 and 4 respond one. For either call, add the probabilities of the two people with each response:
+
+| Response $y$ | People with that response | $P(Y_1=y)$ | $P(Y_2=y)$ |
+|---|---|---:|---:|
+| 0 | 1 and 2 | $1/4+1/4=1/2$ | $1/4+1/4=1/2$ |
+| 1 | 3 and 4 | $1/4+1/4=1/2$ | $1/4+1/4=1/2$ |
+
+This response distribution, too, is the same with and without replacement.
+
+## Changing the population
+
+Suppose person 3's response changes from one to zero, so the population is now $0,0,0,1$. The call probabilities and the marginal distribution of each call are unchanged. Only the final step—grouping people by their responses—changes.
+
+For one response, people 1, 2, and 3 now form the zero group. Person 4 is the one group. Under either sampling scheme, each response is zero with probability $3/4$ and one with probability $1/4$.
+
+For a pair of responses, the $(0,0)$ group now contains nine call sequences. Six remain possible without replacement. The $(0,1)$ and $(1,0)$ groups each contain three call sequences, and the $(1,1)$ group contains only $(4,4)$:
+
+| Response sequence $(Y_1,Y_2)$ | With replacement | Without replacement |
+|---|---:|---:|
+| $(0,0)$ | $9/16$ | $6/12=1/2$ |
+| $(0,1)$ | $3/16$ | $3/12=1/4$ |
+| $(1,0)$ | $3/16$ | $3/12=1/4$ |
+| $(1,1)$ | $1/16$ | $0$ |
+
+Combining the middle rows as before, the probabilities of totals zero, one, and two are $9/16,6/16,1/16$ with replacement and $1/2,1/2,0$ without replacement.
+
+## Dependence and independence
+
+The individual response distributions agree across sampling schemes, but the response-pair distributions do not. For the population $0,0,1,1$, each response is one with probability $1/2$. With replacement, the probability that both are one is $1/4=(1/2)(1/2)$. Without replacement, it is $1/6$, not $1/4$.
+
+With replacement, this product rule holds for every response pair: each joint probability is the product of the corresponding marginal probabilities. The responses are independent. Without replacement, the product rule fails: the responses are dependent. Knowing the individual distributions does not determine the distribution of the pair.
+
+The changed population shows the same distinction. With replacement, the probability of two ones is $1/16=(1/4)(1/4)$. Without replacement it is zero, although each individual response still has probability $1/4$ of being one. We will use this distinction when calculating expectations of products in the next chapter.
+
+## Three calls
+
+For three calls, a cell must identify three people. The three digits inside it now record the three responses in call order. The four layers below correspond to the four possible people selected on call 3. Within each layer, rows still identify the person selected on call 1 and columns the person selected on call 2. We return to the population $0,0,1,1$.
+
+### With replacement
+
+```{r}
+#| label: fig-means-three-calls-with
+#| echo: false
+#| layout-ncol: 2
+#| fig-width: 5
+#| fig-height: 4
+#| fig-cap:
+#| - "Call 3: person 1"
+#| - "Call 3: person 2"
+#| - "Call 3: person 3"
+#| - "Call 3: person 4"
+for (person in 1:4) print(means.call.fig(c(0,0,1,1), "with", third=person))
+```
+
+### Without replacement
+
+```{r}
+#| label: fig-means-three-calls-without
+#| echo: false
+#| layout-ncol: 2
+#| fig-width: 5
+#| fig-height: 4
+#| fig-cap:
+#| - "Call 3: person 1"
+#| - "Call 3: person 2"
+#| - "Call 3: person 3"
+#| - "Call 3: person 4"
+for (person in 1:4) print(means.call.fig(c(0,0,1,1), "without", third=person))
+```
+
+There are $4^3=64$ ordered call sequences with replacement, each with probability $1/64$. Without replacement, only $4\cdot3\cdot2=24$ are possible, each with probability $1/24$.
+
+::: {#exr-three-call-layers .callout-exercise}
+Use the four layers to find the distribution of the response sequence $(Y_1,Y_2,Y_3)$ under each sampling scheme. For example, which cells produce $(0,0,1)$? Add their probabilities across the layers. Repeat for the other response sequences, then obtain the distribution of the total $S=Y_1+Y_2+Y_3$.
+:::
+
+::: {.callout-solution collapse="true"}
+With replacement, each response sequence comes from eight call sequences: two choices of person for each of the three responses. Each therefore has probability $8/64=1/8$.
+
+Without replacement, three zeros and three ones are impossible because the population has only two people with either response. For $(0,0,1)$, there are two orders for the two zero responders and two choices of one responder: four call sequences, with total probability $4/24=1/6$. Each of the other sequences containing both responses has the same count.
+
+| Response sequence | With replacement | Without replacement |
+|---|---:|---:|
+| $(0,0,0)$ | $1/8$ | $0$ |
+| $(0,0,1)$ | $1/8$ | $1/6$ |
+| $(0,1,0)$ | $1/8$ | $1/6$ |
+| $(1,0,0)$ | $1/8$ | $1/6$ |
+| $(0,1,1)$ | $1/8$ | $1/6$ |
+| $(1,0,1)$ | $1/8$ | $1/6$ |
+| $(1,1,0)$ | $1/8$ | $1/6$ |
+| $(1,1,1)$ | $1/8$ | $0$ |
+
+Combining sequences by their totals produces:
+
+| Total $s$ | $P(S=s)$ with replacement | $P(S=s)$ without replacement |
+|---|---:|---:|
+| 0 | $1/8$ | $0$ |
+| 1 | $3/8$ | $1/2$ |
+| 2 | $3/8$ | $1/2$ |
+| 3 | $1/8$ | $0$ |
+:::
+
+The method is unchanged, but the bookkeeping is growing. If we only want an average, do we need the whole distribution?
+
+# Expectations {#sec-expectation}
+
+Often we do not need to know the whole distribution. We want a summary, such as the average response or total. We can calculate that summary directly, without first doing all the marginalization above.
+
+## Expectation and location
+
+The *expectation* of a random variable $X$ is its probability-weighted average. If its possible values are $x$, then
+$$
+\E[X]=\sum_x xP(X=x).
+$$
+This means summing, over the horizontal axis, each value times the probability at that value. Histograms count dots: a bar's height records the fraction at that value. Averaging the dots weights each value by that fraction. For a uniformly selected member of a finite population, those fractions are exactly the probabilities of its responses.
+
+Does that tell us where the distribution is located—where draws are likely to be?
+
+### A single bump
+
+```{r}
+#| label: fig-means-single-mean
+#| echo: false
+#| fig-width: 8
+#| fig-height: 3
+means.population.plot(means.populations[[1]], "mean")
+```
+
+The purple dots are a population of values. The gray bars count them, and the green line marks their average. In this example, the expectation is near the middle of the bump, where many of the values are. It looks like a reasonable summary of location.
+
+### Binary responses
+
+```{r}
+#| label: fig-means-binary
+#| echo: false
+#| fig-width: 8
+#| fig-height: 3
+means.population.plot(means.populations[[2]], "mean")
+```
+
+Now every value is zero or one. The average lies between them, where there are no dots at all. The same probability-weighted average no longer describes a typical individual response.
+
+Write $\theta=P(X=1)$ for the probability of one. Then $P(X=0)=1-\theta$, and
+$$
+\E[X]=0(1-\theta)+1\theta=\theta.
+$$
+The expectation is the fraction of ones in the population.
+
+### Two bumps
+
+```{r}
+#| label: fig-means-two-bumps
+#| echo: false
+#| fig-width: 8
+#| fig-height: 3
+means.population.plot(means.populations[[3]], "mean")
+```
+
+Here there are two separated groups of values. Their average falls between the bumps. Again, the average need not be a place where individual draws are likely to be.
+
+It is reasonable to question whether any one location is a useful description of a coin flip or a pair of bumps. Why use the mean anyway? Because we will average many observations. If we average many independent draws, the average concentrates around the expectation, even when one draw is usually far from it. Linearity will explain the center of that average; variance will help us understand its spread in the next chapter.
+
+## Calculate the expectation two ways
+
+Return to the population $0,0,1,1$ and the two-call total $S=Y_1+Y_2$. We have its distribution already. With replacement,
+$$
+\E[S]=0\cdot\frac14+1\cdot\frac12+2\cdot\frac14=1.
+$$
+Without replacement,
+$$
+\E[S]=0\cdot\frac16+1\cdot\frac23+2\cdot\frac16=1.
+$$
+
+We can also average directly over call sequences. This table lists the total response in every call cell, before combining any probabilities:
+
+| First person $J_1$ / second person $J_2$ | 1 | 2 | 3 | 4 |
+|---|---:|---:|---:|---:|
+| 1 | 0 | 0 | 1 | 1 |
+| 2 | 0 | 0 | 1 | 1 |
+| 3 | 1 | 1 | 2 | 2 |
+| 4 | 1 | 1 | 2 | 2 |
+
+With replacement, multiply each entry by its call probability $1/16$ and sum:
+$$
+\E[S]=\frac{(0+0+1+1)+(0+0+1+1)+(1+1+2+2)+(1+1+2+2)}{16}=1.
+$$
+Without replacement, omit the diagonal cells and weight each remaining entry by $1/12$:
+$$
+\E[S]=\frac{(0+1+1)+(0+1+1)+(1+1+2)+(1+1+2)}{12}=1.
+$$
+
+This is the same average as before. Marginalization groups equal totals and adds their probabilities first. The direct calculation weights each call sequence's total first and then adds. Neither changes what is being averaged.
+
+We can change the order once more. Each cell's total is its first response plus its second. Sum all the first-response contributions separately from the second-response contributions. With replacement, the first-response calculation is
+$$
+\frac{4\cdot0+4\cdot0+4\cdot1+4\cdot1}{16}=\frac12.
+$$
+Without replacement, it is
+$$
+\frac{3\cdot0+3\cdot0+3\cdot1+3\cdot1}{12}=\frac12.
+$$
+The second-response calculation is the same, using columns instead of rows. Under either sampling scheme,
+$$
+\E[Y_1+Y_2]=\E[Y_1]+\E[Y_2]=\frac12+\frac12=1.
+$$
+
+::: {#exr-new-population .callout-exercise}
+Repeat the distribution calculation and the direct call-sequence calculation for the population $0,0,0,1$, under both sampling schemes.
+:::
+
+::: {.callout-solution collapse="true"}
+With replacement, the distribution calculation is
+$$
+0\cdot\frac9{16}+1\cdot\frac6{16}+2\cdot\frac1{16}=\frac12.
+$$
+The rows of call totals are now $(0,0,0,1)$ for each of people 1, 2, and 3, and $(1,1,1,2)$ for person 4. Averaging all sixteen cells directly produces
+$$
+\frac{(0+0+0+1)+(0+0+0+1)+(0+0+0+1)+(1+1+1+2)}{16}=\frac12.
+$$
+Without replacement, the distribution calculation is $0\cdot1/2+1\cdot1/2=1/2$. Omitting the diagonal from the call table instead produces
+$$
+\frac{(0+0+1)+(0+0+1)+(0+0+1)+(1+1+1)}{12}=\frac12.
+$$
+:::
+
+## Linearity
+
+There are two things going on here. To average a sum of two things, we can take two averages and sum. To average a constant times a random variable, we multiply the random variable's average by the constant. In other words, we can *distribute* expectations and can pull constants out of them. For random variables $Y$ and $Z$ and numbers $a$ and $b$, these rules do not require independence:
+$$
+\E[aY+bZ]=a\E[Y]+b\E[Z].
+$$
+The proof is the regrouping we just did. For finite-valued random variables,
+$$
+\begin{aligned}
+\E[aY+bZ]
+&\explain{=}{definition of expectation}\sum_y\sum_z(ay+bz)P(Y=y,Z=z)\\
+&\explain{=}{changing the order in which we sum}\sum_y\sum_z ayP(Y=y,Z=z)+\sum_z\sum_y bzP(Y=y,Z=z)\\
+&\explain{=}{pulling constants out of the inner sums}\sum_y ay\sum_zP(Y=y,Z=z)+\sum_z bz\sum_yP(Y=y,Z=z)\\
+&\explain{=}{summing to obtain marginal probabilities}\sum_y ayP(Y=y)+\sum_z bzP(Z=z)\\
+&\explain{=}{pulling constants out of the remaining sums}a\sum_y yP(Y=y)+b\sum_z zP(Z=z)\\
+&\explain{=}{definition of expectation}a\E[Y]+b\E[Z].
+\end{aligned}
+$$
+The fourth line sums rows and columns to obtain marginal probabilities. It does not factor joint probabilities. That is why independence is unnecessary.
+
+## Indicators and probabilities
+
+An indicator records whether a condition holds: it is one when the condition holds and zero otherwise. For example, $1_{=j}(J_i)$ indicates that call $i$ selects person $j$:
+$$
+1_{=j}(J_i)=
+\begin{cases}
+1 & \text{if } J_i=j,\\
+0 & \text{otherwise.}
+\end{cases}
+$$
+This is a binary random variable. Its expectation is the probability that it is one:
+$$
+\E[1_{=j}(J_i)]
+=0P(J_i\ne j)+1P(J_i=j)
+=P(J_i=j).
+$$
+We use indicators to express probabilities as expectations.
+
+## Uniform sampling and unbiasedness
+
+Let the fixed population responses be $y_1 \ldots y_m$, where $m$ is the number of people. Write $\mu=m^{-1}\sum_{j=1}^m y_j$ for the population mean. Call $i$ selects person $J_i$ and observes $Y_i=y_{J_i}$.
+
+We will use three sampling schemes. With replacement, each call is equally likely to select anyone, and one call tells us nothing about the next. Without replacement, each call selects uniformly from the people not yet selected. The random-start cycle picks a starting position uniformly at random from the $m$ positions in the population, then calls a run of consecutive positions, wrapping around the end of the list.
+
+{{< include moments-sampling.qmd >}}
+
+```{r}
+#| label: fig-means-uniform-schemes
+#| echo: false
+#| fig-width: 9
+#| fig-height: 8
+#| fig-cap: "The plotted population is 40 ones followed by 60 zeros, with mean 0.4."
+#| fig-alt: "Sampling distributions for three sample sizes and three sampling schemes, with a common population mean and different spreads."
+moments.sampling.plot()
+```
+
+Sampling uniformly means that each call, considered on its own, is equally likely to go to anyone in the population: $P(J_i=j)=1/m$ for every person $j$. Our marginalization example showed this for sampling with and without replacement, and for the random-start cycle it follows because the starting position is uniform. It does not say that different calls are independent.
+
+Exactly one selection indicator is one, so
+$$
+Y_i=\sum_{j=1}^m y_j1_{=j}(J_i).
+$$
+Taking its expectation, using linearity and then uniform sampling,
+$$
+\begin{aligned}
+\E[Y_i]
+&=\sum_{j=1}^m y_j\E[1_{=j}(J_i)]\\
+&=\sum_{j=1}^m y_jP(J_i=j)\\
+&=\frac1m\sum_{j=1}^m y_j=\mu.
+\end{aligned}
+$$
+The same calculation works for a function $f$ of the response: replace each population value $y_j$ by $f(y_j)$. Thus
+$$
+\E[f(Y_i)]=\frac1m\sum_{j=1}^m f(y_j).
+$$
+
+Now take $n$ calls and write $\hat\mu=n^{-1}\sum_{i=1}^nY_i$ for their sample mean. Linearity implies
+$$
+\begin{aligned}
+\E[\hat\mu]
+&=\E\left[\frac1n\sum_{i=1}^nY_i\right]\\
+&=\frac1n\sum_{i=1}^n\E[Y_i]
+=\frac1n\sum_{i=1}^n\mu
+=\mu.
+\end{aligned}
+$$
+
+The **bias** of an estimator is the difference between its expected value and the value of the thing it estimates. Here that difference is zero: the sample mean is an **unbiased estimator** of the population mean. This is true under each of the three sampling schemes. The calculation used uniformity of each call and linearity, not independence.
+
+Why care? If we calibrate intervals to cover the estimator's mean 95% of the time, how often will they cover the thing we are estimating? For an unbiased estimator, those centers agree. For a biased estimator, they do not. The distinction matters for coverage even if the sampling distribution has the same shape and spread.
+
+# From an expectation to a probability bound
+
+## Indicators count the observations in an event
+
+Consider the vote histories of a small town. Each dot is a resident, and its value is how many of the last five elections they voted in. The histogram counts these same residents. The blue region selects those who voted in at least four elections. Replace each selected resident's value by one and each remaining value by zero. Averaging these indicators counts the selected residents and divides by the population size. This is the fraction in the blue region. For a random variable $X$ and a threshold $t$, write $1_{\ge t}(X)$ for the indicator that $X\ge t$. More generally,
+$$
+\E[1_{\ge t}(X)]
+=0P(X<t)+1P(X\ge t)
+=P(X\ge t).
+$$
+
+```{r}
+#| label: fig-means-indicator
+#| echo: false
+#| fig-width: 9
+#| fig-height: 3.3
+#| layout: [[2,1]]
+#| fig-alt: "The town's residents and their vote-history histogram with the selected tail shaded blue."
+markov.hist(rep(1, 100), "step")
+markov.graph("step")
+```
+
+The town has `r length(markov.H)` residents; `r sum(markov.H >= markov.t)` are in the blue region. The average of the indicators is $(`r sum(markov.H < markov.t)`\cdot0+`r sum(markov.H >= markov.t)`\cdot1)/`r length(markov.H)`$.
+
+## Markov's inequality
+
+Suppose $X$ is nonnegative and $t>0$. Compare the indicator with the ramp $X/t$. Below the threshold, the indicator is zero and the ramp is nonnegative. At or above the threshold, the indicator is one and the ramp is at least one. At every possible value,
+$$
+1_{\ge t}(X)\le\frac Xt.
+$$
+In the picture, dot area represents the function value. Replacing the indicator by the ramp never decreases a dot's area. The unit of area stays fixed: an indicator value of one and a ramp value of one have the same area.
+
+### From an indicator to a ramp
+
+```{r}
+#| label: fig-means-markov-indicator
+#| echo: false
+#| layout: [[2,1]]
+#| fig-width: 6
+#| fig-height: 3.3
+markov.hist(recall.step.v, "step")
+markov.graph("step")
+```
+
+The graph on the right is the indicator function: zero below the threshold, one at or above it. On the left, the area of each resident's dot is that indicator value. Averaging these zero-or-one areas produces the fraction of residents in the selected event.
+
+```{r}
+#| label: fig-means-markov-ramp
+#| echo: false
+#| layout: [[2,1]]
+#| fig-width: 6
+#| fig-height: 3.3
+markov.hist(recall.ramp.v, "ramp")
+markov.graph("ramp")
+```
+
+Now replace the indicator by the ramp. Each dot's area is its value divided by the threshold. Below the threshold, a zero area can only increase. At or above the threshold, the area is at least one. The ramp therefore has an average at least as large as the indicator's average. Both pictures use the same unit of dot area, so this comparison is visible rather than rescaled away.
+
+An average preserves this comparison. Every probability weight is nonnegative, so a pointwise larger function has an expectation at least as large. This property is called *monotonicity*. Combining it with our indicator calculation and linearity proves **Markov's inequality**:
+$$
+\begin{aligned}
+P(X\ge t)
+&=\E[1_{\ge t}(X)]\\
+&\le\E[X/t]\\
+&=\frac{\E[X]}t.
+\end{aligned}
+$$
+
+::: {#exr-nonnegative-markov .callout-exercise}
+Why did we require $X$ to be nonnegative? Find where the comparison fails if negative values are allowed. Could a random variable have expectation zero and still have positive probability of exceeding one?
+:::
+
+::: {.callout-solution collapse="true"}
+For negative $x$, the indicator is zero but $x/t$ is negative. The ramp no longer bounds the indicator. A centered random variable can have mean zero while some of its values exceed one: its positive and negative values cancel in the mean.
+
+```{r}
+#| label: fig-means-nonnegative-counterexample
+#| echo: false
+#| fig-width: 8
+#| fig-height: 3.3
+nonneg.fig()
+```
+:::
+
+## What Markov misses about a sample mean
+
+Can we use Markov to calibrate an interval for a population mean? Consider a binary response with population frequency $\theta$ and sample frequency $\hat\theta$, using uniform sampling as above. We know $\E[\hat\theta]=\theta$, and $\hat\theta$ is nonnegative, so Markov applies to it. Taking the threshold $t=20\theta$,
+$$
+P(\hat\theta\ge20\theta)\le\frac{\theta}{20\theta}=0.05.
+$$
+So with probability at least $95\%$, our sample frequency is below $20\theta$. That is a statement about $\hat\theta$, which we observe; it rearranges into one about $\theta$, which we do not.
+$$
+\theta\ge0.05\hat\theta \qqtext{ with probability at least } 95\%
+$$
+If our observed frequency is $0.7$, we learn that $\theta\ge0.035$. A frequency cannot exceed one, so our guaranteed $95\%$ interval is $[0.035,1]$. We have ruled out almost nothing.
+
+One side is all Markov can give us. It bounds the probability of landing far *above* the mean and says nothing about landing far below, so it supplies a lower bound on $\theta$ and no upper bound at all.
+
+That is less of a limitation than it sounds, because plenty of the questions we actually have are one-sided. How low could turnout really be, given what we saw? How bad might this be for us? Those never needed an upper bound. So the fair comparison is not against a two-sided interval but against a one-sided bound built the way our earlier ones were, from the binomial model with its frequency set to $\hat\theta$: take the $95$th percentile of the error $\hat\theta-\theta$ under that model and subtract it from our estimate.
+
+Compare this with the bootstrap/binomial bound. For binary responses, resampling from the observed sample produces the binomial model with its success probability set to $\hat\theta$. Those calibrated bounds narrow as the sample grows. The Markov bound above does not: the expectation of the sample frequency remains $\theta$ for every sample size.
+
+{{< include moments-calibration-data.qmd >}}
+{{< include moments-calibration.qmd >}}
+
+The panels show the same construction for three sample sizes. Each purple dot is a sample frequency. For one highlighted sample, the [bootstrap/binomial bound is pink]{.pink} and the dark one is Markov's. Both are one-sided, so both run to the right edge; what differs is where each one starts. The green line is the population frequency, and both use the same sample.
+
+```{r}
+#| label: fig-means-calibration-20
+#| echo: false
+#| fig-width: 9
+#| fig-height: 4.5
+#| fig-cap: "20 observations"
+mcal.plot(20)
+```
+
+```{r}
+#| label: fig-means-calibration-80
+#| echo: false
+#| fig-width: 9
+#| fig-height: 4.5
+#| fig-cap: "80 observations"
+mcal.plot(80)
+```
+
+```{r}
+#| label: fig-means-calibration-320
+#| echo: false
+#| fig-width: 9
+#| fig-height: 4.5
+#| fig-cap: "320 observations"
+mcal.plot(320)
+```
+
+The Markov guarantee is valid without knowing the full sampling distribution, and even without independence. The bootstrap/binomial calibration uses more information and is much more informative here; its plug-in calibration is not itself a distribution-free guarantee. Our one-sided bound says that $\theta$ is not much smaller than what we observed, and nothing at all about its being much larger. To get both sides out of Markov we would have to apply it to a quantity that is large whenever our error is large in *either* direction. Squared error is such a quantity, and its mean is the subject of the next chapter.
