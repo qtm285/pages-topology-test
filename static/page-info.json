@@ -9,9 +9,9 @@
     },
     "tocLevel": "part",
     "build": {
-      "buildId": "mv3tewlt-1",
-      "sourceRevision": "42c30516a16d4b1af9ac2c4151ca1b1335a0589c",
-      "retainedAt": "2026-10-11T12:44:25.664Z"
+      "buildId": "mv4hbp41-1",
+      "sourceRevision": "53128cd90f2482da3f28f6aaa4c707c841282c08",
+      "retainedAt": "2026-10-11T23:53:46.931Z"
     }
   },
   {
@@ -183,22 +183,36 @@
     }
   },
   {
-    "file": "chapters/chapter-random-variables-and-moments.html",
-    "title": "Chapter 13: 14 Means and Markov’s Inequality",
+    "file": "chapters/chapter-joint-distributions-and-independence.html",
+    "title": "Chapter 13: 11 What’s Common and What Isn’t",
     "width": 1041,
     "height": 1000,
     "source": {
-      "file": "chapters/chapter-random-variables-and-moments.qmd"
+      "file": "chapters/chapter-joint-distributions-and-independence.qmd"
     },
     "build": {
-      "buildId": "mv1ydvaf-1",
-      "sourceRevision": "db7f5946f7d9511695d5091e7055fb9856576377",
-      "retainedAt": "2026-10-10T05:28:03.031Z"
+      "buildId": "mv3rrnaz-1",
+      "sourceRevision": "544d1cf639d40d436089f78a67d8e2e35b397a89",
+      "retainedAt": "2026-10-11T11:58:20.809Z"
+    }
+  },
+  {
+    "file": "chapters/chapter-mean-and-variance-of-an-average.html",
+    "title": "Chapter 14: 11 Means, Variances, and Sample Averages",
+    "width": 1041,
+    "height": 1000,
+    "source": {
+      "file": "chapters/chapter-mean-and-variance-of-an-average.qmd"
+    },
+    "build": {
+      "buildId": "mv3rtx2h-1",
+      "sourceRevision": "3464b43337abcdbce590d01be3351a48371922f1",
+      "retainedAt": "2026-10-11T12:00:07.009Z"
     }
   },
   {
     "file": "chapters/chapter-concentration.html",
-    "title": "Chapter 14: 20 Concentration",
+    "title": "Chapter 15: 20 Concentration",
     "width": 1041,
     "height": 1000,
     "source": {
@@ -212,7 +226,7 @@
   },
   {
     "file": "homework/homework-random-variables-and-moments.html",
-    "title": "Chapter 15: 17 Homework — Random Variables, Moments, and the Standard Deviation",
+    "title": "Chapter 16: 17 Homework — Random Variables, Moments, and the Standard Deviation",
     "width": 1041,
     "height": 1000,
     "source": {
@@ -226,7 +240,7 @@
   },
   {
     "file": "chapters/chapter-normal-approximation.html",
-    "title": "Chapter 16: 18 Normal Approximation and Sample Size Calculation",
+    "title": "Chapter 17: 18 Normal Approximation and Sample Size Calculation",
     "width": 1041,
     "height": 1000,
     "source": {
@@ -240,7 +254,7 @@
   },
   {
     "file": "homework/homework-comparing-estimators.html",
-    "title": "Chapter 17: 19 Homework: Comparing Estimators",
+    "title": "Chapter 18: 19 Homework: Comparing Estimators",
     "width": 1041,
     "height": 1000,
     "source": {
@@ -254,7 +268,7 @@
   },
   {
     "file": "exams/practice-midterm-1.html",
-    "title": "Chapter 18: 21 Practice Midterm 1",
+    "title": "Chapter 19: 21 Practice Midterm 1",
     "width": 1041,
     "height": 1000,
     "source": {
@@ -268,7 +282,7 @@
   },
   {
     "file": "chapters/chapter-programming-reference.html",
-    "title": "Chapter 19: 21 Programming Reference",
+    "title": "Chapter 20: 21 Programming Reference",
     "width": 1041,
     "height": 1000,
     "source": {
@@ -282,7 +296,7 @@
   },
   {
     "file": "decks/chapter-calibration-binary-slides.html",
-    "title": "Chapter 20: Calibrating Interval Estimates with Binary Observations",
+    "title": "Chapter 21: Calibrating Interval Estimates with Binary Observations",
     "width": 1041,
     "height": 1000,
     "source": {
@@ -296,7 +310,7 @@
   },
   {
     "file": "decks/chapter-bootstrap-slides.html",
-    "title": "Chapter 21: Calibrating Interval Estimates using the Bootstrap",
+    "title": "Chapter 22: Calibrating Interval Estimates using the Bootstrap",
     "width": 1041,
     "height": 1000,
     "source": {
@@ -310,7 +324,7 @@
   },
   {
     "file": "decks/chapter-normal-approximation-slides.html",
-    "title": "Chapter 22: Normal Approximation and Sample Size Calculation",
+    "title": "Chapter 23: Normal Approximation and Sample Size Calculation",
     "width": 1041,
     "height": 1000,
     "source": {
@@ -324,7 +338,7 @@
   },
   {
     "file": "decks/chapter-bias-and-coverage-slides.html",
-    "title": "Chapter 23: Power, Bias, and Coverage",
+    "title": "Chapter 24: Power, Bias, and Coverage",
     "width": 1041,
     "height": 1000,
     "source": {

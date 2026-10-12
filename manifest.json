@@ -63,11 +63,19 @@
           "format": "qmd"
         },
         {
+          "path": "homework/homework-calibration-binary.solutions.qmd",
+          "format": "qmd"
+        },
+        {
           "path": "homework/homework-bootstrap.qmd",
           "format": "qmd"
         },
         {
-          "path": "chapters/chapter-random-variables-and-moments.qmd",
+          "path": "chapters/chapter-joint-distributions-and-independence.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-mean-and-variance-of-an-average.qmd",
           "format": "qmd"
         },
         {
@@ -100,10 +108,6 @@
         },
         {
           "path": "chapters/chapter-programming-reference.qmd",
-          "format": "qmd"
-        },
-        {
-          "path": "homework/homework-calibration-binary.solutions.qmd",
           "format": "qmd"
         },
         {
@@ -143,7 +147,7 @@
           "format": "qmd"
         }
       ],
-      "pages": 24,
+      "pages": 25,
       "pageFiles": [
         "index.html",
         "chapters/chapter-social-pressure-experiment.html",
@@ -158,7 +162,8 @@
         "chapters/chapter-sampling-without-replacement.html",
         "chapters/chapter-bootstrap.html",
         "homework/homework-bootstrap.html",
-        "chapters/chapter-random-variables-and-moments.html",
+        "chapters/chapter-joint-distributions-and-independence.html",
+        "chapters/chapter-mean-and-variance-of-an-average.html",
         "chapters/chapter-concentration.html",
         "homework/homework-random-variables-and-moments.html",
         "chapters/chapter-normal-approximation.html",
@@ -173,9 +178,9 @@
       "classSiteUrl": "https://qtm285.github.io/static",
       "previewUrl": "https://imac.cormorant-matrix.ts.net:10000/static",
       "buildStatus": "success",
-      "lastBuild": "2026-10-11T12:44:25.664Z",
-      "lastBuildSuccess": "2026-10-11T12:44:25.664Z",
-      "linkedAt": "2026-10-11T12:44:25.664Z"
+      "lastBuild": "2026-10-11T23:53:46.931Z",
+      "lastBuildSuccess": "2026-10-11T23:53:46.931Z",
+      "linkedAt": "2026-10-11T23:53:46.931Z"
     }
   }
 }
