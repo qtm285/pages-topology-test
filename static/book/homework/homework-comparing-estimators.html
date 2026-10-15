@@ -1,4 +1,5 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -25,29 +26,29 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../_assets/mv24p8at-1/site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../_assets/mv24p8at-1/site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../_assets/mv24p8at-1/site_libs/clipboard/clipboard.min.js"></script>
-<script src="../_assets/mv24p8at-1/site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../_assets/mv24p8at-1/site_libs/quarto-search/fuse.min.js"></script>
-<script src="../_assets/mv24p8at-1/site_libs/quarto-search/quarto-search.js"></script>
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../homework/homework-comparing-estimators.solutions.html" rel="next">
+<link href="../chapters/chapter-bias-and-coverage.html" rel="next">
 <link href="../chapters/chapter-normal-approximation.html" rel="prev">
-<script src="../_assets/mv24p8at-1/site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../_assets/mv24p8at-1/site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../_assets/mv24p8at-1/site_libs/quarto-html/popper.min.js"></script>
-<script src="../_assets/mv24p8at-1/site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../_assets/mv24p8at-1/site_libs/quarto-html/anchor.min.js"></script>
-<link href="../_assets/mv24p8at-1/site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../_assets/mv24p8at-1/site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../_assets/mv24p8at-1/site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../_assets/mv24p8at-1/site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../_assets/mv24p8at-1/site_libs/bootstrap/bootstrap-6fe1715721786a838a92806728cb6c53.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="../_assets/mv24p8at-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
-<link href="../_assets/mv24p8at-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
-<script src="../_assets/mv24p8at-1/site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
-<link href="../_assets/mv24p8at-1/site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6fe1715721786a838a92806728cb6c53.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -75,10 +76,10 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script type="module" src="../_assets/mv24p8at-1/site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
-<link href="../_assets/mv24p8at-1/site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
-<link href="../_assets/mv24p8at-1/site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="../_assets/mv24p8at-1/site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script>
 // GENERATED by bin/generate-katex-macros.mjs from the tlda repo's
 // shared/katex-base-macros.mjs. Do not edit here -- edit the source and
@@ -525,7 +526,7 @@ window.__tldaKatexMacros = {
 
 </script>
 
-  <script defer="" src="../_assets/mv24p8at-1/katex-assets/dist/katex.min.js"></script>
+  <script defer="" src="../katex-assets/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
  var mathElements = document.getElementsByClassName("math");
  var macros = [];
@@ -540,7 +541,7 @@ window.__tldaKatexMacros = {
    });
 }}});
   </script>
-  <link rel="stylesheet" href="../_assets/mv24p8at-1/katex-assets/dist/katex.min.css">
+  <link rel="stylesheet" href="../katex-assets/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -571,7 +572,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -752,26 +753,20 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../homework/homework-comparing-estimators.solutions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-bias-and-coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-concentration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Concentration</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Concentration</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
   </div>
 </li>
       </ul>
@@ -779,7 +774,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-programming-reference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Programming Reference</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Programming Reference</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -798,26 +793,26 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li data-source-line="33"><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
   <ul class="collapse">
-  <li data-source-line="35"><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
-  <li data-source-line="50"><a href="#the-point" id="toc-the-point" class="nav-link" data-scroll-target="#the-point">The Point</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#the-point" id="toc-the-point" class="nav-link" data-scroll-target="#the-point">The Point</a></li>
   </ul></li>
-  <li data-source-line="55"><a href="#bias-variance-and-tradeoffs" id="toc-bias-variance-and-tradeoffs" class="nav-link" data-scroll-target="#bias-variance-and-tradeoffs">Bias, Variance, and Tradeoffs</a>
+  <li><a href="#bias-variance-and-tradeoffs" id="toc-bias-variance-and-tradeoffs" class="nav-link" data-scroll-target="#bias-variance-and-tradeoffs">Bias, Variance, and Tradeoffs</a>
   <ul class="collapse">
-  <li data-source-line="57"><a href="#review-prior-based-estimators" id="toc-review-prior-based-estimators" class="nav-link" data-scroll-target="#review-prior-based-estimators">Review: Prior-Based Estimators</a></li>
-  <li data-source-line="76"><a href="#the-biasvariance-tradeoff" id="toc-the-biasvariance-tradeoff" class="nav-link" data-scroll-target="#the-biasvariance-tradeoff">The Bias/Variance Tradeoff</a></li>
-  <li data-source-line="337"><a href="#consistency" id="toc-consistency" class="nav-link" data-scroll-target="#consistency">Consistency</a></li>
+  <li><a href="#review-prior-based-estimators" id="toc-review-prior-based-estimators" class="nav-link" data-scroll-target="#review-prior-based-estimators">Review: Prior-Based Estimators</a></li>
+  <li><a href="#the-biasvariance-tradeoff" id="toc-the-biasvariance-tradeoff" class="nav-link" data-scroll-target="#the-biasvariance-tradeoff">The Bias/Variance Tradeoff</a></li>
+  <li><a href="#consistency" id="toc-consistency" class="nav-link" data-scroll-target="#consistency">Consistency</a></li>
   </ul></li>
-  <li data-source-line="392"><a href="#convergence-in-probability" id="toc-convergence-in-probability" class="nav-link" data-scroll-target="#convergence-in-probability">Convergence in Probability</a>
+  <li><a href="#convergence-in-probability" id="toc-convergence-in-probability" class="nav-link" data-scroll-target="#convergence-in-probability">Convergence in Probability</a>
   <ul class="collapse">
-  <li data-source-line="456"><a href="#what-consistency-implies" id="toc-what-consistency-implies" class="nav-link" data-scroll-target="#what-consistency-implies">What Consistency Implies</a></li>
-  <li data-source-line="467"><a href="#negligible-and-non-negligible-bias" id="toc-negligible-and-non-negligible-bias" class="nav-link" data-scroll-target="#negligible-and-non-negligible-bias">Negligible and Non-Negligible Bias</a></li>
-  <li data-source-line="504"><a href="#how-big-a-sample" id="toc-how-big-a-sample" class="nav-link" data-scroll-target="#how-big-a-sample">How Big a Sample?</a></li>
+  <li><a href="#what-consistency-implies" id="toc-what-consistency-implies" class="nav-link" data-scroll-target="#what-consistency-implies">What Consistency Implies</a></li>
+  <li><a href="#negligible-and-non-negligible-bias" id="toc-negligible-and-non-negligible-bias" class="nav-link" data-scroll-target="#negligible-and-non-negligible-bias">Negligible and Non-Negligible Bias</a></li>
+  <li><a href="#how-big-a-sample" id="toc-how-big-a-sample" class="nav-link" data-scroll-target="#how-big-a-sample">How Big a Sample?</a></li>
   </ul></li>
-  <li data-source-line="524"><a href="#the-rotational-design-revisited" id="toc-the-rotational-design-revisited" class="nav-link" data-scroll-target="#the-rotational-design-revisited">The Rotational Design, Revisited</a>
+  <li><a href="#the-rotational-design-revisited" id="toc-the-rotational-design-revisited" class="nav-link" data-scroll-target="#the-rotational-design-revisited">The Rotational Design, Revisited</a>
   <ul class="collapse">
-  <li data-source-line="580"><a href="#extra-credit-an-arrangement-you-dont-know" id="toc-extra-credit-an-arrangement-you-dont-know" class="nav-link" data-scroll-target="#extra-credit-an-arrangement-you-dont-know">Extra Credit: An Arrangement You Don’t Know</a></li>
+  <li><a href="#extra-credit-an-arrangement-you-dont-know" id="toc-extra-credit-an-arrangement-you-dont-know" class="nav-link" data-scroll-target="#extra-credit-an-arrangement-you-dont-know">Extra Credit: An Arrangement You Don’t Know</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -847,8 +842,7 @@ window.Quarto = {
 <div class="callout-handout">
 <p><a href="https://pic.cormorant-matrix.ts.net/api/classroom/assignments/week5-homework/handout.zip" download="homework-comparing-estimators-handout.zip"><strong>Download this assignment</strong></a> — unzip it, open <code>homework-comparing-estimators.qmd</code> in Positron, and answer inside the answer blocks.</p>
 </div>
-
-<div class="hidden" data-source-line="9">
+<div class="hidden">
 <p>$$ \newcommand{X}{} \newcommand{Y}{} % A hex digit after # inside a macro body is eaten by build-time expansion, so digit-leading hexes spell # via . </p>
 <p>$$</p>
 </div>
@@ -866,24 +860,24 @@ window.Quarto = {
 </span></p>
 </div>
 <section id="introduction" class="level1">
-<h1 data-source-line="33">Introduction</h1>
+<h1>Introduction</h1>
 <section id="summary" class="level2">
-<h2 class="anchored" data-anchor-id="summary" data-source-line="35">Summary</h2>
-<p data-source-line="37">This homework continues where the last one left off. You’ve now seen that biased estimators can mess up coverage, and you’ve learned exactly how: coverage depends on the ratio bias/se. Now we’ll dig into the tradeoffs involved in choosing an estimator.</p>
-<p>We’ll start with the <em>bias/variance tradeoff</em>. An estimator can be bad in multiple ways: too much bias, too much variance, or both. We’ll use <em>root-mean-squared error</em> to summarize overall accuracy.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> </p>
-<p data-source-line="39">Then we’ll talk about <em>consistency</em>—the one property that almost everyone agrees they want an estimator to have. It’s really the bare minimum: if you’re willing to collect enough data, you can get as close to the estimation target as you want. We’ll see which of our prior-based estimators are consistent and which aren’t.</p>
-<p data-source-line="43">And we’ll see what consistency <em>doesn’t</em> promise. An estimator can be consistent—its typical error vanishing as you collect more data—and still give you interval estimates that get <em>worse</em> as <span class="math inline">n</span> grows. We’ll also work out how big a sample has to be for a chosen precision.</p>
-<p data-source-line="48">Finally, you’ll use the expectation and variance calculations from your previous homework to study a different sampling design.</p>
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>This homework continues where the last one left off. You’ve now seen that biased estimators can mess up coverage, and you’ve learned exactly how: coverage depends on the ratio bias/se. Now we’ll dig into the tradeoffs involved in choosing an estimator.</p>
+<p>We’ll start with the <em>bias/variance tradeoff</em>. An estimator can be bad in multiple ways: too much bias, too much variance, or both. We’ll use <em>root-mean-squared error</em> to summarize overall accuracy.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Then we’ll talk about <em>consistency</em>—the one property that almost everyone agrees they want an estimator to have. It’s really the bare minimum: if you’re willing to collect enough data, you can get as close to the estimation target as you want. We’ll see which of our prior-based estimators are consistent and which aren’t.</p>
+<p>And we’ll see what consistency <em>doesn’t</em> promise. An estimator can be consistent—its typical error vanishing as you collect more data—and still give you interval estimates that get <em>worse</em> as <span class="math inline">n</span> grows. We’ll also work out how big a sample has to be for a chosen precision.</p>
+<p>Finally, you’ll use the expectation and variance calculations from your previous homework to study a different sampling design.</p>
 </section>
 <section id="the-point" class="level2">
-<h2 class="anchored" data-anchor-id="the-point" data-source-line="50">The Point</h2>
-<p data-source-line="52">Knowing this stuff will help you choose between estimators yourself, think about the choices others make, and communicate about these decisions and their implications. It’ll help us think about calibration later on, too, because when we know our point estimators are close to the estimation target, we can get away with using approximations like Taylor series to understand their sampling distributions.</p>
+<h2 class="anchored" data-anchor-id="the-point">The Point</h2>
+<p>Knowing this stuff will help you choose between estimators yourself, think about the choices others make, and communicate about these decisions and their implications. It’ll help us think about calibration later on, too, because when we know our point estimators are close to the estimation target, we can get away with using approximations like Taylor series to understand their sampling distributions.</p>
 </section>
 </section>
 <section id="bias-variance-and-tradeoffs" class="level1">
-<h1 data-source-line="55">Bias, Variance, and Tradeoffs</h1>
+<h1>Bias, Variance, and Tradeoffs</h1>
 <section id="review-prior-based-estimators" class="level2">
-<h2 class="anchored" data-anchor-id="review-prior-based-estimators" data-source-line="57">Review: Prior-Based Estimators</h2>
+<h2 class="anchored" data-anchor-id="review-prior-based-estimators">Review: Prior-Based Estimators</h2>
 <p>In the last homework, we worked with estimators that incorporate prior information. Recall the general form: if we have <span class="math inline">\nprior</span> prior observations with mean <span class="math inline">\thetaprior</span>, we can combine them with our sample to get <span class="math display">
 \tilde{Y}_{\nprior} = \frac{1}{\nprior + n}  \cb*{ \nprior\thetaprior + n\bar Y }.
 </span> You calculated the bias and standard deviation of this estimator: <span class="math display">
@@ -892,17 +886,16 @@ window.Quarto = {
 \mathop{\mathrm{sd}}(\tilde Y_{\nprior}) &amp;= \sqrt{\frac{n\theta(1-\theta)}{(\nprior + n)^2}}
 \end{aligned}
 </span> Throughout, assume the prior mean is not exactly the population proportion, <span class="math inline">\thetaprior \neq \theta</span>, and that the population is not degenerate, <span class="math inline">0 &lt; \theta &lt; 1</span>.</p>
-<p data-source-line="72">And you saw, both in the sampling distribution plots and in the coverage simulation, that bias causes problems for interval estimation. The lecture gave us the precise relationship: coverage depends on the ratio bias/se.</p>
-<p data-source-line="74">Now we’ll dig deeper into the tradeoffs involved in choosing an estimator.</p>
+<p>And you saw, both in the sampling distribution plots and in the coverage simulation, that bias causes problems for interval estimation. The lecture gave us the precise relationship: coverage depends on the ratio bias/se.</p>
+<p>Now we’ll dig deeper into the tradeoffs involved in choosing an estimator.</p>
 </section>
 <section id="the-biasvariance-tradeoff" class="level2">
-<h2 class="anchored" data-anchor-id="the-biasvariance-tradeoff" data-source-line="76">The Bias/Variance Tradeoff</h2>
-<p data-source-line="78">Here’s the figure from last homework showing three estimators at three sample sizes. Recall that estimator ‘a’ is the sample mean (unbiased), estimator ‘b’ uses a fixed number of prior observations (bias shrinks with <span class="math inline">n</span>), and estimator ‘c’ scales the prior observations with sample size (constant bias).</p>
+<h2 class="anchored" data-anchor-id="the-biasvariance-tradeoff">The Bias/Variance Tradeoff</h2>
+<p>Here’s the figure from last homework showing three estimators at three sample sizes. Recall that estimator ‘a’ is the sample mean (unbiased), estimator ‘b’ uses a fixed number of prior observations (bias shrinks with <span class="math inline">n</span>), and estimator ‘c’ scales the prior observations with sample size (constant bias).</p>
 <div id="fig-3-sampling-distributions" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-3-sampling-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-
-<div class="cell" data-source-line="81">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -917,11 +910,11 @@ Figure&nbsp;21.1: Sampling distributions of three estimators at three sample siz
 </figcaption>
 </figure>
 </div>
-<p data-source-line="139">As the figure shows, there are multiple ways to be a not-so-great estimator. You can have no bias—or small bias—but so much variance that in many surveys (i.e.&nbsp;many draws from the sampling distribution) you’re way off. That’s what we see happening with ‘estimator a’ at sample size <span class="math inline">n=10</span>. You can have low variance but comparatively high bias, like we see with ‘estimator c’ at sample sizes <span class="math inline">n=40</span> and <span class="math inline">n=160</span>. We often use <em>root-mean-squared-error</em> to summarize the typical magnitude of an estimator’s error.</p>
+<p>As the figure shows, there are multiple ways to be a not-so-great estimator. You can have no bias—or small bias—but so much variance that in many surveys (i.e.&nbsp;many draws from the sampling distribution) you’re way off. That’s what we see happening with ‘estimator a’ at sample size <span class="math inline">n=10</span>. You can have low variance but comparatively high bias, like we see with ‘estimator c’ at sample sizes <span class="math inline">n=40</span> and <span class="math inline">n=160</span>. We often use <em>root-mean-squared-error</em> to summarize the typical magnitude of an estimator’s error.</p>
 <p><span class="math display">
 \RMSE(\hat\theta) = \sqrt{ \mathop{\mathrm{E}}\sb*{ \cb*{\hat \theta - \theta}^2 } }
 </span></p>
-<p data-source-line="149">Famously, we can decompose its square into a sum of squared bias and variance.</p>
+<p>Famously, we can decompose its square into a sum of squared bias and variance.</p>
 <p><span class="math display">
 \begin{aligned}
 \mathop{\mathrm{E}}\sb*{ \cb*{\hat\theta - \theta}^2 }
@@ -930,7 +923,7 @@ Figure&nbsp;21.1: Sampling distributions of three estimators at three sample siz
 &amp;= \mathop{\mathrm{\mathop{\mathrm{V}}}}[\hat\theta] + 2 \times 0 + \underset{\text{bias}(\hat\theta)^2}{\cb*{ \mathop{\mathrm{E}}[\hat\theta] - \theta }^2} \\
 \end{aligned}
 </span></p>
-<p data-source-line="160">Just to check that you’re following the math, do this quick exercise.</p>
+<p>Just to check that you’re following the math, do this quick exercise.</p>
 <div id="exr-linearity-of-expectation" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 21.1</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -947,7 +940,20 @@ Figure&nbsp;21.1: Sampling distributions of three estimators at three sample siz
 </div>
 </div>
 </div>
-<p data-source-line="171">Now here’s a real one. We’re talking about different estimators for the same estimation target. This exercise is an opportunity to think about how you might choose between them. I’ve asked you to answer a few questions and sketch a few things to help you think through the issues, but I’ve tried to leave this pretty open-ended because this really is a question without a single right answer. To some extent, it’s about what you think is important. You don’t have to stand by this choice for the rest of your life, so it’s okay if you miss something important and wind up changing your mind later, e.g.&nbsp;when you talk with your classmates or read the solution. It’s really just to get you started thinking about these kinds of choices and what you might want to consider when making them.</p>
+<div id="ans-exr-linearity-of-expectation" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<p>Now here’s a real one. We’re talking about different estimators for the same estimation target. This exercise is an opportunity to think about how you might choose between them. I’ve asked you to answer a few questions and sketch a few things to help you think through the issues, but I’ve tried to leave this pretty open-ended because this really is a question without a single right answer. To some extent, it’s about what you think is important. You don’t have to stand by this choice for the rest of your life, so it’s okay if you miss something important and wind up changing your mind later, e.g.&nbsp;when you talk with your classmates or read the solution. It’s really just to get you started thinking about these kinds of choices and what you might want to consider when making them.</p>
 <div id="exr-bias-variance-rmse" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 21.2</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -960,19 +966,32 @@ Figure&nbsp;21.1: Sampling distributions of three estimators at three sample siz
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="184">Suppose we increase our number of prior observations, <span class="math inline">\nprior</span>, without changing their mean <span class="math inline">\thetaprior</span>. What happens to the bias of the estimator <span class="math inline">\tilde{Y}_{\nprior}</span>? E.g. does it stay the same, increase, decrease, increase then decrease, decrease then increase, etc.? What happens to its standard deviation? And what happens to its root-mean-squared-error, <span class="math inline">\RMSE(\tilde{Y}_{\nprior})</span>? Is there a <em>bias/variance tradeoff</em> going on?</p>
-<p data-source-line="192">Thinking of the magnitude of the bias, the standard deviation, and the root-mean-squared error as functions of <span class="math inline">\nprior</span>, sketch all three on the same axes. This sketch doesn’t have to be super precise, but try to convey the general shape of each function and do identify precisely the location (value of <span class="math inline">\nprior</span>) and value (height of the function at the location) of any important features, e.g.&nbsp;minima or maxima of one curve, points where two curves cross, etc.</p>
-<p data-source-line="199">Having done all this, propose a choice for <span class="math inline">\nprior</span> and explain why you’d make it. Your choice can depend on <span class="math inline">n</span> and <span class="math inline">\thetaprior</span>, because you know all that stuff. But it can’t depend on <span class="math inline">\theta</span>. That’s something you don’t know.</p>
+<p>Suppose we increase our number of prior observations, <span class="math inline">\nprior</span>, without changing their mean <span class="math inline">\thetaprior</span>. What happens to the bias of the estimator <span class="math inline">\tilde{Y}_{\nprior}</span>? E.g. does it stay the same, increase, decrease, increase then decrease, decrease then increase, etc.? What happens to its standard deviation? And what happens to its root-mean-squared-error, <span class="math inline">\RMSE(\tilde{Y}_{\nprior})</span>? Is there a <em>bias/variance tradeoff</em> going on?</p>
+<p>Thinking of the magnitude of the bias, the standard deviation, and the root-mean-squared error as functions of <span class="math inline">\nprior</span>, sketch all three on the same axes. This sketch doesn’t have to be super precise, but try to convey the general shape of each function and do identify precisely the location (value of <span class="math inline">\nprior</span>) and value (height of the function at the location) of any important features, e.g.&nbsp;minima or maxima of one curve, points where two curves cross, etc.</p>
+<p>Having done all this, propose a choice for <span class="math inline">\nprior</span> and explain why you’d make it. Your choice can depend on <span class="math inline">n</span> and <span class="math inline">\thetaprior</span>, because you know all that stuff. But it can’t depend on <span class="math inline">\theta</span>. That’s something you don’t know.</p>
 </div>
+</div>
+</div>
+<div id="ans-exr-bias-variance-rmse" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
 </div>
 </div>
 </section>
 <section id="consistency" class="level2">
-<h2 class="anchored" data-anchor-id="consistency" data-source-line="337">Consistency</h2>
-<p data-source-line="339">We say an estimator is <em>consistent</em> if it converges to the estimation target as sample size increases to infinity. That’s being vague. There are a couple ways this is imprecise.</p>
-<p data-source-line="343">First, what does it mean to be the same estimator at different sample sizes? E.g., the definition of estimator ‘c’ in <a href="homework-comparing-estimators.solutions.html#fig-3-sampling-distributions" class="quarto-xref">Figure&nbsp;<span>22.1</span></a> depends on <span class="math inline">n</span>, so is that ‘an estimator’? The resolution for this one is easy—if we really want to be precise, we explicitly specify an estimator for each sample size: we say ‘an estimator sequence’ is consistent instead of ‘an estimator’. When we say ‘an estimator’ is consistent, we expect the person we’re talking about understands what sequence of estimators we actually mean. This is just a language thing.</p>
-<p data-source-line="351">The second thing that’s imprecise is what it actually means for a random variable, like an estimator, to converge to something. It turns out that there are a lot of different, useful ways to think about this happening. One of the simpler versions is called <em>convergence in mean square</em>. A sequence of random variables <span class="math inline">Z_1,Z_2,Z_3,\ldots</span> converges in mean square to a a random variable <span class="math inline">Z</span>, which is often but not necessarily a constant, if the root mean square difference between them, <span class="math inline">\sqrt{E[(Z_n - Z)^2]}</span>, gets arbitrarily small (i.e., converges to zero) as <span class="math inline">n \to \infty</span>. And we say an estimator <span class="math inline">\hat\theta</span> is <em>consistent in mean-square</em> if it converges in mean square to the estimation target <span class="math inline">\theta</span> as <em>sample size</em> <span class="math inline">n</span> goes to infinity.</p>
-<p data-source-line="360">Here are a few exercises to get you thinking about what consistency can and can’t look like.</p>
+<h2 class="anchored" data-anchor-id="consistency">Consistency</h2>
+<p>We say an estimator is <em>consistent</em> if it converges to the estimation target as sample size increases to infinity. That’s being vague. There are a couple ways this is imprecise.</p>
+<p>First, what does it mean to be the same estimator at different sample sizes? E.g., the definition of estimator ‘c’ in <a href="#fig-3-sampling-distributions" class="quarto-xref">Figure&nbsp;<span>21.1</span></a> depends on <span class="math inline">n</span>, so is that ‘an estimator’? The resolution for this one is easy—if we really want to be precise, we explicitly specify an estimator for each sample size: we say ‘an estimator sequence’ is consistent instead of ‘an estimator’. When we say ‘an estimator’ is consistent, we expect the person we’re talking about understands what sequence of estimators we actually mean. This is just a language thing.</p>
+<p>The second thing that’s imprecise is what it actually means for a random variable, like an estimator, to converge to something. It turns out that there are a lot of different, useful ways to think about this happening. One of the simpler versions is called <em>convergence in mean square</em>. A sequence of random variables <span class="math inline">Z_1,Z_2,Z_3,\ldots</span> converges in mean square to a a random variable <span class="math inline">Z</span>, which is often but not necessarily a constant, if the root mean square difference between them, <span class="math inline">\sqrt{E[(Z_n - Z)^2]}</span>, gets arbitrarily small (i.e., converges to zero) as <span class="math inline">n \to \infty</span>. And we say an estimator <span class="math inline">\hat\theta</span> is <em>consistent in mean-square</em> if it converges in mean square to the estimation target <span class="math inline">\theta</span> as <em>sample size</em> <span class="math inline">n</span> goes to infinity.</p>
+<p>Here are a few exercises to get you thinking about what consistency can and can’t look like.</p>
 <div id="exr-mean-square-convergence-and-rmse" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 21.3</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -990,6 +1009,19 @@ Figure&nbsp;21.1: Sampling distributions of three estimators at three sample siz
 </div>
 </div>
 </div>
+<div id="ans-exr-mean-square-convergence-and-rmse" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
 <div id="exr-mean-square-convergence" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 21.4</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -1002,19 +1034,31 @@ Figure&nbsp;21.1: Sampling distributions of three estimators at three sample siz
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p>Of the three estimators depicted in <a href="homework-comparing-estimators.solutions.html#fig-3-sampling-distributions" class="quarto-xref">Figure&nbsp;<span>22.1</span></a> — estimators ‘a’, ‘b’, and ‘c’ — which are mean-square consistent? Using the figure, explain your reasoning.</p>
+<p>Of the three estimators depicted in <a href="#fig-3-sampling-distributions" class="quarto-xref">Figure&nbsp;<span>21.1</span></a> — estimators ‘a’, ‘b’, and ‘c’ — which are mean-square consistent? Using the figure, explain your reasoning.</p>
 <p>Because consistency is about what happens as <span class="math inline">n\to\infty</span>, it’s not really possible to know whether an estimator is consistent by looking at what happens at 3 sample sizes, like we have in the figure. You’d have to guess what the next row would look like, and the next, etc. But you don’t need to guess. You have the actual estimator definitions in the review section at the start of this homework. That said, rather than phrasing your explanation in terms of any formulas, talk about what you see in the figure and what the formulas tell you that <em>you would see</em> if we were to add rows for <span class="math inline">n</span> increasing to <span class="math inline">\infty</span>.</p>
 </div>
+</div>
+</div>
+<div id="ans-exr-mean-square-convergence" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
 </div>
 </div>
 </section>
 </section>
 <section id="convergence-in-probability" class="level1">
-<h1 data-source-line="392">Convergence in Probability</h1>
-<p data-source-line="394">Now let’s think about another notion of convergence. If an estimator’s sampling distribution ends up in the right location (<span class="math inline">\text{bias} \to 0</span>) with arbitrarily little spread (<span class="math inline">\text{standard deviation} \to 0</span>), then it makes sense that <em>every draw from that sampling distribution</em> will be close to the estimation target. Or almost every draw, anyway.</p>
-<p data-source-line="399">We tend to visualize our estimate as a single dot, e.g.&nbsp;the black dot below. That’s what it is. One number. But when we want to think about what estimates we could have plausibly gotten, we tend to think about the dots we’d get if we were to repeat our survey a hundred times or a billion, each time calculating an estimate the same way. The sampling distribution of our estimator. We can plot actual dots, like the purple ones below, or histogram them, to get a sense of what this looks like. Hopefully all this is familiar-verging-on-boring to you by now.</p>
-
-<div class="cell" data-source-line="405">
+<h1>Convergence in Probability</h1>
+<p>Now let’s think about another notion of convergence. If an estimator’s sampling distribution ends up in the right location (<span class="math inline">\text{bias} \to 0</span>) with arbitrarily little spread (<span class="math inline">\text{standard deviation} \to 0</span>), then it makes sense that <em>every draw from that sampling distribution</em> will be close to the estimation target. Or almost every draw, anyway.</p>
+<p>We tend to visualize our estimate as a single dot, e.g.&nbsp;the black dot below. That’s what it is. One number. But when we want to think about what estimates we could have plausibly gotten, we tend to think about the dots we’d get if we were to repeat our survey a hundred times or a billion, each time calculating an estimate the same way. The sampling distribution of our estimator. We can plot actual dots, like the purple ones below, or histogram them, to get a sense of what this looks like. Hopefully all this is familiar-verging-on-boring to you by now.</p>
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1028,13 +1072,13 @@ P(\lvert\hat\theta - \theta\rvert \le \epsilon) \to 1 \qqtext{ as } n \to \infty
 </span> Or equivalently, the probability that it isn’t sufficiently close goes to zero. That is, if <span class="math display">
 P(\lvert\hat\theta - \theta\rvert &gt; \epsilon) \to 0 \qqtext{ as } n \to \infty \qqtext{ for any } \epsilon &gt; 0
 </span></p>
-<p>If <span class="math inline">\hat \theta</span> is an estimator and <span class="math inline">\theta</span> is our estimation target, we say <span class="math inline">\hat\theta</span> is <em>consistent in probability</em> if it converges in probability to <span class="math inline">\theta</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> </p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled" data-source-line="443">
+<p>If <span class="math inline">\hat \theta</span> is an estimator and <span class="math inline">\theta</span> is our estimation target, we say <span class="math inline">\hat\theta</span> is <em>consistent in probability</em> if it converges in probability to <span class="math inline">\theta</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill" data-source-line="447">
+<div class="callout-title-container flex-fill">
 <span class="screen-reader-only">Note</span>Convergence in Probability and Interval Estimation
 </div>
 </div>
@@ -1043,14 +1087,14 @@ P(\lvert\hat\theta - \theta\rvert &gt; \epsilon) \to 0 \qqtext{ as } n \to \inft
 </div>
 </div>
 <section id="what-consistency-implies" class="level2">
-<h2 class="anchored" data-anchor-id="what-consistency-implies" data-source-line="456">What Consistency Implies</h2>
-<p data-source-line="458">We now have two notions of consistency on the table and nothing connecting them. Chebyshev’s inequality connects them.</p>
+<h2 class="anchored" data-anchor-id="what-consistency-implies">What Consistency Implies</h2>
+<p>We now have two notions of consistency on the table and nothing connecting them. Chebyshev’s inequality connects them.</p>
 <p>Centred on the estimation target rather than on the estimator’s own mean, it says <span class="math display">
 P(\lvert\hat\theta - \theta\rvert &gt; \epsilon) \le \frac{\mathop{\mathrm{E}}\sb*{(\hat\theta-\theta)^2}}{\epsilon^2} = \frac{\RMSE(\hat\theta)^2}{\epsilon^2}.
 </span> Fix <span class="math inline">\epsilon</span> and let <span class="math inline">n</span> grow. If the root-mean-squared error goes to zero, the bound on the right goes to zero, so the probability on the left does too. Which implies that mean-square consistency implies consistency in probability: if your typical error vanishes, then you land close to the target with probability approaching one.</p>
 </section>
 <section id="negligible-and-non-negligible-bias" class="level2">
-<h2 class="anchored" data-anchor-id="negligible-and-non-negligible-bias" data-source-line="467">Negligible and Non-Negligible Bias</h2>
+<h2 class="anchored" data-anchor-id="negligible-and-non-negligible-bias">Negligible and Non-Negligible Bias</h2>
 <p>Mean-square consistency is a promise about typical error, and even that promise buys less than it sounds like. Coverage runs on the ratio <span class="math inline">\text{bias}/\text{sd}</span>, and for our prior-based estimator that ratio is simple, because the <span class="math inline">\nprior + n</span> in the bias and in the standard deviation cancels. <span class="math display">
 \frac{\mathop{\mathrm{bias}}(\tilde Y_{\nprior})}{\mathop{\mathrm{sd}}(\tilde Y_{\nprior})} = \frac{\nprior(\thetaprior - \theta)}{\sqrt{n\theta(1-\theta)}}.
 </span> So the ratio is governed by <span class="math inline">\nprior</span> against <span class="math inline">\sqrt n</span>. And <span class="math inline">\nprior</span> is something <em>we</em> choose.</p>
@@ -1066,26 +1110,26 @@ P(\lvert\hat\theta - \theta\rvert &gt; \epsilon) \le \frac{\mathop{\mathrm{E}}\s
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p>Take three ways of growing the number of prior observations as <span class="math inline">n \to \infty</span>: <span class="math inline">\nprior = 10</span> (which is what estimator ‘b’ in <a href="homework-comparing-estimators.solutions.html#fig-3-sampling-distributions" class="quarto-xref">Figure&nbsp;<span>22.1</span></a> does), <span class="math inline">\nprior = \sqrt n</span>, and <span class="math inline">\nprior = n^{3/4}</span>.</p>
+<p>Take three ways of growing the number of prior observations as <span class="math inline">n \to \infty</span>: <span class="math inline">\nprior = 10</span> (which is what estimator ‘b’ in <a href="#fig-3-sampling-distributions" class="quarto-xref">Figure&nbsp;<span>21.1</span></a> does), <span class="math inline">\nprior = \sqrt n</span>, and <span class="math inline">\nprior = n^{3/4}</span>.</p>
 <ol type="1">
-<li><p data-source-line="478">For each, say what happens to the bias, the standard deviation, the root-mean-squared error, and the ratio <span class="math inline">\text{bias}/\text{sd}</span>. Which of the three are mean-square consistent?</p></li>
-<li><p data-source-line="480"><strong>By hand</strong>, on paper, sketch the sampling distribution of <span class="math inline">\tilde Y_{\nprior}</span> at a large sample size for two of the three: one where the bias is negligible compared to the standard deviation, and one where it isn’t. On each sketch, mark the estimation target <span class="math inline">\theta</span>, the mean of the sampling distribution, and the mean <span class="math inline">\pm</span> two standard deviations, the way we’ve been marking them in green and blue. Photograph your sketches and include them below.</p></li>
+<li><p>For each, say what happens to the bias, the standard deviation, the root-mean-squared error, and the ratio <span class="math inline">\text{bias}/\text{sd}</span>. Which of the three are mean-square consistent?</p></li>
+<li><p><strong>By hand</strong>, on paper, sketch the sampling distribution of <span class="math inline">\tilde Y_{\nprior}</span> at a large sample size for two of the three: one where the bias is negligible compared to the standard deviation, and one where it isn’t. On each sketch, mark the estimation target <span class="math inline">\theta</span>, the mean of the sampling distribution, and the mean <span class="math inline">\pm</span> two standard deviations, the way we’ve been marking them in green and blue. Photograph your sketches and include them below.</p></li>
 <li><p>In words: for the case where the interval estimate gets worse as <span class="math inline">n</span> grows, explain how that can happen even though the estimator is consistent.</p></li>
 </ol>
 </div>
 </div>
 </div>
 <div class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill" data-source-line="486">
+<div class="callout-title-container flex-fill">
 <span class="screen-reader-only">Tip</span>Hints
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li>The three choices make the number of prior observations grow at different speeds—or not at all. To see how fast the bias goes to zero, write it as <span class="math display">
@@ -1097,9 +1141,22 @@ P(\lvert\hat\theta - \theta\rvert &gt; \epsilon) \le \frac{\mathop{\mathrm{E}}\s
 </div>
 </div>
 </div>
+<div id="ans-exr-negligible-bias" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
 </section>
 <section id="how-big-a-sample" class="level2">
-<h2 class="anchored" data-anchor-id="how-big-a-sample" data-source-line="504">How Big a Sample?</h2>
+<h2 class="anchored" data-anchor-id="how-big-a-sample">How Big a Sample?</h2>
 <div id="exr-sample-size" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 22.2</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -1114,17 +1171,30 @@ P(\lvert\hat\theta - \theta\rvert &gt; \epsilon) \le \frac{\mathop{\mathrm{E}}\s
 <div class="callout-exercise">
 <p>A new, wildly controversial candidate is on the ballot, and nobody has any idea what turnout will look like. You’re polling to estimate the proportion <span class="math inline">\theta</span> of eligible voters who will turn out, drawing people independently and uniformly, and you want a 95% interval estimate accurate to within 1 percentage point—an interval of the form <span class="math inline">\hat\theta \pm .01</span>, using the normal approximation.</p>
 <ol type="1">
-<li><p data-source-line="509">Roughly how many voters should you poll? Choose the closest from this list: <span class="math inline">1{,}000</span>, <span class="math inline">10{,}000</span>, <span class="math inline">100{,}000</span>.</p></li>
+<li><p>Roughly how many voters should you poll? Choose the closest from this list: <span class="math inline">1{,}000</span>, <span class="math inline">10{,}000</span>, <span class="math inline">100{,}000</span>.</p></li>
 <li><p>Suppose you only needed to be accurate to within 2 percentage points, i.e.&nbsp;<span class="math inline">\hat\theta \pm .02</span>. Would you need half as many voters, or fewer than half? Say why, in a sentence.</p></li>
 </ol>
 </div>
 </div>
 </div>
+<div id="ans-exr-sample-size" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
 </section>
 </section>
 <section id="the-rotational-design-revisited" class="level1">
-<h1 data-source-line="524">The Rotational Design, Revisited</h1>
-<p data-source-line="526">A population of <span class="math inline">m=2n</span> people consists of <span class="math inline">n</span> people whose response is 0 followed by <span class="math inline">n</span> people whose response is 1, arranged in a circle. Choose a starting person uniformly at random and sample that person and the next <span class="math inline">n-1</span> people around the circle. Let <span class="math inline">\hat\theta</span> be the proportion of 1s in the sample.</p>
+<h1>The Rotational Design, Revisited</h1>
+<p>A population of <span class="math inline">m=2n</span> people consists of <span class="math inline">n</span> people whose response is 0 followed by <span class="math inline">n</span> people whose response is 1, arranged in a circle. Choose a starting person uniformly at random and sample that person and the next <span class="math inline">n-1</span> people around the circle. Let <span class="math inline">\hat\theta</span> be the proportion of 1s in the sample.</p>
 <div id="exr-rotational-sample" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 23.1</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -1138,9 +1208,9 @@ P(\lvert\hat\theta - \theta\rvert &gt; \epsilon) \le \frac{\mathop{\mathrm{E}}\s
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
 <ol type="1">
-<li><p data-source-line="529">Start with <span class="math inline">n=2</span>: the circle is <span class="math inline">0,0,1,1</span>, and you sample two consecutive people. List the possible samples and work out the sampling distribution of <span class="math inline">\hat\theta</span>.</p></li>
-<li><p data-source-line="531">Now let <span class="math inline">n</span> be any positive integer. Work out the sampling distribution of <span class="math inline">\hat\theta</span>. Count the starting positions that produce each possible number of 1s in the sample.</p></li>
-<li><p data-source-line="533">Calculate the expectation and variance of <span class="math inline">\hat\theta</span>.</p></li>
+<li><p>Start with <span class="math inline">n=2</span>: the circle is <span class="math inline">0,0,1,1</span>, and you sample two consecutive people. List the possible samples and work out the sampling distribution of <span class="math inline">\hat\theta</span>.</p></li>
+<li><p>Now let <span class="math inline">n</span> be any positive integer. Work out the sampling distribution of <span class="math inline">\hat\theta</span>. Count the starting positions that produce each possible number of 1s in the sample.</p></li>
+<li><p>Calculate the expectation and variance of <span class="math inline">\hat\theta</span>.</p></li>
 <li><p>What happens to the variance as <span class="math inline">n</span> grows? Compare it with the variance when you draw <span class="math inline">n</span> people independently from the same population. What does this comparison tell you about increasing the sample size?</p></li>
 </ol>
 </div>
@@ -1151,7 +1221,7 @@ P(\lvert\hat\theta - \theta\rvert &gt; \epsilon) \le \frac{\mathop{\mathrm{E}}\s
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill" data-source-line="539">
+<div class="callout-title-container flex-fill">
 <span class="screen-reader-only">Tip</span>Help with the sums
 </div>
 </div>
@@ -1163,9 +1233,22 @@ P(\lvert\hat\theta - \theta\rvert &gt; \epsilon) \le \frac{\mathop{\mathrm{E}}\s
 </span> For example, when <span class="math inline">n=4</span>, the first sum is <span class="math inline">1+2+3=6</span>, and its formula is <span class="math inline">3\cdot4/2=6</span>. The second is <span class="math inline">1^2+2^2+3^2=14</span>, and its formula is <span class="math inline">3\cdot4\cdot7/6=14</span>.</p>
 </div>
 </div>
+<div id="ans-exr-rotational-sample" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
 <section id="extra-credit-an-arrangement-you-dont-know" class="level2">
-<h2 class="anchored" data-anchor-id="extra-credit-an-arrangement-you-dont-know" data-source-line="580">Extra Credit: An Arrangement You Don’t Know</h2>
-<p data-source-line="582">Keep the circle of <span class="math inline">2n</span> people and the same sampling rule, but now suppose you don’t know how many responses are 1 or how they are arranged. You want a variance bound that works for every such population.</p>
+<h2 class="anchored" data-anchor-id="extra-credit-an-arrangement-you-dont-know">Extra Credit: An Arrangement You Don’t Know</h2>
+<p>Keep the circle of <span class="math inline">2n</span> people and the same sampling rule, but now suppose you don’t know how many responses are 1 or how they are arranged. You want a variance bound that works for every such population.</p>
 <div id="exr-worst-case-arrangement" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 23.2</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -1179,11 +1262,24 @@ P(\lvert\hat\theta - \theta\rvert &gt; \epsilon) \le \frac{\mathop{\mathrm{E}}\s
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
 <ol type="1">
-<li><p data-source-line="585">Consider the alternating arrangement <span class="math inline">0,1,0,1,\ldots</span>. Why is the sample proportion essentially the same at every starting point?</p></li>
-<li><p data-source-line="587">Give an informal argument that the half-and-half block arrangement in the previous exercise has the largest variance. It may help to consider how the number of 1s in the sample changes when you move the starting point one place, and when you move it <span class="math inline">n</span> places.</p></li>
+<li><p>Consider the alternating arrangement <span class="math inline">0,1,0,1,\ldots</span>. Why is the sample proportion essentially the same at every starting point?</p></li>
+<li><p>Give an informal argument that the half-and-half block arrangement in the previous exercise has the largest variance. It may help to consider how the number of 1s in the sample changes when you move the starting point one place, and when you move it <span class="math inline">n</span> places.</p></li>
 <li><p>Use this argument and your previous calculation to state a bound on the variance that holds no matter how many responses are 1 or how they are arranged.</p></li>
 </ol>
 </div>
+</div>
+</div>
+<div id="ans-exr-worst-case-arrangement" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
 </div>
 </div>
 
@@ -1670,8 +1766,8 @@ window._ojs.runtime.interpretFromScriptTags();
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../homework/homework-comparing-estimators.solutions.html" class="pagination-link" aria-label="Homework: Comparing Estimators">
-        <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../chapters/chapter-bias-and-coverage.html" class="pagination-link" aria-label="Bias and Coverage">
+        <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
