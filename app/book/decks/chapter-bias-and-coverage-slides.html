@@ -95,7 +95,7 @@
     code span.wa { color: #008000; font-weight: bold; } /* Warning */
   </style>
   <link rel="stylesheet" href="chapter-bias-and-coverage-slides_files/libs/revealjs/dist/theme/quarto-7302623cebb49f2c16f5fb89f378febd.css">
-  <script defer="" src="../_assets/mv3rx1ub-1/katex-assets/dist/katex.min.js"></script>
+  <script defer="" src="../_assets/mv4ojv3n-1/katex-assets/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
  var mathElements = document.getElementsByClassName("math");
  var macros = [];
@@ -110,7 +110,7 @@
    });
 }}});
   </script>
-  <link rel="stylesheet" href="../_assets/mv3rx1ub-1/katex-assets/dist/katex.min.css">
+  <link rel="stylesheet" href="../_assets/mv4ojv3n-1/katex-assets/dist/katex.min.css">
   <link href="chapter-bias-and-coverage-slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="chapter-bias-and-coverage-slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="chapter-bias-and-coverage-slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -718,21 +718,21 @@
 </div>
 </div>
 </div>
-<p data-source-line="127">National Supported Work was a 1970s employment program for people facing serious barriers to work, including former drug users, former offenders, and young school dropouts.</p>
-<p data-source-line="129">Our dataset contains 445 men, of whom 185 were assigned treatment and 260 control.</p>
+<p data-source-line="132">National Supported Work was a 1970s employment program for people facing serious barriers to work, including former drug users, former offenders, and young school dropouts.</p>
+<p data-source-line="134">Our dataset contains 445 men, of whom 185 were assigned treatment and 260 control.</p>
 <ul>
 <li>These weren’t randomly selected American men.</li>
 <li>They were recruited into a program intended to help people struggling to find work, often beyond the difficulties associated with their demographic circumstances.</li>
 </ul>
-<p data-source-line="134">Our population for this calculation is these 445 participants.</p>
+<p data-source-line="139">Our population for this calculation is these 445 participants.</p>
 </section>
 <section id="whats-random" class="slide level2">
-<h2 data-source-line="136">What’s Random?</h2>
+<h2 data-source-line="141">What’s Random?</h2>
 
-<div class="r-stack" style="align-items: start;" data-source-line="138">
+<div class="r-stack" style="align-items: start;" data-source-line="143">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="188">
+<div class="cell" data-source-line="193">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -744,7 +744,7 @@
 </div>
 <div class="fragment current-visible" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="197">
+<div class="cell" data-source-line="202">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -756,7 +756,7 @@
 </div>
 <div class="fragment current-visible" data-fragment-index="1" style="width: 100%;">
 
-<div class="cell" data-source-line="206">
+<div class="cell" data-source-line="211">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -768,7 +768,7 @@
 </div>
 <div class="fragment fade-in" data-fragment-index="2" style="width: 100%;">
 
-<div class="cell" data-source-line="215">
+<div class="cell" data-source-line="220">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -779,21 +779,22 @@
 </div>
 </div>
 </div>
-<div class="fragment" data-fragment-index="0">
-<p>Random assignment is literally sampling the treated group<a href="#/footnotes" class="footnote-ref" id="fnref1" role="doc-noteref" data-footnote-href="#/fn1" onclick=""><sup>1</sup></a></p>
+<p>Random assignment is—the way it happened here—literally sampling the treated group<a href="#/footnotes" class="footnote-ref" id="fnref1" role="doc-noteref" data-footnote-href="#/fn1" onclick=""><sup>1</sup></a> </p>
 <ul>
-<li>Without replacement</li>
+<li data-source-line="230">Without replacement</li>
 <li>From the population of all study participants</li>
 </ul>
+<p data-source-line="235">If we’re being serious about what’s really random—and we should be—we need to make a small change.</p>
+<div style="text-align: center;">
+<p data-source-line="238">A multiplicative change.</p>
 </div>
 <aside></aside></section>
-<section id="same-calculation-one-correction" class="slide level2">
-<h2 data-source-line="232">Same Calculation, One Correction</h2>
-<div style="padding-bottom: 80px;">
+<section id="how-many-participants" class="slide level2">
+<h2 data-source-line="241">How Many Participants?</h2>
 <div class="r-stack" style="align-items: start; width: 100%;">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="239">
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="246">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
@@ -816,7 +817,7 @@
 </div>
 <div class="fragment fade-in" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="254">
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="261">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
@@ -838,57 +839,36 @@
 </div>
 </div>
 </div>
-<p data-source-line="270">If we’re being serious about what’s really random—and we should be—we need to make a small change.</p>
-<div style="text-align: center;">
-<p>A multiplicative change.</p>
-</div>
-<p data-source-line="276">Both times we solve for <span class="math inline">n</span>: how many men it takes to get inside plus or minus 500 dollars.</p>
+<ul>
+<li>Last class’s goal: a 95% interval with a half-width of 500 dollars. We need <span class="math inline">1.96\widehat{\operatorname{se}}_n\le500</span>.</li>
+<li>We increase the <strong>total number of participants, <span class="math inline">N</span></strong>, with about <span class="math inline">185/445</span> assigned treatment: <span class="math inline">n\approx(185/445)N</span>.</li>
+</ul>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p><span class="math display">
-\begin{aligned}
-\widehat{\operatorname{se}}_n&amp;=\frac{\hat\sigma}{\sqrt n}. \\[.35em]
-1.96\frac{\hat\sigma}{\sqrt n}&amp;\le 500. \\[.35em]
-1.96\hat\sigma&amp;\le 500\sqrt n. \\[.35em]
-\frac{1.96\hat\sigma}{500}&amp;\le\sqrt n. \\[.35em]
-\left(\frac{1.96\hat\sigma}{500}\right)^2&amp;\le n.
-\end{aligned}
+
+<p data-source-line="282"><span class="math display">
+\widehat{\operatorname{se}}_n=\frac{\hat\sigma}{\sqrt n}.
 </span></p>
-<p>About 952 men.</p>
+<p data-source-line="286"><strong>2,290 total participants</strong>, 952 treated.</p>
 </div><div class="column" style="width:50%;">
-<p><span class="math display">
-\begin{aligned}
-\widehat{\operatorname{se}}_n&amp;=\frac{\hat\sigma}{\sqrt n}\sqrt{\textcolor{hotpink}{\frac{N-n}{N-1}}}. \\[.35em]
-1.96\frac{\hat\sigma}{\sqrt n}\sqrt{\textcolor{hotpink}{\frac{N-n}{N-1}}}&amp;\le500. \\[.35em]
-1.96\hat\sigma\sqrt{\textcolor{hotpink}{\frac{N-n}{N-1}}}&amp;\le500\sqrt n. \\[.35em]
-\frac{1.96\hat\sigma}{500}\sqrt{\textcolor{hotpink}{\frac{N-n}{N-1}}}&amp;\le\sqrt n. \\[.35em]
-\left(\frac{1.96\hat\sigma}{500}\right)^2\textcolor{hotpink}{\frac{N-n}{N-1}}&amp;\le n.
-\end{aligned}
+
+<p data-source-line="290"><span class="math display">
+\widehat{\operatorname{se}}_n=\frac{\hat\sigma}{\sqrt n}\sqrt{\textcolor{hotpink}{\frac{N-n}{N-1}}}.
 </span></p>
-<p>About 557 treated out of 1340 men.</p>
+<p data-source-line="294"><strong>1,340 total participants</strong>, 557 treated.</p>
 </div></div>
 <ul>
-<li><p data-source-line="308">At our 185 men the interval is plus or minus 1,134 dollars last class, plus or minus 868 dollars without replacement.</p></li>
-<li><p data-source-line="310">Same random mechanism as the homework.</p></li>
-<li><p data-source-line="311">Binary outcomes there; earnings here.</p></li>
+<li>With 445 participants and 185 treated, the half-width falls from 1,134 to 868 dollars.</li>
+<li>Same random mechanism as the homework: binary outcomes there; earnings here.</li>
 </ul>
-</div>
 </section>
 <section id="people-like-them" class="slide level2">
-<h2 data-source-line="315">People Like Them</h2>
+<h2 data-source-line="301">People Like Them</h2>
 
-<ul>
-<li data-source-line="317">In the Current Population Survey: Black men aged 20–35 who earned less than $12,500 in both 1974 and 1975.
-<ul>
-<li>286 men. A rough benchmark for people sharing some of the NSW participants’ circumstances.</li>
-</ul></li>
-<li data-source-line="335">Before the program, the men assigned treatment earned about 34% of these peers’ mean earnings.</li>
-<li data-source-line="336">Look where they started.</li>
-</ul>
-<div class="r-stack" style="align-items: start; width: 100%;">
+<div class="r-stack" style="align-items: start; width: 100%;" data-source-line="303">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="342">
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="323">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
@@ -908,11 +888,10 @@
 </div>
 </div>
 </div>
-<p data-source-line="355">Mean earnings: 1,532 dollars for the NSW men and 4,455 dollars for their rough peers.</p>
 </div>
 <div class="fragment fade-in" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="361">
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="340">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
@@ -932,21 +911,29 @@
 </div>
 </div>
 </div>
+</div>
+</div>
 <ul>
-<li>Mean earnings: 6,349 dollars and 7,103 dollars.</li>
-<li>The NSW men are now at about 89% of their peers’ mean.</li>
+<li>Set the controls aside for now. <strong>Who would make a useful comparison?</strong></li>
+<li>In the Current Population Survey: Black men aged 20–35 who earned less than $12,500 in both 1974 and 1975.
+<ul>
+<li>286 men. A rough benchmark for people sharing some of the NSW participants’ circumstances.</li>
+</ul></li>
+<li><strong>Before the program:</strong> mean earnings of 1,532 versus 4,455 dollars—about 34% of their peers’ mean.</li>
+<li><strong>After the program:</strong> 6,349 versus 7,103 dollars—about 89% of their peers’ mean.</li>
+<li>How close would count as success?</li>
 </ul>
-</div>
-</div>
-<p data-source-line="381">How close would count as success?</p>
 </section></section>
 <section>
 <section id="power-analysis" class="title-slide slide level1 center">
-<h1 data-source-line="383">Power Analysis</h1>
-<p data-source-line="385">Use the NSW study as a pilot to plan a larger study of the same kind.</p>
+<h1 data-source-line="364">Power Analysis</h1>
+<ul>
+<li>Last class, we chose a width and called it precise enough. Now we choose it for what the study should let us <strong>say</strong>.</li>
+</ul>
+<p data-source-line="368">Use the NSW study as a pilot to plan a larger study of the same kind.</p>
 </section>
 <section id="detecting-success" class="slide level2">
-<h2 data-source-line="387">Detecting Success</h2>
+<h2 data-source-line="370">Detecting Success</h2>
 
 
 <style>
@@ -974,12 +961,12 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 .transition-content table { font-size: .75em; }
 </style>
 
-<div class="transition-content" data-source-line="389">
+<div class="transition-content" data-source-line="372">
 <div class="transition-plot">
 <div class="r-stack" style="align-items: start; width: 100%;">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="512">
+<div class="cell" data-source-line="510">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -991,7 +978,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 <div class="fragment current-visible" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="526">
+<div class="cell" data-source-line="524">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1003,7 +990,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 <div class="fragment current-visible" data-fragment-index="1" style="width: 100%;">
 
-<div class="cell" data-source-line="540">
+<div class="cell" data-source-line="538">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1013,9 +1000,9 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<div class="fragment fade-in" data-fragment-index="2" style="width: 100%;">
+<div class="fragment current-visible" data-fragment-index="2" style="width: 100%;">
 
-<div class="cell" data-source-line="554">
+<div class="cell" data-source-line="552">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1025,63 +1012,55 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-</div>
-</div>
-<ul>
-<li><strong>Should we do this?</strong> Suppose the agency calls 75% of peer earnings success: 5,327 dollars. An interval they’d be happy with lies entirely <strong>above</strong> orange.</li>
-<li><strong>For planning:</strong> suppose the true mean is the pilot estimate, 6,349 dollars (green). Using an unbiased estimator, blue—the center of repeated estimates—is at green.</li>
-<li>Start with a pilot, real or imagined. Draw the picture. Then imagine running the study longer until it has the properties people ask for.</li>
-</ul>
-<div class="r-stack" style="align-items: start; width: 100%;">
-<div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
-<p data-source-line="576"><strong>Should we do this? No.</strong> <span class="math inline">n=185</span> treated men: 64% of intervals lie entirely above orange.</p>
-</div>
-<div class="fragment current-visible" data-fragment-index="0" style="width: 100%;">
-<p data-source-line="581"><strong>No.</strong> <span class="math inline">n=229</span> treated men: 73% of intervals lie entirely above orange.</p>
-</div>
-<div class="fragment current-visible" data-fragment-index="1" style="width: 100%;">
-<p data-source-line="586"><strong>Yes.</strong> <span class="math inline">n=273</span> treated men: 80% of intervals lie entirely above orange.</p>
-</div>
-<div class="fragment fade-in" data-fragment-index="2" style="width: 100%;">
-<p data-source-line="591"><strong>Yes—and I’m pretty sure it’s going to work.</strong> <span class="math inline">n=546</span> treated men: 98% of intervals lie entirely above orange.</p>
-</div>
-</div>
-<ul>
-<li><strong>Power:</strong> if that were the truth, how often would we get the evidence we need? We aim for at least 80%.</li>
-<li>That’s what power is. Whatever. People use it.</li>
-<li>20% of the time, you’re gonna meet the standard and still not get funded. That’s randomness for you.</li>
-<li>20% is just the agreed-upon convention for how much uncertainty you, as a program proposer, have to stomach.</li>
-</ul>
-</div>
+<div class="fragment fade-in" data-fragment-index="3" style="width: 100%;">
 
-</section>
-<section id="what-we-know-and-dont" class="slide level2">
-<h2 data-source-line="603">What We Know and Don’t</h2>
-<div class="transition-content">
-
-<div class="cell" data-source-line="713">
+<div class="cell" data-source-line="566">
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="chapter-bias-and-coverage-slides_files/figure-revealjs/beat-b-pic-1.svg" style="width:100.0%" alt="Three estimated distributions with their intervals; the actual distribution and truth are ghosted."></p>
+<p><img data-src="chapter-bias-and-coverage-slides_files/figure-revealjs/success-lower-endpoints-1.svg" style="width:100.0%" alt="The same three highlighted intervals now mark their lower endpoints; the distribution, intervals, truth and success standard remain fixed."></p>
 </figure>
 </div>
 </div>
 </div>
+</div>
+</div>
+</div>
 <ul>
-<li>Each colored line is that interval’s worst-case green line: what it’s saying about how small <span class="target">the target</span> can be.</li>
-<li>We treat an interval as containing the thing, or something unusual happened. That’s the convention we’re agreeing to.</li>
+<li><strong>Success:</strong> the agency’s standard is 75% of peer earnings, 5,327 dollars. It wants a 95% interval entirely above <span class="alternative">that standard</span>.</li>
+<li><strong>For planning:</strong> suppose <span class="target">the true mean</span> is the pilot estimate, 6,349 dollars. Using an unbiased estimator, the blue sampling center <strong>coincides</strong> with it.</li>
+<li><strong>Power:</strong> under that assumption, how often would we get the required evidence? The agency asks for at least <strong>80%</strong>.</li>
+</ul>
+<div class="r-stack" style="align-items: start; width: 100%; text-align: center;">
+<div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
+<p data-source-line="588"><strong>Should we do this? No.</strong> <span class="math inline">n=185</span> treated men: 64% of intervals lie entirely above orange.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="0" style="width: 100%;">
+<p data-source-line="593"><strong>Should we do this? No.</strong> <span class="math inline">n=229</span> treated men: 73% of intervals lie entirely above orange.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="1" style="width: 100%;">
+<p data-source-line="598"><strong>Should we do this? Yes.</strong> <span class="math inline">n=273</span> treated men: 80% of intervals lie entirely above orange.</p>
+</div>
+<div class="fragment fade-in" data-fragment-index="2" style="width: 100%;">
+<p data-source-line="603"><strong>Should we do this? Yes—and I’m pretty sure it’s going to work.</strong> <span class="math inline">n=546</span> treated men: 98% of intervals lie entirely above orange.</p>
+</div>
+</div>
+<ul>
+<li>At 80% power, a program meeting the planning assumption still misses funding <strong>20% of the time</strong>. That’s the risk the proposer agrees to take.</li>
+<li>An interval’s <strong>lower endpoint</strong> is its worst case for the target. If that endpoint clears the standard, the whole interval does.</li>
+<li>We treat the interval as containing the target, or as one of the unusual misses. That’s the convention we’re agreeing to.</li>
 </ul>
 </div>
+
 </section>
 <section id="what-counts-as-a-good-sample-size" class="slide level2">
-<h2 data-source-line="733">What Counts as a Good Sample Size?</h2>
+<h2 data-source-line="614">What Counts as a Good Sample Size?</h2>
 <div class="transition-content">
 <div class="transition-plot">
 <div class="r-stack" style="align-items: start; width: 100%;">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="743">
+<div class="cell" data-source-line="729">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1093,7 +1072,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 <div class="fragment current-visible" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="767">
+<div class="cell" data-source-line="753">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1105,7 +1084,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 <div class="fragment current-visible" data-fragment-index="1" style="width: 100%;">
 
-<div class="cell" data-source-line="792">
+<div class="cell" data-source-line="778">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1117,7 +1096,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 <div class="fragment fade-in" data-fragment-index="2" style="width: 100%;">
 
-<div class="cell" data-source-line="818">
+<div class="cell" data-source-line="804">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1130,36 +1109,23 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 <ul>
-<li>Last class, we chose a width and called it precise enough. Now we choose it for what the study should let us <strong>say</strong>.</li>
 <li>How effective we expect the program to be (green), and how effective it needs to be (orange), are our two reference points.</li>
 <li>Use 95% intervals. If green is right, we want the interval to clear orange 80% of the time.</li>
-<li>I don’t know why that’s the standard. But let me tell you what it means, in pictures.</li>
+<li>For the whole interval to clear orange, the estimate has to be <strong>1.96 standard errors</strong> above it.</li>
+<li>The <strong>20%</strong> risk puts the cutoff <strong>0.84 standard errors</strong> below green.</li>
+<li>Together, the requirements put green <strong>1.96 + 0.84 = 2.80 standard errors</strong> above orange.</li>
 </ul>
-<div class="r-stack" style="align-items: start; width: 100%;">
-<div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
-<p data-source-line="856">An interval entirely above orange is the evidence the agency wants.</p>
-</div>
-<div class="fragment current-visible" data-fragment-index="0" style="width: 100%;">
-<p data-source-line="861">For the whole interval to clear orange, the estimate has to be <strong>1.96 standard errors</strong> above it. That’s the dashed line.</p>
-</div>
-<div class="fragment current-visible" data-fragment-index="1" style="width: 100%;">
-<p data-source-line="866">Put <strong>20%</strong> of the sampling distribution left of that cutoff. Green sits another <strong>0.84 standard errors</strong> to its right.</p>
-</div>
-<div class="fragment fade-in" data-fragment-index="2" style="width: 100%;">
-<p data-source-line="871">The two requirements put green <strong>1.96 + 0.84 = 2.80 standard errors</strong> above orange.</p>
-</div>
-</div>
 </div>
 </section>
 <section id="okay-i-lied.-its-2.5." class="slide level2">
-<h2 data-source-line="879">Okay, I Lied. It’s 2.5.</h2>
+<h2 data-source-line="842">Okay, I Lied. It’s 2.5.</h2>
 
-<div class="transition-content" data-source-line="881">
+<div class="transition-content" data-source-line="844">
 <div class="transition-plot">
 <div class="r-stack" style="align-items: start; width: 100%;">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="914">
+<div class="cell" data-source-line="877">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1171,7 +1137,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 <div class="fragment current-visible" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="935">
+<div class="cell" data-source-line="898">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1183,7 +1149,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 <div class="fragment fade-in" data-fragment-index="1" style="width: 100%;">
 
-<div class="cell" data-source-line="957">
+<div class="cell" data-source-line="920">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1195,10 +1161,10 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p data-source-line="987">We know which side we want to be on, so we can put our best foot forward.</p>
+<p data-source-line="950">We know which side we want to be on, so we can put our best foot forward.</p>
 <div class="r-stack" style="align-items: start; width: 100%;">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
-<p data-source-line="992">Our two-sided 95% intervals spend <strong>2.5% in each tail</strong>.</p>
+<p data-source-line="955">Our two-sided 95% intervals spend <strong>2.5% in each tail</strong>.</p>
 </div>
 <div class="fragment current-visible" data-fragment-index="0" style="width: 100%;">
 <ul>
@@ -1207,19 +1173,19 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </ul>
 </div>
 <div class="fragment fade-in" data-fragment-index="1" style="width: 100%;">
-<p data-source-line="1003">Put that back in the picture: <strong>1.65 + 0.84 = 2.49</strong>, or about <strong>2.5 standard errors</strong>. But let’s not split hairs.</p>
+<p data-source-line="966">Put that back in the picture: <strong>1.65 + 0.84 = 2.49</strong>, or about <strong>2.5 standard errors</strong>. But let’s not split hairs.</p>
 </div>
 </div>
 </div>
 </section>
 <section id="change-the-conventions" class="slide level2">
-<h2 data-source-line="1010">Change the Conventions</h2>
+<h2 data-source-line="973">Change the Conventions</h2>
 <div class="transition-content">
 <div class="transition-plot">
 <div class="r-stack" style="align-items: start; width: 100%;">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="1020">
+<div class="cell" data-source-line="983">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1231,7 +1197,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 <div class="fragment current-visible" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="1048">
+<div class="cell" data-source-line="1011">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1243,7 +1209,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 <div class="fragment fade-in" data-fragment-index="1" style="width: 100%;">
 
-<div class="cell" data-source-line="1078">
+<div class="cell" data-source-line="1041">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1279,17 +1245,17 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </ul>
 </div>
 </div>
-<p data-source-line="1134">For the same expected earnings and standard, a bigger required distance in SE units means a smaller standard error—and more data.</p>
-<p data-source-line="1136">These are planning conventions, including in <a href="https://www.fda.gov/media/71336/download#page=25">clinical-trial guidance (FDA/ICH E9, §3.5)</a>.</p>
+<p data-source-line="1097">For the same expected earnings and standard, a bigger required distance in SE units means a smaller standard error—and more data.</p>
+<p data-source-line="1099">These are planning conventions, including in <a href="https://www.fda.gov/media/71336/download#page=25">clinical-trial guidance (FDA/ICH E9, §3.5)</a>.</p>
 </div>
 </section>
 <section id="detecting-futility" class="slide level2">
-<h2 data-source-line="1140">Detecting Futility</h2>
+<h2 data-source-line="1103">Detecting Futility</h2>
 <div class="transition-content">
 <div class="transition-plot">
 <div class="r-stack" style="align-items: start; width: 100%;">
 
-<div class="cell" data-source-line="1147">
+<div class="cell" data-source-line="1110">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1305,7 +1271,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 <li><strong>For planning:</strong> the same pilot and supposed truth, 6,349 dollars (green). Using an unbiased estimator, blue is at green. A different standard.</li>
 </ul>
 <div class="r-stack" style="align-items: start; width: 100%;">
-<p><span class="math inline">n=501</span> treated men: 80% of intervals lie entirely below orange.</p>
+<p data-source-line="1127"><span class="math inline">n=501</span> treated men: 80% of intervals lie entirely below orange.</p>
 </div>
 <ul>
 <li>Now power counts evidence of a shortfall. The intervals still have 95% coverage of green.</li>
@@ -1314,10 +1280,10 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </section>
 <section id="the-best-case" class="slide level2">
-<h2 data-source-line="1173">The Best Case</h2>
+<h2 data-source-line="1136">The Best Case</h2>
 <div class="transition-content">
 
-<div class="cell" data-source-line="1178">
+<div class="cell" data-source-line="1141">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1334,13 +1300,13 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </section>
 <section id="same-picture-other-direction" class="slide level2">
-<h2 data-source-line="1199">Same Picture, Other Direction</h2>
+<h2 data-source-line="1162">Same Picture, Other Direction</h2>
 <div class="transition-content">
 <div class="transition-plot">
 <div class="r-stack" style="align-items: start; width: 100%;">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="1209">
+<div class="cell" data-source-line="1172">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1352,7 +1318,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 <div class="fragment fade-in" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="1234">
+<div class="cell" data-source-line="1197">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1364,22 +1330,22 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p data-source-line="1262">An interval entirely <strong>below</strong> orange is evidence of a shortfall.</p>
+<p data-source-line="1225">An interval entirely <strong>below</strong> orange is evidence of a shortfall.</p>
 <div class="r-stack" style="align-items: start; width: 100%;">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
-<p data-source-line="1267">The upper endpoint just touches orange when the estimate is <strong>1.96 standard errors below</strong> it.</p>
+<p data-source-line="1230">The upper endpoint just touches orange when the estimate is <strong>1.96 standard errors below</strong> it.</p>
 </div>
 <div class="fragment fade-in" data-fragment-index="0" style="width: 100%;">
-<p data-source-line="1272">Put green another <strong>0.84 standard errors below</strong> the dashed cutoff: 80% detect the shortfall, and 20% fail to detect it.</p>
+<p data-source-line="1235">Put green another <strong>0.84 standard errors below</strong> the dashed cutoff: 80% detect the shortfall, and 20% fail to detect it.</p>
 </div>
 </div>
 </div>
 </section>
 <section id="power-from-bias" class="slide level2">
-<h2 data-source-line="1279">Power From Bias</h2>
+<h2 data-source-line="1242">Power From Bias</h2>
 <div class="transition-content">
 
-<div class="transition-plot bias-picture" style="--bias-shift: 20.758074358884%;" data-source-line="1283"><div class="geometry-layer "><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="1008.00pt" height="252.00pt" viewBox="0 0 1008.00 252.00">
+<div class="transition-plot bias-picture" style="--bias-shift: 20.758074358884%;" data-source-line="1246"><div class="geometry-layer "><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="1008.00pt" height="252.00pt" viewBox="0 0 1008.00 252.00">
 <g class="svglite">
 <defs>
   <style type="text/css">
@@ -2152,7 +2118,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </svg></div></div></div>
 <div class="r-stack" style="align-items: start; width: 100%;">
 <div class="fragment fade-out" data-fragment-index="3" style="width: 100%;">
-<p data-source-line="1321">What people don’t talk about enough is the power you get from bias. Not like, metaphorically.</p>
+<p data-source-line="1284">What people don’t talk about enough is the power you get from bias. Not like, metaphorically.</p>
 <ul>
 <li>The green line is just a line.</li>
 <li>Coverage; power; they’re all just counting how many intervals cross a line. One is the complement of the other.</li>
@@ -2176,7 +2142,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 <li>Before, about <strong>2.8 standard errors</strong> separated the truth from the standard we wanted to rule out. Now the same distance separates the estimator’s centre from the truth. Same geometry, different labels.</li>
 </ul>
 
-<p data-source-line="1341"><span class="math display">
+<p data-source-line="1304"><span class="math display">
 \underset{\text{coverage}}{\Pr(\text{covers green})} \;=\; 1-\underset{\text{power}}{\Pr(\text{doesn't cover green})}
 </span></p>
 
@@ -2186,24 +2152,24 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 <aside><div>
 <div class="r-stack" style="align-items: start; width: 100%;">
 <div class="fragment fade-out" data-fragment-index="4" style="width: 100%;">
-<p data-source-line="1349"><span class="math inline">n=501</span>: 80% exclude green; 20% cover green.</p>
+<p data-source-line="1312"><span class="math inline">n=501</span>: 80% exclude green; 20% cover green.</p>
 </div>
 <div class="fragment current-visible" data-fragment-index="4" style="width: 100%;">
-<p data-source-line="1354"><span class="math inline">n=1002</span>: 98% exclude green; 2% cover green.</p>
+<p data-source-line="1317"><span class="math inline">n=1002</span>: 98% exclude green; 2% cover green.</p>
 </div>
 <div class="fragment fade-in" data-fragment-index="5" style="width: 100%;">
-<p data-source-line="1359"><span class="math inline">n=2004</span>: 99.99% exclude green; 0.01% cover green.</p>
+<p data-source-line="1322"><span class="math inline">n=2004</span>: 99.99% exclude green; 0.01% cover green.</p>
 </div>
 </div>
 </div></aside></section>
 <section id="reality-and-what-were-doing" class="slide level2">
-<h2 data-source-line="1373">Reality and What We’re Doing</h2>
+<h2 data-source-line="1336">Reality and What We’re Doing</h2>
 <div class="transition-content">
 <div class="transition-plot">
 <div class="r-stack" style="align-items: start; width: 100%;">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="1383">
+<div class="cell" data-source-line="1346">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2215,7 +2181,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 <div class="fragment fade-in" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="1404">
+<div class="cell" data-source-line="1367">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2234,7 +2200,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </ul>
 <div class="r-stack" style="align-items: start; width: 100%;">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
-<p data-source-line="1437">What we construct from the study is the estimate and its width. The standard is something we chose.</p>
+<p data-source-line="1400">What we construct from the study is the estimate and its width. The standard is something we chose.</p>
 </div>
 <div class="fragment fade-in" data-fragment-index="0" style="width: 100%;">
 <ul>
@@ -2246,13 +2212,13 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </section>
 <section id="a-spectrum-of-comparisons" class="slide level2">
-<h2 data-source-line="1450">A Spectrum of Comparisons</h2>
+<h2 data-source-line="1413">A Spectrum of Comparisons</h2>
 <div class="transition-content">
 <div class="transition-plot">
 <div class="r-stack" style="align-items: start; width: 100%;">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="1460">
+<div class="cell" data-source-line="1423">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2264,7 +2230,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 <div class="fragment current-visible" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="1478">
+<div class="cell" data-source-line="1441">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2276,7 +2242,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 <div class="fragment fade-in" data-fragment-index="1" style="width: 100%;">
 
-<div class="cell" data-source-line="1497">
+<div class="cell" data-source-line="1460">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2295,23 +2261,23 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </ul>
 <div class="r-stack" style="align-items: start; width: 100%;">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
-<p data-source-line="1527">A smaller discrepancy.</p>
+<p data-source-line="1490">A smaller discrepancy.</p>
 </div>
 <div class="fragment current-visible" data-fragment-index="0" style="width: 100%;">
-<p data-source-line="1532">Our rough CPS benchmark.</p>
+<p data-source-line="1495">Our rough CPS benchmark.</p>
 </div>
 <div class="fragment fade-in" data-fragment-index="1" style="width: 100%;">
-<p data-source-line="1537">An even worse comparison.</p>
+<p data-source-line="1500">An even worse comparison.</p>
 </div>
 </div>
 </div>
 </section>
 <section id="remember-the-red-dots" class="slide level2">
-<h2 data-source-line="1544">Remember the Red Dots?</h2>
+<h2 data-source-line="1507">Remember the Red Dots?</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 
-<div class="cell" data-source-line="1548">
+<div class="cell" data-source-line="1511">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2320,12 +2286,12 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p><strong>Observed NSW earnings: blue treated, red controls.</strong></p>
-</div><div class="column" style="width:50%;">
+<p><strong>Observed NSW earnings: blue treated, red controls.</strong> </p>
+</div><div class="column" style="width:50%;" data-source-line="1521">
 <div class="r-stack" style="align-items: start; width: 100%;">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="1563">
+<div class="cell" data-source-line="1526">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2337,7 +2303,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 <div class="fragment current-visible" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="1574">
+<div class="cell" data-source-line="1537">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2349,7 +2315,7 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 <div class="fragment fade-in" data-fragment-index="1" style="width: 100%;">
 
-<div class="cell" data-source-line="1585">
+<div class="cell" data-source-line="1548">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2360,9 +2326,9 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p><strong>Assignment schematic: now keep the controls.</strong></p>
+<p><strong>Assignment schematic: now keep the controls.</strong> </p>
 </div></div>
-<p data-source-line="1600">When do we see that biased picture? In exactly this study—but for the other group.</p>
+<p data-source-line="1559">When do we see that biased picture? In exactly this study—but for the other group.</p>
 <ul>
 <li>The red controls estimate the mean earnings the NSW participants would have <strong>without the program</strong>.</li>
 <li>Random assignment samples that outcome list, just as it sampled the treated-outcome list earlier.</li>
@@ -2370,9 +2336,9 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </ul>
 </section>
 <section id="a-more-precise-reference" class="slide level2">
-<h2 data-source-line="1606">A More Precise Reference?</h2>
+<h2 data-source-line="1569">A More Precise Reference?</h2>
 
-<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="1608">
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="1571">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <p><img data-src="chapter-bias-and-coverage-slides_files/figure-revealjs/c3-panels-1.svg" alt="Red earnings histograms of the observed NSW controls and the observed CPS subgroup on a common dollar range, with thin red lines at their means."></p>
@@ -2386,22 +2352,22 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 <div class="column" style="width:50%;">
 <p><strong>Observed NSW controls (260).</strong></p>
 </div><div class="column" style="width:50%;">
-<p><strong>Observed CPS subgroup (286).</strong></p>
+<p><strong>Observed CPS subgroup (286).</strong> </p>
 </div></div>
 <ul>
-<li>We don’t have many NSW controls. Could we get a more precise reference from people outside the study?</li>
+<li data-source-line="1588">We don’t have many NSW controls. Could we get a more precise reference from people outside the study?</li>
 <li>There are many more people receiving the same treatment: <strong>no NSW program</strong>.</li>
 <li>CPS is a survey. Our 286 records come from a subgroup of a much larger population: Black men aged 20–35 with low recent earnings.</li>
 <li>Sampling that subgroup can be statistically fine. Using its mean for the NSW population’s untreated mean is the gamble.</li>
 </ul>
 </section>
 <section id="imperfect-comparisons" class="slide level2">
-<h2 data-source-line="1637">Imperfect Comparisons</h2>
+<h2 data-source-line="1600">Imperfect Comparisons</h2>
 
 
-<div class="transition-content" data-source-line="1639">
+<div class="transition-content" data-source-line="1602">
 
-<div class="cell" data-source-line="1729">
+<div class="cell" data-source-line="1692">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2411,26 +2377,26 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 <div class="comparison-labels">
-<p data-source-line="1741">Age · Years of schooling · Black · Hispanic · Married · Finished high school.</p>
+<p data-source-line="1704">Age · Years of schooling · Black · Hispanic · Married · Finished high school.</p>
 <p><span style="color: #073b4c;">NSW controls</span> · <span style="color: #ef476f;">rough CPS peers</span> </p>
 </div>
-<div class="r-stack" style="align-items: start; width: 100%;" data-source-line="1743">
+<div class="r-stack" style="align-items: start; width: 100%;" data-source-line="1706">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
-<p data-source-line="1751">This happens.</p>
+<p data-source-line="1714">This happens.</p>
 <ul>
 <li>It’s what an imperfect comparison—the kind you’re stuck with essentially whenever you aren’t running a randomized experiment—looks like in statistical terms.</li>
 <li>For example, our CPS comparison.</li>
 </ul>
 </div>
 <div class="fragment fade-in" data-fragment-index="0" style="width: 100%;">
-<p data-source-line="1760">We chose a subgroup sharing conspicuous features: young, Black, persistently low recent earnings.</p>
+<p data-source-line="1723">We chose a subgroup sharing conspicuous features: young, Black, persistently low recent earnings.</p>
 <ul>
 <li>NSW controls: 15.4% married.</li>
 <li>Rough CPS peers: 51.4% married.</li>
 </ul>
-<p data-source-line="1765">Does that matter?</p>
+<p data-source-line="1728">Does that matter?</p>
 
-<table class="caption-top" data-source-line="1767">
+<table class="caption-top" data-source-line="1730">
 <thead>
 <tr class="header">
 <th style="text-align: left;"></th>
@@ -2464,10 +2430,10 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 <li>Keep married and unmarried earnings fixed. Change only how many of each we have.</li>
 <li>For these CPS men, married men earned less. Changing to the NSW mixture raises the mean by 359 dollars.</li>
 </ul>
-<p data-source-line="1778">Turns out having a family is bad for business. That’s not their demographics—that’s the comparison.</p>
+<p data-source-line="1741">Turns out having a family is bad for business. That’s not their demographics—that’s the comparison.</p>
 </div>
 </div>
-<p data-source-line="1784">The real question is not whether the populations differ, but whether there’s enough bias that your coverage is ruined.</p>
+<p data-source-line="1747">The real question is not whether the populations differ, but whether there’s enough bias that your coverage is ruined.</p>
 <ul>
 <li>The composition discrepancy gives a concrete reason to worry about the possibility.</li>
 <li>That’s what we’ll investigate now.</li>
@@ -2475,10 +2441,10 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </section>
 <section id="real-data-fake-data" class="slide level2">
-<h2 data-source-line="1791">Real Data, Fake Data</h2>
+<h2 data-source-line="1754">Real Data, Fake Data</h2>
 <div class="transition-content">
 
-<div class="cell" data-source-line="1795">
+<div class="cell" data-source-line="1758">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2487,9 +2453,9 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p data-source-line="1807">Well, of course, if you want to know coverage, you gotta fake some data.</p>
-<p data-source-line="1809">What we really want to be analyzing is fake data.</p>
-<p data-source-line="1811">To keep it interesting, let’s make it look pretty real.</p>
+<p data-source-line="1770">Well, of course, if you want to know coverage, you gotta fake some data.</p>
+<p data-source-line="1772">What we really want to be analyzing is fake data.</p>
+<p data-source-line="1774">To keep it interesting, let’s make it look pretty real.</p>
 <ul>
 <li>For this exercise, declare the observed NSW controls to be the <strong>whole target population</strong>. Green is its known mean: 4,555 dollars.</li>
 <li><strong>Is this legit?</strong>
@@ -2501,12 +2467,12 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </section>
 <section id="make-it-bigger" class="slide level2">
-<h2 data-source-line="1820">Make It Bigger</h2>
+<h2 data-source-line="1783">Make It Bigger</h2>
 
-<div class="r-stack" style="align-items: start; width: 100%;" data-source-line="1822">
+<div class="r-stack" style="align-items: start; width: 100%;" data-source-line="1785">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="1847">
+<div class="cell" data-source-line="1810">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2515,11 +2481,11 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p><strong>One copy: 286 records.</strong></p>
+<p><strong>One copy: 286 records.</strong> </p>
 </div>
-<div class="fragment current-visible" data-fragment-index="0" style="width: 100%;">
+<div class="fragment current-visible" data-fragment-index="0" style="width: 100%;" data-source-line="1820">
 
-<div class="cell" data-source-line="1860">
+<div class="cell" data-source-line="1823">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2528,11 +2494,11 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p><strong>Two copies: 572 records.</strong></p>
+<p><strong>Two copies: 572 records.</strong> </p>
 </div>
-<div class="fragment fade-in" data-fragment-index="1" style="width: 100%;">
+<div class="fragment fade-in" data-fragment-index="1" style="width: 100%;" data-source-line="1833">
 
-<div class="cell" data-source-line="1873">
+<div class="cell" data-source-line="1836">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2541,22 +2507,22 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p><strong>Four copies: 1144 records.</strong></p>
+<p><strong>Four copies: 1144 records.</strong> </p>
 </div>
 </div>
 <ul>
-<li>We also have to synthesize the huge population that supplies the CPS subgroup.</li>
+<li data-source-line="1846">We also have to synthesize the huge population that supplies the CPS subgroup.</li>
 <li>Take <span class="math inline">k</span> copies of the observed subgroup. More people, same earnings distribution, same mean.</li>
 <li>Hold the study size fixed and let <span class="math inline">k</span> grow. Sampling without replacement approaches sampling <strong>with replacement</strong> from the observed records.</li>
 <li>We’ll use that limiting model. Then we can make the study as large as we like without changing the population we sample.</li>
 </ul>
 </section>
 <section id="which-population-are-we-sampling" class="slide level2">
-<h2 data-source-line="1892">Which Population Are We Sampling?</h2>
+<h2 data-source-line="1855">Which Population Are We Sampling?</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 
-<div class="cell" data-source-line="1897">
+<div class="cell" data-source-line="1860">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2565,10 +2531,10 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p data-source-line="1909"><strong>The target:</strong> our constructed population of NSW controls. Its known mean is green.</p>
+<p data-source-line="1872"><strong>The target:</strong> our constructed population of NSW controls. Its known mean is green.</p>
 </div><div class="column" style="width:50%;">
 
-<div class="cell" data-source-line="1914">
+<div class="cell" data-source-line="1877">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2577,27 +2543,27 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p data-source-line="1927"><strong>The data:</strong> samples with replacement from the CPS subgroup’s empirical distribution. Its mean is blue.</p>
+<p data-source-line="1890"><strong>The data:</strong> samples with replacement from the CPS subgroup’s empirical distribution. Its mean is blue.</p>
 </div></div>
 <ul>
 <li>The CPS mean was our orange benchmark.</li>
 <li>It is now the center of the estimates we’ll get from those samples: 7,103 dollars, compared with green at 4,555.</li>
 </ul>
-<p data-source-line="1935">Both populations are built from observed data. We know both means inside this simulated world.</p>
+<p data-source-line="1898">Both populations are built from observed data. We know both means inside this simulated world.</p>
 <ul>
 <li>For each study, draw <span class="math inline">n</span> CPS records with replacement and form the sample mean plus or minus <span class="math inline">1.96</span> estimated standard errors.</li>
 <li>How often does that interval contain <strong>green</strong>?</li>
 </ul>
 </section>
 <section id="repeat-the-study" class="slide level2">
-<h2 data-source-line="1941">Repeat The Study</h2>
+<h2 data-source-line="1904">Repeat The Study</h2>
 
 
 
-<div class="r-stack" style="align-items: start;" data-source-line="1943">
+<div class="r-stack" style="align-items: start;" data-source-line="1906">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
 
-<div class="cell" data-source-line="2001">
+<div class="cell" data-source-line="1964">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2606,11 +2572,11 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p><em>n = 30. Intervals containing green in 2,000 simulated studies: 51%.</em></p>
+<p><em>n = 30. Intervals containing green in 2,000 simulated studies: 51%.</em> </p>
 </div>
-<div class="fragment current-visible" data-fragment-index="0" style="width: 100%;">
+<div class="fragment current-visible" data-fragment-index="0" style="width: 100%;" data-source-line="1975">
 
-<div class="cell" data-source-line="2015">
+<div class="cell" data-source-line="1978">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2619,11 +2585,11 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p><em>n = 60. Intervals containing green in 2,000 simulated studies: 19%.</em></p>
+<p><em>n = 60. Intervals containing green in 2,000 simulated studies: 19%.</em> </p>
 </div>
-<div class="fragment current-visible" data-fragment-index="1" style="width: 100%;">
+<div class="fragment current-visible" data-fragment-index="1" style="width: 100%;" data-source-line="1989">
 
-<div class="cell" data-source-line="2029">
+<div class="cell" data-source-line="1992">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2632,11 +2598,11 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p><em>n = 120. Intervals containing green in 2,000 simulated studies: 2%.</em></p>
+<p><em>n = 120. Intervals containing green in 2,000 simulated studies: 2%.</em> </p>
 </div>
-<div class="fragment current-visible" data-fragment-index="2" style="width: 100%;">
+<div class="fragment current-visible" data-fragment-index="2" style="width: 100%;" data-source-line="2003">
 
-<div class="cell" data-source-line="2043">
+<div class="cell" data-source-line="2006">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2645,11 +2611,11 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p><em>n = 185. Intervals containing green in 2,000 simulated studies: 0 of 2,000.</em></p>
+<p><em>n = 185. Intervals containing green in 2,000 simulated studies: 0 of 2,000.</em> </p>
 </div>
-<div class="fragment fade-in" data-fragment-index="3" style="width: 100%;">
+<div class="fragment fade-in" data-fragment-index="3" style="width: 100%;" data-source-line="2017">
 
-<div class="cell" data-source-line="2057">
+<div class="cell" data-source-line="2020">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2658,27 +2624,27 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p><em>n = 500. Intervals containing green in 2,000 simulated studies: 0 of 2,000.</em></p>
+<p><em>n = 500. Intervals containing green in 2,000 simulated studies: 0 of 2,000.</em> </p>
 </div>
 </div>
 <ul>
-<li>The target is the constructed control mean, 4,555 dollars, and we know it exactly because we defined it.</li>
+<li data-source-line="2031">The target is the constructed control mean, 4,555 dollars, and we know it exactly because we defined it.</li>
 <li>Our estimates are centred on the CPS mean instead — the wrong population, by 2,548 dollars.</li>
 <li>Each study samples with replacement; there is no finite-population correction.</li>
 </ul>
-<p data-source-line="2076">If a line is right, we want intervals to contain it. If it is wrong, we want intervals to exclude it.</p>
-<p data-source-line="2078">We just gave ourselves power against the truth.</p>
+<p data-source-line="2039">If a line is right, we want intervals to contain it. If it is wrong, we want intervals to exclude it.</p>
+<p data-source-line="2041">We just gave ourselves power against the truth.</p>
 
-<p data-source-line="2080"><span class="math display">
+<p data-source-line="2043"><span class="math display">
 \text{coverage}=1-\Pr(\text{interval excludes the truth}).
 </span></p>
 </section>
 <section id="more-data-more-power" class="slide level2">
-<h2 data-source-line="2084">More Data, More Power</h2>
+<h2 data-source-line="2047">More Data, More Power</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 
-<div class="cell" data-source-line="2088">
+<div class="cell" data-source-line="2051">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2688,10 +2654,10 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 <p><em>Wider intervals. More often covering green.</em> </p>
-<p data-source-line="2097"><em>n = 30. Intervals containing green in 2,000 simulated studies: 51%.</em></p>
-</div><div class="column" style="width:50%;">
+<p data-source-line="2060"><em>n = 30. Intervals containing green in 2,000 simulated studies: 51%.</em> </p>
+</div><div class="column" style="width:50%;" data-source-line="2062">
 
-<div class="cell" data-source-line="2102">
+<div class="cell" data-source-line="2065">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2701,23 +2667,23 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 <p><em>Narrower intervals. Almost always missing green.</em> </p>
-<p data-source-line="2111"><em>n = 185. Intervals containing green in 2,000 simulated studies: 0 of 2,000.</em></p>
+<p data-source-line="2074"><em>n = 185. Intervals containing green in 2,000 simulated studies: 0 of 2,000.</em> </p>
 </div></div>
 <ul>
-<li>When you collect more data to get more power…</li>
+<li data-source-line="2076">When you collect more data to get more power…</li>
 <li>…you get more power against the truth, too.</li>
 </ul>
-<p data-source-line="2120">How much bias does it take to do this?</p>
+<p data-source-line="2083">How much bias does it take to do this?</p>
 </section></section>
 <section>
 <section id="calculating-coverage" class="title-slide slide level1 center">
-<h1 data-source-line="2122">Calculating Coverage</h1>
+<h1 data-source-line="2085">Calculating Coverage</h1>
 
 </section>
 <section id="set-up" class="slide level2">
-<h2 data-source-line="2124">Set Up</h2>
+<h2 data-source-line="2087">Set Up</h2>
 
-<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="2126">
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="2089">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <p><img data-src="chapter-bias-and-coverage-slides_files/figure-revealjs/setup-sampling-dist-1.svg" alt="Histogram of simulated sample means at n equals 30, with a blue line at their centre and a green line at the true target mean to its left."></p>
@@ -2742,11 +2708,11 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </ul>
 </section>
 <section id="which-estimates-hit-the-target" class="slide level2">
-<h2 data-source-line="2185">Which Estimates Hit The Target?</h2>
+<h2 data-source-line="2148">Which Estimates Hit The Target?</h2>
 <div class="r-stack" style="align-items: start;">
 <div class="fragment fade-out" data-fragment-index="0">
 
-<div class="cell" data-source-line="2189">
+<div class="cell" data-source-line="2152">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2755,13 +2721,13 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p data-source-line="2198">Let’s think about things from the target’s perspective. The solid green line.</p>
-<p data-source-line="2200">Give it arms the same length as our intervals have: out to the dotted green lines.</p>
-<p><strong>Which point estimates produce intervals that hit the target?</strong></p>
+<p data-source-line="2161">Let’s think about things from the target’s perspective. The solid green line.</p>
+<p data-source-line="2163">Give it arms the same length as our intervals have: out to the dotted green lines.</p>
+<p><strong>Which point estimates produce intervals that hit the target?</strong> </p>
 </div>
-<div class="fragment fade-in" data-fragment-index="1">
+<div class="fragment fade-in" data-fragment-index="1" data-source-line="2165">
 
-<div class="cell" data-source-line="2205">
+<div class="cell" data-source-line="2168">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2770,21 +2736,21 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p data-source-line="2214">An interval’s arms reach the target if and only if the target’s arms reach that interval’s center.</p>
-<p data-source-line="2216">We integrate the sampling distribution’s density between the target’s arms.</p>
+<p data-source-line="2177">An interval’s arms reach the target if and only if the target’s arms reach that interval’s center.</p>
+<p data-source-line="2179">We integrate the sampling distribution’s density between the target’s arms.</p>
 
-<p data-source-line="2218"><span class="math display">
+<p data-source-line="2181"><span class="math display">
 \text{coverage} = \int_{\mu-1.96\sigma}^{\mu+1.96\sigma} f(x) dx \qqtext{ where } f(x)=\frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}}
 </span></p>
 </div>
 </div>
 </section>
 <section id="everything-in-standard-errors" class="slide level2">
-<h2 data-source-line="2224">Everything in Standard Errors</h2>
+<h2 data-source-line="2187">Everything in Standard Errors</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 
-<div class="cell" data-source-line="2229">
+<div class="cell" data-source-line="2192">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2793,10 +2759,10 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p data-source-line="2257"><strong>Earnings units.</strong> Measure position in dollars.</p>
+<p data-source-line="2220"><strong>Earnings units.</strong> Measure position in dollars.</p>
 </div><div class="column" style="width:50%;">
 
-<div class="cell" data-source-line="2262">
+<div class="cell" data-source-line="2225">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2805,38 +2771,38 @@ section:has(.bias-move.visible) .bias-benchmark { opacity: 0; }
 </div>
 </div>
 </div>
-<p data-source-line="2289"><strong>Standard-error units.</strong> Measure from blue, in units of one standard error.</p>
+<p data-source-line="2252"><strong>Standard-error units.</strong> Measure from blue, in units of one standard error.</p>
 </div></div>
 
-<p data-source-line="2295"><span class="math display">
+<p data-source-line="2258"><span class="math display">
 u=\frac{x-\tilde\mu}{\sigma},\qquad
 \text{green is at }-\frac{\tilde\mu-\mu}{\sigma}
 =-\frac{\text{bias}}{\text{se}}.
 </span></p>
-<p data-source-line="2301">Same picture. Same shaded probability. A different ruler.</p>
+<p data-source-line="2264">Same picture. Same shaded probability. A different ruler.</p>
 </section>
 <section id="five-minutes" class="slide level2">
-<h2 data-source-line="2303">Five Minutes</h2>
-<p data-source-line="2305">Rewrite this probability in standard-error units:</p>
+<h2 data-source-line="2266">Five Minutes</h2>
+<p data-source-line="2268">Rewrite this probability in standard-error units:</p>
 
-<p data-source-line="2307"><span class="math display">
+<p data-source-line="2270"><span class="math display">
 \int_{\mu-1.96\sigma}^{\mu+1.96\sigma}
 \frac{1}{\sqrt{2\pi}\sigma}
 e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}}\,dx.
 </span></p>
-<p data-source-line="2313">Use <span class="math inline">u=(x-\tilde\mu)/\sigma</span>. Write down the new endpoints, the new exponent, and what happens to <span class="math inline">dx</span>.</p>
-<p data-source-line="2315">It’s conceptually simple and a little finicky. Try it; then we’ll look at the solution.</p>
+<p data-source-line="2276">Use <span class="math inline">u=(x-\tilde\mu)/\sigma</span>. Write down the new endpoints, the new exponent, and what happens to <span class="math inline">dx</span>.</p>
+<p data-source-line="2278">It’s conceptually simple and a little finicky. Try it; then we’ll look at the solution.</p>
 </section>
 <section id="a-standard-normal-area" class="slide level2">
-<h2 data-source-line="2317">A Standard Normal Area</h2>
+<h2 data-source-line="2280">A Standard Normal Area</h2>
 
 
-<img data-src="chapter-bias-and-coverage-slides_files/figure-revealjs/exercise-2-figure-1.svg" style="width:100.0%" alt="The same shaded plot again, carrying the green arms with the blue arms faded." class="r-stretch" data-source-line="2319"><p data-source-line="2328">You struggled, didn’t you? Me too. Here’s the solution.</p>
-<p data-source-line="2330">Make the substitution <span class="math inline">u=(x-\tilde\mu)/\sigma</span>. Then <span class="math inline">x=u\sigma+\tilde\mu</span> and <span class="math inline">dx=\sigma\,du</span>.</p>
+<img data-src="chapter-bias-and-coverage-slides_files/figure-revealjs/exercise-2-figure-1.svg" style="width:100.0%" alt="The same shaded plot again, carrying the green arms with the blue arms faded." class="r-stretch" data-source-line="2282"><p data-source-line="2291">You struggled, didn’t you? Me too. Here’s the solution.</p>
+<p data-source-line="2293">Make the substitution <span class="math inline">u=(x-\tilde\mu)/\sigma</span>. Then <span class="math inline">x=u\sigma+\tilde\mu</span> and <span class="math inline">dx=\sigma\,du</span>.</p>
 <p><strong>What happens to the endpoints?</strong> </p>
-<p data-source-line="2332">As <span class="math inline">x</span> goes from <span class="math inline">\mu-1.96\sigma</span> to <span class="math inline">\mu+1.96\sigma</span>, <span class="math inline">u</span> goes from <span class="math inline">-1.96-(\tilde\mu-\mu)/\sigma</span> to <span class="math inline">1.96-(\tilde\mu-\mu)/\sigma</span>.</p>
+<p data-source-line="2295">As <span class="math inline">x</span> goes from <span class="math inline">\mu-1.96\sigma</span> to <span class="math inline">\mu+1.96\sigma</span>, <span class="math inline">u</span> goes from <span class="math inline">-1.96-(\tilde\mu-\mu)/\sigma</span> to <span class="math inline">1.96-(\tilde\mu-\mu)/\sigma</span>.</p>
 
-<p data-source-line="2336"><span class="math display">
+<p data-source-line="2299"><span class="math display">
 \begin{aligned}
 \text{coverage}
 &amp;= \int_{\mu-1.96\sigma}^{\mu+1.96\sigma} \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}} dx \\
@@ -2846,17 +2812,17 @@ e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}}\,dx.
 </span></p>
 </section>
 <section id="summary-and-generalization" class="slide level2">
-<h2 data-source-line="2345">Summary and Generalization</h2>
+<h2 data-source-line="2308">Summary and Generalization</h2>
 
 
-<img data-src="chapter-bias-and-coverage-slides_files/figure-revealjs/standardized-coverage-1.svg" alt="The standard normal density in red with the coverage region shaded yellow." class="r-stretch" data-source-line="2347"><ul>
+<img data-src="chapter-bias-and-coverage-slides_files/figure-revealjs/standardized-coverage-1.svg" alt="The standard normal density in red with the coverage region shaded yellow." class="r-stretch" data-source-line="2310"><ul>
 <li>We can calculate the coverage of a biased, approximately normal estimator easily.</li>
 <li>It’s an integral of the standard normal density over the range <span class="math inline">\pm 1.96 -\text{bias}/\text{se}</span>.</li>
 <li>The <strong>R</strong> function call <strong>pnorm(x)</strong> calculates that integral from <span class="math inline">-\infty</span> to <span class="math inline">x</span>. All we need to do is subtract.</li>
 </ul>
-<h3 id="math-version" data-source-line="2366">Math Version</h3>
+<h3 id="math-version" data-source-line="2329">Math Version</h3>
 
-<p data-source-line="2368"><span class="math display">
+<p data-source-line="2331"><span class="math display">
 \small{
 \begin{aligned}
 \text{coverage}
@@ -2866,20 +2832,20 @@ e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}}\,dx.
 \end{aligned}
 }
 </span></p>
-<h3 id="r-version" data-source-line="2379">R Version</h3>
+<h3 id="r-version" data-source-line="2342">R Version</h3>
 
-<div class="cell" data-source-line="2381">
+<div class="cell" data-source-line="2344">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>coverage <span class="ot">=</span> <span class="cf">function</span>(bias.over.se) {  <span class="fu">pnorm</span>(<span class="fl">1.96</span> <span class="sc">-</span> bias.over.se) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="sc">-</span><span class="fl">1.96</span> <span class="sc">-</span> bias.over.se)  }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="examples" class="slide level2">
-<h2 data-source-line="2388">Examples</h2>
+<h2 data-source-line="2351">Examples</h2>
 <div class="r-stack" style="align-items: start;">
 <div class="fragment fade-out" data-fragment-index="0" style="width: 100%;">
 <div class="columns">
 <div class="column">
 
-<div class="cell" data-source-line="2396">
+<div class="cell" data-source-line="2359">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2889,7 +2855,8 @@ e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}}\,dx.
 </div>
 </div>
 </div><div class="column">
-<p>&nbsp;<br>
+
+<p data-source-line="2387">&nbsp;<br>
 &nbsp;<br>
 <span class="math display">
 \frac{\text{bias}}{\text{se}} = \frac{1}{2} \quad \implies \quad \text{coverage} = 92\%
@@ -2898,7 +2865,7 @@ e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}}\,dx.
 <div class="columns">
 <div class="column">
 
-<div class="cell" data-source-line="2436">
+<div class="cell" data-source-line="2399">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2908,7 +2875,8 @@ e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}}\,dx.
 </div>
 </div>
 </div><div class="column">
-<p>&nbsp;<br>
+
+<p data-source-line="2409">&nbsp;<br>
 &nbsp;<br>
 <span class="math display">
 \frac{\text{bias}}{\text{se}} = 1 \quad \implies \quad \text{coverage} = 83\%
@@ -2920,7 +2888,7 @@ e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}}\,dx.
 <div class="columns">
 <div class="column">
 
-<div class="cell" data-source-line="2463">
+<div class="cell" data-source-line="2426">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2930,7 +2898,8 @@ e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}}\,dx.
 </div>
 </div>
 </div><div class="column">
-<p>&nbsp;<br>
+
+<p data-source-line="2436">&nbsp;<br>
 &nbsp;<br>
 <span class="math display">
 \frac{\text{bias}}{\text{se}} = 2 \quad \implies \quad \text{coverage} = 48\%
@@ -2939,7 +2908,7 @@ e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}}\,dx.
 <div class="columns">
 <div class="column">
 
-<div class="cell" data-source-line="2485">
+<div class="cell" data-source-line="2448">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2949,7 +2918,8 @@ e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}}\,dx.
 </div>
 </div>
 </div><div class="column">
-<p>&nbsp;<br>
+
+<p data-source-line="2458">&nbsp;<br>
 &nbsp;<br>
 <span class="math display">
 \frac{\text{bias}}{\text{se}} = 3 \quad \implies \quad \text{coverage} = 15\%
@@ -2959,10 +2929,10 @@ e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}}\,dx.
 </div>
 <div class="fragment fade-in" data-fragment-index="2" style="width: 100%;">
 
-<div class="r-stack" data-source-line="2510">
+<div class="r-stack" data-source-line="2473">
 <div class="fragment fade-out" data-fragment-index="4">
 
-<div class="cell" data-source-line="2531">
+<div class="cell" data-source-line="2494">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2972,10 +2942,10 @@ e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}}\,dx.
 </div>
 </div>
 <ul>
-<li><p data-source-line="2539">Suppose we’ve got bias, but only a little bit.</p></li>
-<li><p data-source-line="2540">We’re doing a pilot study with sample size <span class="math inline">n=100</span>.</p></li>
-<li><p data-source-line="2541">And we’re sure that our estimator’s absolute bias is less than half its standard error.</p></li>
-<li><p data-source-line="2543"><strong>Question 1</strong>. What’s the coverage of our 95% confidence intervals?</p></li>
+<li><p data-source-line="2502">Suppose we’ve got bias, but only a little bit.</p></li>
+<li><p data-source-line="2503">We’re doing a pilot study with sample size <span class="math inline">n=100</span>.</p></li>
+<li><p data-source-line="2504">And we’re sure that our estimator’s absolute bias is less than half its standard error.</p></li>
+<li><p data-source-line="2506"><strong>Question 1</strong>. What’s the coverage of our 95% confidence intervals?</p></li>
 </ul>
 <div class="fragment" data-fragment-index="3">
 <ul>
@@ -2985,7 +2955,7 @@ e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}}\,dx.
 </div>
 <div class="fragment fade-in" data-fragment-index="4">
 
-<div class="cell" data-source-line="2550">
+<div class="cell" data-source-line="2513">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -3018,21 +2988,21 @@ e^{-\frac{(x-\tilde\mu)^2}{2\sigma^2}}\,dx.
 </div>
 </section>
 <section id="the-coverage-curve" class="slide level2">
-<h2 data-source-line="2580">The Coverage Curve</h2>
+<h2 data-source-line="2543">The Coverage Curve</h2>
 
 
-<img data-src="chapter-bias-and-coverage-slides_files/figure-revealjs/coverage-curve-1.svg" style="width:100.0%" alt="Coverage of a 95 percent interval against bias over standard error, with horizontal reference lines at 95, 80 and 50 percent." class="r-stretch" data-source-line="2582"><p>Reference points: <span style="color: forestgreen;">nominal</span> · <span style="color: goldenrod;">questionable</span> · <span style="color: firebrick;">coinflip</span> </p>
+<img data-src="chapter-bias-and-coverage-slides_files/figure-revealjs/coverage-curve-1.svg" style="width:100.0%" alt="Coverage of a 95 percent interval against bias over standard error, with horizontal reference lines at 95, 80 and 50 percent." class="r-stretch" data-source-line="2545"><p>Reference points: <span style="color: forestgreen;">nominal</span> · <span style="color: goldenrod;">questionable</span> · <span style="color: firebrick;">coinflip</span> </p>
 </section>
 <section id="back-to-power" class="slide level2">
-<h2 data-source-line="2600">Back to Power</h2>
+<h2 data-source-line="2563">Back to Power</h2>
 
 
-<img data-src="chapter-bias-and-coverage-slides_files/figure-revealjs/beat-p-pic-1.svg" style="width:100.0%" alt="Two-sided power picture in standard-error units with both excluded tails shaded." class="r-stretch" data-source-line="2605"><ul>
+<img data-src="chapter-bias-and-coverage-slides_files/figure-revealjs/beat-p-pic-1.svg" style="width:100.0%" alt="Two-sided power picture in standard-error units with both excluded tails shaded." class="r-stretch" data-source-line="2568"><ul>
 <li>Remember: two-sided power to rule out a line is <strong>one minus the fraction of intervals that cover that line</strong>.</li>
 <li>We already know how to calculate it. Replace bias in SE units by the distance from that line to the estimator’s center.</li>
 </ul>
 
-<p data-source-line="2630"><span class="math display">
+<p data-source-line="2593"><span class="math display">
 \text{two-sided power}=1-\text{coverage}(d),\qquad
 d=\frac{\text{estimator center}-\text{reference line}}{\text{se}}.
 </span></p>
@@ -3042,11 +3012,11 @@ d=\frac{\text{estimator center}-\text{reference line}}{\text{se}}.
 </ul>
 </section>
 <section id="finding-people-like-them" class="slide level2">
-<h2 data-source-line="2638">Finding People Like Them</h2>
+<h2 data-source-line="2601">Finding People Like Them</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 
-<div class="cell" data-source-line="2642">
+<div class="cell" data-source-line="2605">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -3056,12 +3026,12 @@ d=\frac{\text{estimator center}-\text{reference line}}{\text{se}}.
 </div>
 </div>
 <div class="comparison-labels">
-<p>Age · Years of schooling · Black · Hispanic · Married · Finished high school.</p>
-<p><span style="color: #073b4c;">NSW controls</span> · <span style="color: #ef476f;">rough CPS peers</span></p>
+<p data-source-line="2616">Age · Years of schooling · Black · Hispanic · Married · Finished high school.</p>
+<p><span style="color: #073b4c;">NSW controls</span> · <span style="color: #ef476f;">rough CPS peers</span> </p>
 </div>
-</div><div class="column" style="width:50%;">
+</div><div class="column" style="width:50%;" data-source-line="2618">
 
-<div class="cell" data-source-line="2659">
+<div class="cell" data-source-line="2622">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -3071,7 +3041,7 @@ d=\frac{\text{estimator center}-\text{reference line}}{\text{se}}.
 </div>
 </div>
 <div class="comparison-labels">
-<p>About 80% power against orange at 501 men.</p>
+<p data-source-line="2633">About 80% power against orange at 501 men.</p>
 </div>
 </div></div>
 <ul>
@@ -3080,13 +3050,13 @@ d=\frac{\text{estimator center}-\text{reference line}}{\text{se}}.
 <li>We made a pretty reasonable attempt to find “people like them.”</li>
 <li>One characteristic we hadn’t thought much about changed the benchmark.</li>
 </ul>
-<p data-source-line="2680">This is why we do experiments. Stay tuned.</p>
-<p data-source-line="2682">We’ll return to these two NSW outcome lists when we formalize potential outcomes and ask what the randomized comparison tells us about the program.</p>
+<p data-source-line="2643">This is why we do experiments. Stay tuned.</p>
+<p data-source-line="2645">We’ll return to these two NSW outcome lists when we formalize potential outcomes and ask what the randomized comparison tells us about the program.</p>
 </section>
 <section id="what-if-they-were-never-exactly-equal" class="slide level2">
-<h2 data-source-line="2684">What If They Were Never Exactly Equal?</h2>
+<h2 data-source-line="2647">What If They Were Never Exactly Equal?</h2>
 
-<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="2687">
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="2650">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <p><img data-src="chapter-bias-and-coverage-slides_files/figure-revealjs/beat-q-precision-1.svg" alt="Fixed discrepancy at wide and narrow precision side by side."></p>
@@ -3105,7 +3075,7 @@ d=\frac{\text{estimator center}-\text{reference line}}{\text{se}}.
 <script type="ojs-module-contents">
 eyJjb250ZW50cyI6W119
 </script>
-<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2" data-source-line="2710">
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2" data-source-line="2673">
 <div id="exercise-loading-status" class="d-flex gap-2">
 
 </div>

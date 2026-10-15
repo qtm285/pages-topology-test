@@ -1,0 +1,423 @@
+{
+  "version": 1,
+  "kind": "tlda-document",
+  "source": {
+    "format": "qmd",
+    "renderer": "quarto"
+  },
+  "document": {
+    "format": "html"
+  },
+  "pages": [
+    {
+      "file": "book/index.html",
+      "title": "Prediction, Inference, and Causality I",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "index.qmd"
+      },
+      "tocLevel": "part",
+      "build": {
+        "buildId": "mv4xmnju-1",
+        "sourceRevision": "5c09089975d142b1693c387b5802086b1c66cfba",
+        "retainedAt": "2026-10-12T07:30:15.047Z"
+      }
+    },
+    {
+      "file": "book/chapters/chapter-social-pressure-experiment.html",
+      "title": "Chapter 1: 1 The Social Pressure Experiment",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "chapters/chapter-social-pressure-experiment.qmd"
+      },
+      "build": {
+        "buildId": "mv1xu0hw-1",
+        "sourceRevision": "648eec71c2504c1d284946ab46a1c1b3fe9191de",
+        "retainedAt": "2026-10-10T05:12:36.605Z"
+      }
+    },
+    {
+      "file": "book/homework/homework-setup.html",
+      "title": "Chapter 2: Homework: Setting Up",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "homework/homework-setup.qmd"
+      },
+      "build": {
+        "buildId": "mv4vyi91-1",
+        "sourceRevision": "2e52ea83e01289fd04c69ff1fca2448face76061",
+        "retainedAt": "2026-10-12T06:43:26.204Z"
+      }
+    },
+    {
+      "file": "book/homework/homework-descriptive.html",
+      "title": "Chapter 3: 3 Homework: Basic Descriptive Statistics",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "homework/homework-descriptive.qmd"
+      },
+      "build": {
+        "buildId": "mv4q05kv-1",
+        "sourceRevision": "f110e04b7ca5615f9f9d973269bcce6e291dd62e",
+        "retainedAt": "2026-10-12T03:56:44.798Z"
+      }
+    },
+    {
+      "file": "book/chapters/chapter-sampling.html",
+      "title": "Chapter 4: 4 Sampling",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "chapters/chapter-sampling.qmd"
+      },
+      "build": {
+        "buildId": "mv1xon16-1",
+        "sourceRevision": "81874a8f6f87655285d6b6d084e25a763ace3cd1",
+        "retainedAt": "2026-10-10T05:08:25.736Z"
+      }
+    },
+    {
+      "file": "book/chapters/chapter-point-and-interval-estimates.html",
+      "title": "Chapter 5: 5 Point and Interval Estimates",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "chapters/chapter-point-and-interval-estimates.qmd"
+      },
+      "build": {
+        "buildId": "mv1xt67i-1",
+        "sourceRevision": "74aa65bb5f0355e86ff9eca6d7c4e548e9749c74",
+        "retainedAt": "2026-10-10T05:11:57.198Z"
+      }
+    },
+    {
+      "file": "book/homework/homework-calibration.html",
+      "title": "Chapter 6: Homework: The Idea of Calibration",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "homework/homework-calibration.qmd"
+      },
+      "build": {
+        "buildId": "mv4vxjso-1",
+        "sourceRevision": "f71fbf4546aa59d10a553d184f28bc76fe935fb5",
+        "retainedAt": "2026-10-12T06:42:41.548Z"
+      }
+    },
+    {
+      "file": "book/homework/homework-calibration-solutions.html",
+      "title": "Chapter 7: 6 Homework: The Idea of Calibration",
+      "width": 1041,
+      "height": 1000,
+      "variant": "solutions",
+      "source": {
+        "file": "homework/homework-calibration.qmd"
+      },
+      "build": {
+        "buildId": "mv4vxjso-1",
+        "sourceRevision": "f71fbf4546aa59d10a553d184f28bc76fe935fb5",
+        "retainedAt": "2026-10-12T06:42:41.548Z"
+      }
+    },
+    {
+      "file": "book/chapters/chapter-calibration-binary.html",
+      "title": "Chapter 8: 7 Calibrating Interval Estimates with Binary Observations",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "chapters/chapter-calibration-binary.qmd"
+      },
+      "build": {
+        "buildId": "mv3rxibg-1",
+        "sourceRevision": "a0dbf8df01ae75ff19758b139debae795a11eaf2",
+        "retainedAt": "2026-10-11T12:02:54.257Z"
+      }
+    },
+    {
+      "file": "book/chapters/chapter-sampling-with-replacement.html",
+      "title": "Chapter 9: 8 Sampling with Replacement and the Binomial Distribution",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "chapters/chapter-sampling-with-replacement.qmd"
+      },
+      "build": {
+        "buildId": "mv4v2at3-1",
+        "sourceRevision": "c2842278a5fa09b7b52027cc2eb0773dbd8dc19b",
+        "retainedAt": "2026-10-12T06:18:22.863Z"
+      }
+    },
+    {
+      "file": "book/homework/homework-calibration-binary.html",
+      "title": "Chapter 10: 9 Homework: Calibration with Binary Outcomes",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "homework/homework-calibration-binary.qmd"
+      },
+      "build": {
+        "buildId": "mv4qd3ng-1",
+        "sourceRevision": "45647fbd34477a6488c49c58687ab19c4d342fce",
+        "retainedAt": "2026-10-12T04:06:48.946Z"
+      }
+    },
+    {
+      "file": "book/chapters/chapter-sampling-without-replacement.html",
+      "title": "Chapter 11: 10 Sampling without Replacement and the Hypergeometric Distribution",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "chapters/chapter-sampling-without-replacement.qmd"
+      },
+      "build": {
+        "buildId": "mv4yf404-1",
+        "sourceRevision": "10a5c2fd69eae5293a443d3c32e4d0b6e501ec8f",
+        "retainedAt": "2026-10-12T07:52:19.492Z"
+      }
+    },
+    {
+      "file": "book/chapters/chapter-bootstrap.html",
+      "title": "Chapter 12: 12 Calibrating Interval Estimates using the Bootstrap",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "chapters/chapter-bootstrap.qmd"
+      },
+      "build": {
+        "buildId": "mv3rw4c5-1",
+        "sourceRevision": "4091517974f75b5e8693e83f33488830231f36e9",
+        "retainedAt": "2026-10-11T12:01:49.548Z"
+      }
+    },
+    {
+      "file": "book/homework/homework-bootstrap.html",
+      "title": "Chapter 13: Homework: Bootstrap",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "homework/homework-bootstrap.qmd"
+      },
+      "build": {
+        "buildId": "mv4xhcfe-1",
+        "sourceRevision": "64df3d7f01e103a188b1ff8f35af0ad09ef94158",
+        "retainedAt": "2026-10-12T07:26:05.307Z"
+      }
+    },
+    {
+      "file": "book/homework/homework-bootstrap-solutions.html",
+      "title": "Chapter 14: 13 Homework: Bootstrap",
+      "width": 1041,
+      "height": 1000,
+      "variant": "solutions",
+      "source": {
+        "file": "homework/homework-bootstrap.qmd"
+      },
+      "build": {
+        "buildId": "mv4xhcfe-1",
+        "sourceRevision": "64df3d7f01e103a188b1ff8f35af0ad09ef94158",
+        "retainedAt": "2026-10-12T07:26:05.307Z"
+      }
+    },
+    {
+      "file": "book/chapters/chapter-joint-distributions-and-independence.html",
+      "title": "Chapter 15: 11 Random Variables and Moments",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "chapters/chapter-joint-distributions-and-independence.qmd"
+      },
+      "build": {
+        "buildId": "mv4y2db6-1",
+        "sourceRevision": "5b488dc2af228e5715e49a4955fe555de26cc042",
+        "retainedAt": "2026-10-12T07:42:25.157Z"
+      }
+    },
+    {
+      "file": "book/chapters/chapter-mean-and-variance-of-an-average.html",
+      "title": "Chapter 16: 11 Means, Variances, and Sample Averages",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "chapters/chapter-mean-and-variance-of-an-average.qmd"
+      },
+      "build": {
+        "buildId": "mv4w1bj1-1",
+        "sourceRevision": "a63211614676d7e48e1a9618d8a7414df728c07c",
+        "retainedAt": "2026-10-12T06:45:36.801Z"
+      }
+    },
+    {
+      "file": "book/chapters/chapter-concentration.html",
+      "title": "Chapter 17: 20 Concentration",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "chapters/chapter-concentration.qmd"
+      },
+      "build": {
+        "buildId": "mv3shnyq-1",
+        "sourceRevision": "dd3fb35fcfa5c5aa191ea295620a644d60c51cea",
+        "retainedAt": "2026-10-11T12:18:35.092Z"
+      }
+    },
+    {
+      "file": "book/homework/homework-random-variables-and-moments.html",
+      "title": "Chapter 18: 17 Homework — Random Variables, Moments, and the Standard Deviation",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "homework/homework-random-variables-and-moments.qmd"
+      },
+      "build": {
+        "buildId": "mv3rtldd-1",
+        "sourceRevision": "93f36223d74b590930b23d7d2b6ece93142a3a4a",
+        "retainedAt": "2026-10-11T11:59:51.528Z"
+      }
+    },
+    {
+      "file": "book/chapters/chapter-normal-approximation.html",
+      "title": "Chapter 19: 18 Normal Approximation and Sample Size Calculation",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "chapters/chapter-normal-approximation.qmd"
+      },
+      "build": {
+        "buildId": "mv1xsv55-1",
+        "sourceRevision": "0e416ff6d810e2b139c41336a32a530cd50ad59b",
+        "retainedAt": "2026-10-10T05:11:43.626Z"
+      }
+    },
+    {
+      "file": "book/homework/homework-comparing-estimators.html",
+      "title": "Chapter 20: 19 Homework: Comparing Estimators",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "homework/homework-comparing-estimators.qmd"
+      },
+      "build": {
+        "buildId": "mv24p8at-1",
+        "sourceRevision": "e7f653679554d933325e483c517df7fe0818d97e",
+        "retainedAt": "2026-10-10T08:24:50.901Z"
+      }
+    },
+    {
+      "file": "book/exams/practice-midterm-1.html",
+      "title": "Chapter 21: 21 Practice Midterm 1",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "exams/practice-midterm-1.qmd"
+      },
+      "build": {
+        "buildId": "mv2g60s9-1",
+        "sourceRevision": "cc5fdce369e56861619ca47ff2c4880105052f51",
+        "retainedAt": "2026-10-10T13:45:49.775Z"
+      }
+    },
+    {
+      "file": "book/chapters/chapter-programming-reference.html",
+      "title": "Chapter 22: 21 Programming Reference",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "chapters/chapter-programming-reference.qmd"
+      },
+      "build": {
+        "buildId": "mv1xocu1-1",
+        "sourceRevision": "f0e6ca1d862b80116354174532dbe63c332890d2",
+        "retainedAt": "2026-10-10T05:08:12.626Z"
+      }
+    },
+    {
+      "file": "book/decks/chapter-social-pressure-experiment-slides.html",
+      "title": "Chapter 23: Introduction",
+      "width": 1041,
+      "height": 1000,
+      "variant": "slides",
+      "source": {
+        "file": "decks/chapter-social-pressure-experiment-slides.qmd"
+      },
+      "build": {
+        "buildId": "mv4y3j6l-1",
+        "sourceRevision": "6162ce9f1f0bbc2c030102d32440dd277ec5d934",
+        "retainedAt": "2026-10-12T07:43:21.774Z"
+      }
+    },
+    {
+      "file": "book/decks/chapter-calibration-binary-slides.html",
+      "title": "Chapter 24: Calibrating Interval Estimates with Binary Observations",
+      "width": 1041,
+      "height": 1000,
+      "variant": "slides",
+      "source": {
+        "file": "decks/chapter-calibration-binary-slides.qmd"
+      },
+      "build": {
+        "buildId": "mv3cfdhl-1",
+        "sourceRevision": "745ece1daa571e41597ab504c3f480392ce43172",
+        "retainedAt": "2026-10-11T04:48:54.088Z"
+      }
+    },
+    {
+      "file": "book/decks/chapter-bootstrap-slides.html",
+      "title": "Chapter 25: Calibrating Interval Estimates using the Bootstrap",
+      "width": 1041,
+      "height": 1000,
+      "variant": "slides",
+      "source": {
+        "file": "decks/chapter-bootstrap-slides.qmd"
+      },
+      "build": {
+        "buildId": "mv3bxx0i-1",
+        "sourceRevision": "460e89888fcb10b0fb83517864da4cfd6dfb7cfa",
+        "retainedAt": "2026-10-11T04:35:19.965Z"
+      }
+    },
+    {
+      "file": "book/decks/chapter-normal-approximation-slides.html",
+      "title": "Chapter 26: Normal Approximation and Sample Size Calculation",
+      "width": 1041,
+      "height": 1000,
+      "variant": "slides",
+      "source": {
+        "file": "decks/chapter-normal-approximation-slides.qmd"
+      },
+      "build": {
+        "buildId": "mv1yhypm-1",
+        "sourceRevision": "c15373fca87dbd7efdfc56cd607f1760f9d7f890",
+        "retainedAt": "2026-10-10T05:31:14.663Z"
+      }
+    },
+    {
+      "file": "book/decks/chapter-bias-and-coverage-slides.html",
+      "title": "Chapter 27: Power, Bias, and Coverage",
+      "width": 1041,
+      "height": 1000,
+      "variant": "slides",
+      "source": {
+        "file": "decks/chapter-bias-and-coverage-slides.qmd"
+      },
+      "build": {
+        "buildId": "mv4ojv3n-1",
+        "sourceRevision": "1f460d5443087349421821a009aab2e06f30d01d",
+        "retainedAt": "2026-10-12T03:16:04.979Z"
+      }
+    }
+  ],
+  "assets": [],
+  "sourceMapping": "none",
+  "view": {
+    "kind": "html-pages",
+    "capabilities": {
+      "presentation": false,
+      "sourceMapping": false,
+      "searchableText": true
+    }
+  }
+}

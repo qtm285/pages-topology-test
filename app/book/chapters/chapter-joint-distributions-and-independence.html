@@ -1,4 +1,5 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -6,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>11&nbsp; What’s Common and What Isn’t – Prediction, Inference, and Causality</title>
+<title>11&nbsp; Random Variables and Moments – Prediction, Inference, and Causality</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -25,29 +26,29 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../_assets/mv3rrnaz-1/site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../_assets/mv3rrnaz-1/site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../_assets/mv3rrnaz-1/site_libs/clipboard/clipboard.min.js"></script>
-<script src="../_assets/mv3rrnaz-1/site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../_assets/mv3rrnaz-1/site_libs/quarto-search/fuse.min.js"></script>
-<script src="../_assets/mv3rrnaz-1/site_libs/quarto-search/quarto-search.js"></script>
+<script src="../_assets/mv4y2db6-1/site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../_assets/mv4y2db6-1/site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../_assets/mv4y2db6-1/site_libs/clipboard/clipboard.min.js"></script>
+<script src="../_assets/mv4y2db6-1/site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../_assets/mv4y2db6-1/site_libs/quarto-search/fuse.min.js"></script>
+<script src="../_assets/mv4y2db6-1/site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../chapters/chapter-calibration-with-the-binomial.html" rel="next">
 <link href="../chapters/chapter-sampling-without-replacement.html" rel="prev">
-<script src="../_assets/mv3rrnaz-1/site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../_assets/mv3rrnaz-1/site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../_assets/mv3rrnaz-1/site_libs/quarto-html/popper.min.js"></script>
-<script src="../_assets/mv3rrnaz-1/site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../_assets/mv3rrnaz-1/site_libs/quarto-html/anchor.min.js"></script>
-<link href="../_assets/mv3rrnaz-1/site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../_assets/mv3rrnaz-1/site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../_assets/mv3rrnaz-1/site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../_assets/mv3rrnaz-1/site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../_assets/mv3rrnaz-1/site_libs/bootstrap/bootstrap-6fe1715721786a838a92806728cb6c53.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="../_assets/mv3rrnaz-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
-<link href="../_assets/mv3rrnaz-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
-<script src="../_assets/mv3rrnaz-1/site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
-<link href="../_assets/mv3rrnaz-1/site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script src="../_assets/mv4y2db6-1/site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../_assets/mv4y2db6-1/site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../_assets/mv4y2db6-1/site_libs/quarto-html/popper.min.js"></script>
+<script src="../_assets/mv4y2db6-1/site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../_assets/mv4y2db6-1/site_libs/quarto-html/anchor.min.js"></script>
+<link href="../_assets/mv4y2db6-1/site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../_assets/mv4y2db6-1/site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../_assets/mv4y2db6-1/site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../_assets/mv4y2db6-1/site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../_assets/mv4y2db6-1/site_libs/bootstrap/bootstrap-be13b5e62a53a36e99ca46c948bdaa3d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../_assets/mv4y2db6-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../_assets/mv4y2db6-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../_assets/mv4y2db6-1/site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../_assets/mv4y2db6-1/site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -75,10 +76,10 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script type="module" src="../_assets/mv3rrnaz-1/site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
-<link href="../_assets/mv3rrnaz-1/site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
-<link href="../_assets/mv3rrnaz-1/site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="../_assets/mv3rrnaz-1/site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script type="module" src="../_assets/mv4y2db6-1/site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../_assets/mv4y2db6-1/site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../_assets/mv4y2db6-1/site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../_assets/mv4y2db6-1/site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script>
 // GENERATED by bin/generate-katex-macros.mjs from the tlda repo's
 // shared/katex-base-macros.mjs. Do not edit here -- edit the source and
@@ -525,7 +526,7 @@ window.__tldaKatexMacros = {
 
 </script>
 
-  <script defer="" src="../_assets/mv3rrnaz-1/katex-assets/dist/katex.min.js"></script>
+  <script defer="" src="../_assets/mv4y2db6-1/katex-assets/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
  var mathElements = document.getElementsByClassName("math");
  var macros = [];
@@ -540,7 +541,7 @@ window.__tldaKatexMacros = {
    });
 }}});
   </script>
-  <link rel="stylesheet" href="../_assets/mv3rrnaz-1/katex-assets/dist/katex.min.css">
+  <link rel="stylesheet" href="../_assets/mv4y2db6-1/katex-assets/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -580,7 +581,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">1.1 Calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-joint-distributions-and-independence.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">What’s Common and What Isn’t</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">1.1 Calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-joint-distributions-and-independence.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -688,7 +689,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-joint-distributions-and-independence.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">What’s Common and What Isn’t</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -786,20 +787,25 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li data-source-line="11"><a href="#to-see-whats-easy-revisit-something-hard" id="toc-to-see-whats-easy-revisit-something-hard" class="nav-link active" data-scroll-target="#to-see-whats-easy-revisit-something-hard">To See What’s Easy, Revisit Something Hard</a>
+  <li><a href="#to-see-whats-easy-revisit-something-hard" id="toc-to-see-whats-easy-revisit-something-hard" class="nav-link active" data-scroll-target="#to-see-whats-easy-revisit-something-hard">To See What’s Easy, Revisit Something Hard <!--tlda:23--></a>
   <ul class="collapse">
-  <li data-source-line="17"><a href="#sec-marginalization" id="toc-sec-marginalization" class="nav-link" data-scroll-target="#sec-marginalization">How We Got Here</a></li>
-  <li data-source-line="62"><a href="#two-calls" id="toc-two-calls" class="nav-link" data-scroll-target="#two-calls">Two Calls</a></li>
-  <li data-source-line="152"><a href="#change-the-population" id="toc-change-the-population" class="nav-link" data-scroll-target="#change-the-population">Change the Population</a></li>
+  <li><a href="#sec-marginalization" id="toc-sec-marginalization" class="nav-link" data-scroll-target="#sec-marginalization">How We Got Here <!--tlda:95--></a></li>
+  <li><a href="#two-calls" id="toc-two-calls" class="nav-link" data-scroll-target="#two-calls">Two Calls <!--tlda:102--></a></li>
+  <li><a href="#change-the-population" id="toc-change-the-population" class="nav-link" data-scroll-target="#change-the-population">Change the Population <!--tlda:218--></a></li>
+  <li><a href="#optional-three-calls" id="toc-optional-three-calls" class="nav-link" data-scroll-target="#optional-three-calls">Optional: Three Calls <!--tlda:324--></a></li>
   </ul></li>
-  <li data-source-line="222"><a href="#what-stays-the-same" id="toc-what-stays-the-same" class="nav-link" data-scroll-target="#what-stays-the-same">What Stays the Same</a></li>
-  <li data-source-line="257"><a href="#the-rules-on-the-grid" id="toc-the-rules-on-the-grid" class="nav-link" data-scroll-target="#the-rules-on-the-grid">The Rules, on the Grid</a></li>
-  <li data-source-line="272"><a href="#a-third-design" id="toc-a-third-design" class="nav-link" data-scroll-target="#a-third-design">A Third Design</a></li>
-  <li data-source-line="314"><a href="#random-variables" id="toc-random-variables" class="nav-link" data-scroll-target="#random-variables">Random Variables</a></li>
-  <li data-source-line="327"><a href="#independence" id="toc-independence" class="nav-link" data-scroll-target="#independence">Independence</a></li>
-  <li data-source-line="393"><a href="#optional-three-calls" id="toc-optional-three-calls" class="nav-link" data-scroll-target="#optional-three-calls">Optional: Three Calls</a>
+  <li><a href="#margins-and-independence" id="toc-margins-and-independence" class="nav-link" data-scroll-target="#margins-and-independence">Margins and Independence <!--tlda:348--></a>
   <ul class="collapse">
-  <li data-source-line="437"><a href="#one-or-two-calls-out-of-three" id="toc-one-or-two-calls-out-of-three" class="nav-link" data-scroll-target="#one-or-two-calls-out-of-three">One or Two Calls out of Three</a></li>
+  <li><a href="#one-or-two-calls-out-of-three" id="toc-one-or-two-calls-out-of-three" class="nav-link" data-scroll-target="#one-or-two-calls-out-of-three">One or Two Calls out of Three <!--tlda:352--></a></li>
+  <li><a href="#what-stays-the-same" id="toc-what-stays-the-same" class="nav-link" data-scroll-target="#what-stays-the-same">What Stays the Same <!--tlda:387--></a></li>
+  <li><a href="#the-rules-on-the-grid" id="toc-the-rules-on-the-grid" class="nav-link" data-scroll-target="#the-rules-on-the-grid">The Rules, on the Grid <!--tlda:427--></a></li>
+  <li><a href="#a-third-design" id="toc-a-third-design" class="nav-link" data-scroll-target="#a-third-design">A Third Design <!--tlda:509--></a></li>
+  </ul></li>
+  <li><a href="#random-variables" id="toc-random-variables" class="nav-link" data-scroll-target="#random-variables">Random Variables <!--tlda:568--></a>
+  <ul class="collapse">
+  <li><a href="#observations-as-random-variables" id="toc-observations-as-random-variables" class="nav-link" data-scroll-target="#observations-as-random-variables">Observations as Random Variables <!--tlda:572--></a></li>
+  <li><a href="#expectation" id="toc-expectation" class="nav-link" data-scroll-target="#expectation">Expectation <!--tlda:585--></a></li>
+  <li><a href="#variance" id="toc-variance" class="nav-link" data-scroll-target="#variance">Variance <!--tlda:787--></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -807,9 +813,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">1.1 Calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-joint-distributions-and-independence.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">What’s Common and What Isn’t</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">1.1 Calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-joint-distributions-and-independence.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">What’s Common and What Isn’t</span></h1>
+<h1 class="title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></h1>
 </div>
 
 
@@ -826,65 +832,67 @@ window.Quarto = {
 </header>
 
 
-
-
-
-
-
-
-<div class="hidden" data-source-line="1" data-source-file="chapters/shared/shared-code.qmd">
+<!--tlda:1@0-->
+<!--tlda:19@0-->
+<!--tlda:1@1-->
+<!--tlda:54@1-->
+<!--tlda:64@1-->
+<!--tlda:85@1-->
+<div class="hidden">
 <p>$$ \newcommand{X}{} \newcommand{Y}{} % A hex digit after # inside a macro body is eaten by build-time expansion, so digit-leading hexes spell # via . </p>
-
-
-
-
-
-
-
-<p data-source-line="132" data-source-file="shared/shared-style.qmd">$$</p>
+<!--tlda:132@1-->
+<!--tlda:142@1-->
+<!--tlda:151@1-->
+<!--tlda:160@1-->
+<!--tlda:164@1-->
+<!--tlda:167@1-->
+<!--tlda:170@1-->
+<p>$$</p>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<!--tlda:191@1-->
+<!--tlda:87@0-->
+<!--tlda:107@0-->
+<!--tlda:120@0-->
+<!--tlda:124@0-->
+<!--tlda:139@0-->
+<!--tlda:153@0-->
+<!--tlda:198@0-->
+<!--tlda:277@0-->
+<!--tlda:1@2-->
+<!--tlda:1@3-->
+<!--tlda:106@3-->
+<!--tlda:248@3-->
+<!--tlda:277@3-->
+<!--tlda:296@3-->
+<!--tlda:417@3-->
+<!--tlda:623@3-->
+<!--tlda:656@3-->
+<!--tlda:950@3-->
+<!--tlda:1@4-->
+<!--tlda:133@4-->
+<!--tlda:220@4-->
+<!--tlda:242@4-->
+<!--tlda:12-->
 <section id="to-see-whats-easy-revisit-something-hard" class="level2">
-<h2 class="anchored" data-anchor-id="to-see-whats-easy-revisit-something-hard" data-source-line="191" data-source-file="shared/shared-style.qmd">To See What’s Easy, Revisit Something Hard</h2>
-<p data-source-line="13">To see what’s easy, we’re going to revisit something hard: how we calculated these distributions in the first place. What stays the same when we change the sampling scheme or the population?</p>
-<section id="sec-marginalization" class="level3">
-<h3 class="anchored" data-anchor-id="sec-marginalization" data-source-line="17">How We Got Here</h3>
-
-<div class="cell" data-source-line="19">
+<h2 class="anchored" data-anchor-id="to-see-whats-easy-revisit-something-hard">To See What’s Easy, Revisit Something Hard <!--tlda:23--></h2>
+<p>We’ve worked out the exact formulas for these distributions in the previous two chapters. The distributions we get when we sample with and without replacement, when we have binary responses. It was a lot of work. We went from call sequences to response sequences, then from response sequences to their sum. We needed a count of the binary sequences with each sum. And without replacement, we had to keep track of who each call used up. <!--tlda:25--></p>
+<p>Here is the population of four we started with in Sampling with Replacement. <!--tlda:32--></p>
+<!--tlda:34-->
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-population-plot-1.svg" class="img-fluid figure-img" alt="Four gray dots at person one to four, two at response zero and two at response one."></p>
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-population-plot-1.svg" class="img-fluid figure-img" style="width:50.0%" alt="Four purple dots at person one to four, two at response zero and two at response one."></p>
 </figure>
 </div>
 </div>
 </div>
-<p data-source-line="29">We’re going to draw a sample of size 2 from the population above. Here is the distribution of the total we get, sampling with replacement first and then without.</p>
-<p><strong>With replacement.</strong> </p>
-
-<div class="cell" data-source-line="32">
+<p>We’re going to draw a sample of size 2 from the population above. Here is the distribution of the total we get, sampling with replacement first and then without. <!--tlda:45--></p>
+<div class="grid">
+<div class="g-col-6">
+<p><strong>With replacement.</strong> <!--tlda:50--></p>
+<!--tlda:52-->
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -893,9 +901,11 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p><strong>Without replacement.</strong> </p>
-
-<div class="cell" data-source-line="44">
+</div>
+<div class="g-col-6">
+<p><strong>Without replacement.</strong> <!--tlda:63--></p>
+<!--tlda:65-->
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -904,16 +914,25 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p data-source-line="56">These are distributions we have had for weeks: with replacement the total is binomial, without replacement it is hypergeometric.</p>
-<p data-source-line="59">And here is how we got them. List the call sequences. Replace each person called by their response. Add.</p>
+</div>
+</div>
+<p>These are called the <em>Binomial</em> and <em>Hypergeometric</em> distributions. <!--tlda:77--></p>
+<p>In the bootstrap homework, we also looked at the sampling distribution we got when we used a particular form of randomized convenience sampling, where we start at a random position on a circle. In “One Roll and a Walk”, we canvassed a street of ten houses on a walk that loops from house 10 back to house 1, rolled the d10 once, and knocked at the house it named and the next three. That sampling distribution is neither Binomial nor Hypergeometric. <!--tlda:79--></p>
+<p>All of this was a lot of work, and these were probably the simplest cases that are relevant to real practice. What we’re going to do now is talk about some principles that will let us get at these approximately, without working them out in full. In particular, we will talk about location and spread. <!--tlda:86--></p>
+<p>To see what’s easy, we’re going to revisit something hard: how we calculated these distributions in the first place. What stays the same when we change the sampling scheme or the population? <!--tlda:91--></p>
+<section id="sec-marginalization" class="level3">
+<h3 class="anchored" data-anchor-id="sec-marginalization">How We Got Here <!--tlda:95--></h3>
+<p>Everything so far has been about binary outcomes. Each person in the population would say Yes or No, which we write as 1 or 0, and the total is the number of Yeses. To get these distributions, we listed the call sequences, replaced each person called by their response, and added up the probabilities of the sequences with the same total. <!--tlda:97--></p>
 </section>
 <section id="two-calls" class="level3">
-<h3 class="anchored" data-anchor-id="two-calls" data-source-line="62">Two Calls</h3>
-<p data-source-line="64">Every call sequence is equally likely. That follows from the design; it is not assumed. With replacement, each call is an independent uniform pick, so all sixteen ordered pairs of people are equally likely. Without replacement, the sample is a shuffle, so all twelve ordered pairs of <em>distinct</em> people are.</p>
-<p data-source-line="69">Rows are the first person called and columns the second, so each cell is one call sequence. In the cell is its probability and the pair of responses those two people give, and the color groups the cells by that pair of responses.</p>
-<p data-source-line="73"><strong>With replacement.</strong> Every cell is <span class="math inline">1/16</span>.</p>
-
-<div class="cell" data-source-line="75">
+<h3 class="anchored" data-anchor-id="two-calls">Two Calls <!--tlda:102--></h3>
+<p>Every call sequence is equally likely. That follows from the design; it is not assumed. With replacement, each call is an independent uniform pick, so all sixteen ordered pairs of people are equally likely. Without replacement, the sample is a shuffle, so all twelve ordered pairs of <em>distinct</em> people are. <!--tlda:104--></p>
+<p>Here are the call grids, with and without replacement. <!--tlda:109--></p>
+<div class="grid">
+<div class="g-col-6">
+<p><strong>With replacement.</strong> Every cell is <span class="respany"><span class="math inline">1/16</span></span>. <!--tlda:113--></p>
+<!--tlda:115-->
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -922,9 +941,11 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p data-source-line="85"><strong>Without replacement.</strong> The diagonal is impossible and the twelve cells off it are <span class="math inline">1/12</span> each.</p>
-
-<div class="cell" data-source-line="88">
+</div>
+<div class="g-col-6">
+<p><strong>Without replacement.</strong> The diagonal is impossible and the twelve cells off it are <span class="respany"><span class="math inline">1/12</span></span> each. <!--tlda:126--></p>
+<!--tlda:129-->
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -933,9 +954,12 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p data-source-line="98">The colors stay the same. The probabilities in the grid you’re coloring change.</p>
-
-<div class="cell" data-source-line="100">
+</div>
+</div>
+<p>Rows are the first person called and columns the second, so each cell is one call sequence. In the cell is its probability and the pair of responses those two people give, and the color groups the cells by that pair of responses. <!--tlda:141--></p>
+<p>The colors stay the same. The probabilities in the grid you’re coloring change. <!--tlda:145--></p>
+<!--tlda:147-->
+<div class="cell">
 <div id="tbl-means-call" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-means-call-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1090,50 +1114,78 @@ Table&nbsp;11.1
 </figure>
 </div>
 </div>
-<p data-source-line="106">The table is the same sixteen call sequences, one column per call, with the two schemes’ probabilities side by side and the rows in the colors of the grid.</p>
-<p data-source-line="109">Aggregate the colored cells into the response grid. Each block of one color in the call grid is the set of call sequences giving one pair of responses, so each block collapses to a single cell, with rows the first response and columns the second. Then aggregate the response grid into the distribution of the total beside it. The two cells where the responses differ both have total 1, so they add together into the middle bar.</p>
-<p><strong>With replacement.</strong> </p>
-
-<div class="cell quarto-layout-panel" data-layout="[[1,1]]" data-source-line="116">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-resp-with-plot-1.svg" class="img-fluid" alt="A two-by-two grid of first response by second response, every cell one quarter, in the four response-pair colors."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-resp-with-plot-2.svg" class="img-fluid" alt="The corresponding total distribution: add the two off-diagonal response probabilities for the bar at one."></p>
-</div>
-</div>
-</div>
-<p><strong>Without replacement.</strong> </p>
-
-<div class="cell quarto-layout-panel" data-layout="[[1,1]]" data-source-line="132">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-resp-without-plot-1.svg" class="img-fluid" alt="A two-by-two grid of first response by second response in the same four colors, with two twelfths on the diagonal and four twelfths off it."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-resp-without-plot-2.svg" class="img-fluid" alt="The corresponding total distribution: add the two off-diagonal response probabilities for the bar at one."></p>
-</div>
-</div>
-</div>
-<p data-source-line="148">Four cells of <span class="math inline">1/16</span> in each block add to <span class="math inline">1/4</span> with replacement; without replacement only two cells are possible where the responses agree, and four where they differ. We get <span class="math inline">2/12</span> where they agree and <span class="math inline">4/12</span> where they differ.</p>
-</section>
-<section id="change-the-population" class="level3">
-<h3 class="anchored" data-anchor-id="change-the-population" data-source-line="152">Change the Population</h3>
-<p data-source-line="154">So far we have changed the scheme and held the population fixed. Now the other way round: one voter in four, three zeros and one one. This population stays for the rest of the chapter.</p>
-
-<div class="cell" data-source-line="158">
+<p>The table is the same sixteen call sequences, one column per call, with the two schemes’ probabilities side by side and the rows in the colors of the grid. <!--tlda:153--></p>
+<p>We aggregate the colored cells into the response grid. <!--tlda:156--></p>
+<div class="grid">
+<div class="g-col-6">
+<p><strong>With replacement.</strong> <!--tlda:160--></p>
+<!--tlda:162-->
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-population-unbal-plot-1.svg" class="img-fluid figure-img" alt="Four gray dots at person one to four, three at response zero and one at response one."></p>
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-resp-with-plot-1.svg" class="img-fluid figure-img" alt="A two-by-two grid of first response by second response, every cell one quarter, in the four response-pair colors."></p>
 </figure>
 </div>
 </div>
 </div>
-<p data-source-line="168">For each sampling scheme, the call probabilities are the same as before; what gets colored changed. Here is the with-replacement grid.</p>
-
-<div class="cell" data-source-line="170">
+<!--tlda:172-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-resp-with-plot-total-1.svg" class="img-fluid figure-img" alt="The corresponding total distribution: add the two off-diagonal response probabilities for the bar at one."></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="g-col-6">
+<p><strong>Without replacement.</strong> <!--tlda:183--></p>
+<!--tlda:185-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-resp-without-plot-1.svg" class="img-fluid figure-img" alt="A two-by-two grid of first response by second response in the same four colors, with two twelfths on the diagonal and four twelfths off it."></p>
+</figure>
+</div>
+</div>
+</div>
+<!--tlda:195-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-resp-without-plot-total-1.svg" class="img-fluid figure-img" alt="The corresponding total distribution: add the two off-diagonal response probabilities for the bar at one."></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Each block of one color in the call grid is the set of call sequences giving one pair of responses, so each block collapses to a single cell, with rows the first response and columns the second. Then we aggregate the response grid into the distribution of the total below it. The two cells where the responses differ both have total 1, so they add together into the middle bar. <!--tlda:207--></p>
+<p>Four cells of <span class="respany"><span class="math inline">1/16</span></span> in each block add to <span class="respany"><span class="math inline">1/4</span></span> with replacement; without replacement only two cells are possible where the responses agree, and four where they differ. We get <span class="respagree"><span class="math inline">2/12</span></span> where they agree and <span class="respdiffer"><span class="math inline">4/12</span></span> where they differ. <!--tlda:214--></p>
+</section>
+<section id="change-the-population" class="level3">
+<h3 class="anchored" data-anchor-id="change-the-population">Change the Population <!--tlda:218--></h3>
+<p>So far we have changed the scheme and held the population fixed. Now the other way round: one voter in four, three zeros and one one. This population stays for the rest of the chapter. <!--tlda:220--></p>
+<!--tlda:224-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-population-unbal-plot-1.svg" class="img-fluid figure-img" style="width:50.0%" alt="Four purple dots at person one to four, three at response zero and one at response one."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here are the call grids, with and without replacement. <!--tlda:235--></p>
+<div class="grid">
+<div class="g-col-6">
+<p><strong>With replacement.</strong> Every cell is <span class="respany"><span class="math inline">1/16</span></span>. <!--tlda:239--></p>
+<!--tlda:241-->
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1142,8 +1194,24 @@ Table&nbsp;11.1
 </div>
 </div>
 </div>
-
-<div class="cell" data-source-line="180">
+</div>
+<div class="g-col-6">
+<p><strong>Without replacement.</strong> The diagonal is impossible and the twelve cells off it are <span class="respany"><span class="math inline">1/12</span></span> each. <!--tlda:252--></p>
+<!--tlda:255-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-call-pop2-without-plot-1.svg" class="img-fluid figure-img" alt="The same four-by-four grid without replacement, cells one twelfth off the diagonal and zero on it, colored as on the left."></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>For each sampling scheme, the call probabilities are the same as before; what gets colored changed. <!--tlda:267--></p>
+<!--tlda:269-->
+<div class="cell">
 <div id="tbl-means-call-pop2" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-means-call-pop2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1298,30 +1366,48 @@ Table&nbsp;11.2
 </figure>
 </div>
 </div>
-<p data-source-line="186">Nine of the sixteen call sequences now reach a zero twice, and only one reaches the single one twice. Aggregate the colors into the response grid, then the response grid into the total, exactly as before.</p>
-<p data-source-line="190">Here is the grid to aggregate into. Each cell is the total probability of the call sequences in its colour.</p>
-<table class="caption-top table">
+<p><span class="resp00">Nine</span> of the sixteen call sequences now reach a zero twice, and <span class="resp11">only one</span> reaches the single one twice. <!--tlda:275--></p>
+<div id="exr-jdi-pop2-aggregate" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 11.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Aggregate the colors in the with-replacement grid into the response grid, then the response grid into the total, exactly as before. <!--tlda:279--></p>
+<p>Here is the grid to aggregate into. Each cell is the total probability of the call sequences in its colour. <!--tlda:282--></p>
+<!--tlda:285-->
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th></th>
-<th><span class="math inline">Y_2=0</span></th>
-<th><span class="math inline">Y_2=1</span></th>
+<th style="text-align: center;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Y2 = 0</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Y2 = 1</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><span class="math inline">Y_1=0</span></td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td style="text-align: center;">Y1 = 0</td>
+<td style="text-align: center; width: 6em; background-color: rgba(234, 223, 241, 1) !important;"></td>
+<td style="text-align: center; width: 6em; background-color: rgba(219, 238, 245, 1) !important;"></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">Y_1=1</span></td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td style="text-align: center;">Y1 = 1</td>
+<td style="text-align: center; width: 6em; background-color: rgba(249, 224, 231, 1) !important;"></td>
+<td style="text-align: center; width: 6em; background-color: rgba(223, 240, 223, 1) !important;"></td>
 </tr>
 </tbody>
 </table>
-<p data-source-line="198">And collapsing that grid by the sum:</p>
+</div>
+</div>
+<p>And collapsing that grid by the sum: <!--tlda:299--></p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1340,8 +1426,11 @@ Table&nbsp;11.2
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+</div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1350,11 +1439,11 @@ Table&nbsp;11.2
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution">
-
-<div class="cell quarto-layout-panel" data-layout="[[1,1]]" data-source-line="206">
+<!--tlda:308-->
+<div class="cell quarto-layout-panel" data-layout="[[1,1]]">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-resp-pop2-plot-1.svg" class="img-fluid" alt="A two-by-two response grid with probabilities nine sixteenths, three sixteenths, three sixteenths and one sixteenth."></p>
@@ -1369,119 +1458,12 @@ Table&nbsp;11.2
 </div>
 </div>
 </section>
-</section>
-<section id="what-stays-the-same" class="level2">
-<h2 class="anchored" data-anchor-id="what-stays-the-same" data-source-line="222">What Stays the Same</h2>
-<p data-source-line="224">To get from two calls to one, sum a row or a column. That gives the <em>marginal</em> distribution of one call, which we’ll call its <em>margin</em> for short.</p>
-
-<div class="cell" data-source-line="226">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-call-row-plot-1.svg" class="img-fluid figure-img" alt="The four-by-four call grid with the first row outlined in pink across its whole width."></p>
-</figure>
-</div>
-</div>
-</div>
-
-<div class="cell" data-source-line="236">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-call-col-plot-1.svg" class="img-fluid figure-img" alt="The four-by-four call grid with the first column outlined in teal down its whole height."></p>
-</figure>
-</div>
-</div>
-</div>
-<p data-source-line="246">The pink row is every call sequence whose first call is person 1, and it adds to <span class="math inline">1/4</span>. The teal column is every sequence whose second call is person 1, and it adds to <span class="math inline">1/4</span> too. The same holds for each of the other three people, and grouping the people by their response turns that into the distribution of one response.</p>
-<p data-source-line="251">Without replacement, each row and each column has three possible cells of <span class="math inline">1/12</span>, so each person still has probability <span class="math inline">1/4</span> on either call. Changing the population changes the responses attached to those people, not their chance of being called. With two voters the chance of hearing Yes was <span class="math inline">1/2</span>; with one voter it is <span class="math inline">1/4</span>. For either fixed population, that response probability is the same under both schemes.</p>
-</section>
-<section id="the-rules-on-the-grid" class="level2">
-<h2 class="anchored" data-anchor-id="the-rules-on-the-grid" data-source-line="257">The Rules, on the Grid</h2>
-
-<p data-source-line="259">A random variable’s distribution assigns a number <span class="math inline">P(X=x)</span> to each value <span class="math inline">x</span> it can take. Two properties define it. Every one of those numbers is at least zero, and they sum to one over all the values. <span class="math display">
-P(X=x)\ge0 \qqtext{ for every } x, \qquad \sum_x P(X=x) = 1.
-</span> Everything else about probabilities follows from these two and one more rule. If two things cannot both happen, the probability that one of them does is the sum of their probabilities. That’s <em>disjoint additivity</em>. For a set <span class="math inline">S</span> of values, since <span class="math inline">X</span> cannot take two values at once, <span class="math display">
-P(X \in S) = \sum_{x \in S} P(X=x).
-</span></p>
-</section>
-<section id="a-third-design" class="level2">
-<h2 class="anchored" data-anchor-id="a-third-design" data-source-line="272">A Third Design</h2>
-<p data-source-line="274">Here is one you have no formula for. Arrange people 1, 2, 3, and 4 in that order around a circle, pick a starting person at random, and call them and the next one round.</p>
-
-<div class="cell" data-source-line="277">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="chapter-joint-distributions-and-independence_files/figure-html/jdi-call-grid-cycle-plot-1.svg" class="img-fluid figure-img" alt="The same four-by-four grid with only four cells live, each one quarter, on the consecutive pairs."></p>
-</figure>
-</div>
-</div>
-</div>
-<p data-source-line="287">Four live cells out of sixteen, a quarter each, because there are only four places to start. Add across any row or down any column: it is <span class="math inline">1/4</span>. Every person is still equally likely on either call.</p>
-<p data-source-line="291">Aggregate twice again. Starting at people 1, 2, 3, and 4 produces responses 00, 00, 01, and 10. Combine matching responses on the left, then combine equal totals on the right.</p>
-
-<div class="cell quarto-layout-panel" data-layout="[[1,1]]" data-source-line="295">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="chapter-joint-distributions-and-independence_files/figure-html/jdi-cycle-aggregations-plot-1.svg" class="img-fluid" alt="The cycle response grid: one half at 00, one quarter at each of 01 and 10, and zero at 11."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="chapter-joint-distributions-and-independence_files/figure-html/jdi-cycle-aggregations-plot-2.svg" class="img-fluid" alt="The cycle total distribution: probability one half at zero and one, and zero at two."></p>
-</div>
-</div>
-</div>
-<p data-source-line="309">For this population, the response grid and total distribution are the same as under sampling without replacement. The call grids differ: the cycle permits only four of the twelve distinct-person pairs. Both designs nevertheless reach the single voter on either call with probability <span class="math inline">1/4</span>.</p>
-</section>
-<section id="random-variables" class="level2">
-<h2 class="anchored" data-anchor-id="random-variables" data-source-line="314">Random Variables</h2>
-<p data-source-line="316">We have been drawing three things and calling them by their columns: which person a call reaches, the response it gets, and the total. We’ve been writing them <span class="math inline">J_1</span>, <span class="math inline">Y_1</span>, and so on, and calling them random variables. Here is what that means, because we are about to talk about two of them at once.</p>
-<p data-source-line="321">Write <span class="math inline">J_1</span> for the person the first call reaches and <span class="math inline">J_2</span> for the second; <span class="math inline">Y_1</span> and <span class="math inline">Y_2</span> for the responses; <span class="math inline">Y_1+Y_2</span> for the total. Each of these is a <strong>random variable</strong> — a thing whose value is determined by how the sampling comes out, and which therefore has a distribution. The grids above are the joint distribution of <span class="math inline">J_1</span> and <span class="math inline">J_2</span>, and of <span class="math inline">Y_1</span> and <span class="math inline">Y_2</span>.</p>
-</section>
-<section id="independence" class="level2">
-<h2 class="anchored" data-anchor-id="independence" data-source-line="327">Independence</h2>
-<p data-source-line="329">One call on its own looks the same with or without replacement, but two calls together don’t: with replacement, every cell of the two-call grid is the product of the one-call probabilities, and without replacement that is not true. Here are the two response grids for the population with one voter.</p>
-<div class="grid">
-<div class="g-col-6">
-<p><strong>With replacement.</strong> </p>
-
-<div class="cell" data-source-line="337">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="chapter-joint-distributions-and-independence_files/figure-html/jdi-response-grid-pop2-plot-1.svg" class="img-fluid figure-img" alt="A two-by-two grid of first response by second response with nine sixteenths, three sixteenths, three sixteenths and one sixteenth."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="g-col-6">
-<p><strong>Without replacement.</strong> </p>
-
-<div class="cell" data-source-line="352">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="chapter-joint-distributions-and-independence_files/figure-html/jdi-response-grid-pop2-without-plot-1.svg" class="img-fluid figure-img" alt="The same two-by-two grid without replacement: six twelfths, three twelfths, three twelfths, and zero where both responses are one."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</div>
-<p data-source-line="367">In both of them each response is a Yes with probability <span class="math inline">1/4</span>: add the bottom row of either grid. The margins are identical. Now look inside.</p>
-<p data-source-line="370">With replacement, the probability that both are Yes is <span class="math inline">1/16</span>, which is <span class="math inline">(1/4)\times(1/4)</span> — the product of the two margins. Check another cell: <span class="math inline">3/16</span> is <span class="math inline">(3/4)\times(1/4)</span>. And <span class="math inline">9/16</span> is <span class="math inline">(3/4)\times(3/4)</span>. Every cell is the product of its two margins.</p>
-<p data-source-line="375">Without replacement, the probability that both are Yes is zero, where the product still says <span class="math inline">1/16</span>. There is only one voter to reach, so hearing Yes twice is impossible — and the margins never knew that.</p>
-<p data-source-line="379">When every cell of the joint distribution is the product of its two margins, the two random variables are <strong>independent</strong>. When some cell isn’t, they are <strong>dependent</strong>. Sampling with replacement gives you independent calls; sampling without replacement does not.</p>
-<p data-source-line="384">Notice what that means about the margins. Knowing the distribution of each call separately does not tell you which of these grids you are in. For a fixed population, the margins are what all three designs share. The joint tells sampling with replacement from sampling without it, so the joint is where you have to look when a question is about two calls at once.</p>
-<p data-source-line="389">If all we want is the distribution of one call, or of a pair, that is not an overwhelming problem. What that buys us is the next chapter: the center and the spread of an average of any number of calls, from these small grids alone.</p>
-</section>
-<section id="optional-three-calls" class="level2">
-<h2 class="anchored" data-anchor-id="optional-three-calls" data-source-line="393">Optional: Three Calls</h2>
-<p data-source-line="395">You can do it. And you did most of it already in the last two chapters. But it was hard work. We’re going to include it here, but we’re doing it to make the point that <strong>you don’t want to do this</strong>. I wouldn’t judge you if you chose to skim it.</p>
-<p data-source-line="399">Three calls on the same population, with replacement. Each layer fixes the third person called — person 1 in the top layer down to person 4 in the bottom one — and within a layer, rows are the first call and columns the second. The four layers are the third axis.</p>
-
-<div class="cell quarto-layout-panel" data-layout="[[42,-58],[-19,42,-39],[-39,42,-19],[-58,42]]" data-source-line="404">
+<section id="optional-three-calls" class="level3">
+<h3 class="anchored" data-anchor-id="optional-three-calls">Optional: Three Calls <!--tlda:324--></h3>
+<p>You can do it. And you did most of it already in the last two chapters. But it was hard work. We’re going to include it here, but we’re doing it to make the point that <strong>you don’t want to do this</strong>. I wouldn’t judge you if you chose to skim it. <!--tlda:326--></p>
+<p>Three calls on the same population, with replacement. <!--tlda:330--></p>
+<!--tlda:332-->
+<div class="cell quarto-layout-panel" data-layout="[[42,-58],[-19,42,-39],[-39,42,-19],[-58,42]]">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 42.0%;justify-content: center;">
 <p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-call-third-plot-1.svg" class="img-fluid" alt="Four four-by-four call grids stacked along a diagonal, each with every cell one sixty-fourth and colored by its three-response sequence, so the four layers read as a third axis."></p>
@@ -1521,93 +1503,414 @@ P(X \in S) = \sum_{x \in S} P(X=x).
 </div>
 </div>
 </div>
-<p data-source-line="415">Collect the sixty-four cells by their response sequence.</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Responses</th>
-<th>Probability</th>
-<th>Total</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>000</td>
-<td><span class="math inline">27/64</span></td>
-<td>0</td>
-</tr>
-<tr class="even">
-<td>001</td>
-<td><span class="math inline">9/64</span></td>
-<td>1</td>
-</tr>
-<tr class="odd">
-<td>010</td>
-<td><span class="math inline">9/64</span></td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>100</td>
-<td><span class="math inline">9/64</span></td>
-<td>1</td>
-</tr>
-<tr class="odd">
-<td>011</td>
-<td><span class="math inline">3/64</span></td>
-<td>2</td>
-</tr>
-<tr class="even">
-<td>101</td>
-<td><span class="math inline">3/64</span></td>
-<td>2</td>
-</tr>
-<tr class="odd">
-<td>110</td>
-<td><span class="math inline">3/64</span></td>
-<td>2</td>
-</tr>
-<tr class="even">
-<td>111</td>
-<td><span class="math inline">1/64</span></td>
-<td>3</td>
-</tr>
-</tbody>
-</table>
-<p data-source-line="428">Then collect the response sequences by their total.</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Total</th>
-<th>Probability</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>0</td>
-<td><span class="math inline">27/64</span></td>
-</tr>
-<tr class="even">
-<td>1</td>
-<td><span class="math inline">27/64</span></td>
-</tr>
-<tr class="odd">
-<td>2</td>
-<td><span class="math inline">9/64</span></td>
-</tr>
-<tr class="even">
-<td>3</td>
-<td><span class="math inline">1/64</span></td>
-</tr>
-</tbody>
-</table>
+<p>Each layer fixes the third person called — person 1 in the top layer down to person 4 in the bottom one — and within a layer, rows are the first call and columns the second. The four layers are the third axis. <!--tlda:343--></p>
+</section>
+</section>
+<section id="margins-and-independence" class="level2">
+<h2 class="anchored" data-anchor-id="margins-and-independence">Margins and Independence <!--tlda:348--></h2>
+<p>Now we look at one or two calls at a time: what the distribution of a single call is, and when single calls tell us about pairs. <!--tlda:350--></p>
 <section id="one-or-two-calls-out-of-three" class="level3">
-<h3 class="anchored" data-anchor-id="one-or-two-calls-out-of-three" data-source-line="437">One or Two Calls out of Three</h3>
-<p data-source-line="439">Suppose we only want the distribution of one call, or of a pair. Everything is set up, so let’s do it mechanically first.</p>
-<p data-source-line="442">To get from three calls to two, add across the layers. Fix a first call and a second call: the four cells in that position, one in each layer, are the four possibilities for the third call, and adding them gives <span class="math inline">4/64 = 1/16</span> — the two-call grid back, cell for cell. And nothing picked out the first two calls: fix any pair of the three and add over the remaining one, and the same thing happens.</p>
-<p data-source-line="448">Now, why didn’t you have to do that? The first call, obviously: everyone is equally likely to be picked. But what’s special about the first? Nothing. That’s the argument.</p>
-<p data-source-line="451">The principle behind each of these sampling schemes is uniformity among all possible call sequences. The possible set varies — every sequence of <span class="math inline">n</span> people with replacement, every sequence of <span class="math inline">n</span> distinct people without — but on that set, all sequences are equally likely. If all sequences are equally likely, then the subsequences sitting in any pair of slots are equally likely too. So is the one sitting in any single slot. Otherwise the whole premise was false.</p>
-<p data-source-line="458">If you’re rolling a die, it doesn’t matter how many times you roll it. On each individual roll, or each pair of rolls, the same thing happens. It’s maybe a little less obvious when you shuffle a deck. But if you shuffle a deck and draw the top card, or shuffle a deck and then cut it and draw the top card, or the top two, the cut isn’t going to change anything. All configurations are equally likely after the cut. And that’s true if you cut twice: the slots you take don’t have to be consecutive. If you could change the distribution of a deck by cutting it, you wouldn’t be allowed to cut it.</p>
-<p data-source-line="467">So the calculation was a painstaking way of seeing that. The calculation is useful to get the distribution of the sum. But to get down to a smaller sample size, we didn’t really have to do it. It just falls off the principle of the thing. From sequences to subsequences.</p>
+<h3 class="anchored" data-anchor-id="one-or-two-calls-out-of-three">One or Two Calls out of Three <!--tlda:352--></h3>
+<p>Suppose we only want the distribution of one call, or of a pair. Everything is set up, so let’s do it mechanically first. <!--tlda:354--></p>
+<p>To get from three calls to two, we add across the layers. If we fix a first call and a second call, the four cells in that position, one in each layer, are the four possibilities for the third call, and adding them gives <span class="respany"><span class="math inline">4/64 = 1/16</span></span> — the two-call grid back, cell for cell. And nothing picked out the first two calls: if we fix any pair of the three and add over the remaining one, the same thing happens. <!--tlda:357--></p>
+<p>Now, why didn’t you have to do that? The first call, obviously: everyone is equally likely to be picked. But what’s special about the first? Nothing. That’s the argument. <!--tlda:363--></p>
+<p>The principle behind each of these sampling schemes is uniformity among all possible call sequences. The possible set varies — every sequence of <span class="math inline">n</span> people with replacement, every sequence of <span class="math inline">n</span> distinct people without — but on that set, all sequences are equally likely. If all sequences are equally likely, then the subsequences sitting in any pair of slots are equally likely too. So is the one sitting in any single slot. Otherwise the whole premise was false. <!--tlda:366--></p>
+<p>If you’re rolling a die, it doesn’t matter how many times you roll it. On each individual roll, or each pair of rolls, the same thing happens. It’s maybe a little less obvious when you shuffle a deck. But if you shuffle a deck and draw the top card, or shuffle a deck and then cut it and draw the top card, or the top two, the cut isn’t going to change anything. All configurations are equally likely after the cut. And that’s true if you cut twice: the slots you take don’t have to be consecutive. If you could change the distribution of a deck by cutting it, you wouldn’t be allowed to cut it. <!--tlda:373--></p>
+<p>So the calculation was a painstaking way of seeing that. The calculation is useful to get the distribution of the sum. But to get down to a smaller sample size, we didn’t really have to do it. It just falls off the principle of the thing. From sequences to subsequences. <!--tlda:382--></p>
+</section>
+<section id="what-stays-the-same" class="level3">
+<h3 class="anchored" data-anchor-id="what-stays-the-same">What Stays the Same <!--tlda:387--></h3>
+<p>To get from two calls to one, we sum a row or a column. That gives the distribution of one call, which is called its <em>marginal</em> distribution, or its <em>margin</em> for short. <!--tlda:389--></p>
+<div class="grid">
+<div class="g-col-6">
+<!--tlda:393-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-call-row-plot-1.svg" class="img-fluid figure-img" alt="The four-by-four call grid with the first row outlined in pink across its whole width."></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="g-col-6">
+<!--tlda:404-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-call-col-plot-1.svg" class="img-fluid figure-img" alt="The four-by-four call grid with the first column outlined in teal down its whole height."></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><span class="rowmargin">The first row</span> is every call sequence whose first call is person 1, and it adds to <span class="rowmargin"><span class="math inline">1/4</span></span>. <span class="colmargin">The first column</span> is every sequence whose second call is person 1, and it adds to <span class="colmargin"><span class="math inline">1/4</span></span> too. The same holds for each of the other three people, and grouping the people by their response turns that into the distribution of one response. <!--tlda:416--></p>
+<p>Without replacement, each row and each column has three possible cells of <span class="rowcolmargin"><span class="math inline">1/12</span></span>, so each person still has probability <span class="rowcolmargin"><span class="math inline">1/4</span></span> on either call. Changing the population changes the responses attached to those people, not their chance of being called. With two voters the chance of hearing Yes was <span class="math inline">1/2</span>; with one voter it is <span class="math inline">1/4</span>. For either fixed population, that response probability is the same under both schemes. <!--tlda:421--></p>
+</section>
+<section id="the-rules-on-the-grid" class="level3">
+<h3 class="anchored" data-anchor-id="the-rules-on-the-grid">The Rules, on the Grid <!--tlda:427--></h3>
+<!--tlda:429-->
+<p>A random variable’s distribution assigns a number <span class="math inline">P(X=x)</span> to each value <span class="math inline">x</span> it can take. Two properties define it. Every one of those numbers is at least zero, and they sum to one over all the values. <span class="math display">
+P(X=x)\ge0 \qqtext{ for every } x, \qquad \sum_x P(X=x) = 1.
+</span> Everything else about probabilities follows from these two and one more rule. If two things cannot both happen, the probability that one of them does is the sum of their probabilities. That’s called <em>disjoint additivity</em>. For a set <span class="math inline">S</span> of values, because <span class="math inline">X</span> cannot take two values at once, <span class="math display">
+P(X \in S) = \sum_{x \in S} P(X=x).
+</span></p>
+<section id="independence" class="level4">
+<h4 class="anchored" data-anchor-id="independence">Independence <!--tlda:442--></h4>
+<p>Here are the two response grids for the population with one voter. <!--tlda:444--></p>
+<div class="grid">
+<div class="g-col-6">
+<p><strong>With replacement.</strong> <!--tlda:450--></p>
+<!--tlda:452-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/jdi-response-grid-pop2-plot-1.svg" class="img-fluid figure-img" alt="A two-by-two grid of first response by second response with nine sixteenths, three sixteenths, three sixteenths and one sixteenth."></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="g-col-6">
+<p><strong>Without replacement.</strong> <!--tlda:465--></p>
+<!--tlda:467-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/jdi-response-grid-pop2-without-plot-1.svg" class="img-fluid figure-img" alt="The same two-by-two grid without replacement: six twelfths, three twelfths, three twelfths, and zero where both responses are one."></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>One call on its own looks the same with or without replacement, but two calls together don’t: with replacement, every cell of the two-call grid is the product of the one-call probabilities, and without replacement that is not true. <!--tlda:480--></p>
+<p>In both of them each response is a Yes with probability <span class="math inline">1/4</span>. For the first response it is <span class="rowmargin">the sum of the bottom row</span> of either grid, and for the second it is <span class="colmargin">the sum of the right column</span>. The margins are identical. Now we look inside. <!--tlda:484--></p>
+<p>With replacement, the probability that both are Yes is <span class="resp11"><span class="math inline">1/16</span></span>, which is (<span class="rowmargin"><span class="math inline">1/4</span></span>)<span class="math inline">\times</span>(<span class="colmargin"><span class="math inline">1/4</span></span>) — the product of the two margins. So is another cell: <span class="resp01"><span class="math inline">3/16</span></span> is (<span class="rowmargin"><span class="math inline">3/4</span></span>)<span class="math inline">\times</span>(<span class="colmargin"><span class="math inline">1/4</span></span>). And <span class="resp00"><span class="math inline">9/16</span></span> is (<span class="rowmargin"><span class="math inline">3/4</span></span>)<span class="math inline">\times</span>(<span class="colmargin"><span class="math inline">3/4</span></span>). Every cell is the product of its two margins. <!--tlda:487--></p>
+<p>Without replacement, the probability that both are Yes is <span class="resp11">zero</span>, where the product still says <span class="resp11"><span class="math inline">1/16</span></span>. There is only one voter to reach, so hearing Yes twice is impossible — and the margins never knew that. <!--tlda:492--></p>
+<p>The grids above show what’s called the <em>joint distribution</em> of <span class="math inline">J_1</span> and <span class="math inline">J_2</span>, and of <span class="math inline">Y_1</span> and <span class="math inline">Y_2</span>. <!--tlda:496--></p>
+<p>When every cell of the joint distribution is the product of its two margins, the two random variables are called <strong>independent</strong>. When some cell isn’t, they’re called <strong>dependent</strong>. Sampling with replacement gives us independent calls; sampling without replacement does not. <!--tlda:499--></p>
+<p>That tells us something about the margins. Knowing the distribution of each call separately does not tell us which of these grids we are in. For a fixed population, the margins are what both designs share. The joint tells sampling with replacement from sampling without it, so the joint is where we have to look when a question is about two calls at once. <!--tlda:504--></p>
+</section>
+</section>
+<section id="a-third-design" class="level3">
+<h3 class="anchored" data-anchor-id="a-third-design">A Third Design <!--tlda:509--></h3>
+<p>Here is one we have no formula for. <!--tlda:511--></p>
+<p>We use the population with one voter: people 1, 2, and 3 respond 0 and person 4 responds 1. <!--tlda:513--></p>
+<!--tlda:515-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/jdi-population-cycle-plot-1.svg" class="img-fluid figure-img" style="width:50.0%" alt="Four purple dots at person one to four, three at response zero and one at response one."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We arrange people 1, 2, 3, and 4 in that order around a circle, pick a starting person at random, and call them and the next one round. <!--tlda:526--></p>
+<!--tlda:529-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/jdi-call-grid-cycle-plot-1.svg" class="img-fluid figure-img" style="width:50.0%" alt="The same four-by-four grid with only four cells live, each one quarter, on the consecutive pairs."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Four live cells out of sixteen, a quarter each, because there are only four places to start. Adding across any row or down any column gives <span class="math inline">1/4</span>. <!--tlda:540--></p>
+<p>We aggregate twice again. <!--tlda:543--></p>
+<!--tlda:545-->
+<div class="cell quarto-layout-panel" data-layout="[[1,1]]">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/jdi-cycle-aggregations-plot-1.svg" class="img-fluid" alt="The cycle response grid: one half at 00, one quarter at each of 01 and 10, and zero at 11."></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/jdi-cycle-aggregations-plot-2.svg" class="img-fluid" alt="The cycle total distribution: probability one half at zero and one, and zero at two."></p>
+</div>
+</div>
+</div>
+<p>Starting at people 1, 2, 3, and 4 produces responses <span class="resp00">00</span>, <span class="resp00">00</span>, <span class="resp01">01</span>, and <span class="resp10">10</span>. We combine matching responses on the left, then combine equal totals on the right. <!--tlda:559--></p>
+<p>For this population, the response grid and total distribution are the same as under sampling without replacement. The call grids differ: the cycle permits only four of the twelve distinct-person pairs. Both designs nevertheless reach the single voter on either call with probability <span class="math inline">1/4</span>. <!--tlda:563--></p>
+</section>
+</section>
+<section id="random-variables" class="level2">
+<h2 class="anchored" data-anchor-id="random-variables">Random Variables <!--tlda:568--></h2>
+<p>Now we turn to location and spread. Both are summaries of a random variable’s distribution, so we start with what a random variable is. <!--tlda:570--></p>
+<section id="observations-as-random-variables" class="level3">
+<h3 class="anchored" data-anchor-id="observations-as-random-variables">Observations as Random Variables <!--tlda:572--></h3>
+<p>The notation <span class="math inline">y_j</span> refers to a number. It’s the response of the <span class="math inline">j</span>th person in our population. That’s just some person. The notation <span class="math inline">Y_i</span> refers to something else. It’s the response of the <span class="math inline">i</span>th person we call in our survey. That’s not a person. That’s the result of a random process—the roll of a die. To summarize this result, we talk about the <strong>probability distribution</strong> of <span class="math inline">Y_i</span>. <!--tlda:574--></p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Notation Conventions <!--tlda:577-->
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>Random variables are written in <strong>uppercase</strong>: <span class="math inline">X</span>, <span class="math inline">Y</span>, <span class="math inline">Z</span>, etc. Constants are written in <strong>lowercase</strong>: <span class="math inline">x</span>, <span class="math inline">y</span>, <span class="math inline">z</span>, etc.</li>
+<li>We’ll use the same letter for a random variable and the value it takes on. <span class="math inline">x</span> is a possible value of <span class="math inline">X</span>, <span class="math inline">y</span> of <span class="math inline">Y</span>, etc.</li>
+<li>Estimators are also random variables, but instead of uppercase we use a <strong>hat</strong>: <span class="math inline">\hat \mu</span>, <span class="math inline">\hat \sigma</span>, etc.</li>
+<li>We’ll use the same letter for the estimator and what it’s meant to estimate. <span class="math inline">\hat \mu</span> is an estimator of <span class="math inline">\mu</span>.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="expectation" class="level3">
+<h3 class="anchored" data-anchor-id="expectation">Expectation <!--tlda:585--></h3>
+<!--tlda:587-->
+<p>Here’s the definition. The <em>expectation</em> of a random variable is its <em>probability-weighted average</em>, <span class="math display">
+\mathop{\mathrm{E}}[X] = \sum_x \textcolor{#EF476F}{x}\textcolor{#118AB2}{P(X=x)}.
+</span> That means summing, over the x axis, the product of the <span class="pink"><span class="math inline">x</span>, the position</span> along the x-axis and the <span class="teal"><span class="math inline">P(X=x)</span>, the <em>bar height</em></span> at that position.</p>
+<p>Remember: histograms are for counting dots. The expectation is the average of infinitely many dots. <!--tlda:595--></p>
+<section id="linearity" class="level4">
+<h4 class="anchored" data-anchor-id="linearity">Linearity <!--tlda:597--></h4>
+<p>Getting a sampling distribution meant building the joint: a grid for two calls, a cube for three, a layer more for every call after that. What’s so special about expectations that they don’t make us do that? Linearity. <!--tlda:599--></p>
+<p>Here is the response grid for our population again, three zeros and one one, sampling with replacement. <!--tlda:603--></p>
+<!--tlda:606-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-resp-linearity-plot-1.svg" class="img-fluid figure-img" style="width:50.0%" alt="The two-by-two grid of first response by second response with nine sixteenths, three sixteenths, three sixteenths and one sixteenth."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Rows are the first response and columns the second; each cell contains the probability of that response pair. <!--tlda:617--></p>
+<!--tlda:620-->
+<p>The long way to the total <span class="math inline">S=Y_1+Y_2</span> reads the cells off the grid: each cell’s total times that cell’s probability, added up. <span class="resp00">The top left cell</span> is two zeros, so its total is 0; the two off-diagonal cells have total 1; <span class="resp11">the bottom right cell</span> is two ones, so its total is 2, <span class="math display">
+\mathop{\mathrm{E}}[S]=0\times\colorbox{#eadff1}{$\displaystyle \frac9{16}$}+1\times\colorbox{#dbeef5}{$\displaystyle \frac3{16}$}+1\times\colorbox{#f9e0e7}{$\displaystyle \frac3{16}$}+2\times\colorbox{#dff0df}{$\displaystyle \frac1{16}$}
+=\frac{8}{16}=\frac12.
+</span></p>
+<!--tlda:629-->
+<p>That same sum regroups into a first-call pass and a second-call pass. Every cell’s total is the first response plus the second, so <span class="math display">
+\mathop{\mathrm{E}}[S]=\underbrace{0\times\colorbox{#FCE4EC}{$\displaystyle \frac{9+3}{16}$}+1\times\colorbox{#FCE4EC}{$\displaystyle \frac{3+1}{16}$}}_{\text{the rows}}
+\;+\;\underbrace{0\times\colorbox{#E0F2F7}{$\displaystyle \frac{9+3}{16}$}+1\times\colorbox{#E0F2F7}{$\displaystyle \frac{3+1}{16}$}}_{\text{the columns}}
+=\frac14+\frac14=\frac12.
+</span> The two passes come out the same here because both calls have the same distribution; what matters is what each used. The first pass used only the row totals, and the rows are the distribution of the first response. The second used only the column totals, which are the distribution of the second. So <span class="math display">
+\mathop{\mathrm{E}}[Y_1+Y_2]=\mathop{\mathrm{E}}[Y_1]+\mathop{\mathrm{E}}[Y_2].
+</span> The joint entered only through its margins.</p>
+<p>We didn’t need the whole grid, only its margins. And we didn’t need the grid to get the margins: they are the one-call distributions, which we already had. <!--tlda:645--></p>
+<p>The same regrouping works for three calls, or <span class="math inline">n</span>, without the cube. <!--tlda:648--></p>
+<!--tlda:650-->
+<p><span class="math display">
+\begin{aligned}
+\mathop{\mathrm{E}}[aY+bZ]
+&amp;=\mathop{\mathrm{E}}[aY]+\mathop{\mathrm{E}}[bZ]\\
+&amp;=a\mathop{\mathrm{E}}[Y]+b\mathop{\mathrm{E}}[Z] \qqtext{for random variables} Y, Z \qqtext{and numbers} a, b.
+\end{aligned}
+</span></p>
+<p>There are two things going on here. To average a sum of two things, we can take two averages and sum. To average a constant times a random variable, we multiply the random variable’s average by the constant. In other words, we can <em>distribute</em> expectations and can pull constants out of them. These rules do not require the two random variables to be independent. <!--tlda:658--></p>
+<section id="proof-of-linearity" class="level5">
+<h5 class="anchored" data-anchor-id="proof-of-linearity">Proof of Linearity <!--tlda:664--></h5>
+<p>In essence, it comes down to the fact that all we’re doing is summing. Expectations are probability-weighted sums. And we’re looking at the expectation of a sum. And we can change the order we sum in without changing what we get. The marginalization step sums along a row or column of the joint distribution. <!--tlda:666--></p>
+<!--tlda:671-->
+<p><span class="math display">
+\small{
+\begin{aligned}
+\mathop{\mathrm{E}}\p*{ a Y + b Z }
+&amp;\overset{\texttip{\small{\text{?}}}{ by definition of expectation}}{=} \sum_{y}\sum_z (a y + b z) \ P(Y=y, Z=z) \\
+&amp;\overset{\texttip{\small{\text{?}}}{changing the order in which we sum}}{=} \sum_{y}\sum_z a y \ P(Y=y, Z=z) + \sum_{z}\sum_y b z \ P(Y=y, Z=z) \\
+&amp;\overset{\texttip{\small{\text{?}}}{pulling constants out of the inner sums}}{=} \sum_{y} a y \ \sum_z P(Y=y,Z=z) + \sum_{z} b z \ \sum_y P(Y=y,Z=z) \\
+&amp;\overset{\texttip{\small{\text{?}}}{summing to get marginal probabilities from our joint }}{=} \sum_{y} a y \ P(Y=y) + \sum_{z} b z \ P(Z=z) \\
+&amp;\overset{\texttip{\small{\text{?}}}{ pulling constants out of the remaining sum }}{=} a\sum_{y} y \ P(Y=y) + b\sum_{z} z \ P(Z=z) \\
+&amp;\overset{\texttip{\small{\text{?}}}{by definition}}{=} a\mathop{\mathrm{E}}Y + b \mathop{\mathrm{E}}Z.
+\end{aligned}
+}
+</span></p>
+</section>
+</section>
+<section id="probability-as-expectation" class="level4">
+<h4 class="anchored" data-anchor-id="probability-as-expectation">Probability as Expectation <!--tlda:685--></h4>
+<!--tlda:687-->
+<p>A tool we use here is understanding probability as an expectation. We write the indicator that call <span class="math inline">i</span> selected person <span class="math inline">j</span>, <span class="math display">
+1_{=j}(J_i) = \begin{cases}
+1 &amp; \qqtext{ for } J_i = j \\ 0 &amp; \qqtext{ otherwise}
+\end{cases}
+</span> It is one on exactly the calls that landed on person <span class="math inline">j</span>, so its probability-weighted average is the probability of landing there, <span class="math display">
+\mathop{\mathrm{E}}[1_{=j}(J_i)] = 0\,P(J_i\ne j) + 1\,P(J_i=j) = P(J_i=j).
+</span></p>
+<p>This is a principle, not a notational trick: <strong>probabilities are expectations of indicators.</strong> The indicator keeps exactly the part of the random outcome that matters for the event and throws everything else away. Its probability-weighted average is the probability that it is one. Consequently, every rule we prove for expectations is also a tool for probabilities. <!--tlda:700--></p>
+<p>For a picture of the same operation on a different event, let <span class="math inline">X</span> count the Yeses in five independent calls to a population where 40% say Yes. <!--tlda:706--></p>
+<p>Here is a population of ten where 40% say Yes: four people respond 1 and six respond 0. <!--tlda:709--></p>
+<!--tlda:711-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/jdi-population-forty-plot-1.svg" class="img-fluid figure-img" style="width:50.0%" alt="Ten purple dots at person one to ten, four at response one and six at response zero."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here is the distribution of <span class="math inline">X</span>, and beside it the distribution of <span class="math inline">1_{\ge3}(X)</span>. <!--tlda:730--></p>
+<!--tlda:732-->
+<div class="cell quarto-layout-panel" data-layout="[[1,1]]">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-indicator-distribution-plot-1.svg" class="img-fluid" alt="A binomial probability histogram with the outcomes three, four and five in green; beside it, the indicator's own distribution, gray mass at zero and green mass at one."></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/means-indicator-distribution-plot-2.svg" class="img-fluid" alt="A binomial probability histogram with the outcomes three, four and five in green; beside it, the indicator's own distribution, gray mass at zero and green mass at one."></p>
+</div>
+</div>
+</div>
+<p>On the left is its distribution, with <span class="event">the outcomes in the event <span class="math inline">X\ge3</span></span> marked. On the right is the distribution of <span class="math inline">1_{\ge3}(X)</span>, which has just two outcomes: it is zero with <span class="nonevent">probability <span class="math inline">P(X&lt;3)</span></span> and one with <span class="event">probability <span class="math inline">P(X\ge3)=0.317</span></span>. <span class="event">That height</span> is both <span class="math inline">P(X\ge3)</span> and <span class="math inline">\mathop{\mathrm{E}}[1_{\ge3}(X)]</span> — the same number read two ways. <!--tlda:762--></p>
+</section>
+<section id="independence-as-a-property-of-expectations" class="level4">
+<h4 class="anchored" data-anchor-id="independence-as-a-property-of-expectations">Independence as a Property of Expectations <!--tlda:768--></h4>
+<!--tlda:770-->
+<p>The factorization from the two-call grid works for any functions <span class="math inline">f</span> and <span class="math inline">g</span> of independent finite-valued random variables <span class="math inline">X</span> and <span class="math inline">Y</span>: <span class="math display">
+\begin{aligned}
+\mathop{\mathrm{E}}[f(X)g(Y)]
+&amp;=\sum_x\sum_y f(x)g(y)P(X=x,Y=y)\\
+&amp;=\sum_x\sum_y f(x)g(y)P(X=x)P(Y=y)\\
+&amp;=\left\{\sum_x f(x)P(X=x)\right\}
+  \left\{\sum_y g(y)P(Y=y)\right\}\\
+&amp;=\mathop{\mathrm{E}}[f(X)]\mathop{\mathrm{E}}[g(Y)].
+\end{aligned}
+</span> The reverse implication holds as well: if this property holds for every pair of functions <span class="math inline">f</span> and <span class="math inline">g</span>, then <span class="math inline">X</span> and <span class="math inline">Y</span> are independent. So the two are equivalent, and some people take the expectation property as the definition. To see why the reverse holds, let <span class="math inline">f</span> and <span class="math inline">g</span> be indicators, <span class="math inline">f=1_{=x}</span> and <span class="math inline">g=1_{=y}</span>. Their product <span class="math inline">1_{=x}(X)1_{=y}(Y)</span> is one when <span class="math inline">X=x</span> and <span class="math inline">Y=y</span> and zero otherwise, so <span class="math display">
+\mathop{\mathrm{E}}[1_{=x}(X)1_{=y}(Y)]=P(X=x,Y=y) \qqtext{and} \mathop{\mathrm{E}}[1_{=x}(X)]\mathop{\mathrm{E}}[1_{=y}(Y)]=P(X=x)P(Y=y).
+</span> If the expectation property holds for these <span class="math inline">f</span> and <span class="math inline">g</span>, every joint probability is the product of the two marginal probabilities. That is independence.</p>
+</section>
+</section>
+<section id="variance" class="level3">
+<h3 class="anchored" data-anchor-id="variance">Variance <!--tlda:787--></h3>
+<p>The expectation gives the center, and the average squared distance from it gives the spread. <!--tlda:789--></p>
+<section id="variance-is-an-expectation" class="level4">
+<h4 class="anchored" data-anchor-id="variance-is-an-expectation">Variance Is an Expectation <!--tlda:791--></h4>
+<!--tlda:793-->
+<p>The centered variable <span class="math inline">Z=Y-\mathop{\mathrm{E}}[Y]</span> is a random variable with its mean subtracted; it records a signed distance from the mean. Its expectation is zero: <span class="math display">
+\mathop{\mathrm{E}}[Z]=\mathop{\mathrm{E}}[Y]-\mathop{\mathrm{E}}[Y]=0.
+</span> Positive and negative distances cancel. To measure their size, square them before averaging. The <em>variance</em> is the expected squared distance from the mean: <span class="math display">
+\operatorname{Var}(Y)=\mathop{\mathrm{E}}[(Y-\mathop{\mathrm{E}}[Y])^2]=\mathop{\mathrm{E}}[Z^2].
+</span> The picture follows twenty centered observations.</p>
+<div id="fig-variance-transformation" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-mode="steps" data-steps=".fig-variance-transformation-step" data-layout="sidebar" data-labels="Data,Barbells,Signed-square distribution,Fold and average">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-variance-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<!--tlda:805-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/variance-distances-plot-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div>
+<!--tlda:814-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/variance-signed-squares-plot-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div>
+<!--tlda:823-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/variance-signed-histogram-plot-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div>
+<!--tlda:832-->
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-joint-distributions-and-independence_files/figure-html/variance-folded-plot-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11.1
+</figcaption>
+</figure>
+</div>
+<div class="fig-variance-transformation-step">
+<p><strong>Data.</strong> Each dot is one centered observation. The histogram counts them. Positive and negative distances cancel in their average, zero. <!--tlda:843--></p>
+</div>
+<div class="fig-variance-transformation-step">
+<p><strong>Barbells.</strong> We keep every data dot and connect it to its signed square: for example, <span class="negside"><span class="math inline">-1.5</span> moves to <span class="math inline">-2.25</span></span>, while <span class="posside"><span class="math inline">0.5</span> moves to <span class="math inline">0.25</span></span>. The sign still records which side of the mean the observation came from. <!--tlda:847--></p>
+</div>
+<div class="fig-variance-transformation-step">
+<p><strong>Signed-square distribution.</strong> We replace the histogram by the distribution of the signed-square endpoints. The original dots and connecting barbells remain, so we can follow each observation through the transformation. <!--tlda:851--></p>
+</div>
+<div class="fig-variance-transformation-step">
+<p><strong>Fold and average.</strong> We fold the negative histogram onto the positive side and stack their probabilities. The data dots and barbells remain as a reference. The new mean line marks the average squared distance—the variance. <!--tlda:855--></p>
+</div>
+<p>The dots are their signed distances from the mean, so the mean line starts at zero. A bar’s height records the fraction of observations at that distance. To square a distance, first square its length on its original side of zero, then fold the negative side over. The original dots and the barbells connecting them to their signed squares stay visible as the distribution changes. <span class="negside">Observations from the negative side</span> keep one color and <span class="posside">those from the positive side</span> the other. The final histogram counts squared distances, whose average is the variance. <!--tlda:858--></p>
+<!--tlda:860-->
+<p>Squaring changes the units. The <em>standard deviation</em> takes us back to the units of <span class="math inline">Y</span>: <span class="math display">
+\operatorname{sd}(Y)=\sqrt{\operatorname{Var}(Y)}.
+</span></p>
+<div id="exr-variance-shift-scale" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 11.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>What happens to variance and standard deviation when we add the same number to every value? What happens when we multiply every value by two? By minus two? <!--tlda:866--></p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution" data-collapse="true">
+<!--tlda:870-->
+<p>Adding a constant <span class="math inline">b</span> moves the mean by the same amount, leaving all distances unchanged. Multiplying by a constant <span class="math inline">a</span> multiplies signed distances by <span class="math inline">a</span>, squared distances by <span class="math inline">a^2</span>, and standard deviation by <span class="math inline">|a|</span>: <span class="math display">
+\operatorname{Var}(aY+b)=a^2\operatorname{Var}(Y),
+\qquad
+\operatorname{sd}(aY+b)=|a|\operatorname{sd}(Y).
+</span></p>
+</div>
+</div>
+</div>
+</div>
 
 
 <script type="ojs-module-contents">
@@ -1624,6 +1927,7 @@ eyJjb250ZW50cyI6W119
 <script type="vfs-file">
 W10=
 </script>
+</section>
 </section>
 </section>
 

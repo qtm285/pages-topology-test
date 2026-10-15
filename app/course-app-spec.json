@@ -25,6 +25,7 @@
     "chapters/chapter-programming-reference.qmd"
   ],
   "decks": [
+    "decks/chapter-social-pressure-experiment-slides.qmd",
     "decks/chapter-calibration-binary-slides.qmd",
     "decks/chapter-bootstrap-slides.qmd",
     "decks/chapter-normal-approximation-slides.qmd",
@@ -36,7 +37,8 @@
     "homework/handouts/homework-calibration-handout.zip",
     "homework/handouts/homework-calibration-binary-handout.zip",
     "homework/handouts/homework-bootstrap-handout.zip",
-    "homework/handouts/homework-random-variables-and-moments-handout.zip"
+    "homework/handouts/homework-random-variables-and-moments-handout.zip",
+    "homework/handouts/homework-comparing-estimators-handout.zip"
   ],
   "links": [
     "chapters/chapter-social-pressure-experiment.html",
@@ -61,14 +63,136 @@
     "chapters/chapter-sampling-without-replacement.html",
     "chapters/chapter-bootstrap.html",
     "decks/chapter-bootstrap-slides.html",
+    "homework/homework-calibration-binary-solutions.html",
     "homework/homework-bootstrap.html",
     "homework/handouts/homework-bootstrap-handout.zip",
-    "chapters/chapter-random-variables-and-moments.html",
-    "chapters/chapter-standard-deviation.html",
-    "decks/chapter-standard-deviation-slides.html",
+    "chapters/chapter-joint-distributions-and-independence.html",
+    "chapters/chapter-mean-and-variance-of-an-average.html",
+    "decks/chapter-random-variables-and-moments-slides.html",
+    "chapters/chapter-concentration.html",
     "homework/homework-bootstrap-solutions.html",
     "homework/homework-random-variables-and-moments.html",
     "homework/handouts/homework-random-variables-and-moments-handout.zip",
-    "decks/chapter-normal-approximation-slides.html"
+    "chapters/chapter-normal-approximation.html",
+    "decks/chapter-normal-approximation-slides.html",
+    "decks/chapter-bias-and-coverage-slides.html",
+    "homework/homework-random-variables-and-moments-solutions.html",
+    "homework/homework-comparing-estimators.html",
+    "homework/handouts/homework-comparing-estimators-handout.zip",
+    "exams/practice-midterm-1.html"
+  ],
+  "outputs": [
+    {
+      "file": "index.html",
+      "source": "index.qmd"
+    },
+    {
+      "file": "chapters/chapter-social-pressure-experiment.html",
+      "source": "chapters/chapter-social-pressure-experiment.qmd"
+    },
+    {
+      "file": "decks/chapter-social-pressure-experiment-slides.html",
+      "source": "decks/chapter-social-pressure-experiment-slides.qmd"
+    },
+    {
+      "file": "homework/homework-setup.html",
+      "source": "homework/homework-setup.qmd"
+    },
+    {
+      "file": "homework/homework-descriptive.html",
+      "source": "homework/homework-descriptive.qmd"
+    },
+    {
+      "file": "chapters/chapter-sampling.html",
+      "source": "chapters/chapter-sampling.qmd"
+    },
+    {
+      "file": "chapters/chapter-point-and-interval-estimates.html",
+      "source": "chapters/chapter-point-and-interval-estimates.qmd"
+    },
+    {
+      "file": "homework/homework-calibration.html",
+      "source": "homework/homework-calibration.qmd"
+    },
+    {
+      "file": "chapters/chapter-calibration-binary.html",
+      "source": "chapters/chapter-calibration-binary.qmd"
+    },
+    {
+      "file": "decks/chapter-calibration-binary-slides.html",
+      "source": "decks/chapter-calibration-binary-slides.qmd"
+    },
+    {
+      "file": "chapters/chapter-sampling-with-replacement.html",
+      "source": "chapters/chapter-sampling-with-replacement.qmd"
+    },
+    {
+      "file": "homework/homework-calibration-solutions.html",
+      "source": "homework/homework-calibration.qmd"
+    },
+    {
+      "file": "homework/homework-calibration-binary.html",
+      "source": "homework/homework-calibration-binary.qmd"
+    },
+    {
+      "file": "chapters/chapter-sampling-without-replacement.html",
+      "source": "chapters/chapter-sampling-without-replacement.qmd"
+    },
+    {
+      "file": "chapters/chapter-bootstrap.html",
+      "source": "chapters/chapter-bootstrap.qmd"
+    },
+    {
+      "file": "decks/chapter-bootstrap-slides.html",
+      "source": "decks/chapter-bootstrap-slides.qmd"
+    },
+    {
+      "file": "homework/homework-bootstrap.html",
+      "source": "homework/homework-bootstrap.qmd"
+    },
+    {
+      "file": "chapters/chapter-joint-distributions-and-independence.html",
+      "source": "chapters/chapter-joint-distributions-and-independence.qmd"
+    },
+    {
+      "file": "chapters/chapter-mean-and-variance-of-an-average.html",
+      "source": "chapters/chapter-mean-and-variance-of-an-average.qmd"
+    },
+    {
+      "file": "chapters/chapter-concentration.html",
+      "source": "chapters/chapter-concentration.qmd"
+    },
+    {
+      "file": "homework/homework-bootstrap-solutions.html",
+      "source": "homework/homework-bootstrap.qmd"
+    },
+    {
+      "file": "homework/homework-random-variables-and-moments.html",
+      "source": "homework/homework-random-variables-and-moments.qmd"
+    },
+    {
+      "file": "chapters/chapter-normal-approximation.html",
+      "source": "chapters/chapter-normal-approximation.qmd"
+    },
+    {
+      "file": "decks/chapter-normal-approximation-slides.html",
+      "source": "decks/chapter-normal-approximation-slides.qmd"
+    },
+    {
+      "file": "decks/chapter-bias-and-coverage-slides.html",
+      "source": "decks/chapter-bias-and-coverage-slides.qmd"
+    },
+    {
+      "file": "homework/homework-comparing-estimators.html",
+      "source": "homework/homework-comparing-estimators.qmd"
+    },
+    {
+      "file": "exams/practice-midterm-1.html",
+      "source": "exams/practice-midterm-1.qmd"
+    },
+    {
+      "file": "chapters/chapter-programming-reference.html",
+      "source": "chapters/chapter-programming-reference.qmd"
+    }
   ]
 }

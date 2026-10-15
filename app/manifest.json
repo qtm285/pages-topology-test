@@ -1,0 +1,14 @@
+{
+  "documents": {
+    "qtm285-book": {
+      "name": "qtm285-book",
+      "format": "qmd",
+      "sourceFormat": "qmd",
+      "renderer": "quarto",
+      "documentFormat": "html",
+      "renderedFormat": "html",
+      "pages": 28,
+      "buildStatus": "success"
+    }
+  }
+}
