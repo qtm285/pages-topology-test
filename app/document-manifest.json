@@ -321,6 +321,20 @@
       }
     },
     {
+      "file": "book/exams/practice-midterm-1-solutions.html",
+      "title": "Practice Midterm 1 Solutions",
+      "width": 1041,
+      "height": 1000,
+      "source": {
+        "file": "exams/practice-midterm-1.solutions.qmd"
+      },
+      "build": {
+        "buildId": "site-post-2026-10-15",
+        "sourceRevision": "e25159495a2a95c15e353b40198f932ad946979d",
+        "retainedAt": "2026-10-15T18:50:01.128715Z"
+      }
+    },
+    {
       "file": "book/chapters/chapter-programming-reference.html",
       "title": "Chapter 22: 21 Programming Reference",
       "width": 1041,
