@@ -338,16 +338,45 @@
   },
   {
     "file": "decks/chapter-bias-and-coverage-slides.html",
-    "title": "Chapter 24: Power, Bias, and Coverage",
+    "title": "Power, Bias, and Coverage",
     "width": 1041,
     "height": 1000,
+    "variant": "slides",
     "source": {
       "file": "decks/chapter-bias-and-coverage-slides.qmd"
     },
     "build": {
-      "buildId": "mv3rx1ub-1",
-      "sourceRevision": "e224b4c666535c783e02990f82ec4d1d09306772",
-      "retainedAt": "2026-10-11T12:02:32.979Z"
+      "buildId": "mv7fp8rh-1",
+      "sourceRevision": "9a7ba64ec2428d8c486215cf3dd0190924e47450",
+      "retainedAt": "2026-10-14T01:31:38.546Z"
+    }
+  },
+  {
+    "file": "chapters/chapter-getting-away-from-bespoke-sampling-distributions.html",
+    "title": "11 Getting Away from Bespoke Sampling Distributions",
+    "width": 1041,
+    "height": 1000,
+    "source": {
+      "file": "chapters/chapter-getting-away-from-bespoke-sampling-distributions.qmd"
+    },
+    "build": {
+      "buildId": "mv98h4e4-1",
+      "sourceRevision": "8a0760330e60f6c4735eb9a502ab0a8bb64647ec",
+      "retainedAt": "2026-10-15T07:44:54.060Z"
+    }
+  },
+  {
+    "file": "chapters/chapter-understanding-sampling-designs-beyond-independence.html",
+    "title": "12 Understanding Sampling Designs Beyond Independence",
+    "width": 1041,
+    "height": 1000,
+    "source": {
+      "file": "chapters/chapter-understanding-sampling-designs-beyond-independence.qmd"
+    },
+    "build": {
+      "buildId": "mv98pj7m-1",
+      "sourceRevision": "587cbd032665f76f733b51553d1d6b11f48e00d9",
+      "retainedAt": "2026-10-15T07:51:26.509Z"
     }
   }
 ]

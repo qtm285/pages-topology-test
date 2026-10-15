@@ -2529,7 +2529,7 @@
     "anchor": "footnotes"
   },
   {
-    "title": "Chapter 27: Power, Bias, and Coverage",
+    "title": "Power, Bias, and Coverage",
     "level": "chapter",
     "page": 28
   },
@@ -2576,22 +2576,16 @@
     "anchor": "detecting-success"
   },
   {
-    "title": "What Counts as a Good Sample Size?",
+    "title": "The Point of Power",
     "level": "subsection",
     "page": 28,
-    "anchor": "what-counts-as-a-good-sample-size"
+    "anchor": "the-point-of-power"
   },
   {
-    "title": "Okay, I Lied. It’s 2.5.",
+    "title": "Power Calculation",
     "level": "subsection",
     "page": 28,
-    "anchor": "okay-i-lied.-its-2.5."
-  },
-  {
-    "title": "Change the Conventions",
-    "level": "subsection",
-    "page": 28,
-    "anchor": "change-the-conventions"
+    "anchor": "power-calculation"
   },
   {
     "title": "Detecting Futility",
@@ -2600,46 +2594,16 @@
     "anchor": "detecting-futility"
   },
   {
-    "title": "The Best Case",
+    "title": "The Power of Bias",
     "level": "subsection",
     "page": 28,
-    "anchor": "the-best-case"
+    "anchor": "the-power-of-bias"
   },
   {
-    "title": "Same Picture, Other Direction",
+    "title": "Bad Comparisons",
     "level": "subsection",
     "page": 28,
-    "anchor": "same-picture-other-direction"
-  },
-  {
-    "title": "Power From Bias",
-    "level": "subsection",
-    "page": 28,
-    "anchor": "power-from-bias"
-  },
-  {
-    "title": "Reality and What We’re Doing",
-    "level": "subsection",
-    "page": 28,
-    "anchor": "reality-and-what-were-doing"
-  },
-  {
-    "title": "A Spectrum of Comparisons",
-    "level": "subsection",
-    "page": 28,
-    "anchor": "a-spectrum-of-comparisons"
-  },
-  {
-    "title": "Remember the Red Dots?",
-    "level": "subsection",
-    "page": 28,
-    "anchor": "remember-the-red-dots"
-  },
-  {
-    "title": "A More Precise Reference?",
-    "level": "subsection",
-    "page": 28,
-    "anchor": "a-more-precise-reference"
+    "anchor": "bad-comparisons"
   },
   {
     "title": "Imperfect Comparisons",
@@ -2648,34 +2612,10 @@
     "anchor": "imperfect-comparisons"
   },
   {
-    "title": "Real Data, Fake Data",
+    "title": "The Bigger, the Worse",
     "level": "subsection",
     "page": 28,
-    "anchor": "real-data-fake-data"
-  },
-  {
-    "title": "Make It Bigger",
-    "level": "subsection",
-    "page": 28,
-    "anchor": "make-it-bigger"
-  },
-  {
-    "title": "Which Population Are We Sampling?",
-    "level": "subsection",
-    "page": 28,
-    "anchor": "which-population-are-we-sampling"
-  },
-  {
-    "title": "Repeat The Study",
-    "level": "subsection",
-    "page": 28,
-    "anchor": "repeat-the-study"
-  },
-  {
-    "title": "More Data, More Power",
-    "level": "subsection",
-    "page": 28,
-    "anchor": "more-data-more-power"
+    "anchor": "the-bigger-the-worse"
   },
   {
     "title": "Calculating Coverage",
@@ -2694,18 +2634,6 @@
     "level": "subsection",
     "page": 28,
     "anchor": "which-estimates-hit-the-target"
-  },
-  {
-    "title": "Everything in Standard Errors",
-    "level": "subsection",
-    "page": 28,
-    "anchor": "everything-in-standard-errors"
-  },
-  {
-    "title": "Five Minutes",
-    "level": "subsection",
-    "page": 28,
-    "anchor": "five-minutes"
   },
   {
     "title": "A Standard Normal Area",
@@ -2732,10 +2660,10 @@
     "anchor": "the-coverage-curve"
   },
   {
-    "title": "Back to Power",
+    "title": "Calculating Power",
     "level": "subsection",
     "page": 28,
-    "anchor": "back-to-power"
+    "anchor": "calculating-power"
   },
   {
     "title": "Finding People Like Them",
@@ -2750,9 +2678,241 @@
     "anchor": "what-if-they-were-never-exactly-equal"
   },
   {
+    "title": "Appendix",
+    "level": "section",
+    "page": 28,
+    "anchor": "appendix"
+  },
+  {
+    "title": "The simulated populations",
+    "level": "subsection",
+    "page": 28,
+    "anchor": "the-simulated-populations"
+  },
+  {
+    "title": "The n on both sides",
+    "level": "subsection",
+    "page": 28,
+    "anchor": "appendix-n-both-sides"
+  },
+  {
     "title": "Footnotes",
     "level": "subsection",
     "page": 28,
     "anchor": "footnotes"
+  },
+  {
+    "title": "11 Getting Away from Bespoke Sampling Distributions",
+    "level": "chapter",
+    "page": 29
+  },
+  {
+    "title": "Three Designs, Three Bespoke Calculations",
+    "level": "subsection",
+    "page": 29,
+    "anchor": "three-designs-three-bespoke-calculations"
+  },
+  {
+    "title": "The population.",
+    "level": "subsubsection",
+    "page": 29,
+    "anchor": "the-population."
+  },
+  {
+    "title": "Summarizing Location and Spread",
+    "level": "subsection",
+    "page": 29,
+    "anchor": "location-and-spread"
+  },
+  {
+    "title": "Expectation and Location",
+    "level": "subsubsection",
+    "page": 29,
+    "anchor": "expectation"
+  },
+  {
+    "title": "Linearity: Expectations Add",
+    "level": "subsubsection",
+    "page": 29,
+    "anchor": "linearity"
+  },
+  {
+    "title": "Why the Sample Mean Is Unbiased",
+    "level": "subsubsection",
+    "page": 29,
+    "anchor": "the-sample-means-location"
+  },
+  {
+    "title": "Spread: Averaging Squared Distances",
+    "level": "subsubsection",
+    "page": 29,
+    "anchor": "spread-and-centered-variables"
+  },
+  {
+    "title": "What’s so good about variance?",
+    "level": "subsection",
+    "page": 29,
+    "anchor": "variance-uses-pairs"
+  },
+  {
+    "title": "Squaring Sums",
+    "level": "subsubsection",
+    "page": 29,
+    "anchor": "sec-rvm-squaring-sums"
+  },
+  {
+    "title": "How Dependence Affects the Sample Mean’s Variance",
+    "level": "subsubsection",
+    "page": 29,
+    "anchor": "the-spread-of-the-sample-mean"
+  },
+  {
+    "title": "Responses That Aren’t Zero or One",
+    "level": "subsection",
+    "page": 29,
+    "anchor": "sec-nonbinary-responses"
+  },
+  {
+    "title": "Comparing Sample Sizes",
+    "level": "subsection",
+    "page": 29,
+    "anchor": "sample-size-comparison"
+  },
+  {
+    "title": "Design problems",
+    "level": "subsection",
+    "page": 29,
+    "anchor": "adding-an-observation-can-increase-variance"
+  },
+  {
+    "title": "Practice",
+    "level": "subsection",
+    "page": 29,
+    "anchor": "sec-moment-calculations"
+  },
+  {
+    "title": "Appendix: Independence as a Property of Expectations",
+    "level": "subsection",
+    "page": 29,
+    "anchor": "sec-independence-expectations"
+  },
+  {
+    "title": "12 Understanding Sampling Designs Beyond Independence",
+    "level": "chapter",
+    "page": 30
+  },
+  {
+    "title": "Returning to the Three Sampling Designs",
+    "level": "subsection",
+    "page": 30,
+    "anchor": "returning-to-the-three-sampling-designs"
+  },
+  {
+    "title": "The population.",
+    "level": "subsubsection",
+    "page": 30,
+    "anchor": "the-population."
+  },
+  {
+    "title": "Same Composition, Different Arrangements",
+    "level": "subsubsection",
+    "page": 30,
+    "anchor": "same-composition-different-arrangements"
+  },
+  {
+    "title": "From Call Sequences to Sampling Distributions",
+    "level": "subsection",
+    "page": 30,
+    "anchor": "sec-marginalization"
+  },
+  {
+    "title": "Two Calls",
+    "level": "subsubsection",
+    "page": 30,
+    "anchor": "two-calls"
+  },
+  {
+    "title": "Changing the Population",
+    "level": "subsubsection",
+    "page": 30,
+    "anchor": "changing-the-population"
+  },
+  {
+    "title": "Optional: Three Calls",
+    "level": "subsubsection",
+    "page": 30,
+    "anchor": "optional-three-calls"
+  },
+  {
+    "title": "Keeping Fewer Calls",
+    "level": "subsection",
+    "page": 30,
+    "anchor": "joints-and-margins"
+  },
+  {
+    "title": "One-call margins",
+    "level": "subsubsection",
+    "page": 30,
+    "anchor": "one-call-margins"
+  },
+  {
+    "title": "Two-call margins",
+    "level": "subsubsection",
+    "page": 30,
+    "anchor": "two-call-margins"
+  },
+  {
+    "title": "Independence Lets Us Recover the Joint from Its Margins",
+    "level": "subsubsection",
+    "page": 30,
+    "anchor": "can-we-recover-the-joint-from-its-margins"
+  },
+  {
+    "title": "What the Sampling Design Guarantees",
+    "level": "subsection",
+    "page": 30,
+    "anchor": "what-the-sampling-design-tells-us"
+  },
+  {
+    "title": "Uniform individual calls",
+    "level": "subsubsection",
+    "page": 30,
+    "anchor": "uniform-individual-calls"
+  },
+  {
+    "title": "Exchangeability",
+    "level": "subsubsection",
+    "page": 30,
+    "anchor": "exchangeability"
+  },
+  {
+    "title": "Independence",
+    "level": "subsubsection",
+    "page": 30,
+    "anchor": "independence"
+  },
+  {
+    "title": "Calculating the Variance Under Dependent Sampling",
+    "level": "subsection",
+    "page": 30,
+    "anchor": "dependent-sampling-variance"
+  },
+  {
+    "title": "Practical Exchangeable Designs",
+    "level": "subsection",
+    "page": 30,
+    "anchor": "practical-exchangeable-designs"
+  },
+  {
+    "title": "One Block Leaves Between-Block Variation",
+    "level": "subsubsection",
+    "page": 30,
+    "anchor": "the-bumps-are-an-exchangeable-sample-mean"
+  },
+  {
+    "title": "Averaging Across Blocks",
+    "level": "subsubsection",
+    "page": 30,
+    "anchor": "sampling-more-blocks"
   }
 ]

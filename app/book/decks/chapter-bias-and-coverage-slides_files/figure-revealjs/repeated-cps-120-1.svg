@@ -29,7 +29,7 @@
 <rect x='0.00' y='0.00' width='1008.00' height='302.40' style='stroke-width: 0.75; stroke: none;' />
 <rect x='0.00' y='0.00' width='1008.00' height='302.40' style='stroke-width: 0.75; stroke: none;' />
 <line x1='0.00' y1='302.40' x2='1008.00' y2='302.40' style='stroke-width: 0.64; stroke: #7F7F7F; stroke-linecap: butt;' />
-<line x1='386.84' y1='302.40' x2='386.84' y2='0.00' style='stroke-width: 6.40; stroke: #00FF00; stroke-opacity: 0.80; stroke-linecap: butt;' />
+<line x1='386.84' y1='302.40' x2='386.84' y2='0.00' style='stroke-width: 6.40; stroke: #00FF00; stroke-opacity: 0.45; stroke-linecap: butt;' />
 <rect x='0.00' y='302.40' width='14.40' height='0.00' style='stroke-width: 0.64; stroke: #FF0000; stroke-opacity: 0.40; stroke-linecap: butt; stroke-linejoin: miter;' />
 <rect x='14.40' y='302.40' width='14.40' height='0.00' style='stroke-width: 0.64; stroke: #FF0000; stroke-opacity: 0.40; stroke-linecap: butt; stroke-linejoin: miter;' />
 <rect x='28.80' y='302.40' width='14.40' height='0.00' style='stroke-width: 0.64; stroke: #FF0000; stroke-opacity: 0.40; stroke-linecap: butt; stroke-linejoin: miter;' />
@@ -302,8 +302,8 @@
 <circle cx='652.85' cy='295.61' r='2.84' style='stroke-width: 1.42; stroke: #A020F0; stroke-opacity: 0.15; fill: #A020F0; fill-opacity: 0.15;' />
 <circle cx='594.92' cy='227.70' r='2.84' style='stroke-width: 1.42; stroke: #A020F0; stroke-opacity: 0.15; fill: #A020F0; fill-opacity: 0.15;' />
 <circle cx='560.11' cy='296.97' r='2.84' style='stroke-width: 1.42; stroke: #A020F0; stroke-opacity: 0.15; fill: #A020F0; fill-opacity: 0.15;' />
-<line x1='621.16' y1='302.40' x2='621.16' y2='0.00' style='stroke-width: 6.40; stroke: #FFA500; stroke-opacity: 0.80; stroke-linecap: butt;' />
-<line x1='621.16' y1='302.40' x2='621.16' y2='0.00' style='stroke-width: 1.07; stroke: #0000FF; stroke-linecap: butt;' />
+<line x1='621.16' y1='302.40' x2='621.16' y2='0.00' style='stroke-width: 6.40; stroke: #FFA500; stroke-opacity: 0.45; stroke-linecap: butt;' />
+<line x1='621.16' y1='302.40' x2='621.16' y2='0.00' style='stroke-width: 1.07; stroke: #0000FF; stroke-opacity: 0.50; stroke-linecap: butt;' />
 </g>
 </g>
 </svg>

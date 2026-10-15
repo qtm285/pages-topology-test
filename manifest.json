@@ -145,9 +145,17 @@
         {
           "path": "decks/chapter-bias-and-coverage-slides.qmd",
           "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-getting-away-from-bespoke-sampling-distributions.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-understanding-sampling-designs-beyond-independence.qmd",
+          "format": "qmd"
         }
       ],
-      "pages": 25,
+      "pages": 27,
       "pageFiles": [
         "index.html",
         "chapters/chapter-social-pressure-experiment.html",
@@ -173,7 +181,9 @@
         "decks/chapter-calibration-binary-slides.html",
         "decks/chapter-bootstrap-slides.html",
         "decks/chapter-normal-approximation-slides.html",
-        "decks/chapter-bias-and-coverage-slides.html"
+        "decks/chapter-bias-and-coverage-slides.html",
+        "chapters/chapter-getting-away-from-bespoke-sampling-distributions.html",
+        "chapters/chapter-understanding-sampling-designs-beyond-independence.html"
       ],
       "classSiteUrl": "https://qtm285.github.io/static",
       "previewUrl": "https://imac.cormorant-matrix.ts.net:10000/static",
