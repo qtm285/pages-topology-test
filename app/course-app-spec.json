@@ -22,6 +22,7 @@
     "chapters/chapter-normal-approximation.qmd",
     "homework/homework-comparing-estimators.qmd",
     "exams/practice-midterm-1.qmd",
+    "exams/practice-midterm-1.solutions.qmd",
     "chapters/chapter-programming-reference.qmd"
   ],
   "decks": [
