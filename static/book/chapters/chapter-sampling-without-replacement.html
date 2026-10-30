@@ -1,4 +1,345 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><!--tlda-publication-head-->
+<script>
+if (new URLSearchParams(window.location.search).has("_tldaShape")) {
+(function () {
+  var MAX_FIELD = 2000;
+  var params = new URLSearchParams(window.location.search);
+  var shapeId = params.get('_tldaShape') || '';
+
+  function clip(value) {
+    if (value === undefined || value === null) return undefined;
+    var s = typeof value === 'string' ? value : String(value);
+    if (!s) return undefined;
+    return s.length > MAX_FIELD ? s.slice(0, MAX_FIELD) + '…[+' + (s.length - MAX_FIELD) + ']' : s;
+  }
+
+  // sendBeacon survives a dying page; keepalive fetch is the fallback.
+  function send(ns, msg, data) {
+    var payload = {
+      ts: new Date().toISOString(),
+      level: 'error',
+      ns: ns,
+      msg: msg,
+      data: Object.assign({
+        url: location.href,
+        shapeId: shapeId,
+        userAgent: navigator.userAgent,
+        online: navigator.onLine,
+        embedded: window.parent !== window,
+      }, data),
+    };
+    try {
+      var body = JSON.stringify(payload);
+      if (navigator.sendBeacon &&
+          navigator.sendBeacon('/api/log', new Blob([body], { type: 'application/json' }))) return;
+      fetch('/api/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: body,
+        keepalive: true,
+      }).catch(function () {
+        // Nowhere left to report a failed report, and rethrowing would be
+        // caught by the rejection handler below and posted, which loops.
+      });
+    } catch (e) {
+      // Circular payload, or no Blob. Called FROM the error handlers, so a
+      // throw here re-enters them and buries the original fault.
+    }
+  }
+
+  function tell(report) {
+    try {
+      window.parent.postMessage({ type: 'tlda-doc-health', shapeId: shapeId, report: report }, '*');
+    } catch (e) {
+      // Served standalone, so no parent is listening. Supported, not a fault:
+      // the report has already gone to /api/log.
+    }
+  }
+
+  // KaTeX render errors, caught at render time inside the wrapper. This runs in
+  // <head> before the page's own math block, so it installs first and Quarto's
+  // hardcoded non-throwing loop renders through it. Setting throwOnError here
+  // turns a silent literal-text render into a throw the catch reports — the
+  // throw is the signal. It never looks at the page.
+  var katexReported = {};
+  function reportKatexError(tex, err) {
+    try {
+      var detail = clip(err && err.message);
+      if (!detail) return;
+      // One report per distinct error per page load: a single broken macro
+      // used fifty times is one defect, not fifty cards.
+      if (katexReported[detail]) return;
+      katexReported[detail] = true;
+      send('katex-error', 'KaTeX render error', {
+        error: detail,
+        tex: clip(tex),
+      });
+    } catch (e) {
+      // Called FROM the render path, so a throw here re-enters the wrapper
+      // and buries the original fault.
+    }
+  }
+
+  function installKatexHook() {
+    try {
+      if (!window.katex || !window.katex.render || window.__tldaKatexHooked) return false;
+      var inner = window.katex.render.bind(window.katex);
+      window.katex.render = function (tex, el, opts) {
+        opts = opts || {};
+        // Quarto hardcodes the non-throwing options in its own template and
+        // the schema accepts only method+url, so this cannot be configuration.
+        // Callers that set it explicitly keep their own value.
+        if (opts.throwOnError === undefined || opts.throwOnError === false) opts.throwOnError = true;
+        try {
+          return inner(tex, el, opts);
+        } catch (err) {
+          reportKatexError(tex, err);
+          // Paint what KaTeX would have painted had it not thrown: callers
+          // and page layout see the same shape as a non-throwing render.
+          try {
+            var fallbackOpts = {};
+            for (var k in opts) fallbackOpts[k] = opts[k];
+            fallbackOpts.throwOnError = false;
+            return inner(tex, el, fallbackOpts);
+          } catch (e2) {
+            return el;
+          }
+        }
+      };
+      window.__tldaKatexHooked = true;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // katex.min.js is deferred, so it may not exist yet when this head script
+  // runs. Poll briefly; give up quietly if KaTeX never loads.
+  (function waitForKatex(tries) {
+    if (installKatexHook()) return;
+    if (tries > 0) setTimeout(function () { waitForKatex(tries - 1); }, 250);
+  })(40);
+  window.__tldaKatexHookInstall = installKatexHook;
+
+  window.addEventListener('error', function (event) {
+    try {
+      // 'error' also fires for failed subresources, where target is the element
+      // rather than window. Unlike crashBeacon.ts these are kept — a macros.js
+      // that 404s is the fault we are looking for — but under their own kind.
+      var target = event.target;
+      if (target && target !== window) {
+        var src = target.src || target.href;
+        if (!src) return;
+        send('doc-fault', 'subresource failed to load', {
+          kind: 'subresource',
+          source: clip(src),
+          tag: target.tagName,
+        });
+        if (target.tagName === 'IMG') scheduleImageCheck();
+        return;
+      }
+      send('doc-fault', event.message || 'error', {
+        kind: 'error',
+        message: clip(event.message),
+        stack: clip(event.error && event.error.stack),
+        source: clip(event.filename),
+        line: event.lineno,
+        column: event.colno,
+      });
+    } catch (e) {
+      // This IS the error handler: a throw here fires 'error' again and
+      // recurses. Reading event.target cross-origin can throw.
+    }
+  }, true);
+
+  window.addEventListener('unhandledrejection', function (event) {
+    try {
+      var reason = event.reason;
+      send('doc-fault', 'unhandled rejection', {
+        kind: 'unhandledrejection',
+        message: clip((reason && reason.message) || reason),
+        stack: clip(reason && reason.stack),
+      });
+    } catch (e) {
+      // A rejection can carry a getter that throws when read, and throwing
+      // here rejects again and re-enters this handler.
+    }
+  });
+
+  function probeMath() {
+    var rendered = document.querySelectorAll('.katex, mjx-container').length;
+    var errored = document.querySelectorAll('.katex-error, mjx-merror').length;
+    // Source delimiters still in the text mean the renderer never ran over
+    // them. The backslash is a charcode, not an escape: this script rides
+    // inside a template literal, so every backslash here is read twice and a
+    // written escape ships wrong while looking right.
+    var BS = String.fromCharCode(92);
+    var body = document.body ? (document.body.innerText || '') : '';
+    var residue = (body.split(BS + '(').length - 1) + (body.split(BS + '[').length - 1);
+
+    if (errored > 0) {
+      var sample = document.querySelector('.katex-error, mjx-merror');
+      return {
+        state: 'broken',
+        why: 'math rendered with errors',
+        errored: errored,
+        rendered: rendered,
+        // KaTeX's title names the undefined control sequence; the count alone
+        // does not tell a reader what to fix.
+        detail: clip(sample && (sample.getAttribute('title') || sample.textContent)),
+      };
+    }
+    if (rendered === 0 && residue > 0) {
+      return { state: 'broken', why: 'math present but nothing rendered it', residue: residue, rendered: 0 };
+    }
+    if (rendered === 0) return { state: 'absent', why: 'no math on this page' };
+    return {
+      state: 'ok',
+      rendered: rendered,
+      engine: window.katex ? 'katex' : 'unknown',
+      macros: window.__tldaKatexMacros ? Object.keys(window.__tldaKatexMacros).length : 0,
+    };
+  }
+
+  function probeWebR() {
+    // The markers are a div with id webr-N and class exercise-cell, beside a
+    // script of type webr-N-contents. Match those and nothing broader:
+    // .cell-code .sourceCode is every static code listing on every Quarto page.
+    //
+    // No backticks in this comment — it lives inside a template literal, and one
+    // backtick closes it and takes the module down.
+    var cells = document.querySelectorAll('div.exercise-cell[id^="webr-"]');
+    if (cells.length === 0) return { state: 'absent', why: 'no webR cells on this page' };
+    // The div ships EMPTY and the runtime mounts into it, so liveness is
+    // readable from the DOM alone: no children means a student cannot run it.
+    var live = 0;
+    for (var i = 0; i < cells.length; i++) if (cells[i].childElementCount > 0) live++;
+    if (live === 0) return { state: 'broken', why: 'webR never mounted any cell', cells: cells.length, live: 0 };
+    if (live < cells.length) {
+      return { state: 'broken', why: 'some webR cells never mounted', cells: cells.length, live: live };
+    }
+    return { state: 'ok', cells: cells.length, live: live };
+  }
+
+  function probeReveal() {
+    if (!document.querySelector('.reveal')) return { state: 'absent', why: 'not a deck' };
+    if (!window.Reveal || typeof window.Reveal.isReady !== 'function' || !window.Reveal.isReady()) {
+      return { state: 'broken', why: 'reveal never initialised' };
+    }
+    return { state: 'ok', slides: document.querySelectorAll('.reveal .slides section').length };
+  }
+
+  function requestedImages() {
+    return Array.from(document.querySelectorAll('img')).filter(function (img) {
+      // Reveal keeps future pictures in data-src. They have not failed: the
+      // browser has not been asked to load them yet.
+      return !!(img.currentSrc || img.getAttribute('src'));
+    });
+  }
+
+  function failedImage(img) { return img.complete && img.naturalWidth === 0; }
+
+  function probeImages() {
+    var images = requestedImages();
+    var failed = images.filter(failedImage).length;
+    var pending = images.filter(function (img) { return !img.complete; }).length;
+    return {
+      state: failed ? 'broken' : pending ? 'pending' : images.length ? 'ok' : 'absent',
+      why: failed ? failed + ' images failed to load' : pending ? 'images are still loading' : undefined,
+      failed: failed,
+      pending: pending,
+      loaded: images.length - failed - pending,
+    };
+  }
+
+  var imageCheckTimer = null;
+  function scheduleImageCheck() {
+    // Initial failures are included in the existing after-load health check.
+    // Do not diagnose Reveal or math before their startup has finished.
+    if (document.readyState !== 'complete') return;
+    if (imageCheckTimer !== null) return;
+    imageCheckTimer = setTimeout(function () {
+      imageCheckTimer = null;
+      check();
+    }, 150);
+  }
+
+  function retryFailedImages() {
+    requestedImages().filter(failedImage).forEach(function (img) {
+      // Keep the current document, its Reveal state and the canvas overlay.
+      // A fresh request for this failed resource must not reload the iframe.
+      var url = new URL(img.currentSrc || img.src, location.href);
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+      url.searchParams.set('_tldaImageRetry', String(Date.now()));
+      // currentSrc may have come from srcset. Keep its chosen resource on this
+      // retry so the unchanged srcset cannot select the failed request again.
+      var picture = img.closest('picture');
+      if (picture) picture.querySelectorAll('source[srcset]').forEach(function (source) {
+        source.removeAttribute('srcset');
+      });
+      img.removeAttribute('srcset');
+      img.addEventListener('load', scheduleImageCheck, { once: true });
+      img.addEventListener('error', scheduleImageCheck, { once: true });
+      img.src = url.href;
+    });
+    check();
+  }
+
+  window.addEventListener('message', function (event) {
+    if (window.parent === window || event.source !== window.parent) return;
+    if (event.data && event.data.type === 'tlda-retry-images') retryFailedImages();
+    if (event.data && event.data.type === 'tlda-request-doc-health') check();
+  });
+
+  // Without this a throwing probe takes check() down: no report, no badge, and
+  // a page that reads as healthy. 'unknown' never folds into 'ok'.
+  function attempt(name, probe) {
+    try {
+      return probe();
+    } catch (e) {
+      return { state: 'unknown', why: 'the ' + name + ' check could not run', error: clip(e && e.message) };
+    }
+  }
+
+  function check() {
+    var report = {
+      math: attempt('math', probeMath),
+      webr: attempt('webR', probeWebR),
+      reveal: attempt('reveal', probeReveal),
+      images: attempt('images', probeImages),
+    };
+    var names = ['math', 'webr', 'reveal', 'images'];
+    var broken = names.filter(function (k) { return report[k].state === 'broken'; });
+    var unknown = names.filter(function (k) { return report[k].state === 'unknown'; });
+    report.broken = broken;
+    report.unknown = unknown;
+    // Reported either way: a check that only speaks when unhappy is
+    // indistinguishable from one that never ran.
+    tell(report);
+    if (broken.length || unknown.length) {
+      send('doc-capability',
+        'document capability check: ' +
+          (broken.length ? 'failed ' + broken.join(', ') : '') +
+          (broken.length && unknown.length ? '; ' : '') +
+          (unknown.length ? 'could not measure ' + unknown.join(', ') : ''),
+        report);
+    }
+    return report;
+  }
+
+  // After load plus a settle window: KaTeX renders on a deferred pass and webR
+  // mounts after its wasm load, so probing earlier reports every page broken.
+  function schedule() { setTimeout(check, 1500); }
+  if (document.readyState === 'complete') schedule();
+  else window.addEventListener('load', schedule);
+
+  // Reads the result out. Deliberately not a fault injector: a detector proved
+  // against a failure it staged for itself was measured on a fixture.
+  window.__tldaDocHealthCheck = check;
+})();
+}
+</script><!--/tlda-publication-head-->
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -60,29 +401,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../_assets/mv3rwceo-1/site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../_assets/mv3rwceo-1/site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../_assets/mv3rwceo-1/site_libs/clipboard/clipboard.min.js"></script>
-<script src="../_assets/mv3rwceo-1/site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../_assets/mv3rwceo-1/site_libs/quarto-search/fuse.min.js"></script>
-<script src="../_assets/mv3rwceo-1/site_libs/quarto-search/quarto-search.js"></script>
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../chapters/chapter-calibration-with-the-binomial.html" rel="next">
 <link href="../homework/homework-calibration-binary.html" rel="prev">
-<script src="../_assets/mv3rwceo-1/site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../_assets/mv3rwceo-1/site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../_assets/mv3rwceo-1/site_libs/quarto-html/popper.min.js"></script>
-<script src="../_assets/mv3rwceo-1/site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../_assets/mv3rwceo-1/site_libs/quarto-html/anchor.min.js"></script>
-<link href="../_assets/mv3rwceo-1/site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../_assets/mv3rwceo-1/site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../_assets/mv3rwceo-1/site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../_assets/mv3rwceo-1/site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../_assets/mv3rwceo-1/site_libs/bootstrap/bootstrap-6fe1715721786a838a92806728cb6c53.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="../_assets/mv3rwceo-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
-<link href="../_assets/mv3rwceo-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
-<script src="../_assets/mv3rwceo-1/site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
-<link href="../_assets/mv3rwceo-1/site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6fe1715721786a838a92806728cb6c53.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -110,10 +451,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script type="module" src="../_assets/mv3rwceo-1/site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
-<link href="../_assets/mv3rwceo-1/site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
-<link href="../_assets/mv3rwceo-1/site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="../_assets/mv3rwceo-1/site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script>
 // GENERATED by bin/generate-katex-macros.mjs from the tlda repo's
 // shared/katex-base-macros.mjs. Do not edit here -- edit the source and
@@ -560,7 +901,7 @@ window.__tldaKatexMacros = {
 
 </script>
 
-  <script defer="" src="../_assets/mv3rwceo-1/katex-assets/dist/katex.min.js"></script>
+  <script defer="" src="../katex-assets/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
  var mathElements = document.getElementsByClassName("math");
  var macros = [];
@@ -575,7 +916,7 @@ window.__tldaKatexMacros = {
    });
 }}});
   </script>
-  <link rel="stylesheet" href="../_assets/mv3rwceo-1/katex-assets/dist/katex.min.css">
+  <link rel="stylesheet" href="../katex-assets/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -606,226 +947,30 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">1.1 Calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-sampling-without-replacement.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
-    </div>
-  </nav>
-</header>
+  
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
-    <div class="sidebar-title mb-0 py-0">
-      <a href="../">Prediction, Inference, and Causality</a> 
-    </div>
-      </div>
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
-        </div>
-        </div>
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Prediction, Inference, and Causality I</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-social-pressure-experiment.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Social Pressure Experiment</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Homework: Setting Up</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-descriptive.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework: Basic Descriptive Statistics</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1 Calibration</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-sampling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-point-and-interval-estimates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Point and Interval Estimates</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-calibration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-calibration-binary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-sampling-with-replacement.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-calibration-binary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-sampling-without-replacement.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../part1-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2 Moments and approximate calibration</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Means and Markov’s Inequality</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-standard-deviation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Chebyshev’s Inequality and Variance</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-normal-approximation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-bias-and-coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-programming-reference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Programming Reference</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">References</span></a>
-  </div>
-</li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+  
+
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li data-source-line="15"><a href="#sec-sampling-without-replacement" id="toc-sec-sampling-without-replacement" class="nav-link active" data-scroll-target="#sec-sampling-without-replacement">Review: Sampling with Replacement</a>
+  <li><a href="#sec-sampling-without-replacement" id="toc-sec-sampling-without-replacement" class="nav-link active" data-scroll-target="#sec-sampling-without-replacement">Review: Sampling with Replacement</a>
   <ul class="collapse">
-  <li data-source-line="79"><a href="#check-with-r" id="toc-check-with-r" class="nav-link" data-scroll-target="#check-with-r">Check with R</a></li>
-  <li data-source-line="98"><a href="#sampling-without-replacement-two-exercises" id="toc-sampling-without-replacement-two-exercises" class="nav-link" data-scroll-target="#sampling-without-replacement-two-exercises">Sampling without Replacement: Two Exercises</a>
+  <li><a href="#check-with-r" id="toc-check-with-r" class="nav-link" data-scroll-target="#check-with-r">Check with R</a></li>
+  <li><a href="#sampling-without-replacement-two-exercises" id="toc-sampling-without-replacement-two-exercises" class="nav-link" data-scroll-target="#sampling-without-replacement-two-exercises">Sampling without Replacement: Two Exercises</a>
   <ul class="collapse">
-  <li data-source-line="104"><a href="#three-calls-from-ten-people" id="toc-three-calls-from-ten-people" class="nav-link" data-scroll-target="#three-calls-from-ten-people">Three Calls from Ten People</a></li>
-  <li data-source-line="186"><a href="#generalize-your-answer" id="toc-generalize-your-answer" class="nav-link" data-scroll-target="#generalize-your-answer">Generalize Your Answer</a></li>
+  <li><a href="#three-calls-from-ten-people" id="toc-three-calls-from-ten-people" class="nav-link" data-scroll-target="#three-calls-from-ten-people">Three Calls from Ten People</a></li>
+  <li><a href="#generalize-your-answer" id="toc-generalize-your-answer" class="nav-link" data-scroll-target="#generalize-your-answer">Generalize Your Answer</a></li>
   </ul></li>
-  <li><a href="#using-r" id="toc-using-r" class="nav-link" data-scroll-target="#using-r">Using <strong>R</strong> </a></li>
-  <li data-source-line="332"><a href="#these-worked-out" id="toc-these-worked-out" class="nav-link" data-scroll-target="#these-worked-out">These Worked Out</a></li>
-  <li data-source-line="371"><a href="#why-its-important-to-think-about-this" id="toc-why-its-important-to-think-about-this" class="nav-link" data-scroll-target="#why-its-important-to-think-about-this">Why It’s Important to Think About This</a></li>
+  <li><a href="#using-r" id="toc-using-r" class="nav-link" data-scroll-target="#using-r">Using <strong>R</strong></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -852,51 +997,18 @@ window.Quarto = {
 </header>
 
 
-
-
-
-
-
-
-<div class="hidden" data-source-line="1" data-source-file="chapters/shared/shared-code.qmd">
+<div class="hidden">
 <p>$$ \newcommand{X}{} \newcommand{Y}{} % A hex digit after # inside a macro body is eaten by build-time expansion, so digit-leading hexes spell # via . </p>
-
-
-
-
-
-
-
-<p data-source-line="132" data-source-file="shared/shared-style.qmd">$$</p>
+<p>$$</p>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <section id="sec-sampling-without-replacement" class="level1">
-<h1 data-source-line="191" data-source-file="shared/shared-style.qmd">Review: Sampling with Replacement</h1>
-<p data-source-line="17">In the last chapter we calculated a sampling distribution, and we did it in two stages. First we went from calls to responses. Then we went from responses to their sum.</p>
-<p data-source-line="19">Think back to three calls to ten voters, <strong>with replacement</strong>. There were <span class="math inline">m_1</span> Yes-voters and <span class="math inline">m_0</span> No-voters, with <span class="math inline">m_1+m_0=10</span>. Each call could reach any of the ten people, including someone we’d already called.</p>
-<p data-source-line="21">Each of the eight things you could hear has three counts multiplied together underneath it, one per call, for the same reason as before — and <span class="math inline">10 \times 10 \times 10 = 10^3</span> roll sequences in all.</p>
+<h1>Review: Sampling with Replacement</h1>
+<p>We calculated a sampling distribution last time, and we did it in two stages. First we went from calls to responses. Then we went from responses to their sum.</p>
+<p>Think back to three calls to ten voters, <strong>with replacement</strong>. There were <span class="math inline">m_1</span> Yes-voters and <span class="math inline">m_0</span> No-voters, with <span class="math inline">m_1+m_0=10</span>. Each call could reach any of the ten people, including someone we’d already called.</p>
+<p>Each of the eight things you could hear has three counts multiplied together underneath it, one per call, for the same reason as before — and <span class="math inline">10 \times 10 \times 10 = 10^3</span> roll sequences in all.</p>
 <div class="grid">
 <section id="partially-marginalized" class="level4 g-col-7">
-<h4 class="anchored" data-anchor-id="partially-marginalized" data-source-line="27">Partially Marginalized</h4>
+<h4 class="anchored" data-anchor-id="partially-marginalized">Partially Marginalized</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -968,7 +1080,7 @@ window.Quarto = {
 </table>
 </section>
 <section id="fully-marginalized" class="level4 g-col-5">
-<h4 class="anchored" data-anchor-id="fully-marginalized" data-source-line="43">Fully Marginalized</h4>
+<h4 class="anchored" data-anchor-id="fully-marginalized">Fully Marginalized</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -997,26 +1109,24 @@ window.Quarto = {
 </table>
 </section>
 </div>
-<p data-source-line="56">The left-hand column of the second table carries the multipliers <span class="math inline">1, 3, 3, 1</span>.</p>
-<p data-source-line="58">The first table has a row for each thing we could hear. The second table combines rows with the same sum. The three rows with one Yes have the same probability because moving the Yes only rearranges the factors of <span class="math inline">m_0^2m_1</span>.</p>
-<p data-source-line="60">Look at the cards you’ve laid out, with red for 1 and black for 0. If you don’t have cards, you’ll have to imagine them.</p>
-<p data-source-line="62"><strong>Understanding partial marginalization.</strong> Swap a card for another of the same colour. You called somebody else and you heard the same thing. The row doesn’t move; you’ve found another roll sequence sitting underneath it, and counting those is what the first stage does.</p>
-<p data-source-line="64"><strong>Understanding full marginalization.</strong> Move the cards you have into a different order. Now you’ve got a different row — a different thing to hear — with the same number of Yeses in it, so it lands on the same sum. Counting those is what the second stage does.</p>
-<p data-source-line="66">For <span class="math inline">n</span> calls <strong>with replacement</strong> to <span class="math inline">m=m_1+m_0</span> people, we wrote the population frequencies as <span class="math inline">\theta_1=m_1/m</span> and <span class="math inline">\theta_0=m_0/m</span>. A response sequence <span class="math inline">a_1 \ldots a_n</span> is a binary sequence of length <span class="math inline">n</span>. If its sum is <span class="math inline">k</span>, the same two steps are</p>
-
-<p data-source-line="68"><span class="math display">
+<p>The left-hand column of the second table carries the multipliers <span class="math inline">1, 3, 3, 1</span>.</p>
+<p>The first table has a row for each thing we could hear. The second table combines rows with the same sum. The three rows with one Yes have the same probability because moving the Yes only rearranges the factors of <span class="math inline">m_0^2m_1</span>.</p>
+<p>Look at the cards you’ve laid out, with red for 1 and black for 0. If you don’t have cards, you’ll have to imagine them.</p>
+<p><strong>Understanding partial marginalization.</strong> Swap a card for another of the same colour. You called somebody else and you heard the same thing. The row doesn’t move; you’ve found another roll sequence sitting underneath it, and counting those is what the first stage does.</p>
+<p><strong>Understanding full marginalization.</strong> Move the cards you have into a different order. Now you’ve got a different row — a different thing to hear — with the same number of Yeses in it, so it lands on the same sum. Counting those is what the second stage does.</p>
+<p>For <span class="math inline">n</span> calls <strong>with replacement</strong> to <span class="math inline">m=m_1+m_0</span> people, we wrote the population frequencies as <span class="math inline">\theta_1=m_1/m</span> and <span class="math inline">\theta_0=m_0/m</span>. A response sequence <span class="math inline">a_1,\ldots,a_n</span> is a binary sequence of length <span class="math inline">n</span>. If its sum is <span class="math inline">k</span>, the same two steps are</p>
+<p><span class="math display">
 \begin{aligned}
-P(Y_1 \ldots Y_n = a_1 \ldots a_n)&amp;=\theta_1^k\theta_0^{n-k},\\
+P(Y_1=a_1,\ldots,Y_n=a_n)&amp;=\theta_1^k\theta_0^{n-k},\\
 P(Y_1+\ldots+Y_n=k)&amp;=\binom{n}{k}\theta_1^k\theta_0^{n-k}.
 \end{aligned}
 </span></p>
-<p data-source-line="75">The first line has one factor for each response: <span class="math inline">k</span> ones and <span class="math inline">n-k</span> zeros. For the second, we sum the probabilities of all binary sequences with sum <span class="math inline">k</span>. With replacement, those sequences all have the same probability: rearranging the responses only rearranges the factors. So summing is counting and multiplying.</p>
-<p data-source-line="77">You could work out how to count binary sequences of length <span class="math inline">n</span> with sum <span class="math inline">k</span>. But we saw its name in the last chapter: the <em>binomial coefficient</em>, written <span class="math inline">\binom{n}{k}</span> and read ‘<span class="math inline">n</span> choose <span class="math inline">k</span>’. You don’t need to derive the count to write the formula.</p>
+<p>The first line has one factor for each response: <span class="math inline">k</span> ones and <span class="math inline">n-k</span> zeros. For the second, we sum the probabilities of all binary sequences with sum <span class="math inline">k</span>. With replacement, those sequences all have the same probability: rearranging the responses only rearranges the factors. So summing is counting and multiplying.</p>
+<p>You could work out how to count binary sequences of length <span class="math inline">n</span> with sum <span class="math inline">k</span>. But we talked about its name last class: the <em>binomial coefficient</em>, written <span class="math inline">\binom{n}{k}</span> and read ‘<span class="math inline">n</span> choose <span class="math inline">k</span>’. You don’t need to derive the count to write the formula.</p>
 <section id="check-with-r" class="level3">
-<h3 class="anchored" data-anchor-id="check-with-r" data-source-line="79">Check with R</h3>
-<p data-source-line="81">In these cells, <code>theta</code> is <span class="math inline">\theta_1</span>, and <code>x</code> is the number of Yeses, which we called <span class="math inline">k</span> above. Edit the inputs to check your calculation. <code>x</code> can be one value or a vector of values; <code>0:n</code> checks them all.</p>
-
-<div data-source-line="83">
+<h3 class="anchored" data-anchor-id="check-with-r">Check with R</h3>
+<p>In these cells, <code>theta</code> is <span class="math inline">\theta_1</span>, and <code>x</code> is the number of Yeses, which we called <span class="math inline">k</span> above. Edit the inputs to check your calculation. <code>x</code> can be one value or a vector of values; <code>0:n</code> checks them all.</p>
+<div>
 <div id="webr-1" class="exercise-cell">
 
 </div>
@@ -1024,19 +1134,19 @@ P(Y_1+\ldots+Y_n=k)&amp;=\binom{n}{k}\theta_1^k\theta_0^{n-k}.
 eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEiOnRydWV9LCJjb2RlIjoibSA9IDEwICAgICAgICMgcG9wdWxhdGlvbiBzaXplXG5uID0gMyAgICAgICAgIyBudW1iZXIgb2YgY2FsbHNcbnRoZXRhID0gLjcgICAjIHBvcHVsYXRpb24gcHJvcG9ydGlvbiB3aG8gd2lsbCB2b3RlXG54ID0gMDpuICAgICAgIyBudW1iZXJzIG9mIFllc2VzIHRvIGNoZWNrOyBvciB1c2UgYSB2ZWN0b3IgbGlrZSBjKDAsIDIsIDMpXG5cbmRhdGEuZnJhbWUoWWVzZXMgPSB4LCBwcm9iYWJpbGl0eSA9IGRiaW5vbSh4LCBzaXplID0gbiwgcHJvYiA9IHRoZXRhKSkifQ==
 </script>
 </div>
-<p data-source-line="92">Both steps were counting and multiplying: the call sequences were equally likely, and response sequences with the same sum had the same probability.</p>
-<p data-source-line="94">Now we sample without replacement: we can’t call the same person twice.</p>
-<p data-source-line="96">Which step changes? What stays the same? Think about it.</p>
+<p>Both steps were counting and multiplying: the call sequences were equally likely, and response sequences with the same sum had the same probability.</p>
+<p>Now we sample without replacement: we can’t call the same person twice.</p>
+<p>Which step changes? What stays the same? Think about it.</p>
 </section>
 <section id="sampling-without-replacement-two-exercises" class="level2">
-<h2 class="anchored" data-anchor-id="sampling-without-replacement-two-exercises" data-source-line="98">Sampling without Replacement: Two Exercises</h2>
-<p data-source-line="100">The probability column in the first table changes. The second step stays the same: combine rows with the same number of Yeses. Those sequences still have equal probabilities, so we can still count them and multiply.</p>
-<p data-source-line="102">With that in mind, work through the two exercises below.</p>
+<h2 class="anchored" data-anchor-id="sampling-without-replacement-two-exercises">Sampling without Replacement: Two Exercises</h2>
+<p>The probability column in the first table changes. The second step stays the same: combine rows with the same number of Yeses. Those sequences still have equal probabilities, so we can still count them and multiply.</p>
+<p>With that in mind, work through the two exercises below.</p>
 <section id="three-calls-from-ten-people" class="level3">
-<h3 class="anchored" data-anchor-id="three-calls-from-ten-people" data-source-line="104">Three Calls from Ten People</h3>
-<p data-source-line="106">Deal three cards from your ten without putting any back, and count the Yeses. That count has a distribution, and the distribution has a name: this is the <em>hypergeometric distribution</em>. Find its probabilities in the first exercise, then generalize to any number of calls.</p>
+<h3 class="anchored" data-anchor-id="three-calls-from-ten-people">Three Calls from Ten People</h3>
+<p>Deal three cards from your ten without putting any back, and count the Yeses. That count has a distribution, and the distribution has a name: this is the <em>hypergeometric distribution</em>. Find its probabilities in the first exercise, then generalize to any number of calls.</p>
 <div id="exr-swor-three-calls" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p data-source-line="109"><span class="theorem-title"><strong>Exercise 11.1 (Three Calls)</strong></span> &nbsp;</p>
+<p><span class="theorem-title"><strong>Exercise 11.1 (Three Calls)</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -1047,20 +1157,19 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEi
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="110">Ten voters: seven will vote and three won’t. Make three calls without replacement. Find the distribution of <span class="math inline">Y_1+Y_2+Y_3</span>.</p>
-<p data-source-line="112">Look at the ten cards you’ve laid out, Ace through 10: red is 1 and black is 0. These cards are our population. If you don’t have cards, you’ll have to imagine them. The example here uses seven red and three black; use your own counts if they’re different. Draw three cards without putting them back.</p>
+<p>Ten voters: seven will vote and three won’t. Make three calls without replacement. Find the distribution of <span class="math inline">Y_1+Y_2+Y_3</span>.</p>
+<p>Look at the ten cards you’ve laid out, Ace through 10: red is 1 and black is 0. These cards are our population. If you don’t have cards, you’ll have to imagine them. The example here uses seven red and three black; use your group’s own counts if they’re different. Draw three cards without putting them back.</p>
 <ol type="1">
 <li>Write the eight response sequences and calculate their probabilities.</li>
 <li>Combine the sequences with the same sum.</li>
 </ol>
-<p data-source-line="117">To help count, lay out a response sequence such as red, red, black. Count the choices for each card as you take it from the population. Try rearranging the same colours and count again.</p>
-<p><strong>Checkpoint.</strong> Check your probabilities against the cell below — it is already set to ten cards with seven red, so change <code>m</code> and <code>theta</code> only if you used different counts. Why do sequences with the same number of Yeses have the same probability?</p>
+<p>To help count, lay out a response sequence such as red, red, black. Count the choices for each card as you take it from the population. Try rearranging the same colours and count again.</p>
+<p><strong>Checkpoint.</strong> Set <code>m</code> to your group’s number of cards and <code>theta</code> to the fraction that are red in the cell below. Check your numbers, then discuss your calculation with me before generalizing. Why do sequences with the same number of Yeses have the same probability?</p>
 </div>
 </div>
 </div>
-<p data-source-line="122">Use the same inputs as in the review. Choose <code>m</code> and <code>theta</code> so that <code>m * theta</code> is a whole number of voters, and keep <code>n</code> no larger than <code>m</code>. The cell converts the population proportion into the two counts that <code>dhyper</code> needs.</p>
-
-<div data-source-line="124">
+<p>Use the same inputs as in the review. Choose <code>m</code> and <code>theta</code> so that <code>m * theta</code> is a whole number of voters, and keep <code>n</code> no larger than <code>m</code>. The cell converts the population proportion into the two counts that <code>dhyper</code> needs.</p>
+<div>
 <div id="webr-2" class="exercise-cell">
 
 </div>
@@ -1073,7 +1182,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEi
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill" data-source-line="136">
+<div class="callout-title-container flex-fill">
 <span class="screen-reader-only">Solution</span>Three Calls: Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -1081,11 +1190,11 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEi
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution">
-<p data-source-line="138">There are <span class="math inline">10\times9\times8=720</span> equally likely call sequences. Take ‘Yes,Yes,No’. There are seven choices for the first Yes, six for the second, and three for the No.&nbsp;That’s <span class="math inline">7\times6\times3=126</span> call sequences that sound the same, so this response sequence has probability <span class="math inline">126/720</span>.</p>
-<p data-source-line="140">The tables have the same columns as before. What changes is the probability column: using a person up leaves one fewer choice the next time we need that response.</p>
+<p>There are <span class="math inline">10\times9\times8=720</span> equally likely call sequences. Take ‘Yes,Yes,No’. There are seven choices for the first Yes, six for the second, and three for the No.&nbsp;That’s <span class="math inline">7\times6\times3=126</span> call sequences that sound the same, so this response sequence has probability <span class="math inline">126/720</span>.</p>
+<p>The tables have the same columns as before. What changes is the probability column: using a person up leaves one fewer choice the next time we need that response.</p>
 <div class="grid">
 <section id="partially-marginalized-1" class="level4 g-col-7">
-<h4 class="anchored" data-anchor-id="partially-marginalized-1" data-source-line="145">Partially Marginalized</h4>
+<h4 class="anchored" data-anchor-id="partially-marginalized-1">Partially Marginalized</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1157,7 +1266,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEi
 </table>
 </section>
 <section id="fully-marginalized-1" class="level4 g-col-5">
-<h4 class="anchored" data-anchor-id="fully-marginalized-1" data-source-line="161">Fully Marginalized</h4>
+<h4 class="anchored" data-anchor-id="fully-marginalized-1">Fully Marginalized</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1186,23 +1295,22 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEi
 </table>
 </section>
 </div>
-<p data-source-line="173">Look at the three rows with two Yeses. Their numerators are <span class="math inline">3\times7\times6</span>, <span class="math inline">7\times3\times6</span>, and <span class="math inline">7\times6\times3</span>. Moving the No changes the order of the factors, not their product. So the second step is still counting and multiplying:</p>
-
-<p data-source-line="175"><span class="math display">
+<p>Look at the three rows with two Yeses. Their numerators are <span class="math inline">3\times7\times6</span>, <span class="math inline">7\times3\times6</span>, and <span class="math inline">7\times6\times3</span>. Moving the No changes the order of the factors, not their product. So the second step is still counting and multiplying:</p>
+<p><span class="math display">
 P(Y_1+Y_2+Y_3=2)
 =\frac{126}{720}+\frac{126}{720}+\frac{126}{720}
 =3\times\frac{126}{720}.
 </span></p>
-<p data-source-line="181">The multipliers are still <span class="math inline">1,3,3,1</span>. The probability of each response sequence changed; the number of response sequences with each sum did not.</p>
+<p>The multipliers are still <span class="math inline">1,3,3,1</span>. The probability of each response sequence changed; the number of response sequences with each sum did not.</p>
 </div>
 </div>
 </div>
 </div>
 </section>
 <section id="generalize-your-answer" class="level3">
-<h3 class="anchored" data-anchor-id="generalize-your-answer" data-source-line="186">Generalize Your Answer</h3>
+<h3 class="anchored" data-anchor-id="generalize-your-answer">Generalize Your Answer</h3>
 <div id="exr-swor-n-calls" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p data-source-line="189"><span class="theorem-title"><strong>Exercise 11.2 (<span class="math inline">n</span> Calls)</strong></span> &nbsp;</p>
+<p><span class="theorem-title"><strong>Exercise 11.2 (<span class="math inline">n</span> Calls)</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -1213,10 +1321,10 @@ P(Y_1+Y_2+Y_3=2)
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="190">Now <span class="math inline">n</span> calls to <span class="math inline">m</span> voters, of whom <span class="math inline">m_1</span> will vote and <span class="math inline">m_0</span> won’t, still without replacement. Find the distribution of <span class="math inline">Y_1 + \ldots + Y_n</span>.</p>
-<p data-source-line="192"><strong>Generalize your three-call calculation.</strong> Replace your population counts by <span class="math inline">m_1</span> and <span class="math inline">m_0</span>, and replace three calls by <span class="math inline">n</span> calls. Keep the same two steps: calls to responses, then responses to their sum.</p>
-<p data-source-line="194">For a response sequence with <span class="math inline">s</span> Yeses, which factors appear in its probability? How many response sequences have that sum?</p>
-<p data-source-line="196">You won’t write out an arbitrarily large table. Spot-check a few rows: choose a response sequence and count the call sequences underneath it, then compare with your formula.</p>
+<p>Now <span class="math inline">n</span> calls to <span class="math inline">m</span> voters, of whom <span class="math inline">m_1</span> will vote and <span class="math inline">m_0</span> won’t, still without replacement. Find the distribution of <span class="math inline">Y_1 + \ldots + Y_n</span>.</p>
+<p><strong>Generalize your three-call calculation.</strong> Replace your population counts by <span class="math inline">m_1</span> and <span class="math inline">m_0</span>, and replace three calls by <span class="math inline">n</span> calls. Keep the same two steps: calls to responses, then responses to their sum.</p>
+<p>For a response sequence with <span class="math inline">s</span> Yeses, which factors appear in its probability? How many response sequences have that sum?</p>
+<p>You won’t write out an arbitrarily large table. Spot-check a few rows: choose a response sequence and count the call sequences underneath it, then compare with your formula.</p>
 <p>Check your formula by putting the three-call numbers back in. You can’t check arbitrary <span class="math inline">m</span> and <span class="math inline">n</span> computationally in the abstract, but you can try a couple of pairs. For each pair, choose how many of the <span class="math inline">m</span> voters will vote, set <code>m</code>, <code>n</code>, and <code>theta</code> in the cell above, and compare its probabilities with your formula.</p>
 </div>
 </div>
@@ -1226,14 +1334,14 @@ P(Y_1+Y_2+Y_3=2)
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill" data-source-line="202">
+<div class="callout-title-container flex-fill">
 <span class="screen-reader-only">Tip</span>Hint
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p data-source-line="203">Stage 2 you already have. Rows with the same sum still carry the same probability — the falling factor moves to a different call and the product doesn’t notice — so the count of rows is the one you counted in the last chapter.</p>
+<p>Stage 2 you already have. Rows with the same sum still carry the same probability — the falling factor moves to a different call and the product doesn’t notice — so the count of rows is the one you counted last time.</p>
 <p>Stage 1 is the one to redo, and the thing to work out is what each call uses up. When you’ve already heard three Yeses, how many Yeses are left to hear — and how many Nos?</p>
 </div>
 </div>
@@ -1243,7 +1351,7 @@ P(Y_1+Y_2+Y_3=2)
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill" data-source-line="210">
+<div class="callout-title-container flex-fill">
 <span class="screen-reader-only">Solution</span>Generalization: Solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -1251,17 +1359,17 @@ P(Y_1+Y_2+Y_3=2)
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution">
-<p data-source-line="212">To find the distribution of a sum <span class="math inline">Y_1 + \ldots + Y_n</span> when we sample <em>without replacement</em> we do the same thing. We start by writing out the joint distribution of <span class="math inline">n</span> calls. We’re equally likely to pull any sequence of <span class="math inline">n</span> <em>distinct</em> numbers in <span class="math inline">1\ldots m</span>. There are <span class="math inline">m \times (m-1) \times \ldots \times (m-n+1)</span> sequences, so the probability is <span class="math inline">1/\bigl[m(m-1)\ldots(m-n+1)\bigr]</span> for each sequence. Then we add the responses and sums as columns. That doesn’t change.</p>
-<p data-source-line="214">Then we marginalize in two steps.</p>
+<p>To find the distribution of a sum <span class="math inline">Y_1 + \ldots + Y_n</span> when we sample <em>without replacement</em> we do the same thing. We start by writing out the joint distribution of <span class="math inline">n</span> calls. We’re equally likely to pull any sequence of <span class="math inline">n</span> <em>distinct</em> numbers in <span class="math inline">1\ldots m</span>. There are <span class="math inline">m \times (m-1) \times \ldots \times (m-n+1)</span> sequences, so the probability is <span class="math inline">1/\bigl[m(m-1)\ldots(m-n+1)\bigr]</span> for each sequence. Then we add the responses and sums as columns. That doesn’t change.</p>
+<p>Then we marginalize in two steps.</p>
 <ol type="1">
 <li>Sum over roll sequences leading to the same response sequence <span class="math inline">a_1 \ldots a_n</span>.</li>
 <li>Sum over response sequences leading to the same sum <span class="math inline">s=a_1+\ldots+a_n</span>.</li>
 </ol>
 <section id="step-1.-partial-marginalization" class="level4">
-<h4 class="anchored" data-anchor-id="step-1.-partial-marginalization" data-source-line="219">Step 1. Partial Marginalization</h4>
-<p data-source-line="221">Here’s the partially marginalized table again. Each row represents a response sequence, and its last column is the number of Yeses. A row has probability zero if it asks for more of either response than the population contains.</p>
+<h4 class="anchored" data-anchor-id="step-1.-partial-marginalization">Step 1. Partial Marginalization</h4>
+<p>Here’s the partially marginalized table again. Each row represents a response sequence, and its last column is the number of Yeses. A row has probability zero if it asks for more of either response than the population contains.</p>
 <section id="partially-marginalized-2" class="level5">
-<h5 class="anchored" data-anchor-id="partially-marginalized-2" data-source-line="223">Partially Marginalized</h5>
+<h5 class="anchored" data-anchor-id="partially-marginalized-2">Partially Marginalized</h5>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 16%">
@@ -1324,25 +1432,24 @@ P(Y_1+Y_2+Y_3=2)
 </tr>
 </tbody>
 </table>
-<p data-source-line="233">There are still <span class="math inline">2^n</span> response sequences. To fill the probability column, we count the distinct-person call sequences under each one. Each product has one factor per response of that kind; when there are none, that product is 1.</p>
-<p data-source-line="236">To sum over roll sequences, we sum over one roll after another. Suppose we’re calculating the probability of the response sequence <span class="math inline">a_1 \ldots a_n = 0 \ldots 0</span>. First assume <span class="math inline">n\leq m_0</span>, so this sequence is possible.</p>
+<p>There are still <span class="math inline">2^n</span> response sequences. To fill the probability column, we count the distinct-person call sequences under each one. Each product has one factor per response of that kind; when there are none, that product is 1.</p>
+<p>To sum over roll sequences, we sum over one roll after another. Suppose we’re calculating the probability of the response sequence <span class="math inline">a_1 \ldots a_n = 0,0,...,0,0</span>. First assume <span class="math inline">n\leq m_0</span>, so this sequence is possible.</p>
 <ol type="1">
-<li>We consider any ‘head’ <span class="math inline">j_1\ldots j_{n-1}</span> where <span class="math inline">y_{j_1} \ldots y_{j_{n-1}}=0 \ldots 0</span> and think about choosing the last element. No matter what the head is, we’ve ‘used up’ <span class="math inline">n-1</span> people with response <span class="math inline">y_j=0</span>. So there are <span class="math inline">m_0-(n-1)=m_0-n+1</span> ways to complete the sequence by choosing <em>an as-yet unused</em> <span class="math inline">j_{n}</span> with <span class="math inline">y_{j_n}=0</span>.</li>
+<li>We consider any ‘head’ <span class="math inline">j_1\ldots j_{n-1}</span> where <span class="math inline">y_{j_1} \ldots y_{j_{n-1}}=0,0,...0</span> and think about choosing the last element. No matter what the head is, we’ve ‘used up’ <span class="math inline">n-1</span> people with response <span class="math inline">y_j=0</span>. So there are <span class="math inline">m_0-(n-1)=m_0-n+1</span> ways to complete the sequence by choosing <em>an as-yet unused</em> <span class="math inline">j_{n}</span> with <span class="math inline">y_{j_n}=0</span>.</li>
 <li>We repeat with shortened ‘head’ <span class="math inline">j_1 \ldots j_{n-2}</span> to consider the choice of <span class="math inline">j_{n-1}</span>. We have <span class="math inline">m_0-n+2</span> as-yet unused choices and our last step tells us that each choice results in <span class="math inline">m_0-(n-1)</span> call sequences, so there are <span class="math inline">(m_0 - n + 1)(m_0 - n + 2)</span> sequences with head <span class="math inline">j_1 \ldots j_{n-2}</span> ending in <span class="math inline">0,0</span>.</li>
 <li>Repeat <span class="math inline">n-2</span> more times. We get <span class="math inline">(m_0 - n + 1) \times \ldots \times m_0</span> rows.</li>
 </ol>
-<p data-source-line="242">When we work through the same argument for sequences with a mix of 0s and 1s, we see that a call in the head forecloses possibilities for later calls <em>with the same response only</em>. Thus, when we have <span class="math inline">s</span> ones and <span class="math inline">n-s</span> zeros, we can think of ourselves as choosing calls with response zero and response one separately. We have <span class="math inline">\bigl[m_0(m_0-1)\ldots(m_0-(n-s)+1)\bigr]\times\bigl[m_1(m_1-1)\ldots(m_1-s+1)\bigr]</span> rows. Multiplying by the probability of each row, we get the probability of seeing a response sequence with <span class="math inline">s</span> ones.</p>
-
-<p data-source-line="244"><span class="math display">
+<p>When we work through the same argument for sequences with a mix of 0s and 1s, we see that a call in the head forecloses possibilities for later calls <em>with the same response only</em>. Thus, when we have <span class="math inline">s</span> ones and <span class="math inline">n-s</span> zeros, we can think of ourselves as choosing calls with response zero and response one separately. We have <span class="math inline">\bigl[m_0(m_0-1)\ldots(m_0-(n-s)+1)\bigr]\times\bigl[m_1(m_1-1)\ldots(m_1-s+1)\bigr]</span> rows. Multiplying by the probability of each row, we get the probability of seeing a response sequence with <span class="math inline">s</span> ones.</p>
+<p><span class="math display">
 \frac{\bigl[m_0(m_0-1)\ldots(m_0-(n-s)+1)\bigr]\,\bigl[m_1(m_1-1)\ldots(m_1-s+1)\bigr]}{m(m-1)\ldots(m-n+1)}
 </span></p>
 </section>
 </section>
 <section id="step-2.-full-marginalization" class="level4">
-<h4 class="anchored" data-anchor-id="step-2.-full-marginalization" data-source-line="248">Step 2. Full Marginalization</h4>
-<p data-source-line="250">Now combine rows with the same sum. Each multiplier counts how many response sequences have that sum.</p>
+<h4 class="anchored" data-anchor-id="step-2.-full-marginalization">Step 2. Full Marginalization</h4>
+<p>Now combine rows with the same sum. Each multiplier counts how many response sequences have that sum.</p>
 <section id="fully-marginalized-2" class="level5">
-<h5 class="anchored" data-anchor-id="fully-marginalized-2" data-source-line="252">Fully Marginalized</h5>
+<h5 class="anchored" data-anchor-id="fully-marginalized-2">Fully Marginalized</h5>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -1377,50 +1484,47 @@ P(Y_1+Y_2+Y_3=2)
 </tr>
 </tbody>
 </table>
-<p data-source-line="263">To calculate the probability that the sum takes on the value <span class="math inline">s</span>, we sum over response sequences with <span class="math inline">s</span> ones. Just like in the with-replacement case, the probability of all these sequences is the same—it depends only on how many ones and zeros are in the sequence, not their order. So summing is counting and multiplying.</p>
-<p data-source-line="265">The count is the same as before: the number of binary sequences of length <span class="math inline">n</span> with <span class="math inline">s</span> ones is <span class="math inline">\binom{n}{s}</span>. For <span class="math inline">0\leq s\leq n</span>, multiplying, we get</p>
-
-<p data-source-line="267"><span class="math display">
+<p>To calculate the probability that the sum takes on the value <span class="math inline">s</span>, we sum over response sequences with <span class="math inline">s</span> ones. Just like in the with-replacement case, the probability of all these sequences is the same—it depends only on how many ones and zeros are in the sequence, not their order. So summing is counting and multiplying.</p>
+<p>The count is the same as before: the number of binary sequences of length <span class="math inline">n</span> with <span class="math inline">s</span> ones is <span class="math inline">\binom{n}{s}</span>. For <span class="math inline">0\leq s\leq n</span>, multiplying, we get</p>
+<p><span class="math display">
 P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{\bigl[m_0(m_0-1)\ldots(m_0-(n-s)+1)\bigr]\,\bigl[m_1(m_1-1)\ldots(m_1-s+1)\bigr]}{m(m-1)\ldots(m-n+1)}.
 </span></p>
-<p data-source-line="271">Outside <span class="math inline">0\leq s\leq n</span>, the probability is zero.</p>
-<p data-source-line="273">It’s a bit uglier than the Binomial, but the same R tricks work.</p>
-<p data-source-line="275">One thing it does that the Binomial didn’t: some of the rows come out zero. You can’t hear four Yeses from three Yes-voters, and you don’t have to say so as a special case — the falling product <span class="math inline">m_1 (m_1-1) \ldots (m_1-s+1)</span> runs off the end and multiplies by zero exactly when you ask for more Yeses than there are. With ten voters, three of whom will vote, and four calls, the <span class="math inline">s=4</span> row is <span class="math inline">3 \times 2 \times 1 \times 0</span>.</p>
+<p>Outside <span class="math inline">0\leq s\leq n</span>, the probability is zero.</p>
+<p>It’s a bit uglier than the Binomial, but the same R tricks work.</p>
+<p>One thing it does that the Binomial didn’t: some of the rows come out zero. You can’t hear four Yeses from three Yes-voters, and you don’t have to say so as a special case — the falling product <span class="math inline">m_1 (m_1-1) \ldots (m_1-s+1)</span> runs off the end and multiplies by zero exactly when you ask for more Yeses than there are. With ten voters, three of whom will vote, and four calls, the <span class="math inline">s=4</span> row is <span class="math inline">3 \times 2 \times 1 \times 0</span>.</p>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill" data-source-line="278">
+<div class="callout-title-container flex-fill">
 <span class="screen-reader-only">Note</span>Factorial Notation
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-
-<p data-source-line="280">For <span class="math inline">s\leq m_1</span> and <span class="math inline">n-s\leq m_0</span>, the falling products can be written with factorials: <span class="math display">
+<p>For <span class="math inline">s\leq m_1</span> and <span class="math inline">n-s\leq m_0</span>, the falling products can be written with factorials: <span class="math display">
 \frac{m_1!}{(m_1-s)!} = m_1 (m_1-1) \ldots (m_1-s+1)
 \qand
 \frac{m_0!}{(m_0-(n-s))!} = m_0 (m_0-1) \ldots (m_0-(n-s)+1)
 </span></p>
-<p data-source-line="287">The same probability can then be written</p>
-
-<p data-source-line="289"><span class="math display">
+<p>The same probability can then be written</p>
+<p><span class="math display">
 P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))!} \times \frac{m_1!}{(m_1-s)!} \times \frac{(m-n)!}{m!}.
 </span></p>
-<p data-source-line="293">Outside those population counts the probability is zero; the factorial expression is only for counts that fit.</p>
+<p>Outside those population counts the probability is zero; the factorial expression is only for counts that fit.</p>
 </div>
 </div>
 </div>
 </section>
 </section>
 <section id="the-two-call-table" class="level4">
-<h4 class="anchored" data-anchor-id="the-two-call-table" data-source-line="297">The Two-Call Table</h4>
-<p data-source-line="299">For <span class="math inline">n=2</span>, the same formula has the following table.</p>
+<h4 class="anchored" data-anchor-id="the-two-call-table">The Two-Call Table</h4>
+<p>For <span class="math inline">n=2</span>, the same formula has the following table.</p>
 <div class="grid">
 <section id="partially-marginalized-3" class="level5 g-col-7">
-<h5 class="anchored" data-anchor-id="partially-marginalized-3" data-source-line="304">Partially Marginalized</h5>
+<h5 class="anchored" data-anchor-id="partially-marginalized-3">Partially Marginalized</h5>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1459,7 +1563,7 @@ P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))
 </table>
 </section>
 <section id="fully-marginalized-3" class="level5 g-col-5">
-<h5 class="anchored" data-anchor-id="fully-marginalized-3" data-source-line="316">Fully Marginalized</h5>
+<h5 class="anchored" data-anchor-id="fully-marginalized-3">Fully Marginalized</h5>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1484,7 +1588,7 @@ P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))
 </table>
 </section>
 </div>
-<p data-source-line="327">Every factor that had a repeat in it fell by one, and every factor that didn’t stayed put. Hearing two Yeses uses up a Yes; hearing a Yes and then a No doesn’t use up any Nos.</p>
+<p>Every factor that had a repeat in it fell by one, and every factor that didn’t stayed put. Hearing two Yeses uses up a Yes; hearing a Yes and then a No doesn’t use up any Nos.</p>
 </section>
 </div>
 </div>
@@ -1493,10 +1597,11 @@ P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))
 </section>
 </section>
 <section id="using-r" class="level2">
-<h2 class="anchored" data-anchor-id="using-r">Using <strong>R</strong> </h2>
-<p data-source-line="332">The <code>dhyper</code> function gives us the probability: <code>dhyper(s, m1, m0, n)</code> is <span class="math inline">P(\sum_{i=1}^n Y_i = s)</span> when we sample <span class="math inline">n</span> times without replacement from a population with <span class="math inline">m_1</span> ones and <span class="math inline">m_0</span> zeros. The <code>rhyper</code> function draws samples: <code>rhyper(10000, m1, m0, n)</code> gives us 10,000.</p>
-
-<div class="cell" data-source-line="336">
+<h2 class="anchored" data-anchor-id="using-r">Using <strong>R</strong></h2>
+<p>The <code>dhyper</code> function gives us the probability: <code>dhyper(s, m1, m0, n)</code> is <span class="math inline">P(\sum_{i=1}^n Y_i = s)</span> when we sample <span class="math inline">n</span> times without replacement from a population with <span class="math inline">m_1</span> ones and <span class="math inline">m_0</span> zeros. The <code>rhyper</code> function draws samples: <code>rhyper(10000, m1, m0, n)</code> gives us 10,000.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>R code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>theta_1 <span class="ot">=</span> .<span class="dv">7</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="dv">1000</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">=</span> m <span class="sc">*</span> theta_1</span>
@@ -1504,10 +1609,13 @@ P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">100</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="fu">dhyper</span>(<span class="dv">0</span><span class="sc">:</span>n, m1, m0, n)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>S <span class="ot">=</span> <span class="fu">rhyper</span>(<span class="dv">10000</span>, m1, m0, n) <span class="sc">|&gt;</span> <span class="fu">with_seed</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-
-<div class="cell" data-source-line="348">
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>S <span class="ot">=</span> <span class="fu">rhyper</span>(<span class="dv">10000</span>, m1, m0, n)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="dv">0</span><span class="sc">:</span>n, <span class="at">y=</span>p), <span class="at">fill=</span>pollc, <span class="at">color=</span>pollc, <span class="at">alpha=</span>.<span class="dv">05</span>, <span class="at">linewidth=</span>.<span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>           <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x=</span>S, <span class="at">y=</span><span class="fu">after_stat</span>(prop)), <span class="at">alpha=</span>.<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>           <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>S[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>], <span class="at">y=</span><span class="fu">max</span>(p)<span class="sc">*</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">length.out=</span><span class="dv">100</span>)), </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                      <span class="at">color=</span><span class="st">'purple'</span>, <span class="at">alpha=</span>.<span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1516,32 +1624,14 @@ P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))
 </div>
 </div>
 </div>
-<p data-source-line="359">The simulated counts follow the distribution we calculated by counting call sequences.</p>
-</section>
-<section id="these-worked-out" class="level2">
-<h2 class="anchored" data-anchor-id="these-worked-out" data-source-line="361">These Worked Out</h2>
-<p data-source-line="363">We got nice formulas and everything. The bad news is that it doesn’t work out like this all that often. Often doing all this marginalization symbolically is too hard or doesn’t leave you with an interpretable formula.</p>
-<p data-source-line="365">The good news is that there are a variety of ways to work around this. If it ‘works out halfway’, meaning you know the parameter(s) it depends on but not the formula, you can calculate the sampling distribution as accurately as you want by simulation. You’ll get a chance to try that in the homework.</p>
-<p data-source-line="367">Failing that, you can work with a simpler <em>approximation</em> to your estimator’s sampling distribution. Ideally, you’d have some mathematical result telling you that approximation is accurate. And proving that yourself would involve some thinking about this marginalization process.</p>
-<p data-source-line="369">That’s what people usually do. Including us later this semester. This usually works and often, though not always, we have mathematical proof.</p>
-</section>
-<section id="why-its-important-to-think-about-this" class="level2">
-<h2 class="anchored" data-anchor-id="why-its-important-to-think-about-this" data-source-line="371">Why It’s Important to Think About This</h2>
-<p data-source-line="373">You can often get by acting as if what you actually did was whatever is most convenient mathematically. But we’ll see a case in which this isn’t ideal in <span class="quarto-unresolved-ref">?sec-binom-hyper-comparison</span>: when we sample a large fraction of our population without replacement. And it’s a relatively benign failure. We understate our precision but we still get the coverage we claim. We ‘overcover’.</p>
-<p data-source-line="375">There are, however, important instances in which the usual approximations can fail pretty badly.</p>
-<ol type="1">
-<li>When we’re running an <em>adaptive randomized trial</em>. These let us experiment with new treatments with minimal risk of negatively impacting patients who’d have done better on the old one.</li>
-<li>When we’re estimating <em>effect variability</em>. These help understand whether a treatment that doesn’t work on average might still be good for some people.</li>
-<li>When we’re studying people who are connected in some way, e.g.&nbsp;in a social network or in a classroom.</li>
-</ol>
-<p data-source-line="381">This is hard stuff. We’re not going to get there in this class. But knowing how inference works from the ground up will hopefully help you in the future. That might mean working out a new estimator’s sampling distribution from scratch. Or maybe knowing what to look for or ask about when the usual stuff isn’t working.</p>
-<p data-source-line="383">If you want to know more about any of the three estimation problems above, let me know. I can give you reading or maybe even a project idea.</p>
 
 
 <script type="webr-data">
 eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC41LjgvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsImdncGxvdDIiLCJwdXJyciIsImRwbHlyIiwidGlkeXIiLCJzY2FsZXMiXSwicmVwb3MiOltdfSwicmVuZGVyX2RmIjoiZGVmYXVsdCJ9
 </script>
-<script type="ojs-module-contents">eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8yO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzIgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0yLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItMi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8yLCB7fSk7XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTEiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl8xID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTEtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfMSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMSwge30pO1xuIn0seyJjZWxsTmFtZSI6IndlYnItcHJlbHVkZSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IndlYlJPanMgPSB7XG4gIGNvbnN0IHsgV2ViUiwgQ2hhbm5lbFR5cGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWUuV2ViUjtcbiAgY29uc3Qge1xuICAgIFdlYlJFdmFsdWF0b3IsXG4gICAgV2ViUkVudmlyb25tZW50TWFuYWdlcixcbiAgICBzZXR1cFIsXG4gICAgYjY0RGVjb2RlLFxuICAgIGNvbGxhcHNlUGF0aFxuICB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzdGF0dXNDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctc3RhdHVzXCIpO1xuICBjb25zdCBpbmRpY2F0b3JDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpbmRpY2F0b3JDb250YWluZXIuY2xhc3NMaXN0LnJlbW92ZShcImQtbm9uZVwiKTtcblxuICBsZXQgc3RhdHVzVGV4dCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgc3RhdHVzVGV4dC5jbGFzc0xpc3QgPSBcImV4ZXJjaXNlLWxvYWRpbmctZGV0YWlsc1wiO1xuICBzdGF0dXNUZXh0ID0gc3RhdHVzQ29udGFpbmVyLmFwcGVuZENoaWxkKHN0YXR1c1RleHQpO1xuICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluaXRpYWxpc2VgO1xuXG4gIC8vIEhvaXN0IGluZGljYXRvciBvdXQgZnJvbSBmaW5hbCBzbGlkZSB3aGVuIHJ1bm5pbmcgdW5kZXIgcmV2ZWFsXG4gIGNvbnN0IHJldmVhbFN0YXR1cyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsIC5leGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaWYgKHJldmVhbFN0YXR1cykge1xuICAgIHJldmVhbFN0YXR1cy5yZW1vdmUoKTtcbiAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCA+IC5zbGlkZXNcIikuYXBwZW5kQ2hpbGQocmV2ZWFsU3RhdHVzKTtcbiAgfVxuXG4gIC8vIE1ha2UgYW55IHJldmVhbCBzbGlkZXMgd2l0aCBsaXZlIGNlbGxzIHNjcm9sbGFibGVcbiAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbChcIi5yZXZlYWwgLmV4ZXJjaXNlLWNlbGxcIikuZm9yRWFjaCgoZWwpID0+IHtcbiAgICBlbC5jbG9zZXN0KCdzZWN0aW9uLnNsaWRlJykuY2xhc3NMaXN0LmFkZChcInNjcm9sbGFibGVcIik7XG4gIH0pXG5cbiAgLy8gd2ViUiBzdXBwbGVtZW50YWwgZGF0YSBhbmQgb3B0aW9uc1xuICBjb25zdCBkYXRhQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVwid2Vici1kYXRhXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGRhdGEgPSBKU09OLnBhcnNlKGI2NERlY29kZShkYXRhQ29udGVudCkpO1xuXG4gIC8vIEdyYWIgbGlzdCBvZiByZXNvdXJjZXMgdG8gYmUgZG93bmxvYWRlZFxuICBjb25zdCBmaWxlc0NvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cInZmcy1maWxlXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGZpbGVzID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZmlsZXNDb250ZW50KSk7XG5cbiAgY29uc3Qgc2hhcmVkSW1hZ2VSZWxhdGl2ZVBhdGggPSBcIl9hc3NldHMvbXYzcndjZW8tMS9zaXRlX2xpYnMvcXVhcnRvLWNvbnRyaWIvbGl2ZS1ydW50aW1lL3F0bTI4NS1zaGFyZWQuZGF0YS5nelwiO1xuXG4gIGNvbnN0IGZpbmRTaGFyZWRJbWFnZSA9IGFzeW5jICgpID0+IHtcbiAgICBsZXQgYmFzZSA9IG5ldyBVUkwoXCIuXCIsIGRvY3VtZW50LmJhc2VVUkkpO1xuICAgIGNvbnN0IGF0dGVtcHRlZCA9IFtdO1xuICAgIHdoaWxlIChiYXNlLnBhdGhuYW1lICE9PSBcIi9cIikge1xuICAgICAgY29uc3QgY2FuZGlkYXRlID0gbmV3IFVSTChzaGFyZWRJbWFnZVJlbGF0aXZlUGF0aCwgYmFzZSk7XG4gICAgICBhdHRlbXB0ZWQucHVzaChjYW5kaWRhdGUuaHJlZik7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGZldGNoKGNhbmRpZGF0ZSwgeyBtZXRob2Q6IFwiSEVBRFwiIH0pO1xuICAgICAgaWYgKHJlc3BvbnNlLm9rKSB7XG4gICAgICAgIHJldHVybiB7IG1vdW50cG9pbnQ6IFwiL3FpbWdcIiwgc291cmNlOiBjYW5kaWRhdGUuaHJlZiB9O1xuICAgICAgfVxuICAgICAgYmFzZSA9IG5ldyBVUkwoXCIuLi9cIiwgYmFzZSk7XG4gICAgfVxuICAgIHRocm93IG5ldyBFcnJvcihgQ2FuJ3QgbG9jYXRlIHRoZSBzaGFyZWQgV2ViUiBpbWFnZS4gVHJpZWQ6ICR7YXR0ZW1wdGVkLmpvaW4oXCIsIFwiKX1gKTtcbiAgfTtcblxuICBsZXQgd2ViUlByb21pc2UgPSBudWxsO1xuICBsZXQgcmVzb2x2ZUJvb3Q7XG4gIGxldCByZWplY3RCb290O1xuICBjb25zdCBib290R2F0ZSA9IG5ldyBQcm9taXNlKChyZXNvbHZlLCByZWplY3QpID0+IHtcbiAgICByZXNvbHZlQm9vdCA9IHJlc29sdmU7XG4gICAgcmVqZWN0Qm9vdCA9IHJlamVjdDtcbiAgfSk7XG5cbiAgY29uc3QgZW5zdXJlV2ViUiA9ICgpID0+IHtcbiAgICBpZiAoIXdlYlJQcm9taXNlKSB7XG4gICAgICB3ZWJSUHJvbWlzZSA9IGluaXRMYXp5V2ViUigpLnRoZW4oXG4gICAgICAgICh3ZWJSKSA9PiB7XG4gICAgICAgICAgcmVzb2x2ZUJvb3Qod2ViUik7XG4gICAgICAgICAgcmV0dXJuIHdlYlI7XG4gICAgICAgIH0sXG4gICAgICAgIChlcnJvcikgPT4ge1xuICAgICAgICAgIHdlYlJQcm9taXNlID0gbnVsbDtcbiAgICAgICAgICByZWplY3RCb290KGVycm9yKTtcbiAgICAgICAgICB0aHJvdyBlcnJvcjtcbiAgICAgICAgfSxcbiAgICAgICk7XG4gICAgfVxuICAgIHJldHVybiB3ZWJSUHJvbWlzZTtcbiAgfTtcblxuICAvLyBJbml0aWFsaXNlIHdlYlIgb25seSB3aGVuIGEgY2VsbCBmaXJzdCByZXF1ZXN0cyBleGVjdXRpb24uXG4gIGNvbnN0IGluaXRMYXp5V2ViUiA9IGFzeW5jICgpID0+IHtcbiAgICBjb25zdCBpbWFnZSA9IGF3YWl0IGZpbmRTaGFyZWRJbWFnZSgpO1xuICAgIGNvbnN0IHdlYlIgPSBuZXcgV2ViUihkYXRhLm9wdGlvbnMpO1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgd2ViUmA7XG4gICAgYXdhaXQgd2ViUi5pbml0KCk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYE1vdW50aW5nIHNoYXJlZCBpbWFnZWA7XG4gICAgYXdhaXQgd2ViUi5ldmFsUlZvaWQoYFxuICAgICAgd2Vicjo6bW91bnQobW91bnRwb2ludCA9IG1vdW50cG9pbnQsIHNvdXJjZSA9IHNvdXJjZSlcbiAgICAgIC5saWJQYXRocyhjKG1vdW50cG9pbnQsIC5saWJQYXRocygpKSlcbiAgICBgLCB7IGVudjoge1xuICAgICAgbW91bnRwb2ludDogaW1hZ2UubW91bnRwb2ludCxcbiAgICAgIHNvdXJjZTogaW1hZ2Uuc291cmNlLFxuICAgIH19KTtcblxuICAgIC8vIFRoZSBpbWFnZSByZXBsYWNlcyBwYWNrYWdlIGluc3RhbGxhdGlvbiwgbm90IHBhY2thZ2UgYXR0YWNobWVudC5cbiAgICBhd2FpdCBkYXRhLnBhY2thZ2VzLnBrZ3MubWFwKChwa2cpID0+ICgpID0+IHtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgTG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIHdlYlIuZXZhbFJWb2lkKGBsaWJyYXJ5KHBrZywgY2hhcmFjdGVyLm9ubHkgPSBUUlVFKWAsIHtcbiAgICAgICAgZW52OiB7IHBrZyB9LFxuICAgICAgfSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgY29uc3QgYW5hbHlzaXMgPSBhd2FpdCB3ZWJSLkZTLmFuYWx5emVQYXRoKHBhdGgpO1xuICAgICAgICBpZiAoIWFuYWx5c2lzLmV4aXN0cykge1xuICAgICAgICAgIHRyeSB7XG4gICAgICAgICAgICBhd2FpdCB3ZWJSLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvcjogXCIke2UubWVzc2FnZX1cIi5gKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHJldHVybiBhd2FpdCB3ZWJSLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluc3RhbGxpbmcgd2ViUiBzaGltc2A7XG4gICAgYXdhaXQgd2ViUi5ldmFsUlZvaWQoYHdlYnI6OnNoaW1faW5zdGFsbCgpYCk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFdlYlIgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUih3ZWJSLCBkYXRhKTtcblxuICAgIHN0YXR1c1RleHQucmVtb3ZlKCk7XG4gICAgaWYgKHN0YXR1c0NvbnRhaW5lci5jaGlsZHJlbi5sZW5ndGggPT0gMCkge1xuICAgICAgc3RhdHVzQ29udGFpbmVyLnBhcmVudE5vZGUucmVtb3ZlKCk7XG4gICAgfVxuICAgIHJldHVybiB3ZWJSO1xuICB9O1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCB3ZWJSID0gYXdhaXQgZW5zdXJlV2ViUigpO1xuICAgIGNvbnN0IGV2YWx1YXRvciA9IG5ldyBXZWJSRXZhbHVhdG9yKHdlYlIsIGNvbnRleHQpXG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHJvY2VzcyxcbiAgICBlbnN1cmVXZWJSLFxuICAgIHdlYlJQcm9taXNlOiBib290R2F0ZSxcbiAgICByZW5kZXJlZE9qcyxcbiAgfTtcbn1cbiJ9XX0=</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8yO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzIgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0yLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItMi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8yLCB7fSk7XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTEiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl8xID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTEtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfMSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMSwge30pO1xuIn0seyJjZWxsTmFtZSI6IndlYnItcHJlbHVkZSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IndlYlJPanMgPSB7XG4gIGNvbnN0IHsgV2ViUiwgQ2hhbm5lbFR5cGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWUuV2ViUjtcbiAgY29uc3Qge1xuICAgIFdlYlJFdmFsdWF0b3IsXG4gICAgV2ViUkVudmlyb25tZW50TWFuYWdlcixcbiAgICBzZXR1cFIsXG4gICAgYjY0RGVjb2RlLFxuICAgIGNvbGxhcHNlUGF0aFxuICB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzdGF0dXNDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctc3RhdHVzXCIpO1xuICBjb25zdCBpbmRpY2F0b3JDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpbmRpY2F0b3JDb250YWluZXIuY2xhc3NMaXN0LnJlbW92ZShcImQtbm9uZVwiKTtcblxuICBsZXQgc3RhdHVzVGV4dCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgc3RhdHVzVGV4dC5jbGFzc0xpc3QgPSBcImV4ZXJjaXNlLWxvYWRpbmctZGV0YWlsc1wiO1xuICBzdGF0dXNUZXh0ID0gc3RhdHVzQ29udGFpbmVyLmFwcGVuZENoaWxkKHN0YXR1c1RleHQpO1xuICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluaXRpYWxpc2VgO1xuXG4gIC8vIEhvaXN0IGluZGljYXRvciBvdXQgZnJvbSBmaW5hbCBzbGlkZSB3aGVuIHJ1bm5pbmcgdW5kZXIgcmV2ZWFsXG4gIGNvbnN0IHJldmVhbFN0YXR1cyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsIC5leGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaWYgKHJldmVhbFN0YXR1cykge1xuICAgIHJldmVhbFN0YXR1cy5yZW1vdmUoKTtcbiAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCA+IC5zbGlkZXNcIikuYXBwZW5kQ2hpbGQocmV2ZWFsU3RhdHVzKTtcbiAgfVxuXG4gIC8vIE1ha2UgYW55IHJldmVhbCBzbGlkZXMgd2l0aCBsaXZlIGNlbGxzIHNjcm9sbGFibGVcbiAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbChcIi5yZXZlYWwgLmV4ZXJjaXNlLWNlbGxcIikuZm9yRWFjaCgoZWwpID0+IHtcbiAgICBlbC5jbG9zZXN0KCdzZWN0aW9uLnNsaWRlJykuY2xhc3NMaXN0LmFkZChcInNjcm9sbGFibGVcIik7XG4gIH0pXG5cbiAgLy8gd2ViUiBzdXBwbGVtZW50YWwgZGF0YSBhbmQgb3B0aW9uc1xuICBjb25zdCBkYXRhQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVwid2Vici1kYXRhXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGRhdGEgPSBKU09OLnBhcnNlKGI2NERlY29kZShkYXRhQ29udGVudCkpO1xuXG4gIC8vIEdyYWIgbGlzdCBvZiByZXNvdXJjZXMgdG8gYmUgZG93bmxvYWRlZFxuICBjb25zdCBmaWxlc0NvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cInZmcy1maWxlXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGZpbGVzID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZmlsZXNDb250ZW50KSk7XG5cbiAgY29uc3Qgc2hhcmVkSW1hZ2VSZWxhdGl2ZVBhdGggPSBcInNpdGVfbGlicy9xdWFydG8tY29udHJpYi9saXZlLXJ1bnRpbWUvcXRtMjg1LXNoYXJlZC5kYXRhLmd6XCI7XG5cbiAgY29uc3QgZmluZFNoYXJlZEltYWdlID0gYXN5bmMgKCkgPT4ge1xuICAgIGxldCBiYXNlID0gbmV3IFVSTChcIi5cIiwgZG9jdW1lbnQuYmFzZVVSSSk7XG4gICAgY29uc3QgYXR0ZW1wdGVkID0gW107XG4gICAgd2hpbGUgKGJhc2UucGF0aG5hbWUgIT09IFwiL1wiKSB7XG4gICAgICBjb25zdCBjYW5kaWRhdGUgPSBuZXcgVVJMKHNoYXJlZEltYWdlUmVsYXRpdmVQYXRoLCBiYXNlKTtcbiAgICAgIGF0dGVtcHRlZC5wdXNoKGNhbmRpZGF0ZS5ocmVmKTtcbiAgICAgIGNvbnN0IHJlc3BvbnNlID0gYXdhaXQgZmV0Y2goY2FuZGlkYXRlLCB7IG1ldGhvZDogXCJIRUFEXCIgfSk7XG4gICAgICBpZiAocmVzcG9uc2Uub2spIHtcbiAgICAgICAgcmV0dXJuIHsgbW91bnRwb2ludDogXCIvcWltZ1wiLCBzb3VyY2U6IGNhbmRpZGF0ZS5ocmVmIH07XG4gICAgICB9XG4gICAgICBiYXNlID0gbmV3IFVSTChcIi4uL1wiLCBiYXNlKTtcbiAgICB9XG4gICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBsb2NhdGUgdGhlIHNoYXJlZCBXZWJSIGltYWdlLiBUcmllZDogJHthdHRlbXB0ZWQuam9pbihcIiwgXCIpfWApO1xuICB9O1xuXG4gIGxldCB3ZWJSUHJvbWlzZSA9IG51bGw7XG4gIGxldCByZXNvbHZlQm9vdDtcbiAgbGV0IHJlamVjdEJvb3Q7XG4gIGNvbnN0IGJvb3RHYXRlID0gbmV3IFByb21pc2UoKHJlc29sdmUsIHJlamVjdCkgPT4ge1xuICAgIHJlc29sdmVCb290ID0gcmVzb2x2ZTtcbiAgICByZWplY3RCb290ID0gcmVqZWN0O1xuICB9KTtcblxuICBjb25zdCBlbnN1cmVXZWJSID0gKCkgPT4ge1xuICAgIGlmICghd2ViUlByb21pc2UpIHtcbiAgICAgIHdlYlJQcm9taXNlID0gaW5pdExhenlXZWJSKCkudGhlbihcbiAgICAgICAgKHdlYlIpID0+IHtcbiAgICAgICAgICByZXNvbHZlQm9vdCh3ZWJSKTtcbiAgICAgICAgICByZXR1cm4gd2ViUjtcbiAgICAgICAgfSxcbiAgICAgICAgKGVycm9yKSA9PiB7XG4gICAgICAgICAgd2ViUlByb21pc2UgPSBudWxsO1xuICAgICAgICAgIHJlamVjdEJvb3QoZXJyb3IpO1xuICAgICAgICAgIHRocm93IGVycm9yO1xuICAgICAgICB9LFxuICAgICAgKTtcbiAgICB9XG4gICAgcmV0dXJuIHdlYlJQcm9taXNlO1xuICB9O1xuXG4gIC8vIEluaXRpYWxpc2Ugd2ViUiBvbmx5IHdoZW4gYSBjZWxsIGZpcnN0IHJlcXVlc3RzIGV4ZWN1dGlvbi5cbiAgY29uc3QgaW5pdExhenlXZWJSID0gYXN5bmMgKCkgPT4ge1xuICAgIGNvbnN0IGltYWdlID0gYXdhaXQgZmluZFNoYXJlZEltYWdlKCk7XG4gICAgY29uc3Qgd2ViUiA9IG5ldyBXZWJSKGRhdGEub3B0aW9ucyk7XG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyB3ZWJSYDtcbiAgICBhd2FpdCB3ZWJSLmluaXQoKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgTW91bnRpbmcgc2hhcmVkIGltYWdlYDtcbiAgICBhd2FpdCB3ZWJSLmV2YWxSVm9pZChgXG4gICAgICB3ZWJyOjptb3VudChtb3VudHBvaW50ID0gbW91bnRwb2ludCwgc291cmNlID0gc291cmNlKVxuICAgICAgLmxpYlBhdGhzKGMobW91bnRwb2ludCwgLmxpYlBhdGhzKCkpKVxuICAgIGAsIHsgZW52OiB7XG4gICAgICBtb3VudHBvaW50OiBpbWFnZS5tb3VudHBvaW50LFxuICAgICAgc291cmNlOiBpbWFnZS5zb3VyY2UsXG4gICAgfX0pO1xuXG4gICAgLy8gVGhlIGltYWdlIHJlcGxhY2VzIHBhY2thZ2UgaW5zdGFsbGF0aW9uLCBub3QgcGFja2FnZSBhdHRhY2htZW50LlxuICAgIGF3YWl0IGRhdGEucGFja2FnZXMucGtncy5tYXAoKHBrZykgPT4gKCkgPT4ge1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBMb2FkaW5nIHBhY2thZ2U6ICR7cGtnfWA7XG4gICAgICByZXR1cm4gd2ViUi5ldmFsUlZvaWQoYGxpYnJhcnkocGtnLCBjaGFyYWN0ZXIub25seSA9IFRSVUUpYCwge1xuICAgICAgICBlbnY6IHsgcGtnIH0sXG4gICAgICB9KTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIC8vIERvd25sb2FkIGFuZCBpbnN0YWxsIHJlc291cmNlc1xuICAgIGF3YWl0IGZpbGVzLm1hcCgoZmlsZSkgPT4gYXN5bmMgKCkgPT4ge1xuICAgICAgY29uc3QgbmFtZSA9IGZpbGUuc3Vic3RyaW5nKGZpbGUubGFzdEluZGV4T2YoJy8nKSArIDEpO1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyByZXNvdXJjZTogJHtuYW1lfWA7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGZldGNoKGZpbGUpO1xuICAgICAgaWYgKCFyZXNwb25zZS5vaykge1xuICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYENhbid0IGRvd25sb2FkIFxcYCR7ZmlsZX1cXGAuIEVycm9yICR7cmVzcG9uc2Uuc3RhdHVzfTogXCIke3Jlc3BvbnNlLnN0YXR1c1RleHR9XCIuYCk7XG4gICAgICB9XG4gICAgICBjb25zdCBkYXRhID0gYXdhaXQgcmVzcG9uc2UuYXJyYXlCdWZmZXIoKTtcblxuICAgICAgLy8gU3RvcmUgVVJMcyBpbiB0aGUgY3dkIHdpdGhvdXQgYW55IHN1YmRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGlmIChmaWxlLmluY2x1ZGVzKFwiOi8vXCIpKSB7XG4gICAgICAgIGZpbGUgPSBuYW1lO1xuICAgICAgfVxuXG4gICAgICAvLyBDb2xsYXBzZSBoaWdoZXIgZGlyZWN0b3J5IHN0cnVjdHVyZVxuICAgICAgZmlsZSA9IGNvbGxhcHNlUGF0aChmaWxlKTtcblxuICAgICAgLy8gQ3JlYXRlIGRpcmVjdG9yeSB0cmVlLCBpZ25vcmluZyBcImRpcmVjdG9yeSBleGlzdHNcIiBWRlMgZXJyb3JzXG4gICAgICBjb25zdCBwYXJ0cyA9IGZpbGUuc3BsaXQoJy8nKS5zbGljZSgwLCAtMSk7XG4gICAgICBsZXQgcGF0aCA9ICcnO1xuICAgICAgd2hpbGUgKHBhcnRzLmxlbmd0aCA+IDApIHtcbiAgICAgICAgcGF0aCArPSBwYXJ0cy5zaGlmdCgpICsgJy8nO1xuICAgICAgICBjb25zdCBhbmFseXNpcyA9IGF3YWl0IHdlYlIuRlMuYW5hbHl6ZVBhdGgocGF0aCk7XG4gICAgICAgIGlmICghYW5hbHlzaXMuZXhpc3RzKSB7XG4gICAgICAgICAgdHJ5IHtcbiAgICAgICAgICAgIGF3YWl0IHdlYlIuRlMubWtkaXIocGF0aCk7XG4gICAgICAgICAgfSBjYXRjaCAoZSkge1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBGaWxlc3lzdGVtIEVycm9yOiBcIiR7ZS5tZXNzYWdlfVwiLmApO1xuICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgfVxuXG4gICAgICAvLyBXcml0ZSB0aGlzIGZpbGUgdG8gdGhlIFZGU1xuICAgICAgcmV0dXJuIGF3YWl0IHdlYlIuRlMud3JpdGVGaWxlKGZpbGUsIG5ldyBVaW50OEFycmF5KGRhdGEpKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5zdGFsbGluZyB3ZWJSIHNoaW1zYDtcbiAgICBhd2FpdCB3ZWJSLmV2YWxSVm9pZChgd2Vicjo6c2hpbV9pbnN0YWxsKClgKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgV2ViUiBlbnZpcm9ubWVudCBzZXR1cGA7XG4gICAgYXdhaXQgc2V0dXBSKHdlYlIsIGRhdGEpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHdlYlI7XG4gIH07XG5cbiAgLy8gS2VlcCB0cmFjayBvZiBpbml0aWFsIE9KUyBibG9jayByZW5kZXJcbiAgY29uc3QgcmVuZGVyZWRPanMgPSB7fTtcblxuICBjb25zdCBwcm9jZXNzID0gYXN5bmMgKGNvbnRleHQsIGlucHV0cykgPT4ge1xuICAgIGNvbnN0IHdlYlIgPSBhd2FpdCBlbnN1cmVXZWJSKCk7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFdlYlJFdmFsdWF0b3Iod2ViUiwgY29udGV4dClcbiAgICBhd2FpdCBldmFsdWF0b3IucHJvY2VzcyhpbnB1dHMpO1xuICAgIHJldHVybiBldmFsdWF0b3IuY29udGFpbmVyO1xuICB9XG5cbiAgcmV0dXJuIHtcbiAgICBwcm9jZXNzLFxuICAgIGVuc3VyZVdlYlIsXG4gICAgd2ViUlByb21pc2U6IGJvb3RHYXRlLFxuICAgIHJlbmRlcmVkT2pzLFxuICB9O1xufVxuIn1dfQ==
+</script>
 <div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
 <div id="exercise-loading-status" class="d-flex gap-2">
 
@@ -2024,4 +2114,1617 @@ window._ojs.runtime.interpretFromScriptTags();
 
 
 
-</body></html>
+<!--tlda-publication-body-->
+<script>
+if (new URLSearchParams(window.location.search).has("_tldaShape")) {
+(function() {
+  // Read shape ID from query string
+  var params = new URLSearchParams(window.location.search);
+  var shapeId = params.get('_tldaShape') || '';
+  var tldaWheelOwner = 'page';
+  var tldaWheelViewportId = '';
+
+  // The text an agent reads for a block, for a widened (chapter view) request only. KaTeX puts
+  // every formula in the DOM three times -- MathML text, the TeX source in an annotation, and a
+  // hidden visual copy -- so textContent runs them together ("E[X]=..x..." beside the TeX beside
+  // "E[X]=x...", and an inline t reads "ttt"). A formula is read once, as its TeX source: $...$
+  // inline, $$...$$ when it is display math. Everything else is its text, as before.
+  function tldaReadableBlockText(el) {
+    var out = '';
+    var kids = el.childNodes || [];
+    for (var kidIndex = 0; kidIndex < kids.length; kidIndex++) {
+      var kid = kids[kidIndex];
+      if (kid.nodeType === 3) { out += kid.textContent; continue; }
+      if (kid.nodeType !== 1) continue;
+      if (kid.classList && kid.classList.contains('katex') && kid.querySelector) {
+        var annotation = kid.querySelector('annotation[encoding="application/x-tex"]');
+        var tex = annotation ? (annotation.textContent || '').trim() : '';
+        if (tex) {
+          var isDisplay = !!(kid.closest && kid.closest('.katex-display, .math.display'));
+          out += isDisplay ? '$$' + tex + '$$' : '$' + tex + '$';
+          continue;
+        }
+      }
+      out += tldaReadableBlockText(kid);
+    }
+    return out;
+  }
+
+  // Read once from the page by the capture driver, which checks the headings measured here against
+  // the page's own headings by text: both sides must read a heading with the same reader, or a heading
+  // that holds a formula ("Why Must X Be Nonnegative?") makes the two lists differ and the view refuse.
+  window.__tldaReadableBlockText = tldaReadableBlockText;
+
+  // The title of the callout that holds a closed (collapsed) block, without the screen-reader
+  // word Quarto puts in front of it ("Note", "Warning"). Empty when the callout has no title.
+  function tldaCalloutTitle(host) {
+    var callout = host.closest ? host.closest('.callout') : null;
+    var titleEl = callout && callout.querySelector ? callout.querySelector('.callout-title-container') : null;
+    if (!titleEl) return '';
+    var title = '';
+    var kids = titleEl.childNodes || [];
+    for (var kidIndex = 0; kidIndex < kids.length; kidIndex++) {
+      var kid = kids[kidIndex];
+      if (kid.nodeType === 1 && kid.classList && kid.classList.contains('screen-reader-only')) continue;
+      title += kid.nodeType === 1 ? tldaReadableBlockText({ childNodes: [kid] }) : (kid.nodeType === 3 ? kid.textContent : '');
+    }
+    return title.replace(/\s+/g, ' ').trim();
+  }
+
+  function tldaMeasureRenderedLines(candidatesSelector, includePictureLayout, includeLineBreaks) {
+    // In a Reveal deck after a scroll-view goto, section.present stays on the
+    // title slide while the address moves; getCurrentSlide() reads the
+    // addressed slide. Measure that first (the hidden!==root guard below keeps
+    // its slide-level aria-hidden text measurable); present, then main/body,
+    // preserve every non-deck path exactly.
+    var addressed = null;
+    try {
+      if (typeof Reveal !== 'undefined' && Reveal.getCurrentSlide) {
+        var slide = Reveal.getCurrentSlide();
+        if (slide && slide.tagName === 'SECTION') addressed = slide;
+      }
+    } catch (e) { /* pre-init Reveal: fall through to present */ }
+    var root = addressed ||
+      document.querySelector('.reveal .slides section.present') ||
+      document.querySelector('main') || document.body;
+    var blocks = [];
+    // The default candidate set is the prose skeleton, and it is what every
+    // deck walk gets: the walk passes no selector, so deck output is the same
+    // blocks in the same order as before this parameter existed. A caller may
+    // widen the set per request -- the chapter view asks for captions, tables
+    // and display math alongside prose -- and every match comes back in the
+    // one block shape below. The parameter is request-local; no caller reads
+    // or writes any state outside its own call.
+    var candidates = root.querySelectorAll(candidatesSelector || 'h1, h2, h3, h4, li, p');
+    var widenedRequest = typeof candidatesSelector === 'string' && candidatesSelector !== '';
+    var pictureLayoutRequest = includePictureLayout === true;
+    function isVisibleLayoutElement(element) {
+      for (var current = element; current; current = current.parentElement) {
+        var currentStyle = getComputedStyle(current);
+        var opacity = parseFloat(currentStyle.opacity);
+        if (currentStyle.display === 'none' || currentStyle.visibility === 'hidden' || currentStyle.visibility === 'collapse' || currentStyle.contentVisibility === 'hidden' || opacity === 0) return false;
+        if (current === document.documentElement) break;
+      }
+      return true;
+    }
+    function visibleTextLayoutRects() {
+      var rects = [];
+      var mathSelector = '.katex-display, .katex, .math.display, .MathJax, .MathJax_Display, mjx-container, math';
+      var mathWithVisibleText = new Set();
+      var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      var textNode;
+      while ((textNode = walker.nextNode())) {
+        var text = textNode.textContent || '';
+        var owner = textNode.parentElement;
+        // SVG is measured as a picture; its internal labels belong to that
+        // image. Text siblings in an SVG-containing block still count.
+        if (!/\S/.test(text) || !owner || (owner.closest && owner.closest('svg')) || !isVisibleLayoutElement(owner)) continue;
+        var range = document.createRange();
+        range.setStart(textNode, 0);
+        range.setEnd(textNode, text.length);
+        var visibleRects = Array.from(range.getClientRects()).filter(function(rect) {
+          return rect.width > 1 && rect.height > 1 && Number.isFinite(rect.top) && Number.isFinite(rect.bottom);
+        });
+        visibleRects.forEach(function(rect) {
+          rects.push({ top: rect.top, bottom: rect.bottom });
+        });
+        if (visibleRects.length) {
+          for (var current = owner; current; current = current.parentElement) {
+            if (current.matches && current.matches(mathSelector)) mathWithVisibleText.add(current);
+            if (current === root) break;
+          }
+        }
+      }
+      // MathJax's SVG output can have no text node with a rendered range.
+      // Its visible container box is the text bound in that case. Prefer one
+      // outer math box and skip math SVGs when pictures are measured below.
+      var mathNodes = root.querySelectorAll(mathSelector);
+      for (var mathIndex = 0; mathIndex < mathNodes.length; mathIndex++) {
+        var math = mathNodes[mathIndex];
+        if (!isVisibleLayoutElement(math) || mathWithVisibleText.has(math)) continue;
+        var outerMath = math.parentElement && math.parentElement.closest ? math.parentElement.closest(mathSelector) : null;
+        if (outerMath && outerMath !== root) continue;
+        var mathRect = math.getBoundingClientRect ? math.getBoundingClientRect() : null;
+        if (mathRect && mathRect.width > 1 && mathRect.height > 1 && Number.isFinite(mathRect.top) && Number.isFinite(mathRect.bottom)) {
+          rects.push({ top: mathRect.top, bottom: mathRect.bottom });
+        }
+      }
+      return rects;
+    }
+    for (var blockIndex = 0; blockIndex < candidates.length; blockIndex++) {
+      var block = candidates[blockIndex];
+      if (block.closest('svg') || block.querySelector('svg')) continue;
+      // Display math written inside a paragraph or list item is part of that block's text now;
+      // measuring it again as its own block would read the same equation twice.
+      if (widenedRequest && block.matches && block.matches('.math.display') && block.parentElement && block.parentElement.closest(candidatesSelector)) continue;
+      var style = getComputedStyle(block);
+      if (style.display === 'none' || style.visibility === 'hidden') continue;
+      var words = [];
+      var walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+      var node;
+      while ((node = walker.nextNode())) {
+        var hidden = node.parentElement ? node.parentElement.closest('[aria-hidden="true"]') : null;
+        if (hidden && hidden !== root) continue;
+        // Chapter views use readable block text, not wrapped word lines. One
+        // Range per text node establishes the same visibility without paying
+        // one layout query per word. Deck/export callers keep wrapped lines.
+        var pattern = includeLineBreaks === false ? /\S[\s\S]*/g : /\S+/g;
+        var match;
+        while ((match = pattern.exec(node.textContent || ''))) {
+          var range = document.createRange();
+          range.setStart(node, match.index);
+          range.setEnd(node, match.index + match[0].length);
+          var rects = Array.from(range.getClientRects()).filter(function(rect) {
+            return rect.width > 1 && rect.height > 1;
+          });
+          if (!rects.length) continue;
+          words.push({
+            word: match[0],
+            center: rects[0].top + rects[0].height / 2,
+            height: rects[0].height,
+          });
+        }
+      }
+      var lines = [];
+      words.forEach(function(word) {
+        var line = lines.find(function(candidate) {
+          return Math.abs(candidate.center - word.center) < word.height * 0.5;
+        });
+        if (!line) {
+          line = { center: word.center, words: [] };
+          lines.push(line);
+        }
+        line.words.push(word.word);
+      });
+      // A block inside a closed (collapsed) callout has no layout box, so it has no rendered lines
+      // and used to be dropped, though a reader can open the callout. A widened request keeps it,
+      // marked with the callout it is closed in.
+      var closedCallout = null;
+      if (widenedRequest && !lines.length && block.closest) {
+        var closedHost = block.closest('.callout-collapse');
+        if (closedHost && getComputedStyle(closedHost).display === 'none') closedCallout = closedHost;
+      }
+      if (lines.length || closedCallout) {
+        // A widened request (the chapter view passes a candidate selector;
+        // the deck walk never does) gets two additions on the block shape:
+        //   - tables join cells with " | " and rows with " / ", because a
+        //     table's textContent concatenates cells with no separator and
+        //     "AB12" is not a readable row (tables are never matched under
+        //     the default set, so this can only fire for a widened request);
+        //   - sourceLine (from the build's data-source-line stamp; null when
+        //     unstamped, absence stated rather than guessed) and rect
+        //     (viewport coordinates at measurement time, for region math on
+        //     an unscrolled page).
+        // A default request takes the exact object it always took: no new
+        // keys, so deck measurement output is byte-identical field for
+        // field, not merely compatible.
+        var viewRequest = typeof candidatesSelector === 'string' && candidatesSelector !== '';
+        var blockText = (viewRequest ? tldaReadableBlockText(block) : (block.textContent || '')).replace(/\s+/g, ' ').trim();
+        if (viewRequest && block.tagName === 'TABLE' && typeof block.querySelectorAll === 'function') {
+          var rows = [];
+          var trs = block.querySelectorAll('tr');
+          for (var rowIndex = 0; rowIndex < trs.length; rowIndex++) {
+            var cells = [];
+            var tds = trs[rowIndex].querySelectorAll('th, td');
+            for (var cellIndex = 0; cellIndex < tds.length; cellIndex++) {
+              cells.push(tldaReadableBlockText(tds[cellIndex]).replace(/\s+/g, ' ').trim());
+            }
+            rows.push(cells.join(' | '));
+          }
+          if (rows.length) blockText = rows.join(' / ');
+        }
+        var entry = {
+          tag: block.tagName.toLowerCase(),
+          id: block.id || null,
+          text: blockText,
+          lines: lines.map(function(line) { return line.words.join(' '); }),
+        };
+        if (viewRequest) {
+          var blockRect = block.getBoundingClientRect ? block.getBoundingClientRect() : null;
+          var sourceLineAttr = block.getAttribute ? block.getAttribute('data-source-line') : null;
+          var sourceLineNum = sourceLineAttr == null ? null : Number(sourceLineAttr);
+          entry.sourceLine = Number.isInteger(sourceLineNum) ? sourceLineNum : null;
+          entry.sourceFile = block.getAttribute ? block.getAttribute('data-source-file') : null;
+          var endLineAttr = block.getAttribute ? block.getAttribute('data-source-end-line') : null;
+          entry.sourceEndLine = endLineAttr == null ? entry.sourceLine : Number(endLineAttr);
+          entry.domIndex = blockIndex;
+          entry.rect = blockRect && !closedCallout ? { x: blockRect.left, y: blockRect.top, w: blockRect.width, h: blockRect.height } : null;
+          if (closedCallout) {
+            entry.closedCallout = { id: closedCallout.id || null, title: tldaCalloutTitle(closedCallout) };
+          }
+        }
+        blocks.push(entry);
+      }
+    }
+    var measurement = { url: window.location.href, title: document.title, blocks: blocks };
+    if (pictureLayoutRequest) {
+      measurement.visibleTextRects = visibleTextLayoutRects();
+      var pictures = [];
+      var pictureNodes = root.querySelectorAll('img, svg, canvas');
+      for (var pictureIndex = 0; pictureIndex < pictureNodes.length; pictureIndex++) {
+        var picture = pictureNodes[pictureIndex];
+        var tag = (picture.tagName || '').toLowerCase();
+        // An embedded SVG (including KaTeX/MathJax glyphs) is part of its
+        // enclosing picture or equation, not a separate picture box.
+        if (picture.parentElement && picture.parentElement.closest && picture.parentElement.closest('svg')) continue;
+        if (tag === 'svg' && picture.closest && picture.closest('.katex, .math, .MathJax, .MathJax_Display, mjx-container')) continue;
+        if (!isVisibleLayoutElement(picture)) continue;
+        var pictureRect = picture.getBoundingClientRect ? picture.getBoundingClientRect() : null;
+        if (!pictureRect || pictureRect.width < 2 || pictureRect.height < 2) continue;
+        pictures.push({
+          tag: tag,
+          id: picture.id || null,
+          alt: tag === 'img' && picture.getAttribute ? picture.getAttribute('alt') : null,
+          layoutRect: { top: pictureRect.top, bottom: pictureRect.bottom },
+        });
+      }
+      measurement.pictures = pictures;
+    }
+    return measurement;
+  }
+
+  window.addEventListener('message', function(event) {
+    if (event.data?.type !== 'tlda-measure-rendered-lines') return;
+    var requestId = event.data.requestId || null;
+    Promise.resolve(document.fonts?.ready).then(function() {
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          var target = event.source || window.parent;
+          target.postMessage({
+            type: 'tlda-rendered-lines',
+            shapeId: shapeId,
+            requestId: requestId,
+            measurement: tldaMeasureRenderedLines(
+              typeof event.data.candidates === 'string' && event.data.candidates
+                ? event.data.candidates
+                : null,
+              event.data.includePictureLayout === true,
+              event.data.includeLineBreaks !== false,
+            ),
+          }, '*');
+        });
+      });
+    });
+  });
+
+  // Figure serialization for the client-side linearizer. The app and the
+  // deck often live on different origins (cross-origin asset server is the
+  // shipped topology), so the parent cannot read pixels itself: the frame
+  // serializes its own current-slide figures — static SVGs through canvas
+  // to PNG, live canvases via toDataURL — and posts the data back. One
+  // figure's failure is a note on that figure, never a failed roundtrip.
+  function tldaRasterSvg(svg, width, height) {
+    return new Promise(function(resolve, reject) {
+      try {
+        var clone = svg.cloneNode(true);
+        clone.setAttribute('width', String(width));
+        clone.setAttribute('height', String(height));
+        var source = new XMLSerializer().serializeToString(clone);
+        var url = URL.createObjectURL(new Blob([source], { type: 'image/svg+xml;charset=utf-8' }));
+        var image = new Image();
+        image.onload = function() {
+          try {
+            var canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext('2d');
+            if (!ctx) { URL.revokeObjectURL(url); reject(new Error('no 2d context')); return; }
+            ctx.drawImage(image, 0, 0, width, height);
+            var png = canvas.toDataURL('image/png');
+            URL.revokeObjectURL(url);
+            resolve(png);
+          } catch (e) { URL.revokeObjectURL(url); reject(e); }
+        };
+        image.onerror = function() { URL.revokeObjectURL(url); reject(new Error('SVG raster failed to load')); };
+        image.src = url;
+      } catch (e) { reject(e); }
+    });
+  }
+
+  function tldaSerializeFigures() {
+    var doc = document;
+    // Same addressing as measurement: after a scroll-view goto,
+    // section.present stays on the title slide while the address moves;
+    // getCurrentSlide() reads the addressed slide.
+    var addressed = null;
+    try {
+      if (typeof Reveal !== 'undefined' && Reveal.getCurrentSlide) {
+        var current = Reveal.getCurrentSlide();
+        if (current && current.tagName === 'SECTION') addressed = current;
+      }
+    } catch (e) { /* pre-init Reveal: fall through to present */ }
+    var slide = addressed
+      || doc.querySelector('.reveal .slides section.present')
+      || doc.querySelector('.reveal .slides section');
+    var found = slide ? slide.querySelectorAll('svg, canvas') : [];
+    var nodes = Array.prototype.slice.call(found);
+    var figures = [];
+    var chain = Promise.resolve();
+    nodes.forEach(function(node) {
+      chain = chain.then(function() {
+        var tag = (node.tagName || '').toLowerCase();
+        if (tag === 'svg') {
+          var rect = node.getBoundingClientRect();
+          var width = Math.max(1, Math.round(rect.width));
+          var height = Math.max(1, Math.round(rect.height));
+          if (rect.width < 2 || rect.height < 2) return null;
+          return tldaRasterSvg(node, width, height).then(function(png) {
+            figures.push({ kind: 'svg', png: png, width: width, height: height, note: null });
+          }, function(e) {
+            figures.push({ kind: 'svg', png: null, width: width, height: height,
+              note: 'SVG did not raster: ' + (e && e.message ? e.message : String(e)) });
+          });
+        }
+        if (tag === 'canvas') {
+          if (node.width < 2 || node.height < 2) return null;
+          try {
+            figures.push({ kind: 'canvas', png: node.toDataURL('image/png'),
+              width: node.width, height: node.height, note: null });
+          } catch (e) {
+            figures.push({ kind: 'canvas', png: null, width: node.width, height: node.height,
+              note: 'canvas unreadable (tainted or empty): ' + (e && e.message ? e.message : String(e)) });
+          }
+          return null;
+        }
+        return null;
+      });
+    });
+    return chain.then(function() { return figures; });
+  }
+
+  window.addEventListener('message', function(event) {
+    if (event.data?.type !== 'tlda-serialize-figures') return;
+    var requestId = event.data.requestId || null;
+    var target = event.source || window.parent;
+    tldaSerializeFigures().then(function(figures) {
+      target.postMessage({
+        type: 'tlda-figures',
+        shapeId: shapeId,
+        requestId: requestId,
+        figures: figures,
+      }, '*');
+    }, function(e) {
+      target.postMessage({
+        type: 'tlda-figures',
+        shapeId: shapeId,
+        requestId: requestId,
+        figures: [],
+        error: e && e.message ? e.message : String(e),
+      }, '*');
+    });
+  });
+
+
+  // Keep the static content layout, including its named grid tracks. The app
+  // supplies navigation around the embedded chapter, so Quarto's duplicate
+  // book/sidebar TOCs and their mobile toggle stay hidden inside the frame.
+  // Hide with CSS rather than removing nodes Quarto's own scripts reference.
+  function hideEmbeddedTocs() {
+    if (window.parent === window) return;
+    var style = document.createElement('style');
+    style.textContent = "#quarto-sidebar, #quarto-sidebar-glass, #quarto-sidebar-toc-left, #TOC, #quarto-header .quarto-secondary-nav { display: none !important; }";
+    document.head.appendChild(style);
+  }
+  // Let the canvas show through: the document's own background goes
+  // transparent so the page paints the fog canvas instead of Quarto white.
+  // The deck bridge already does the same for slides; this is the chapter
+  // half the parity commit dropped, and the pages went white without it.
+  function letCanvasShowThrough() {
+    document.body.style.background = 'transparent';
+    document.documentElement.style.background = 'transparent';
+  }
+  function installCanvasListeners() {
+    // Dark mode: toggle via postMessage from parent, only change backgrounds
+    // and default text color — leave semantic colors (plots, colored text) alone
+    window.addEventListener('message', function(e) {
+      if (e.data?.type === 'tlda-dark-mode') {
+        document.documentElement.classList.toggle('tlda-dark', !!e.data.dark);
+      }
+      if (e.data?.type === 'tlda-wheel-owner') {
+        tldaWheelOwner = e.data.owner === 'clip' ? 'clip' : 'page';
+        tldaWheelViewportId = tldaWheelOwner === 'clip' ? (e.data.viewportId || '') : '';
+      }
+      if (e.data?.type === 'tlda-scroll-to-id') {
+        var el = document.getElementById(e.data.id);
+        if (el) {
+          // Report element position back to parent for camera scrolling
+          var rect = el.getBoundingClientRect();
+          var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+          window.parent.postMessage({
+            type: 'tlda-element-position',
+            shapeId: shapeId,
+            id: e.data.id,
+            offsetTop: rect.top + scrollY,
+            offsetLeft: rect.left,
+            height: rect.height,
+            docWidth: document.documentElement.clientWidth,
+          }, '*');
+          // Flash the element briefly
+          el.style.outline = '2px solid rgba(255, 100, 100, 0.6)';
+          el.style.outlineOffset = '4px';
+          setTimeout(function() { el.style.outline = ''; el.style.outlineOffset = ''; }, 2000);
+        }
+      }
+    });
+    // Prevent iframe from capturing wheel/touch scroll events (Safari ignores
+    // pointer-events:none on iframes for scroll gestures).
+    // Forward to parent so TLDraw still scrolls when text-select tool is active.
+    function tldaAllowsInternalScroll(target) {
+      return !!(target && target.closest && target.closest('.tlda-scroll'));
+    }
+    document.addEventListener('wheel', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      e.preventDefault();
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: tldaWheelOwner === 'clip' ? 'tlda-clip-wheel' : 'tlda-wheel',
+          shapeId: shapeId,
+          viewportId: tldaWheelViewportId,
+          deltaX: e.deltaX, deltaY: e.deltaY, deltaMode: e.deltaMode,
+          clientX: e.clientX, clientY: e.clientY,
+          ctrlKey: e.ctrlKey, metaKey: e.metaKey,
+        }, '*');
+      }
+    }, { passive: false });
+    // The mouse side buttons (3 and 4) toggle pan mode in the parent window. A press
+    // over a page that takes pointer events lands HERE, in this document, where the
+    // parent's listener cannot see it, so it is forwarded like the wheel above. The
+    // matching mouseup and auxclick are claimed so the browser does not navigate
+    // history on them.
+    function tldaIsSideButton(e) { return e.button === 3 || e.button === 4; }
+    document.addEventListener('mousedown', function(e) {
+      if (!tldaIsSideButton(e)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'tlda-pan-toggle',
+          shapeId: shapeId,
+          clientX: e.clientX, clientY: e.clientY,
+        }, '*');
+      }
+    }, true);
+    ['mouseup', 'auxclick'].forEach(function(name) {
+      document.addEventListener(name, function(e) {
+        if (!tldaIsSideButton(e)) return;
+        e.preventDefault();
+        e.stopPropagation();
+      }, true);
+    });
+    var tldaLastTouch = null;
+    function tldaTouchCenter(touches) {
+      var x = 0, y = 0;
+      for (var i = 0; i < touches.length; i++) {
+        x += touches[i].clientX;
+        y += touches[i].clientY;
+      }
+      return { x: x / touches.length, y: y / touches.length };
+    }
+    document.addEventListener('touchstart', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) {
+        tldaLastTouch = null;
+        return;
+      }
+      if (!e.touches || e.touches.length < 2) {
+        tldaLastTouch = null;
+        return;
+      }
+      tldaLastTouch = tldaTouchCenter(e.touches);
+      tldaPostTouches(e);
+    }, { passive: true });
+    // Send the touches themselves, not a scroll derived from them.
+    //
+    // This used to post the centroid delta as a WHEEL event, and that was the
+    // judder: a wheel carries translation and nothing else, so a pinch inside a
+    // page could only ever pan. Skip: "the slide seemed to refuse pinch
+    // gestures, and they comply with drag gestures but they vibrate while you
+    // do them." Pan arrived by one mechanism with its own timing while the
+    // scale it implied was thrown away.
+    //
+    // The parent already converts this frame's CSS pixels to screen pixels for
+    // the wheel path, and it owns the same pan/zoom classifier the canvas uses.
+    // So hand it the raw points and let one classifier read them, wherever the
+    // fingers happen to be.
+    function tldaPostTouches(e) {
+      if (window.parent === window) return;
+      var pts = [];
+      for (var i = 0; i < e.touches.length; i++) {
+        pts.push({ id: e.touches[i].identifier, x: e.touches[i].clientX, y: e.touches[i].clientY });
+      }
+      window.parent.postMessage({
+        type: 'tlda-touches',
+        shapeId: shapeId,
+        viewportId: tldaWheelViewportId,
+        points: pts,
+      }, '*');
+    }
+    document.addEventListener('touchmove', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      if (!e.touches || e.touches.length < 2) return;
+      e.preventDefault();
+      tldaPostTouches(e);
+    }, { passive: false });
+    document.addEventListener('touchend', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+    document.addEventListener('touchcancel', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+
+    function tldaElementFromNode(node) {
+      if (!node) return null;
+      return node.nodeType === 1 ? node : node.parentElement;
+    }
+    function tldaSelectionLine(range) {
+      var node = tldaElementFromNode(range.commonAncestorContainer) || tldaElementFromNode(range.startContainer);
+      while (node && node !== document.body && node !== document.documentElement) {
+        if (node.id) {
+          var m = String(node.id).match(/^line-(\d+)$/);
+          if (m) return parseInt(m[1], 10);
+        }
+        node = node.parentElement;
+      }
+      return null;
+    }
+    function tldaPostTextSelection() {
+      if (window.parent === window) return;
+      var sel = window.getSelection && window.getSelection();
+      var text = sel ? String(sel.toString() || '').trim() : '';
+      if (!sel || sel.rangeCount === 0 || !text) return;
+      var range = sel.getRangeAt(0);
+      var rect = range.getBoundingClientRect();
+      if (!rect || (rect.width <= 0 && rect.height <= 0)) return;
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      window.parent.postMessage({
+        type: 'tlda-text-selection',
+        shapeId: shapeId,
+        text: text,
+        line: tldaSelectionLine(range),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      }, '*');
+    }
+    document.addEventListener('selectionchange', function() {
+      setTimeout(tldaPostTextSelection, 0);
+    });
+    document.addEventListener('pointerup', tldaPostTextSelection, true);
+
+    function docLinkPayload(el) {
+      var rect = el.getBoundingClientRect();
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      return {
+        type: '',
+        shapeId: shapeId,
+        refType: el.dataset.refType || '',
+        refValue: el.dataset.refValue || '',
+        refLabel: el.dataset.refLabel || '',
+        refFile: el.dataset.refFile || '',
+        refLine: el.dataset.refLine || '',
+        text: (el.textContent || '').trim(),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      };
+    }
+
+    document.addEventListener('mouseover', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link || link.classList.contains('doc-link-unresolved')) return;
+      var payload = docLinkPayload(link);
+      payload.type = 'tlda-doc-link-hover';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+    }, true);
+
+    document.addEventListener('mouseout', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link) return;
+      var related = e.relatedTarget;
+      if (related && related.closest && related.closest('.doc-link') === link) return;
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'tlda-doc-link-out', shapeId: shapeId }, '*');
+      }
+    }, true);
+
+    function postDocLinkClick(e, docLink) {
+      if (!docLink || docLink.classList.contains('doc-link-unresolved')) return false;
+      e.preventDefault();
+      var payload = docLinkPayload(docLink);
+      payload.type = 'tlda-doc-link-click';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+      return true;
+    }
+
+    document.addEventListener('pointerdown', function(e) {
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'tlda-pointerdown', shapeId: shapeId }, '*');
+      }
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      postDocLinkClick(e, docLink);
+    }, true);
+
+    // Tab-pane state sync across same-document iframe instances.
+    //
+    // The docview renders its OWN iframe of the target document (measured: two
+    // iframes serve chapter-social-pressure-experiment.html with the same
+    // _tldaShape after a peek). A pane opened by a link click exists only in
+    // the clicked instance, so the docview's copy keeps default tabs and shows
+    // the wrong figure in the right slot (measured: Figure 3.1 in the Figure
+    // 3.4 slot). Instances sync open panes over a BroadcastChannel keyed by
+    // document path: the click path broadcasts to live instances, and the
+    // parent posts tlda-activate-pane to the target's iframes as load
+    // signals arrive so late joiners converge too.
+    var tabSyncChannel = null;
+    try {
+      tabSyncChannel = ('BroadcastChannel' in window) ? new BroadcastChannel('tlda-tab-panes') : null;
+    } catch (bcErr) { tabSyncChannel = null; }
+    function tabSyncDocKey() {
+      try { return window.location.pathname; } catch (e) { return ''; }
+    }
+    function broadcastOpenPane(paneId) {
+      if (!tabSyncChannel || !paneId) return;
+      // Best-effort cross-instance sync: if the broadcast fails the clicked
+      // instance still navigates correctly and only the mirror stays stale.
+      try { tabSyncChannel.postMessage({ t: 'tlda-tab-open', doc: tabSyncDocKey(), pane: paneId }); } catch (e) { /* sync is advisory */ }
+    }
+    // Open the tab pane holding an anchor, through its tab, so a link to a
+    // figure in a closed pane lands on the figure and not on whichever pane
+    // happens to be open (measured: the book keeps one letter-figure per pane
+    // with only the first open; clicks landed on the slot showing Figure 3.1
+    // whatever the link named). Manipulates Bootstrap tab classes directly
+    // rather than clicking the tab, so no second navigation is posted.
+    function openTabPaneById(paneId, broadcast) {
+      if (!paneId || !document.getElementById) return false;
+      var pane = document.getElementById(paneId);
+      if (!pane || !pane.classList || !pane.classList.contains('tab-pane')) return false;
+      if (pane.classList.contains('active')) return false;
+      var tab = null;
+      if (pane.id) {
+        tab = document.querySelector('[role="tab"][aria-controls="' + pane.id + '"]');
+        if (!tab) {
+          tab = document.querySelector(
+            'a[data-bs-toggle="tab"][href="#' + pane.id + '"],' +
+            'button[data-bs-toggle="tab"][data-bs-target="#' + pane.id + '"]'
+          );
+        }
+      }
+      // Scope to the whole tabset: the tablist is a sibling of .tab-content,
+      // so scoping to .tab-content clears the panes but leaves the old tab
+      // button marked selected alongside the new one (measured: Civic Duty
+      // and Neighbors both aria-selected after a Figure 3.4 click).
+      var tabset = pane.closest('.panel-tabset') || pane.parentElement;
+      if (tabset) {
+        tabset.querySelectorAll('.tab-pane.active').forEach(function(p) {
+          p.classList.remove('active');
+          p.classList.remove('show');
+        });
+        tabset.querySelectorAll('[role="tab"][aria-selected="true"]').forEach(function(t) {
+          t.setAttribute('aria-selected', 'false');
+          t.classList.remove('active');
+        });
+      }
+      pane.classList.add('active');
+      pane.classList.add('show');
+      if (tab) {
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+      }
+      // A remote apply must not rebroadcast: the sender already has it open,
+      // and an echo would ping-pong between instances.
+      if (broadcast) broadcastOpenPane(pane.id);
+      return true;
+    }
+    function activateTabPaneForAnchor(anchorId) {
+      if (!anchorId || !document.getElementById) return false;
+      var el = document.getElementById(anchorId);
+      // Quarto xref tooltips clone the target (id included) into the link's
+      // vicinity on click, ahead of the original in document order — so
+      // getElementById returns the clone (measured: an IMG in the link's LI
+      // while the real figure sits in its tab pane) and the pane lookup
+      // below finds nothing. Walk every copy to the one outside tooltips.
+      if (el && el.closest && el.closest('[data-tippy-root], .tippy-box, .tippy-content')) {
+        var copies = document.querySelectorAll('[id]');
+        el = null;
+        for (var i = 0; i < copies.length; i++) {
+          if (copies[i].id === anchorId
+            && !(copies[i].closest && copies[i].closest('[data-tippy-root], .tippy-box, .tippy-content'))) {
+            el = copies[i];
+            break;
+          }
+        }
+      }
+      var pane = el && el.closest ? el.closest('.tab-pane:not(.active)') : null;
+      if (!pane || !pane.id) return false;
+      return openTabPaneById(pane.id, true);
+    }
+    // Folds (callouts, code folds, <details>) and tabs are mirrored the same
+    // way, so every frame showing this document shows it the same: the
+    // canvas and a doc-view panel are two cameras on one page, not two pages
+    // that drift apart. A change made here is sent; a change applied from
+    // another frame is not sent again (remoteExpect), so nothing echoes.
+    var remoteExpect = {};
+    function foldKeyOf(el) {
+      if (!el) return null;
+      if (el.tagName === 'DETAILS') {
+        if (el.id) return '#' + el.id;
+        return 'details:' + Array.prototype.indexOf.call(document.querySelectorAll('details'), el);
+      }
+      return el.id ? '#' + el.id : null;
+    }
+    function foldElement(key) {
+      if (!key) return null;
+      if (key.indexOf('details:') === 0) return document.querySelectorAll('details')[Number(key.slice(8))] || null;
+      return document.getElementById(key.slice(1));
+    }
+    function foldIsOpen(el) {
+      return el.tagName === 'DETAILS' ? !!el.open : el.classList.contains('show');
+    }
+    function sendFold(el, open) {
+      var key = foldKeyOf(el);
+      if (!key || !tabSyncChannel) return;
+      if (remoteExpect[key] === open) { delete remoteExpect[key]; return; }
+      foldStateSettled = true;
+      try { tabSyncChannel.postMessage({ t: 'tlda-fold', doc: tabSyncDocKey(), key: key, open: !!open }); } catch (e) { /* mirroring is advisory */ }
+    }
+    function applyFold(key, open) {
+      var el = foldElement(key);
+      if (!el || foldIsOpen(el) === open) return;
+      remoteExpect[key] = open;
+      if (el.tagName === 'DETAILS') { el.open = open; return; }
+      var B = window.bootstrap;
+      if (B && B.Collapse) {
+        var c = B.Collapse.getOrCreateInstance(el, { toggle: false });
+        if (open) c.show(); else c.hide();
+      } else {
+        el.classList.toggle('show', open);
+        delete remoteExpect[key];
+      }
+      var sel = '[data-bs-target="#' + el.id + '"], [href="#' + el.id + '"], [data-bs-target=".' + el.id + '-contents"]';
+      document.querySelectorAll(sel).forEach(function(h) {
+        h.setAttribute('aria-expanded', open ? 'true' : 'false');
+        h.classList.toggle('collapsed', !open);
+      });
+    }
+    // Bootstrap fires show/hide as the change starts, before its animation.
+    document.addEventListener('show.bs.collapse', function(e) { sendFold(e.target, true); });
+    document.addEventListener('hide.bs.collapse', function(e) { sendFold(e.target, false); });
+    document.addEventListener('toggle', function(e) {
+      if (e.target && e.target.tagName === 'DETAILS') sendFold(e.target, e.target.open);
+    }, true);
+    // A tab the reader clicks, not only one a link opened.
+    document.addEventListener('shown.bs.tab', function(e) {
+      var target = e.target && (e.target.getAttribute('data-bs-target') || e.target.getAttribute('href') || '');
+      if (target && target.charAt(0) === '#') broadcastOpenPane(target.slice(1));
+    });
+    function foldState() {
+      var folds = {};
+      document.querySelectorAll('.collapse[id], details').forEach(function(el) {
+        var key = foldKeyOf(el);
+        if (key) folds[key] = foldIsOpen(el);
+      });
+      var panes = [];
+      document.querySelectorAll('.tab-pane.active[id]').forEach(function(p) { panes.push(p.id); });
+      return { folds: folds, panes: panes };
+    }
+    if (tabSyncChannel) {
+      tabSyncChannel.onmessage = function(ev) {
+        var msg = ev && ev.data;
+        if (!msg || msg.doc !== tabSyncDocKey()) return;
+        if (msg.t === 'tlda-tab-open') {
+          openTabPaneById(msg.pane, false);
+        } else if (msg.t === 'tlda-fold') {
+          applyFold(msg.key, !!msg.open);
+        } else if (msg.t === 'tlda-fold-query') {
+          // Only a frame whose state is settled answers. A frame that has just
+          // loaded holds every fold shut, and the first answer wins, so its
+          // answer could tell a sibling loading beside it that nothing was open.
+          if (!foldStateSettled) return;
+          try { tabSyncChannel.postMessage({ t: 'tlda-fold-state', doc: tabSyncDocKey(), to: msg.from, state: foldState() }); } catch (e) { /* advisory */ }
+        } else if (msg.t === 'tlda-fold-state' && msg.to === foldSyncId && !foldStateApplied) {
+          // The first answer wins; every settled frame holds the same state.
+          foldStateApplied = true;
+          foldStateSettled = true;
+          var folds = (msg.state && msg.state.folds) || {};
+          Object.keys(folds).forEach(function(key) { applyFold(key, !!folds[key]); });
+          ((msg.state && msg.state.panes) || []).forEach(function(pane) { openTabPaneById(pane, false); });
+        }
+      };
+      // A frame that loads after the others (a panel opened later, a page
+      // reloaded by a rebuild) takes the state the others are showing.
+      var foldSyncId = Math.random().toString(36).slice(2);
+      var foldStateApplied = false;
+      var foldStateSettled = false;
+      var askFoldState = function() {
+        try { tabSyncChannel.postMessage({ t: 'tlda-fold-query', doc: tabSyncDocKey(), from: foldSyncId }); } catch (e) { /* advisory */ }
+        // No settled frame answered: this one is the first showing the page,
+        // and what it shows is the state.
+        setTimeout(function() { foldStateSettled = true; }, 600);
+      };
+      // Ask once the document is parsed, not on load: the folds exist then,
+      // and load waits for every subresource, which can be a long time or never.
+      if (document.readyState !== 'loading') askFoldState();
+      else document.addEventListener('DOMContentLoaded', askFoldState);
+    }
+    // Late joiners (a docview iframe mounting after the click missed the
+    // broadcast) converge through the parent instead: on a peek the parent
+    // posts tlda-activate-pane to every iframe serving the target document,
+    // immediately and again as load signals arrive. A peer query was tried
+    // first and removed: late mounts never observed asking, while the
+    // addressed post reaches exactly the instances showing the target.
+    window.addEventListener('message', function(ev) {
+      var msg = ev && ev.data;
+      if (!msg || msg.type !== 'tlda-activate-pane' || !msg.anchor) return;
+      if (msg.doc && msg.doc !== tabSyncDocKey()) return;
+      activateTabPaneForAnchor(msg.anchor);
+    });
+    window.addEventListener('message', function(ev) {
+      var msg = ev && ev.data;
+      if (!msg || msg.type !== 'tlda-request-figures') return;
+      // On-demand authoritative report: the parent asks for this after room
+      // hydration when a keyed report already arrived pre-hydration (its
+      // retire saw a partial store). Answers with the same keyed
+      // tlda-figures post as the scheduled reports — not the keyless
+      // serialize path, which serves deck export.
+      // A loaded frame also receives this request when it gains layout
+      // ownership; refresh the heading outline and anchor positions then.
+      reportHeadings();
+      reportFigures();
+    });
+    // Intercept link clicks — route navigation through parent canvas
+    document.addEventListener('click', function(e) {
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      if (postDocLinkClick(e, docLink)) return;
+      var a = e.target.closest('a[href]');
+      if (!a) return;
+      if (a.hasAttribute('data-tlda-app-shell')) return;
+      // Download links must retain the browser's native file-download behavior.
+      if (a.hasAttribute('download')) return;
+      // Tab controls are not document navigation: the element switches its own
+      // pane through data-bs-target. Quarto's nav fixup rewrites a tab's empty
+      // href attribute to this page's own URL, which the anchor path below
+      // would reduce to an all-null navigate — the page-top jump on a tab click.
+      if (a.getAttribute('role') === 'tab' || a.getAttribute('data-bs-toggle') === 'tab') return;
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('javascript:') || href.startsWith('mailto:')) return;
+      // External links: open in new tab
+      if (/^https?:\/\//.test(href) && !href.includes(window.location.host)) {
+        e.preventDefault();
+        window.open(href, '_blank');
+        return;
+      }
+      e.preventDefault();
+      // Parse href: same-host full URLs, relative paths, or bare anchors
+      // Same-host full URLs (Quarto cross-refs like "http://host/docs/name/...#fig-id")
+      // → treat as in-page anchor if they point to this same iframe URL
+      var parsed = href;
+      if (/^https?:\/\//.test(href) && href.includes(window.location.host)) {
+        // Same document (matching path): keep just the hash portion.
+        // Cross-chapter path: keep the full path so the parent chapter
+        // matcher can find the target shape; keep any hash as the anchor.
+        // (A bare cross-chapter URL with no hash used to be reduced to the
+        // empty string here, shipping targetFile/targetPath/anchor all null
+        // — so no target shape ever resolved and the parent fell back to
+        // centering the current page top.)
+        var hashIdx = href.indexOf('#');
+        try {
+          var linkUrl = new URL(href, window.location.href);
+          var selfUrl = new URL(window.location.href);
+          if (linkUrl.pathname === selfUrl.pathname) {
+            parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
+          } else {
+            parsed = linkUrl.pathname + (hashIdx >= 0 ? href.slice(hashIdx) : '');
+          }
+        } catch (parseErr) {
+          parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
+        }
+      }
+      var parts = parsed.split('#');
+      var targetFile = (parts[0] || '').replace(/^\.\//,'').replace(/^.*\//,'') || null;
+      // Strip query params from targetFile (e.g. "file.html?_tldaShape=..." -> "file.html")
+      if (targetFile) targetFile = targetFile.split('?')[0] || null;
+      var anchor = parts[1] || null;
+      // targetFile is a basename and stays one — every existing consumer matches
+      // on it. targetPath keeps the whole path, which is what you need to OPEN a
+      // document of this project that has no shape on the canvas yet, and
+      // targetTitle is what the link called it.
+      var targetPath = parts[0] || null;
+      var targetTitle = ((a.textContent || '').trim()) || null;
+      // Same-document anchors only: a cross-chapter anchor lives in an iframe
+      // this document cannot reach. Re-measure after opening so the parent
+      // navigates with the pane open; same-channel ordering delivers the fresh
+      // positions before the navigation.
+      if (anchor && !targetFile && activateTabPaneForAnchor(anchor)) {
+        reportHeadings();
+        reportHeight();
+      }
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'tlda-navigate',
+          shapeId: shapeId,
+          targetFile: targetFile,
+          targetPath: targetPath,
+          targetTitle: targetTitle,
+          anchor: anchor,
+        }, '*');
+      }
+    }, true);
+    // Keep authored content styling. Duplicate embedded TOCs are hidden
+    // separately above; these rules are dark-mode states the parent toggles.
+    var style = document.createElement('style');
+    style.textContent = [
+      // Dark mode: CSS invert on html element, counter-rotate semantic color classes.
+      // invert(0.92) lands body text at soft off-white; semantic color counter-filter
+      // uses invert(0.92) which isn't a perfect identity but keeps colors recognizable.
+      'html.tlda-dark { filter: invert(0.92) hue-rotate(180deg); background: #fff; }',
+      // Counter-filter for semantic color classes (text labeled "the red curve" must stay red)
+      // Applying the same filter undoes the parent: invert(invert(x)) = x
+      'html.tlda-dark .twocolor-red, html.tlda-dark .twocolor-green, html.tlda-dark .groupa, html.tlda-dark .groupb, html.tlda-dark .midnight, html.tlda-dark .polla, html.tlda-dark .pink, html.tlda-dark .pollb, html.tlda-dark .teal, html.tlda-dark .pollc, html.tlda-dark .polld, html.tlda-dark .magenta, html.tlda-dark .counterfactual, html.tlda-dark .green, html.tlda-dark .cyan, html.tlda-dark .population, html.tlda-dark .blue, html.tlda-dark .sample, html.tlda-dark .red, html.tlda-dark .purple, html.tlda-dark .target, html.tlda-dark .shadedred, html.tlda-dark .todofix { filter: invert(0.92) hue-rotate(180deg); }',
+      // Counter-filter for semantic colors in inline SVG plots (tagged by inline-svg.lua)
+      'html.tlda-dark .darkmode-invariant { filter: invert(0.92) hue-rotate(180deg); }',
+    ].join('\n');
+    document.head.appendChild(style);
+  }
+
+  // Hide WebR cells when WebR runtime is not available.
+  // With live-html format, WebR is embedded — don't call this.
+  function processWebRCells() {
+    var pres = document.querySelectorAll('pre[class="{webr}"]');
+    pres.forEach(function(pre) {
+      var cell = pre.closest('.cell');
+      if (cell) cell.style.display = 'none';
+      else pre.style.display = 'none';
+    });
+  }
+
+  // Prefer <main> bottom to avoid hidden Quarto sidebar/nav inflating height,
+  // and because body/documentElement scrollHeight include the height the parent
+  // sets on the embed — they stay put while the page reflows.
+  function contentHeight() {
+    var main = document.querySelector('main');
+    if (main) {
+      var rect = main.getBoundingClientRect();
+      return Math.ceil(rect.bottom + window.scrollY);
+    }
+    return Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.scrollHeight
+    );
+  }
+
+  // Report height to parent
+  function reportHeight() {
+    var h = contentHeight();
+    if (h > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-resize',
+        shapeId: shapeId,
+        height: h,
+      }, '*');
+    }
+  }
+
+  // Report anchor Y positions for navigation (headings, figures, tables, sections)
+  // An element inside an inactive tab pane reports offsetTop 0 (the pane is
+  // display:none, which collapses the whole offset chain), so the position
+  // would register as the top of the document instead of the real location.
+  // Measure those elements with their pane chain temporarily activated and
+  // restored in the same synchronous pass, so no paint happens in between.
+  // Note: toggling the Bootstrap active class (not inline display) is what
+  // makes the pane visible — the hiding rule targets panes without the
+  // active class, which outranks any inline display value.
+  // The reveal must be isolated, not stacked: activating the hidden pane
+  // alongside the currently-active sibling lays both out, and the revealed
+  // content measures below the sibling's (measured: y=7456 stacked against
+  // a true y=6833). Park the active siblings while measuring, restoring each
+  // pane's exact classes afterwards.
+  function measureWithHiddenPanesShown(el, measure) {
+    var reveal = [];
+    var node = el;
+    while (node && node !== document.body && node !== document.documentElement) {
+      if (node.classList && node.classList.contains('tab-pane') &&
+          !node.classList.contains('active')) {
+        reveal.push(node);
+      }
+      node = node.parentElement;
+    }
+    if (reveal.length === 0) return measure();
+    // Collect every pane touched — the reveal chain plus the active sibling
+    // in each of its tabsets — snapshot each once, then swap: deactivating
+    // and snapshotting interleaved would catch an already-revealed pane in a
+    // nested tabset and measure it hidden again.
+    var parked = [];
+    var seen = [];
+    reveal.forEach(function(pane) {
+      var tabset = pane.closest('.panel-tabset') || pane.parentElement;
+      if (tabset) {
+        tabset.querySelectorAll('.tab-pane.active').forEach(function(p) {
+          if (seen.indexOf(p) === -1) { seen.push(p); parked.push(p); }
+        });
+      }
+      if (seen.indexOf(pane) === -1) { seen.push(pane); parked.push(pane); }
+    });
+    var saved = parked.map(function(p) {
+      return {
+        pane: p,
+        active: p.classList.contains('active'),
+        show: p.classList.contains('show'),
+      };
+    });
+    parked.forEach(function(p) {
+      p.classList.remove('active');
+      p.classList.remove('show');
+    });
+    reveal.forEach(function(pane) {
+      pane.classList.add('active');
+      pane.classList.add('show');
+    });
+    var value;
+    try {
+      value = measure();
+    } finally {
+      saved.forEach(function(entry) {
+        if (entry.active) entry.pane.classList.add('active');
+        else entry.pane.classList.remove('active');
+        if (entry.show) entry.pane.classList.add('show');
+        else entry.pane.classList.remove('show');
+      });
+    }
+    return value;
+  }
+  function reportHeadings() {
+    var elements = document.querySelectorAll('[id]');
+    var positions = {};
+    elements.forEach(function(el) {
+      var id = el.id;
+      if (!id) return;
+      // Tooltip clones carry the target's id (see activateTabPaneForAnchor);
+      // duplicates overwrite by document order, so measuring one replaces
+      // the real position with the tooltip's. Skip tooltip subtrees.
+      if (el.closest && el.closest('[data-tippy-root], .tippy-box, .tippy-content')) return;
+      positions[id] = measureWithHiddenPanesShown(el, function() {
+        var y = 0;
+        var node = el;
+        while (node) {
+          y += node.offsetTop || 0;
+          node = node.offsetParent;
+        }
+        return y;
+      });
+    });
+    if (Object.keys(positions).length > 0 && window.parent !== window) {
+      var outline = Array.prototype.slice.call(document.querySelectorAll('h1,h2,h3,h4')).map(function(heading) {
+        var owner = heading.id ? heading : heading.closest('[id]');
+        var titleNode = heading.cloneNode(true);
+        titleNode.querySelectorAll('a.anchorjs-link, a[aria-label="Anchor"]').forEach(function(anchor) { anchor.remove(); });
+        return {
+          id: owner ? owner.id : '',
+          title: (titleNode.textContent || '').trim(),
+          level: parseInt(heading.tagName.slice(1), 10),
+        };
+      }).filter(function(entry) { return entry.id && entry.title; });
+      window.parent.postMessage({
+        type: 'tlda-headings',
+        shapeId: shapeId,
+        positions: positions,
+        outline: outline,
+      }, '*');
+    }
+  }
+
+  // Report figure positions and hide originals (replaced by TLDraw shapes on canvas)
+  function getOffsetY(el) {
+    var y = 0;
+    while (el) {
+      y += el.offsetTop || 0;
+      el = el.offsetParent;
+    }
+    return y;
+  }
+  function getOffsetX(el) {
+    var x = 0;
+    while (el) {
+      x += el.offsetLeft || 0;
+      el = el.offsetParent;
+    }
+    return x;
+  }
+
+  // Figures stay in the page. They used to be lifted onto the canvas: an
+  // image figure was hidden here and redrawn over the page on a plate, and an
+  // inline SVG got a transparent pane over it that turned the wheel into a
+  // zoom of that figure. The plates trailed the text after every reflow and the
+  // panes took the wheel away from the canvas (Skip: "some images take scroll",
+  // "misplaced white plate scrolling svgs"; "ZOOM WORKS ON THE FULL CANVAS").
+  //
+  // What remains: inline SVGs are made to scale with their container, and the
+  // page still says it has no figures to lift. That empty report, under a key,
+  // is what retires the figure records earlier loads left in the room.
+  function reportFigures() {
+    var inlineSvgs = document.querySelectorAll('div.inlined-svg > svg');
+    inlineSvgs.forEach(function(svg) {
+      // Fix case-sensitive viewBox attribute (svglite outputs lowercase "viewbox")
+      // and make SVG scale responsively within its container
+      if (!svg.getAttribute('viewBox') && svg.getAttribute('viewbox')) {
+        svg.setAttribute('viewBox', svg.getAttribute('viewbox'));
+      }
+      if (!svg.getAttribute('viewBox')) {
+        var w = svg.getAttribute('width'), h = svg.getAttribute('height');
+        if (w && h) svg.setAttribute('viewBox', '0 0 ' + parseFloat(w) + ' ' + parseFloat(h));
+      }
+      svg.style.width = '100%';
+      svg.style.height = 'auto';
+      svg.removeAttribute('width');
+      svg.removeAttribute('height');
+    });
+    if (window.parent !== window) {
+      window.parent.postMessage({ type: 'tlda-figures', shapeId: shapeId, figuresKey: 'in-page', figures: [] }, '*');
+    }
+  }
+
+  function reportMermaidDiagrams() {
+    var placeholders = document.querySelectorAll('.tlda-mermaid-placeholder[data-tlda-mermaid-id]');
+    if (placeholders.length === 0 || window.parent === window) return;
+    var diagrams = [];
+    placeholders.forEach(function(el) {
+      var rect = el.getBoundingClientRect();
+      if (rect.height < 10) return;
+      var sourceEl = el.querySelector('template[data-tlda-mermaid-source]');
+      var source = sourceEl ? ((sourceEl.content && sourceEl.content.textContent) || sourceEl.textContent || '') : '';
+      if (!source.trim()) return;
+      diagrams.push({
+        id: el.getAttribute('data-tlda-mermaid-id'),
+        source: source,
+        offsetX: getOffsetX(el),
+        offsetY: getOffsetY(el),
+        w: rect.width,
+        h: rect.height,
+        docWidth: Math.max(document.body.scrollWidth, document.documentElement.scrollWidth, 800),
+      });
+    });
+    if (diagrams.length > 0) {
+      window.parent.postMessage({ type: 'tlda-mermaid-diagrams', shapeId: shapeId, diagrams: diagrams }, '*');
+    }
+  }
+
+  // Report scrollytelling region metadata to parent for overlay rendering.
+  // The overlay shows the figure in a floating panel; step text stays inline.
+  // Note: image-toggle.js (Quarto extension) restructures the DOM before this
+  // runs — sidebar toggles get wrapped in .image-toggle-sidebar with step text
+  // moved into .image-toggle-steps. Cells get .image-toggle-cell class.
+  function reportScrollyRegions() {
+    var containers = document.querySelectorAll('.image-toggle');
+    if (containers.length === 0) return;
+
+    function getOffsetY(el) {
+      var y = 0;
+      while (el) { y += el.offsetTop || 0; el = el.offsetParent; }
+      return y;
+    }
+
+    var regions = [];
+    containers.forEach(function(container, idx) {
+      var containerY = getOffsetY(container);
+      var labels = (container.getAttribute('data-labels') || '').split(',').map(function(s) { return s.trim(); });
+      var stepSel = container.getAttribute('data-steps');
+
+      // Find images: image-toggle.js wraps cells in .image-toggle-stack > .image-toggle-cell
+      // With inline SVGs (from the Lua filter), there are no <img> tags — serialize SVGs to blob URLs.
+      var cells = container.querySelectorAll('.image-toggle-cell');
+      var imgUrls = Array.from(cells).map(function(cell) {
+        var img = cell.querySelector('img');
+        if (img) return img.src;
+        var inlineSvg = cell.querySelector('div.inlined-svg > svg');
+        if (inlineSvg) {
+          var serialized = new XMLSerializer().serializeToString(inlineSvg);
+          return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(serialized)));
+        }
+        return '';
+      });
+
+      // Find step text elements — location depends on layout:
+      // Sidebar: moved into .image-toggle-sidebar > .image-toggle-steps
+      // Non-sidebar: still siblings of the container
+      var stepTextEls = [];
+      var sidebar = container.closest('.image-toggle-sidebar');
+      if (sidebar) {
+        var stepsCol = sidebar.querySelector('.image-toggle-steps');
+        if (stepsCol && stepSel) {
+          stepTextEls = Array.from(stepsCol.querySelectorAll(stepSel));
+        }
+      } else if (stepSel) {
+        var sibling = container.nextElementSibling;
+        while (sibling) {
+          if (sibling.matches && sibling.matches(stepSel)) {
+            stepTextEls.push(sibling);
+          } else if (stepTextEls.length > 0) {
+            break;
+          }
+          sibling = sibling.nextElementSibling;
+        }
+      }
+
+      // Build steps array
+      var numSteps = Math.max(imgUrls.length, stepTextEls.length, labels.length);
+      if (numSteps === 0) return;
+
+      var steps = [];
+      for (var s = 0; s < numSteps; s++) {
+        var stepEl = stepTextEls[s];
+        var stepY = stepEl ? getOffsetY(stepEl) : containerY;
+        // Extract bold lead-in as label, remainder as text
+        var stepLabel = labels[s] || ('Step ' + (s + 1));
+        var stepText = '';
+        if (stepEl) {
+          var strong = stepEl.querySelector('strong, b');
+          if (strong) {
+            stepLabel = strong.textContent.replace(/[.s]+$/, '');
+            // Get text after the bold element
+            var clone = stepEl.cloneNode(true);
+            var boldClone = clone.querySelector('strong, b');
+            if (boldClone) boldClone.remove();
+            stepText = clone.textContent.trim();
+          } else {
+            stepText = stepEl.textContent.trim();
+          }
+        }
+        steps.push({
+          y: stepY,
+          label: stepLabel,
+          imageUrl: imgUrls[s] || imgUrls[0] || '',
+          text: stepText,
+        });
+      }
+
+      // Click step text → switch figure + highlight active step
+      var cellArr = Array.from(cells);
+      var stepArr = Array.from(stepTextEls);
+      // Mark first step as active initially
+      if (stepArr.length > 0) {
+        var activeIdx = cellArr.findIndex(function(c) { return c.classList.contains('active'); });
+        if (activeIdx >= 0 && activeIdx < stepArr.length) {
+          stepArr[activeIdx].classList.add('scrolly-active');
+        }
+      }
+      for (var s2 = 0; s2 < stepArr.length; s2++) {
+        (function(stepIdx) {
+          stepArr[stepIdx].addEventListener('click', function() {
+            for (var c = 0; c < cellArr.length; c++) {
+              cellArr[c].classList.toggle('active', c === stepIdx);
+            }
+            for (var t = 0; t < stepArr.length; t++) {
+              stepArr[t].classList.toggle('scrolly-active', t === stepIdx);
+            }
+          });
+        })(s2);
+      }
+
+      // Region bounds: top of container to bottom of last step element
+      var startY = containerY;
+      var endY = containerY + (container.offsetHeight || 200);
+      // For sidebar, use the sidebar wrapper bounds
+      if (sidebar) {
+        startY = getOffsetY(sidebar);
+        endY = startY + sidebar.offsetHeight;
+      }
+      if (stepTextEls.length > 0) {
+        var lastEl = stepTextEls[stepTextEls.length - 1];
+        var lastY = getOffsetY(lastEl) + lastEl.offsetHeight;
+        if (lastY > endY) endY = lastY;
+      }
+
+      regions.push({
+        id: container.id || ('scrolly-' + idx),
+        startY: startY,
+        endY: endY,
+        steps: steps,
+      });
+    });
+
+    if (regions.length > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-scrolly-regions',
+        shapeId: shapeId,
+        regions: regions,
+      }, '*');
+    }
+  }
+
+  // Install parent listeners on DOMContentLoaded, then measure
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      installCanvasListeners();
+      hideEmbeddedTocs();
+      letCanvasShowThrough();
+      // processWebRCells(); // Disabled — live-html includes WebR runtime
+      // Early reports for fast anchor resolution, later reports for render accuracy
+      setTimeout(reportHeight, 200);
+      setTimeout(reportHeight, 500);
+      setTimeout(reportHeight, 2000);
+      setTimeout(reportHeight, 5000);
+      setTimeout(reportHeadings, 200);
+      setTimeout(reportHeadings, 1000);
+      setTimeout(reportHeadings, 3000);
+      setTimeout(reportHeadings, 6000);
+      setTimeout(reportScrollyRegions, 200);
+      setTimeout(reportScrollyRegions, 1000);
+      setTimeout(reportScrollyRegions, 3000);
+      setTimeout(reportFigures, 500);
+      setTimeout(reportFigures, 2000);
+      setTimeout(reportFigures, 5000);
+      setTimeout(reportMermaidDiagrams, 500);
+      setTimeout(reportMermaidDiagrams, 2000);
+      setTimeout(reportMermaidDiagrams, 5000);
+    });
+  } else {
+    installCanvasListeners();
+    hideEmbeddedTocs();
+    letCanvasShowThrough();
+    // processWebRCells(); // Disabled — live-html includes WebR runtime
+    setTimeout(reportHeight, 100);
+    setTimeout(reportHeight, 2000);
+    setTimeout(reportHeadings, 500);
+    setTimeout(reportHeadings, 2500);
+    setTimeout(reportScrollyRegions, 500);
+    setTimeout(reportScrollyRegions, 2500);
+    setTimeout(reportFigures, 500);
+    setTimeout(reportFigures, 2000);
+    setTimeout(reportMermaidDiagrams, 500);
+    setTimeout(reportMermaidDiagrams, 2000);
+  }
+
+  // Observe DOM mutations (webR output, KaTeX rendering, etc.)
+  var lastHeight = 0;
+  var debounceTimer = null;
+  var observer = new MutationObserver(function(mutations) {
+    // A tab pane becoming active changes which figures are on screen, and the
+    // load-time reports only ever covered the pane that was active at load —
+    // nothing else publishes figures afterwards, so a pane opened later would
+    // keep whatever record an earlier report left at its figures' indices.
+    // Re-report here instead. Only a class change on a pane that is active now
+    // counts, so figure style writes (which never touch a pane's class) cannot
+    // re-enter this.
+    for (var mi = 0; mi < mutations.length; mi++) {
+      var mt = mutations[mi];
+      if (mt.type === 'attributes' && mt.attributeName === 'class' &&
+          mt.target && mt.target.classList &&
+          mt.target.classList.contains('tab-pane') &&
+          mt.target.classList.contains('active')) {
+        reportFigures();
+        break;
+      }
+    }
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      var h = contentHeight();
+      if (Math.abs(h - lastHeight) > 10) {
+        lastHeight = h;
+        reportHeight();
+        reportHeadings();
+        reportScrollyRegions();
+        // A height change means the page reflowed — a callout or code fold, an
+        // image settling — and the figures moved with their text, so re-report
+        // them; otherwise the canvas plates keep covering the spot the text
+        // has flowed into.
+        reportFigures();
+        reportMermaidDiagrams();
+      }
+    }, 300);
+  });
+
+  // Follow <main>'s size as it changes, one report per frame, so the page on
+  // the canvas grows and shrinks with a callout's own animation instead of
+  // 300 ms after it. <main>, not body: body includes the height the parent
+  // gives the frame, so observing it would feed back (measured on a chapter
+  // and an exam: <main> is the same height in an 800 px and a 20000 px frame).
+  var mainSizeFrame = 0;
+  var mainSizeFollowed = false;
+  function followMainSize() {
+    var main = document.querySelector('main');
+    if (mainSizeFollowed || !main || typeof ResizeObserver !== 'function') return;
+    mainSizeFollowed = true;
+    new ResizeObserver(function() {
+      if (mainSizeFrame) return;
+      mainSizeFrame = requestAnimationFrame(function() {
+        mainSizeFrame = 0;
+        var h = contentHeight();
+        if (Math.abs(h - lastHeight) <= 10) return;
+        lastHeight = h;
+        reportHeight();
+        reportHeadings();
+        reportScrollyRegions();
+        reportMermaidDiagrams();
+      });
+    }).observe(main);
+  }
+
+  // Start observing once DOM is ready
+  function startObserver() {
+    // <main> may not be parsed yet when body first exists.
+    followMainSize();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', followMainSize);
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: false,
+    });
+  }
+
+  if (document.body) {
+    startObserver();
+  } else {
+    document.addEventListener('DOMContentLoaded', startObserver);
+  }
+})();
+}
+</script><!--/tlda-publication-body--><!--tlda-file-app-switch--><a class="presentation-mode-switch" href="../../../app.html?location=static%2Fbook%2Fchapters%2Fchapter-sampling-without-replacement.html&amp;course=qtm285" hidden style="position:fixed;top:12px;left:12px;z-index:10000">App</a><script data-tlda-app-link-access data-tlda-file-app-switch>(function installAppLinkAccess(anchor, mode, readToken) {
+  anchor.hidden = true
+  const params = new URLSearchParams(location.search)
+  if (params.has('_tldaShape')) return
+  const destination = new URL(anchor.href, location.href)
+  const course = params.get('course')
+  if (course) destination.searchParams.set('course', course)
+  anchor.href = destination.href
+  if (destination.origin !== location.origin || !['http:', 'https:'].includes(destination.protocol)) return
+  let active = null
+  let generation = 0
+
+  async function refresh() {
+    const current = ++generation
+    active?.abort()
+    const controller = new AbortController()
+    active = controller
+    anchor.hidden = true
+    const timeout = setTimeout(() => controller.abort(), 5000)
+    try {
+      const read = async url => {
+        const target = new URL(url, destination)
+        if (target.origin !== destination.origin) throw new Error('Reader resource is not same-origin')
+        const result = await fetch(target.href, { credentials: 'same-origin', redirect: 'error', cache: 'no-store', signal: controller.signal })
+        if (!result.ok || result.redirected) throw new Error('Reader resource is unavailable')
+        return result
+      }
+      const response = await read(destination.href)
+      const doc = new DOMParser().parseFromString(await response.text(), 'text/html')
+      const marker = doc.querySelector('meta[name="tlda-app-reader"]')
+      if (marker?.content !== mode || !marker.dataset.readerBase) return
+      const readerBase = new URL(decodeURIComponent(marker.dataset.readerBase), destination)
+      if (readerBase.origin !== destination.origin || readerBase.search || readerBase.hash
+        || readerBase.username || readerBase.password) return
+      if (!doc.querySelector('script[type="module"][src]')) return
+      let base, wanted, config
+      if (mode === 'files') {
+        base = new URL('./', destination)
+        if (readerBase.href !== base.href) return
+        wanted = destination.searchParams.get('location')
+        const publication = await (await read(new URL('manifest.json', base))).json()
+        const documents = publication?.documents
+        if (!documents || typeof documents !== 'object' || Array.isArray(documents)) return
+        const project = destination.searchParams.get('project')
+        const keys = Object.keys(documents)
+        config = project ? documents[project] : keys.length === 1 ? documents[keys[0]] : null
+        const pages = await (await read(new URL('page-info.json', base))).json()
+        if (!Array.isArray(pages) || !pages.some(page => page?.file === wanted)) return
+      } else {
+        const route = destination.pathname.match(/^\/docs\/([^/]+)\/app\/(.+)$/)
+        if (!route) return
+        const store = readerBase.href.replace(/\/$/, '')
+        base = new URL(`${store}/docs/${route[1]}/`)
+        wanted = route[2].split('/').map(decodeURIComponent).join('/')
+        config = await (await read(`${store}/api/projects/${route[1]}?include=page-info`)).json()
+      }
+      if (!wanted || !config || !(config.pages > 0)) return
+      const manifest = await (await read(new URL('document-manifest.json', base))).json()
+      if (manifest?.version !== 1 || manifest.kind !== 'tlda-document' || !Array.isArray(manifest.pages)
+        || !manifest.source?.format || !manifest.document?.format
+        || !['html-pages', 'slides', 'svg-pages', 'image-pages'].includes(manifest.view?.kind)) return
+      const pages = manifest.view.kind === 'slides' && manifest.pages.some(page => page.variant === 'slides')
+        ? manifest.pages.filter(page => page.variant === 'slides') : manifest.pages
+      // Match the same source/output alternatives used by presentationLocationMatchesPage.
+      const encoded = wanted.split('/').map(encodeURIComponent).join('/')
+      const legacy = wanted.replace(/^book\//, '')
+      const page = pages.find(page => {
+        if (typeof page?.file !== 'string' || !(page.width > 0) || !(page.height > 0)) return false
+        if (mode === 'files') return page.file === wanted
+        const path = new URL(page.file, base).pathname
+        return page.source?.file === wanted || page.source?.file?.replace(/\.qmd$/i, '.html') === legacy
+          || path === `${base.pathname}app/${encoded}` || path === `${base.pathname}${encoded}`
+          || path.endsWith(`/_book/${legacy}`)
+      })
+      if (!page) return
+      const resource = new URL(page.file, base)
+      resource.searchParams.set('_tldaShape', 'app-link-access')
+      if (course) resource.searchParams.set('course', course)
+      await (await read(resource)).arrayBuffer()
+      const readerCourse = destination.searchParams.get('course')
+      if (readerCourse) {
+        // A course reader resolves this same identity before it can connect.
+        // File metadata alone says nothing about that backend's CORS/admission.
+        const identities = JSON.parse(decodeURIComponent(marker.dataset.readerIdentities || ''))
+        if (!Array.isArray(identities) || !identities.length) return
+        const matches = identities.filter(identity => {
+          if (!identity.publicationUrl) return identities.length === 1
+          const declared = new URL(identity.publicationUrl)
+          return declared.origin === destination.origin && destination.pathname.startsWith(declared.pathname)
+        })
+        if (matches.length !== 1) return
+        const identity = matches[0]
+        const backend = new URL(identity.database)
+        if (!['http:', 'https:'].includes(backend.protocol) || backend.username || backend.password
+          || backend.search || backend.hash || !['include', 'same-origin'].includes(identity.credentials)) return
+        const identityUrl = new URL(`${backend.href.replace(/\/$/, '')}/api/classroom/me`)
+        identityUrl.searchParams.set('course', readerCourse)
+        const token = readToken(destination.search, readerCourse, key => window.localStorage.getItem(key))
+        const response = await fetch(identityUrl.href, {
+          credentials: identity.credentials, redirect: 'error', cache: 'no-store', signal: controller.signal,
+          ...(token ? { headers: { 'x-tlda-student-token': token } } : {}),
+        })
+        if (!response.ok || response.redirected) return
+        const principal = await response.json()
+        if (principal.courseId !== readerCourse || !((principal.role === 'student' && principal.studentId)
+          || (principal.role === 'instructor' && principal.instructorId))) return
+      }
+      if (current === generation && !controller.signal.aborted) anchor.hidden = false
+    } catch {
+      // Refusal, missing publication and connectivity failure all leave no link
+      // to an app this page has not established the reader can enter.
+    } finally {
+      clearTimeout(timeout)
+      if (active === controller) active = null
+    }
+  }
+  window.addEventListener('pageshow', refresh)
+  window.addEventListener('pagehide', () => { generation++; active?.abort(); anchor.hidden = true })
+  return refresh()
+})(document.currentScript.previousElementSibling,"files",function readClassroomTokenFrom(search, courseId, getStored) {
+  const fromUrl = new URLSearchParams(search).get('classroomToken')
+  if (fromUrl) return fromUrl
+  try { return getStored(`tlda-classroom-token:${courseId}`) } catch { return null }
+});</script><!--/tlda-file-app-switch--></body></html>

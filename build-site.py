@@ -1,0 +1,866 @@
+from pathlib import Path
+import argparse
+import datetime
+import json
+import re
+import runpy
+import shutil
+import subprocess
+import sys
+import time
+from pybars import Compiler
+import yaml
+
+# The solution scan lives in publish_guard so the workflow can run the same
+# function over the committed tree without this file's dependencies.
+from publish_guard import pages_with_solutions, read_allowlist
+
+COURSE_DIR = None
+SCHEDULE_SOURCE = None
+SOURCE_REVISION = None
+
+# The pages his ruling keeps published with their answers, read by this script
+# and by the workflow gate from the same file.
+ALLOWLIST_PATH = Path('publish-allow-solutions.txt')
+
+# Homework that has not come out yet, collected while the schedule is read.
+#
+# Leaving a future homework's page unlinked is not the same as not publishing
+# it: the book build renders every declared chapter, the site copies the book
+# wholesale, and the page then answers on its URL with the solutions inside it.
+# On 2026-09-18 HW4 was reachable that way while it was still out. Unlinked is
+# not unposted, so these are removed from the assembled site, on the same date
+# rule that already decides the linking.
+WITHHELD_HOMEWORK = []
+
+# The schedule, from the book project
+#
+# The book's index.qmd holds the real schedule: date, title, the chapter each
+# session links to, and the homework markers, in one markdown table. The landing
+# page used to carry its own hand-typed copy, which is how the two came to
+# disagree about which sessions are linked. This parses the book's table and
+# generates the landing page's schedule from it, so there is one source.
+#
+# The link rule is Skip's: a session that has happened or is happening today
+# links into the book; a future one is text. Applied here, at generation, so it
+# is a consequence of the date rather than something anyone has to remember.
+
+MONTHS = {m: i + 1 for i, m in enumerate(
+  ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])}
+
+# `Th Aug 27`, or a range like `Dec 10-19` for an exam window. A range is the
+# session's start: the window has begun once its first day has.
+DATE_CELL = re.compile(r'^(?:(?P<weekday>M|T|W|Th|F|Sa|Su)\s+)?'
+                       r'(?P<month>[A-Z][a-z]{2})\s+(?P<day>\d+)'
+                       r'(?:\s*[-–—]\s*\d+)?$')
+
+# A trailing `· *HW 1 due · HW 2 out*` is the homework markers for that session.
+# The landing page gives each such group its own row under the session, so a
+# session that puts two assignments out writes two groups and gets two rows.
+# Anchored at the end so a whole-cell emphasis like `*No class (Fall Break)*` is
+# not mistaken for a marker.
+MARKER_GROUP = re.compile(r'\s*·\s*\*(?P<markers>[^*]+)\*\s*$')
+
+MD_LINK = re.compile(r'\[(?P<text>[^\]]+)\]\((?P<target>[^)]+)\)')
+
+
+def schedule_year(text):
+  """The year the schedule's months belong to, from the document's own subtitle.
+
+  Hardcoding it would go stale silently the first term nobody remembers to
+  change it, and a wrong year makes every link decision wrong at once.
+  """
+  match = re.search(r'^subtitle:.*?(\d{4})', text, re.M)
+  if match is None:
+    raise ValueError(f'{SCHEDULE_SOURCE}: no year in the subtitle, so no schedule dates')
+  return int(match.group(1))
+
+
+def session_date(cell, year):
+  match = DATE_CELL.match(cell.strip())
+  if match is None:
+    return None
+  month = MONTHS.get(match.group('month'))
+  if month is None:
+    raise ValueError(f'{SCHEDULE_SOURCE}: unreadable month in date cell {cell!r}')
+  # Aug-Dec is the fall term; a Jan-May row belongs to the spring that follows.
+  return datetime.date(year if month >= 8 else year + 1, month, int(match.group('day')))
+
+
+def dated_time(cell, time):
+  return f'{cell.replace(" ", "&nbsp;")},&nbsp;{time}'
+
+
+def meeting_date(cell):
+  if cell.startswith(('T ', 'Th ')):
+    return dated_time(cell, '4:00')
+  if cell.startswith('F '):
+    return dated_time(cell, '2:30')
+  return cell.replace(' ', '&nbsp;')
+
+
+def book_href(target, unbuilt=()):
+  """Where something the schedule points at actually is on the site, or None.
+
+  A `.qmd` is a chapter, and resolves to the book's rendered page if it is
+  published — the same rule the homework list uses. Anything else is already a
+  site asset, a handout zip in practice, and is passed through as written.
+
+  A declared chapter missing from this build stays as schedule text. Other
+  missing targets remain errors.
+
+  Deliberately does not call `rendered()`: building the syllabus should not
+  trigger a chapter render as a side effect.
+  """
+  if target.endswith('.qmd') and target in unbuilt:
+    return None
+  # Schedule page links are spelled .html while membership is declared .qmd;
+  # resolve through the declared form, mirroring the generator's mapping
+  # order (solutions first, then generic).
+  if target.endswith('-solutions.html') and target.removesuffix('-solutions.html') + '.solutions.qmd' in unbuilt:
+    return None
+  if target.endswith('.html') and str(Path(target).with_suffix('.qmd')) in unbuilt:
+    return None
+  href = Path('book') / (Path(target).with_suffix('.html') if target.endswith('.qmd') else Path(target))
+  if not (ACTIVE_SITE / href).is_file():
+    raise ValueError(f'scheduled material is absent from this build: {target} (expected {ACTIVE_SITE / href})')
+  return href
+
+
+def cell_html(cell, linked, unbuilt=()):
+  """One schedule cell as HTML. `linked` decides whether its chapter link survives.
+
+  A future session keeps its title and loses its link, which is the whole rule.
+  """
+  def link(match):
+    href = book_href(match.group('target'), unbuilt) if linked else None
+    text = match.group('text')
+    if not href:
+      return text
+    result = f'<a href="{href}">{text}</a>'
+    target = Path(match.group('target'))
+    deck = Path('book/decks') / f'{target.stem}-slides.html'
+    # The schedule generator appends its own `· [slides](…)` to a chapter row
+    # that has a deck, so adding one here too renders the deck twice:
+    # "Sampling [slides] · slides" appeared on eight rows the moment the
+    # generator's link stopped being stripped. Only add it when the cell does
+    # not already point at that deck.
+    already_linked = f'decks/{target.stem}-slides.html' in cell
+    if (target.parts and target.parts[0] == 'chapters'
+        and (ACTIVE_SITE / deck).exists() and not already_linked):
+      result += f' <a href="{deck}">[slides]</a>'
+    return result
+
+  # `\[` and `\]` are literal brackets around a link — the landing page writes
+  # `[view]` with the brackets visible — so they must survive link substitution.
+  html = MD_LINK.sub(link, cell.replace('\\[', '\0').replace('\\]', '\1'))
+  html = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', html)
+  html = re.sub(r'(?<!\*)\*([^*]+)\*(?!\*)', r'<em>\1</em>', html)
+  return html.replace('·', '&middot;').replace('\0', '[').replace('\1', ']')
+
+
+def homework_html(path, number, linked):
+  stem = path.stem.removesuffix('.handout')
+  if not linked:
+    # The schedule is read more than once per build, so guard against listing
+    # the same homework twice: a doubled "withheld" line reads as two removals.
+    if stem not in WITHHELD_HOMEWORK:
+      WITHHELD_HOMEWORK.append(stem)
+    return f'HW {number} out'
+  page = Path('book/homework') / f'{stem}.html'
+  archive = Path('book/homework/handouts') / f'{stem}-handout.zip'
+  return (f'<a href="{page}">HW {number}</a> out '
+          f'<a href="{archive}">[download zip]</a>')
+
+
+def parse_schedule(today, unbuilt=()):
+  """The book's schedule as `[(heading, [row, ...]), ...]`, dates already decided.
+
+  A row that will not parse raises. Skipping it would drop a session off the
+  syllabus silently, and nobody would find out until a student did.
+  """
+  text = SCHEDULE_SOURCE.read_text()
+  year = schedule_year(text)
+  if '## Schedule' not in text:
+    raise ValueError(f'{SCHEDULE_SOURCE}: no "## Schedule" section to read')
+  # Read the generated region; do not generate it again. `bin/generate-index.py`
+  # runs as a Quarto pre-render (`_quarto.yml`) and writes this region into
+  # `index.qmd` between its own markers, which is what renders to the book's
+  # index page. Calling `render_region` here recomputed, from `bin/schedule.json`,
+  # a region already committed in the file being read -- a second build of a
+  # thing already built, and the reason the landing page could carry a different
+  # link set from the book index. Reading it also means the `ready:` release rule
+  # cannot be bypassed here: whatever the generator withheld is simply not
+  # present to parse.
+  #
+  # Stop at the next top-level heading, or the practices and policies further
+  # down the page contribute their own `###` headings as empty sections.
+  body = re.split(r'^## (?!Schedule)', text.split('## Schedule', 1)[1], maxsplit=1, flags=re.M)[0]
+
+  sections, heading, note, rows = [], None, None, []
+  before, pending_before = [], []
+  for line in body.splitlines():
+    if line.startswith('### '):
+      if heading is not None:
+        sections.append((heading, note, rows, before))
+      heading, note, rows = line[4:].strip(), None, []
+      before, pending_before = pending_before, []
+      continue
+    if heading is None:
+      continue
+    # A sentence between the heading and the table qualifies the whole section --
+    # "This unit is not on either exam." The landing page carried that inside the
+    # heading, so dropping it here would quietly lose it.
+    if not line.startswith('|'):
+      if line.strip().startswith('<!--'):
+        # The generator's own region markers, not anything to render.
+        continue
+      if line.strip():
+        if not rows:
+          note = line.strip()
+        else:
+          # Past this section's table and before the next heading: a block that
+          # belongs to neither table -- "About the Midterm" sits between the
+          # two parts. It used to be skipped here with no error at all.
+          pending_before.append(line.strip())
+      continue
+    cells = [cell.strip() for cell in line.strip().strip('|').split('|')]
+    if len(cells) != 2 or cells[0] in ('Date', '') or set(cells[0]) <= set('-: '):
+      continue
+    date = session_date(cells[0], year)
+    if date is None:
+      raise ValueError(f'{SCHEDULE_SOURCE}: unreadable date cell {cells[0]!r} — '
+                       f'refusing to drop the session silently')
+    main, markers = cells[1], []
+    while True:
+      match = MARKER_GROUP.search(main)
+      if match is None:
+        break
+      markers.insert(0, match.group('markers'))
+      main = main[:match.start()]
+    # Whether a link survives was decided upstream, by each document's own
+    # `ready:` front matter, when `bin/generate-index.py` generated this region.
+    # A link that reaches this parse is one the course released, so it is kept.
+    #
+    # This used to re-apply `date <= today` here, a second copy of a rule that
+    # had already run. Two copies of one decision meant the landing page could
+    # strip a link the schedule had deliberately published, and it made the
+    # calendar -- not the author -- the thing that released a chapter.
+    homework = []
+    for marker in markers:
+      homework.append(cell_html(marker, linked=True, unbuilt=unbuilt))
+    rows.append({'date': meeting_date(cells[0]),
+                 'homework_date': dated_time(cells[0], '11:59'),
+                 'session': cell_html(main, linked=True, unbuilt=unbuilt),
+                 'homework': homework})
+  if heading is not None:
+    sections.append((heading, note, rows, before))
+  if pending_before:
+    raise ValueError(f'{SCHEDULE_SOURCE}: a block follows the last table with no '
+                     f'heading after it, so nothing would render it: '
+                     f'{pending_before[0]!r}')
+  # A section whose table produced no rows means a table went unread -- a
+  # different column count, a heading this loop did not recognise. Silently
+  # covering half the term is worse than failing to build, and it is exactly
+  # how the Part 2 rows were missed once already.
+  empty = [h for h, _, r, _ in sections if not r]
+  if empty:
+    raise ValueError(f'{SCHEDULE_SOURCE}: schedule sections with no rows parsed: '
+                     f'{empty} -- a table was not read')
+  return sections
+
+
+def schedule_html(today=None, unbuilt=()):
+  from zoneinfo import ZoneInfo
+  today = today or datetime.datetime.now(ZoneInfo('America/New_York')).date()
+  out = []
+  for heading, note, rows, before in parse_schedule(today, unbuilt):
+    for para in before:
+      out.append(f'<p>{cell_html(para, linked=False)}</p>\n')
+    out.append(f'<h5> {heading} </h5>\n')
+    if note:
+      out.append(f'<p>{cell_html(note, linked=False)}</p>\n')
+    out.append('<table><tbody>')
+    for row in rows:
+      out.append(f'<tr><td>{row["date"]}</td><td> {row["session"]} </td></tr>')
+      if row['homework']:
+        out.append(f'<tr><td>{row["homework_date"]}</td><td> '
+                   f'{" &middot; ".join(row["homework"])} </td></tr>')
+    out.append('</tbody></table>\n')
+  return '\n'.join(out)
+
+
+# What the site says about itself
+#
+# The site used to carry no record of where it came from, so "is what's published
+# current?" was a question only an agent with both trees in front of it could
+# answer, and it was answered wrong: a tarball rendered at 15:39 from superseded
+# source was published at 15:56 by a clean run. The three checks below all exist
+# so that the assemble step refuses to do that, and `build-info.json` plus the
+# line at the foot of the landing page exist so the answer is readable off the
+# site itself rather than out of somebody's terminal.
+
+
+def git_output(args):
+  result = subprocess.run(['git', '-C', str(COURSE_DIR), *args], capture_output=True, text=True)
+  if result.returncode != 0:
+    raise ValueError(f'git {" ".join(args)} in {COURSE_DIR} failed: {result.stderr.strip()}')
+  return result.stdout.strip()
+
+
+# Where this project publishes
+#
+# The course declares its destination in `course-release.json`, which already
+# records where this project's artifacts go. Before that key existed the target
+# was whichever repository someone happened to be standing in, so pointing
+# publication somewhere else was a thing to remember rather than a thing that
+# held -- and Skip's instruction to publish to the test site while he reviews it
+# is exactly the kind of thing that gets forgotten at 8am on a class day.
+
+
+def book_fingerprint(book_dir):
+  return sorted((str(path.relative_to(book_dir)), path.stat().st_mtime_ns, path.stat().st_size)
+                for path in book_dir.rglob('*') if path.is_file())
+
+
+def refuse_if_book_moved(book_dir, before):
+  """Refuse if the book changed across this run's reads of it.
+
+  Measured 2026-09-20 02:35: a render removed `tlda-manifest.json` while
+  rewriting `_book`, and a run in that window saw a tree with no manifest. The
+  same window can present a chapter as unbuilt or a page as stale when it is
+  neither, and each is a wrong verdict delivered confidently.
+
+  Anchored on the tree's own content across the span this run actually read it,
+  rather than on "did it move during an N-second sample". `publish-state` made
+  the argument for the difference and it is right: a window only catches a build
+  impatient enough to write inside it, while comparing the thing itself catches
+  any change at all, including a rebuild that produces the same revision.
+  """
+  if before is None or not book_dir.is_dir():
+    return
+  after = book_fingerprint(book_dir)
+  if before == after:
+    return
+  names = {name for name, _, _ in after} ^ {name for name, _, _ in before}
+  rewritten = [name for name, _, _ in sorted(set(after) - set(before)) if name not in names]
+  detail = sorted(names)[:5] + rewritten[:5]
+  raise SystemExit(f'{book_dir} changed while this run was reading it, so something was '
+                   f'writing the book -- most likely a render.\n'
+                   f'Changed: {", ".join(detail) if detail else "file contents"}.\n'
+                   f'A tree read mid-write reports chapters as unbuilt and pages as stale '
+                   f'when they are neither, so nothing was published. Wait for the render '
+                   f'to finish and run again.')
+
+
+def publication_target():
+  contract = COURSE_DIR / 'course-release.json'
+  if not contract.exists():
+    return None
+  return json.loads(contract.read_text()).get('publication')
+
+
+def destination_repository(site_dir):
+  """`owner/name` of the repository `site_dir` sits in, or None if it is not one.
+
+  A scratch directory is not a repository and is not publishing, so it is not
+  checked -- the target only means something when the output is going somewhere
+  a push can reach.
+  """
+  result = subprocess.run(['git', '-C', str(site_dir), 'remote', 'get-url', 'origin'],
+                          capture_output=True, text=True)
+  if result.returncode != 0:
+    return None
+  url = result.stdout.strip().removesuffix('.git')
+  if ':' in url and '//' not in url:
+    url = url.split(':', 1)[1]
+  parts = [part for part in url.split('/') if part]
+  return '/'.join(parts[-2:]) if len(parts) >= 2 else None
+
+
+def refuse_wrong_destination(site_dir):
+  target = publication_target()
+  if not target or not target.get('repository'):
+    return None
+  destination = destination_repository(site_dir)
+  if destination is None or destination == target['repository']:
+    return target
+  raise SystemExit(f'{COURSE_DIR / "course-release.json"} publishes this project to '
+                   f'{target["repository"]}, but {site_dir} is in {destination}.\n'
+                   f'Publishing here would send it somewhere the course does not declare. '
+                   f'Change `publication.repository` if the destination has moved.')
+
+
+# The book config was `_quarto_book.yml` and is now the conventional
+# `_quarto.yml`. Four places here named the old one: one raised
+# FileNotFoundError, one was dead code, one quietly dropped the file from the
+# provenance record, and one printed a path that does not exist. Resolve it in
+# one place so a message can never cite a file that was not read.
+BOOK_CONFIG_NAMES = ('_quarto_book.yml', '_quarto.yml')
+
+
+def book_config_name():
+  """The book config's filename as it exists here, or None if neither does."""
+  return next((name for name in BOOK_CONFIG_NAMES
+               if (COURSE_DIR / name).is_file()), None)
+
+
+def declared_chapters():
+  """Every `.qmd` the book declares, whether or not it was rendered."""
+  generator = COURSE_DIR / 'bin' / 'generate-index.py'
+  if generator.is_file():
+    spec = runpy.run_path(str(generator))['rolling_book_spec'](SCHEDULE_SOURCE)
+    return spec['documents'] + spec['decks']
+  # Only reached if the generator is gone.
+  book_yml = book_config_name()
+  if not book_yml:
+    raise SystemExit(f'{COURSE_DIR} has none of {" or ".join(BOOK_CONFIG_NAMES)}, '
+                     f'and bin/generate-index.py is absent, so nothing declares '
+                     f'the book.')
+  config = yaml.safe_load((COURSE_DIR / book_yml).read_text())
+  result = []
+  for part in config['book']['chapters']:
+    entries = part.get('chapters', []) if isinstance(part, dict) else [part]
+    for chapter in [entries] if isinstance(entries, str) else entries:
+      if isinstance(chapter, str) and chapter.endswith('.qmd'):
+        result.append(chapter)
+  return result
+
+
+def rendered_pages(book_dir):
+  """The book's own record of what it rendered: `{output file: source file}`.
+
+  Quarto leaves no revision behind, but the tlda manifest it writes alongside the
+  pages maps each rendered page to the source it came from, which is what makes a
+  per-page currency check possible at all.
+  """
+  manifest = book_dir / 'tlda-manifest.json'
+  if not manifest.exists():
+    # Seen for real on 2026-09-20: a render was rewriting `_book` and the
+    # manifest was absent for a few seconds, so this fired mid-rebuild rather
+    # than on a genuinely unrecorded tree. Both are refusals, but a reader who
+    # is told which one saves themselves a search.
+    written = datetime.datetime.fromtimestamp(book_dir.stat().st_mtime).astimezone()
+    raise SystemExit(
+        f'{manifest} is absent, so nothing records which source produced {book_dir} '
+        f'and its currency cannot be checked.\n'
+        f'{book_dir} was last written {written.isoformat(timespec="seconds")}. '
+        f'If that is seconds ago a render is probably still writing it, and this run '
+        f'was reading a half-built tree -- wait for the render and try again. '
+        f'If it is not, the book was produced without a manifest and needs re-rendering.')
+  pages = json.loads(manifest.read_text())['pages']
+  return {page['file']: page['source']['file']
+          for page in pages if page.get('source', {}).get('file')}
+
+
+def stale_pages(book_dir):
+  """Pages whose source has been edited since the page was rendered.
+
+  mtime is the only available oracle: neither `_book` nor `_freeze` records the
+  revision a page was rendered from. It errs towards refusing -- touching a file
+  without changing it raises the alarm -- which is the safe direction.
+  """
+  stale = []
+  selected = set(declared_chapters())
+  for page, source in sorted(rendered_output_pages(book_dir).items()):
+    if source not in selected:
+      continue
+    source_path, page_path = COURSE_DIR / source, book_dir.parent / page
+    if not source_path.exists() or not page_path.exists():
+      continue
+    # A homework that has not come out is not published, so how current its
+    # render is says nothing about the site. Blocking the build on it would
+    # hold every publish hostage to a page nobody can reach.
+    if source_path.stem in WITHHELD_HOMEWORK:
+      continue
+    rendered_at, edited_at = page_path.stat().st_mtime, source_path.stat().st_mtime
+    if edited_at > rendered_at:
+      stale.append({'page': page, 'source': source,
+                    'renderedAt': stamp(rendered_at), 'sourceEditedAt': stamp(edited_at),
+                    'behindMinutes': round((edited_at - rendered_at) / 60, 1)})
+  return stale
+
+
+def unbuilt_chapters(book_dir):
+  built = {source for page, source in rendered_output_pages(book_dir).items()
+           if (book_dir.parent / page).is_file()}
+  return [chapter for chapter in declared_chapters() if chapter not in built]
+
+
+def rendered_output_pages(book_dir):
+  pages = {str(Path(book_dir.name) / page): source
+           for page, source in rendered_pages(book_dir).items()}
+  page_info = book_dir.parent / 'page-info.json'
+  if page_info.is_file():
+    for page in json.loads(page_info.read_text()):
+      source, output = page.get('source', {}).get('file'), page.get('file')
+      if source and output:
+        pages[output] = source
+        if source.startswith('decks/'):
+          linear = Path(output).with_name(f'{Path(output).stem}-linear.html')
+          if (book_dir.parent / linear).is_file():
+            pages[str(linear)] = source
+  return pages
+
+
+def prune_rolling_book(book_dir, copied_book, required):
+  manifest_path = copied_book / 'tlda-manifest.json'
+  manifest = json.loads(manifest_path.read_text())
+  kept = [page for page in manifest['pages']
+          if page.get('source', {}).get('file') in required]
+  selected_outputs = {page['file'] for page in kept}
+  for output, source in rendered_output_pages(book_dir).items():
+    path = Path(output)
+    if source in required and path.parts[0] == book_dir.name:
+      selected_outputs.add(str(Path(*path.parts[1:])))
+  recorded_outputs = {page['file'] for page in manifest['pages']}
+  for path in copied_book.rglob('*.html'):
+    rel = path.relative_to(copied_book)
+    course_page = (str(rel) in recorded_outputs
+                   or (COURSE_DIR / rel.with_suffix('.qmd')).is_file()
+                   or rel.parts[0] in {'chapters', 'homework', 'decks'})
+    if not course_page or str(rel) in selected_outputs:
+      continue
+    path.unlink()
+    support = path.with_name(f'{path.stem}_files')
+    if support.is_dir():
+      shutil.rmtree(support)
+  manifest['pages'] = kept
+  manifest_path.write_text(json.dumps(manifest, indent=2) + '\n')
+
+
+def stamp(mtime):
+  return datetime.datetime.fromtimestamp(mtime).astimezone().isoformat(timespec='seconds')
+
+
+def course_provenance(book_dir):
+  """Where the course source stood when this site was assembled."""
+  if SOURCE_REVISION is not None:
+    if not re.fullmatch(r'[0-9a-f]{40}', SOURCE_REVISION):
+      raise ValueError('--source-revision must be the exact accepted tlda source revision (40 lowercase hex characters)')
+    return {'kind': 'tlda', 'checkout': str(COURSE_DIR),
+            'revision': SOURCE_REVISION, 'committedAt': None,
+            'subject': 'accepted tlda source snapshot', 'uncommittedSources': []}
+  # Both config names, not one: `present` filters to what exists, and naming
+  # only the old one meant an uncommitted change to the live `_quarto.yml` never
+  # showed up in `uncommittedSources`.
+  sources = sorted(set(rendered_pages(book_dir).values()) | {'index.qmd'} | set(BOOK_CONFIG_NAMES))
+  present = [source for source in sources if (COURSE_DIR / source).exists()]
+  uncommitted = [line[3:] for line in
+                 git_output(['status', '--porcelain=v1', '--', *present]).splitlines()]
+  return {'checkout': str(COURSE_DIR),
+          'revision': git_output(['rev-parse', 'HEAD']),
+          'committedAt': git_output(['log', '-1', '--format=%cI']),
+          'subject': git_output(['log', '-1', '--format=%s']),
+          'uncommittedSources': uncommitted}
+
+
+def site_files(root):
+  return {str(path.relative_to(root)) for path in root.rglob('*') if path.is_file()}
+
+
+def refuse_stale(book_dir, allowed):
+  stale = stale_pages(book_dir)
+  if stale and not allowed:
+    rows = '\n'.join(f'  {row["page"]}\n'
+                     f'    rendered      {row["renderedAt"]}\n'
+                     f'    source edited {row["sourceEditedAt"]}  ({row["source"]}, '
+                     f'{row["behindMinutes"]} min later)' for row in stale)
+    raise SystemExit(f'{len(stale)} page(s) in {book_dir} are older than the source they '
+                     f'were rendered from, so publishing would ship superseded work:\n{rows}\n'
+                     f'Re-render the course, or pass --stale-ok to publish them anyway and say '
+                     f'so on the site.')
+  return stale
+
+
+def refuse_unbuilt(book_dir, allowed):
+  unbuilt = unbuilt_chapters(book_dir)
+  if unbuilt and not allowed:
+    rows = '\n'.join(f'  {chapter}' for chapter in unbuilt)
+    declarer = COURSE_DIR / (book_config_name() or BOOK_CONFIG_NAMES[-1])
+    raise SystemExit(f'{len(unbuilt)} chapter(s) that {declarer} declares '
+                     f'were never rendered into {book_dir}, so publishing would ship a partial '
+                     f'book:\n{rows}\n'
+                     f'Render them, or pass --incomplete-ok to publish without them and say so '
+                     f'on the site.')
+  return unbuilt
+
+
+def refuse_deletions(stage_dir, site_dir, dropped, drop_all):
+  """Nothing already published disappears because a fresh render did not carry it.
+
+  The assemble step replaces the whole tree, so a render missing a handout zip or
+  a deck deletes it from the site on an exit-zero run. That has happened: a
+  regeneration from an out-of-sync `_book` staged 62 deletions including the
+  homework setup handout students use.
+  """
+  if not site_dir.exists():
+    return []
+  going = sorted(site_files(site_dir) - site_files(stage_dir))
+  if not going:
+    return []
+  if drop_all:
+    return going
+  unexpected = [path for path in going if path not in dropped]
+  if unexpected:
+    rows = '\n'.join(f'  {path}' for path in unexpected)
+    raise SystemExit(f'{len(unexpected)} file(s) published in {site_dir} are absent from this '
+                     f'build and would be deleted from the site:\n{rows}\n'
+                     f'Re-render whatever produced them, or name each one with --drop, or pass '
+                     f'--drop-all to remove all {len(going)}.')
+  return going
+
+
+def refuse_published_solutions(site_dir, allowed):
+  found = [row for row in pages_with_solutions(site_dir)
+           if row['page'] not in allowed]
+  if found:
+    rows = '\n'.join(f'  {row["page"]}  — {row["blocks"]} solution callout(s)' for row in found)
+    raise SystemExit(f'{len(found)} chapter(s) in this build carry worked solutions, '
+                     f'which the static site must not serve:\n{rows}\n'
+                     f'The book renders these chapters from their full masters; there is no '
+                     f'handout render in the book to publish instead, so this is fixed where the '
+                     f'chapter is rendered, not here. Pass --allow-solutions PATH per page to '
+                     f'publish anyway.')
+  return found
+
+
+def remove_withheld_homework(site_dir):
+  """Drop the pages, assets and handouts of homework that has not come out yet.
+
+  Runs after render_site, because reading the schedule is what decides which
+  those are. Returns what it removed: a homework silently vanishing from the
+  site is the same class of failure as one silently appearing with its answers.
+  """
+  homework_dir = site_dir / 'book' / 'homework'
+  removed = []
+  for stem in WITHHELD_HOMEWORK:
+    for target in (homework_dir / f'{stem}.html',
+                   homework_dir / f'{stem}_files',
+                   homework_dir / f'{stem}-solutions.html',
+                   homework_dir / 'handouts' / f'{stem}-handout.zip'):
+      if not target.exists():
+        continue
+      if target.is_dir():
+        shutil.rmtree(target)
+      else:
+        target.unlink()
+      removed.append(str(target.relative_to(site_dir)))
+  return removed
+
+
+def build_info(book_dir, provenance, stale, unbuilt, dropped):
+  """What the site publishes about itself.
+
+  This file is served, so it carries counts rather than paths for the same reason
+  the stamp does: naming a page that was held back from the site announces it.
+  The operator's copy, with every path, goes to stderr at the end of the run.
+  """
+  return {'version': 1,
+          'builtAt': datetime.datetime.now().astimezone().isoformat(timespec='seconds'),
+          'course': {'checkout': provenance['checkout'],
+                     'revision': provenance['revision'],
+                     'committedAt': provenance['committedAt'],
+                     'subject': provenance['subject'],
+                     'uncommittedSourceCount': len(provenance['uncommittedSources'])},
+          'publishedStale': len(stale),
+          'publishedWithoutChapters': len(unbuilt),
+          'deletedFromSite': len(dropped)}
+
+
+def build_stamp_html(info):
+  """The one line on the landing page that answers "is this current?".
+
+  Counts, never paths. This page is public, and a path here would announce the
+  filename of material that was deliberately kept off the site -- homework that
+  is still out, in practice. The operator gets the paths on stderr and in the
+  refusal messages, which is where the evidence is useful anyway.
+
+  Whatever was overridden to get the build out is still counted here, because a
+  stamp that only ever reports success is not worth reading.
+  """
+  course = info['course']
+  when = datetime.datetime.fromisoformat(info['builtAt']).strftime('%b %-d, %Y at %-I:%M %p')
+  parts = [f'Built {when} from course revision '
+           f'<code>{course["revision"][:12]}</code> ({course["subject"]}).']
+  for count, description in (
+      (course['uncommittedSourceCount'], 'source file(s) were uncommitted'),
+      (info['publishedStale'], 'page(s) are older than the source they came from'),
+      (info['publishedWithoutChapters'], 'declared chapter(s) are not in this build'),
+      (info['deletedFromSite'], 'previously published file(s) were removed')):
+    if count:
+      parts.append(f'<b>{count}</b> {description}.')
+  return ('<p style="margin-top:3em;font-size:0.8em;color:#666">'
+          f'{" ".join(parts)}</p>')
+
+
+def render_site(site_dir=Path('_site'), buildstamp='', unbuilt=()):
+  compiler = Compiler()
+  source = open("index.template", "r").read()
+  template = compiler.compile(source)
+  output = template({
+    'zoomlink': 'https://emory.zoom.us/j/91330426454?pwd=US7RfFmxBgGd2rvJCtnLcYu3zDepki.1',
+    # add dummy element to count lectures/labs starting with 1
+    'schedule': schedule_html(unbuilt=unbuilt),
+    'buildstamp': buildstamp
+    })
+  (site_dir / 'index.html').write_text(output)
+
+
+def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
+                    dropped=(), drop_all=False, allow_solutions=()):
+  """Assemble the site beside the published one, check it, then swap.
+
+  Staging first is what lets the deletion check compare the new tree against the
+  published one while the published one still exists. The old order -- delete,
+  then copy -- had already destroyed the evidence by the time anything could look.
+  """
+  global ACTIVE_SITE
+  target = refuse_wrong_destination(site_dir)
+  book_before = book_fingerprint(book_dir) if book_dir.is_dir() else None
+  provenance = course_provenance(book_dir)
+  # Read the schedule first: it is what decides which homework is not out yet,
+  # and both the currency check and the assembled tree need that answer.
+  required = set(declared_chapters())
+  stale = refuse_stale(book_dir, stale_ok)
+  unbuilt = refuse_unbuilt(book_dir, incomplete_ok)
+
+  stage_dir = site_dir.with_name(f'{site_dir.name}.staging')
+  if stage_dir.exists():
+    shutil.rmtree(stage_dir)
+  # A refusal must leave nothing behind: a half-built tree sitting next to the
+  # published one is another copy nobody can identify, and this repository is
+  # published whole -- the deploy workflow uploads `path: .`.
+  try:
+    stage_dir.mkdir(parents=True)
+    shutil.copytree(book_dir, stage_dir / 'book')
+    generator = COURSE_DIR / 'bin' / 'generate-index.py'
+    selection = runpy.run_path(str(generator))['rolling_book_spec'](SCHEDULE_SOURCE) if generator.is_file() else None
+    if selection is not None:
+      prune_rolling_book(book_dir, stage_dir / 'book', required)
+      # The linked book carries built pages, not committed assets: stage each
+      # selected asset the book lacks straight from course source. No
+      # existence guard here — the generator validated the source, so an
+      # absent source fails loudly at the copy instead of skipping silently.
+      for asset in selection['assets']:
+        staged = stage_dir / 'book' / asset
+        if not staged.is_file():
+          staged.parent.mkdir(parents=True, exist_ok=True)
+          shutil.copy2(COURSE_DIR / asset, staged)
+      for archive in (stage_dir / 'book' / 'homework' / 'handouts').glob('*-handout.zip'):
+        if str(archive.relative_to(stage_dir / 'book')) not in selection['assets']:
+          archive.unlink()
+    for name in ('css', 'images'):
+      shutil.copytree(Path('site-assets') / name, stage_dir / name)
+    info = build_info(book_dir, provenance, stale, unbuilt, [])
+    (stage_dir / 'build-info.json').write_text(json.dumps(info, indent=2) + '\n')
+    ACTIVE_SITE = stage_dir
+    render_site(stage_dir, build_stamp_html(info), unbuilt=unbuilt)
+    refuse_if_book_moved(book_dir, book_before)
+    withheld = remove_withheld_homework(stage_dir)
+    # After withholding, so a homework that is not out yet is already gone and
+    # is not reported twice.
+    # Same allowlist file the workflow gate reads, so the builder and the
+    # boundary cannot disagree about which pages his ruling keeps published.
+    # `--allow-solutions` adds to it rather than replacing it.
+    refuse_published_solutions(stage_dir,
+                               read_allowlist(ALLOWLIST_PATH) | set(allow_solutions))
+
+    # A page this build withheld on purpose is not a file that went missing, so
+    # it must not trip the deletion guard. Without this the two checks deadlock
+    # on the one case that matters: withholding removes the page from the staged
+    # tree, the deletion guard refuses the build because it would vanish from the
+    # site, nothing publishes, and the page stays up. Refusing to publish is not
+    # the same as taking down, and only this makes a takedown possible at all.
+    deleted = refuse_deletions(stage_dir, site_dir, set(dropped) | set(withheld), drop_all)
+    deleted = [path for path in deleted if path not in set(withheld)]
+    if deleted:
+      info = build_info(book_dir, provenance, stale, unbuilt, deleted)
+      (stage_dir / 'build-info.json').write_text(json.dumps(info, indent=2) + '\n')
+      render_site(stage_dir, build_stamp_html(info), unbuilt=unbuilt)
+
+    if site_dir.exists():
+      shutil.rmtree(site_dir)
+    stage_dir.rename(site_dir)
+  except BaseException:
+    ACTIVE_SITE = site_dir
+    shutil.rmtree(stage_dir, ignore_errors=True)
+    raise
+  ACTIVE_SITE = site_dir
+  # The operator's copy names every path. The published stamp and build-info.json
+  # deliberately do not.
+  destination = f' -> {target["repository"]}' if target else ''
+  summary = [f'{site_dir}{destination}: course revision {provenance["revision"][:12]}']
+  for label, paths in (
+      ('stale page(s) published', [row['page'] for row in stale]),
+      ('declared chapter(s) not built', unbuilt),
+      ('file(s) removed from the site', deleted),
+      ('file(s) withheld, homework not out yet', withheld),
+      ('uncommitted source(s)', provenance['uncommittedSources'])):
+    if paths:
+      summary.append(f'  {len(paths)} {label}:')
+      summary.extend(f'    {path}' for path in paths)
+  print('\n'.join(summary), file=sys.stderr)
+
+
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--course-dir', type=Path, required=True)
+  parser.add_argument('--source-revision', help='exact accepted tlda source revision for a materialized snapshot')
+  parser.add_argument('--book-dir', type=Path)
+  parser.add_argument('--site-dir', type=Path, default=Path('_site'))
+  parser.add_argument('--stale-ok', action='store_true',
+                      help='publish pages older than their source, and say so on the site')
+  parser.add_argument('--incomplete-ok', action='store_true',
+                      help='publish without chapters the book declares, and say so on the site')
+  parser.add_argument('--drop', action='append', default=[], metavar='PATH',
+                      help='a published file this build is meant to remove; repeatable')
+  parser.add_argument('--allow-solutions', action='append', default=[], metavar='PATH',
+                      help='publish this homework chapter even though it carries worked '
+                           'solutions; repeatable')
+  parser.add_argument('--drop-all', action='store_true',
+                      help='remove every published file absent from this build')
+  args = parser.parse_args()
+  COURSE_DIR = args.course_dir.resolve()
+  SOURCE_REVISION = args.source_revision
+  SCHEDULE_SOURCE = COURSE_DIR / 'index.qmd'
+  ACTIVE_SITE = args.site_dir
+  if args.book_dir:
+    assemble_static(args.book_dir, args.site_dir, stale_ok=args.stale_ok,
+                    incomplete_ok=args.incomplete_ok, dropped=args.drop, drop_all=args.drop_all,
+                    allow_solutions=args.allow_solutions)
+  else:
+    # Rendering the landing page alone still has to know which scheduled
+    # material is absent from the site, or `book_href` raises on the first
+    # link whose page is not there and no page is written at all. The
+    # assembled path gets this from the book build; here it comes from the
+    # published tree, which is the same question asked of what is actually
+    # serving. Absent material stays as schedule text, so the term reads in
+    # full and only the links that resolve are links.
+    def published_name(source):
+      # A solutions source publishes as `-solutions.html`, not
+      # `.solutions.html`, the same mapping `book_href` resolves through.
+      # Getting this wrong marks every posted solutions page as absent and
+      # silently strips its link from the schedule.
+      if source.endswith('.solutions.qmd'):
+        return source.removesuffix('.solutions.qmd') + '-solutions.html'
+      return str(Path(source).with_suffix('.html'))
+
+    # Rendered as schedule text although its page is on the site. Skip,
+    # 2026-10-08: "there is no chapter" -- which beats the link typed into
+    # the schedule on 2026-10-06, and that row is being rewritten anyway.
+    # Remove this when the row is settled; it is a dated exception, not a rule.
+    WITHHELD_LINKS = ('chapters/chapter-bias-and-coverage.qmd',)
+
+    missing = tuple(source for source in declared_chapters()
+                    if source in WITHHELD_LINKS
+                    or not (args.site_dir / 'book' / published_name(source)).is_file())
+    render_site(args.site_dir, unbuilt=missing)
+    # Report when the live pages stop matching the schedule file. Advisory:
+    # this build writes a local file and the live site only changes on a push,
+    # so a mismatch here usually means the push has not happened yet. It is
+    # still worth printing, because the failure it exists for -- a page that
+    # quietly stopped reflecting the file -- looked exactly like silence.
+    checker = COURSE_DIR / 'bin' / 'check-site-matches-schedule.py'
+    if checker.is_file():
+      subprocess.run([sys.executable, str(checker)], check=False)

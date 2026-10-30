@@ -1,4 +1,5 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><!--tlda-publication-head-->
 <script>
 if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 (function () {
@@ -20,7 +21,13 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       level: 'error',
       ns: ns,
       msg: msg,
-      data: Object.assign({ url: location.href, shapeId: shapeId }, data),
+      data: Object.assign({
+        url: location.href,
+        shapeId: shapeId,
+        userAgent: navigator.userAgent,
+        online: navigator.onLine,
+        embedded: window.parent !== window,
+      }, data),
     };
     try {
       var body = JSON.stringify(payload);
@@ -129,6 +136,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
           source: clip(src),
           tag: target.tagName,
         });
+        if (target.tagName === 'IMG') scheduleImageCheck();
         return;
       }
       send('doc-fault', event.message || 'error', {
@@ -222,6 +230,68 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     return { state: 'ok', slides: document.querySelectorAll('.reveal .slides section').length };
   }
 
+  function requestedImages() {
+    return Array.from(document.querySelectorAll('img')).filter(function (img) {
+      // Reveal keeps future pictures in data-src. They have not failed: the
+      // browser has not been asked to load them yet.
+      return !!(img.currentSrc || img.getAttribute('src'));
+    });
+  }
+
+  function failedImage(img) { return img.complete && img.naturalWidth === 0; }
+
+  function probeImages() {
+    var images = requestedImages();
+    var failed = images.filter(failedImage).length;
+    var pending = images.filter(function (img) { return !img.complete; }).length;
+    return {
+      state: failed ? 'broken' : pending ? 'pending' : images.length ? 'ok' : 'absent',
+      why: failed ? failed + ' images failed to load' : pending ? 'images are still loading' : undefined,
+      failed: failed,
+      pending: pending,
+      loaded: images.length - failed - pending,
+    };
+  }
+
+  var imageCheckTimer = null;
+  function scheduleImageCheck() {
+    // Initial failures are included in the existing after-load health check.
+    // Do not diagnose Reveal or math before their startup has finished.
+    if (document.readyState !== 'complete') return;
+    if (imageCheckTimer !== null) return;
+    imageCheckTimer = setTimeout(function () {
+      imageCheckTimer = null;
+      check();
+    }, 150);
+  }
+
+  function retryFailedImages() {
+    requestedImages().filter(failedImage).forEach(function (img) {
+      // Keep the current document, its Reveal state and the canvas overlay.
+      // A fresh request for this failed resource must not reload the iframe.
+      var url = new URL(img.currentSrc || img.src, location.href);
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+      url.searchParams.set('_tldaImageRetry', String(Date.now()));
+      // currentSrc may have come from srcset. Keep its chosen resource on this
+      // retry so the unchanged srcset cannot select the failed request again.
+      var picture = img.closest('picture');
+      if (picture) picture.querySelectorAll('source[srcset]').forEach(function (source) {
+        source.removeAttribute('srcset');
+      });
+      img.removeAttribute('srcset');
+      img.addEventListener('load', scheduleImageCheck, { once: true });
+      img.addEventListener('error', scheduleImageCheck, { once: true });
+      img.src = url.href;
+    });
+    check();
+  }
+
+  window.addEventListener('message', function (event) {
+    if (window.parent === window || event.source !== window.parent) return;
+    if (event.data && event.data.type === 'tlda-retry-images') retryFailedImages();
+    if (event.data && event.data.type === 'tlda-request-doc-health') check();
+  });
+
   // Without this a throwing probe takes check() down: no report, no badge, and
   // a page that reads as healthy. 'unknown' never folds into 'ok'.
   function attempt(name, probe) {
@@ -237,8 +307,9 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       math: attempt('math', probeMath),
       webr: attempt('webR', probeWebR),
       reveal: attempt('reveal', probeReveal),
+      images: attempt('images', probeImages),
     };
-    var names = ['math', 'webr', 'reveal'];
+    var names = ['math', 'webr', 'reveal', 'images'];
     var broken = names.filter(function (k) { return report[k].state === 'broken'; });
     var unknown = names.filter(function (k) { return report[k].state === 'unknown'; });
     report.broken = broken;
@@ -268,7 +339,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   window.__tldaDocHealthCheck = check;
 })();
 }
-</script>
+</script><!--/tlda-publication-head-->
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -330,29 +401,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../_assets/mv9bmbxv-1/site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../_assets/mv9bmbxv-1/site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../_assets/mv9bmbxv-1/site_libs/clipboard/clipboard.min.js"></script>
-<script src="../_assets/mv9bmbxv-1/site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../_assets/mv9bmbxv-1/site_libs/quarto-search/fuse.min.js"></script>
-<script src="../_assets/mv9bmbxv-1/site_libs/quarto-search/quarto-search.js"></script>
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../homework/homework-calibration.html" rel="next">
 <link href="../chapters/chapter-sampling.html" rel="prev">
-<script src="../_assets/mv9bmbxv-1/site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../_assets/mv9bmbxv-1/site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../_assets/mv9bmbxv-1/site_libs/quarto-html/popper.min.js"></script>
-<script src="../_assets/mv9bmbxv-1/site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../_assets/mv9bmbxv-1/site_libs/quarto-html/anchor.min.js"></script>
-<link href="../_assets/mv9bmbxv-1/site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../_assets/mv9bmbxv-1/site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../_assets/mv9bmbxv-1/site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../_assets/mv9bmbxv-1/site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../_assets/mv9bmbxv-1/site_libs/bootstrap/bootstrap-be13b5e62a53a36e99ca46c948bdaa3d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="../_assets/mv9bmbxv-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
-<link href="../_assets/mv9bmbxv-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
-<script src="../_assets/mv9bmbxv-1/site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
-<link href="../_assets/mv9bmbxv-1/site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6fe1715721786a838a92806728cb6c53.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -380,10 +451,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script type="module" src="../_assets/mv9bmbxv-1/site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
-<link href="../_assets/mv9bmbxv-1/site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
-<link href="../_assets/mv9bmbxv-1/site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="../_assets/mv9bmbxv-1/site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script>
 // GENERATED by bin/generate-katex-macros.mjs from the tlda repo's
 // shared/katex-base-macros.mjs. Do not edit here -- edit the source and
@@ -830,7 +901,7 @@ window.__tldaKatexMacros = {
 
 </script>
 
-  <script defer="" src="../_assets/mv9bmbxv-1/katex-assets/dist/katex.min.js"></script>
+  <script defer="" src="../katex-assets/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
  var mathElements = document.getElementsByClassName("math");
  var macros = [];
@@ -845,7 +916,7 @@ window.__tldaKatexMacros = {
    });
 }}});
   </script>
-  <link rel="stylesheet" href="../_assets/mv9bmbxv-1/katex-assets/dist/katex.min.css">
+  <link rel="stylesheet" href="../katex-assets/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -876,239 +947,45 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">1.1 Calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-point-and-interval-estimates.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Point and Interval Estimates</span></a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
-    </div>
-  </nav>
-</header>
+  
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
-    <div class="sidebar-title mb-0 py-0">
-      <a href="../">Prediction, Inference, and Causality</a> 
-    </div>
-      </div>
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
-        </div>
-        </div>
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Prediction, Inference, and Causality I</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-social-pressure-experiment.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Social Pressure Experiment</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Homework: Setting Up</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-descriptive.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework: Basic Descriptive Statistics</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1 Calibration</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-sampling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-point-and-interval-estimates.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Point and Interval Estimates</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-calibration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-calibration-binary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-sampling-with-replacement.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-calibration-binary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-sampling-without-replacement.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../part1-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2 Moments and approximate calibration</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Means and Markov’s Inequality</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-standard-deviation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Calibrating Intervals with Variance</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-normal-approximation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation and Sample Size Calculation</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-bias-and-coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Power, Bias, and Coverage</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-programming-reference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Programming Reference</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">References</span></a>
-  </div>
-</li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+  
+
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li data-source-line="5" data-source-end-line="5"><a href="#sampling-review" id="toc-sampling-review" class="nav-link active" data-scroll-target="#sampling-review">Sampling Review</a>
+  <li><a href="#sampling-review" id="toc-sampling-review" class="nav-link active" data-scroll-target="#sampling-review">Sampling Review</a>
   <ul class="collapse">
-  <li data-source-line="193" data-source-end-line="193"><a href="#sampling-distributions-in-real-studies" id="toc-sampling-distributions-in-real-studies" class="nav-link" data-scroll-target="#sampling-distributions-in-real-studies">Sampling Distributions in Real Studies</a></li>
-  <li data-source-line="216" data-source-end-line="216"><a href="#what-do-we-do-with-a-sampling-distribution" id="toc-what-do-we-do-with-a-sampling-distribution" class="nav-link" data-scroll-target="#what-do-we-do-with-a-sampling-distribution">What Do We Do with a Sampling Distribution?</a></li>
-  <li data-source-line="239" data-source-end-line="239"><a href="#sampling-mechanisms" id="toc-sampling-mechanisms" class="nav-link" data-scroll-target="#sampling-mechanisms">Sampling Mechanisms</a></li>
+  <li><a href="#sampling-distributions-in-real-studies" id="toc-sampling-distributions-in-real-studies" class="nav-link" data-scroll-target="#sampling-distributions-in-real-studies">Sampling Distributions in Real Studies</a></li>
+  <li><a href="#what-do-we-do-with-a-sampling-distribution" id="toc-what-do-we-do-with-a-sampling-distribution" class="nav-link" data-scroll-target="#what-do-we-do-with-a-sampling-distribution">What Do We Do with a Sampling Distribution?</a></li>
+  <li><a href="#sampling-mechanisms" id="toc-sampling-mechanisms" class="nav-link" data-scroll-target="#sampling-mechanisms">Sampling Mechanisms</a></li>
   </ul></li>
-  <li data-source-line="275" data-source-end-line="275"><a href="#polling" id="toc-polling" class="nav-link" data-scroll-target="#polling">Polling</a>
+  <li><a href="#polling" id="toc-polling" class="nav-link" data-scroll-target="#polling">Polling</a>
   <ul class="collapse">
-  <li data-source-line="338" data-source-end-line="338"><a href="#important-questions" id="toc-important-questions" class="nav-link" data-scroll-target="#important-questions">Important Questions</a></li>
-  <li data-source-line="345" data-source-end-line="345"><a href="#sampling" id="toc-sampling" class="nav-link" data-scroll-target="#sampling">Sampling</a></li>
-  <li data-source-line="445" data-source-end-line="445"><a href="#sampling-distributions" id="toc-sampling-distributions" class="nav-link" data-scroll-target="#sampling-distributions">Sampling Distributions</a></li>
-  <li data-source-line="579" data-source-end-line="579"><a href="#the-sampling-distribution-of-our-estimate" id="toc-the-sampling-distribution-of-our-estimate" class="nav-link" data-scroll-target="#the-sampling-distribution-of-our-estimate">The Sampling Distribution of our Estimate</a>
+  <li><a href="#important-questions" id="toc-important-questions" class="nav-link" data-scroll-target="#important-questions">Important Questions</a></li>
+  <li><a href="#sampling" id="toc-sampling" class="nav-link" data-scroll-target="#sampling">Sampling</a></li>
+  <li><a href="#sampling-distributions" id="toc-sampling-distributions" class="nav-link" data-scroll-target="#sampling-distributions">Sampling Distributions</a></li>
+  <li><a href="#the-sampling-distribution-of-our-estimate" id="toc-the-sampling-distribution-of-our-estimate" class="nav-link" data-scroll-target="#the-sampling-distribution-of-our-estimate">The Sampling Distribution of our Estimate</a>
   <ul class="collapse">
-  <li data-source-line="594" data-source-end-line="594"><a href="#programming-the-sampling-distribution" id="toc-programming-the-sampling-distribution" class="nav-link" data-scroll-target="#programming-the-sampling-distribution">Programming the sampling distribution</a></li>
+  <li><a href="#programming-the-sampling-distribution" id="toc-programming-the-sampling-distribution" class="nav-link" data-scroll-target="#programming-the-sampling-distribution">Programming the sampling distribution</a></li>
   </ul></li>
-  <li data-source-line="695" data-source-end-line="695"><a href="#interval-estimation" id="toc-interval-estimation" class="nav-link" data-scroll-target="#interval-estimation">Interval Estimation</a></li>
-  <li data-source-line="760" data-source-end-line="760"><a href="#calculating-the-coverage-probability" id="toc-calculating-the-coverage-probability" class="nav-link" data-scroll-target="#calculating-the-coverage-probability">Calculating the Coverage Probability</a></li>
-  <li data-source-line="823" data-source-end-line="823"><a href="#calibrating-interval-estimates" id="toc-calibrating-interval-estimates" class="nav-link" data-scroll-target="#calibrating-interval-estimates">Calibrating Interval Estimates</a>
+  <li><a href="#interval-estimation" id="toc-interval-estimation" class="nav-link" data-scroll-target="#interval-estimation">Interval Estimation</a></li>
+  <li><a href="#calculating-the-coverage-probability" id="toc-calculating-the-coverage-probability" class="nav-link" data-scroll-target="#calculating-the-coverage-probability">Calculating the Coverage Probability</a></li>
+  <li><a href="#calibrating-interval-estimates" id="toc-calibrating-interval-estimates" class="nav-link" data-scroll-target="#calibrating-interval-estimates">Calibrating Interval Estimates</a>
   <ul class="collapse">
-  <li data-source-line="877" data-source-end-line="877"><a href="#a-problem" id="toc-a-problem" class="nav-link" data-scroll-target="#a-problem">A Problem</a></li>
+  <li><a href="#a-problem" id="toc-a-problem" class="nav-link" data-scroll-target="#a-problem">A Problem</a></li>
   </ul></li>
-  <li data-source-line="892" data-source-end-line="892"><a href="#communication" id="toc-communication" class="nav-link" data-scroll-target="#communication">Communication</a>
+  <li><a href="#communication" id="toc-communication" class="nav-link" data-scroll-target="#communication">Communication</a>
   <ul class="collapse">
-  <li data-source-line="900" data-source-end-line="900"><a href="#dont-make-this-mistake" id="toc-dont-make-this-mistake" class="nav-link" data-scroll-target="#dont-make-this-mistake">Don’t Make this Mistake!</a></li>
+  <li><a href="#dont-make-this-mistake" id="toc-dont-make-this-mistake" class="nav-link" data-scroll-target="#dont-make-this-mistake">Don’t Make this Mistake!</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -1137,37 +1014,14 @@ window.Quarto = {
 
 
 <section id="sampling-review" class="level1">
-<h1 data-source-line="5" data-source-end-line="5">Sampling Review</h1>
-
-
-
-
-
-<div class="hidden" data-source-line="1" data-source-end-line="17" data-source-file="chapters/shared/shared-code.qmd">
+<h1>Sampling Review</h1>
+<div class="hidden">
 <p>$$ \newcommand{X}{} \newcommand{Y}{} % A hex digit after # inside a macro body is eaten by build-time expansion, so digit-leading hexes spell # via . </p>
-
-
-
-
-
-
-
-<p data-source-line="122" data-source-end-line="130" data-source-file="shared/shared-style.qmd">$$</p>
+<p>$$</p>
 </div>
-
-
-
-
-
-
-
-
-
-
-<div class="columns" data-source-line="181" data-source-end-line="200" data-source-file="shared/shared-style.qmd">
+<div class="columns">
 <div class="column">
-
-<div class="cell" data-source-line="27" data-source-end-line="33">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1177,8 +1031,7 @@ window.Quarto = {
 </div>
 </div>
 </div><div class="column">
-
-<p data-source-line="38" data-source-end-line="46"><span class="math display">
+<p><span class="math display">
 \color{gray}
 \begin{array}{r|rrrrrr|r}
 j &amp; 1 &amp; 2 &amp; 3 &amp; 4 &amp; 5 &amp; 6 &amp;
@@ -1189,12 +1042,11 @@ y_{j} &amp; 0 &amp; 1 &amp; \textcolor{#073B4C}{1} &amp; 1 &amp; \textcolor{#073
 </span></p>
 </div>
 </div>
-<p data-source-line="51" data-source-end-line="51">In the last chapter, we talked about how to use sampling to summarize a population without surveying everyone in it. For example, we might estimate the proportion of people in a population of six who prefer chocolate to sour candy. In the fake population shown above, 4/6 people prefer chocolate. Those who prefer chocolate are in the top row, at y=1. Those who prefer sour candy are below at y=0.</p>
-<p data-source-line="53" data-source-end-line="53">We considered a few different sampling schemes: sampling with replacement, sampling without replacement, and convenience sampling. Suppose we chose sampling with replacement. We’d randomly pick people from our population to survey, putting them back each time so they could be picked again. Of the <span class="polla">3 people we sampled</span>, 2 prefer chocolate to sour candy. So our estimate of the proportion of the population who preferred chocolate was 2/3.</p>
+<p>In the last chapter, we talked about how to use sampling to summarize a population without surveying everyone in it. For example, we might estimate the proportion of people in a population of six who prefer chocolate to sour candy. In the fake population shown above, 4/6 people prefer chocolate. Those who prefer chocolate are in the top row, at y=1. Those who prefer sour candy are below at y=0.</p>
+<p>We considered a few different sampling schemes: sampling with replacement, sampling without replacement, and convenience sampling. Suppose we chose sampling with replacement. We’d randomly pick people from our population to survey, putting them back each time so they could be picked again. Of the <span class="polla">3 people we sampled</span>, 2 prefer chocolate to sour candy. So our estimate of the proportion of the population who preferred chocolate was 2/3.</p>
 <div class="columns">
 <div class="column">
-
-<div class="cell quarto-layout-panel" data-layout-nrow="3" data-source-line="59" data-source-end-line="71">
+<div class="cell quarto-layout-panel" data-layout-nrow="3">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
 <p><img src="chapter-point-and-interval-estimates_files/figure-html/plot-three-samples-1.svg" class="img-fluid" alt="Three differently colored samples overlaid on the same six-person binary population, illustrating three possible draws and their different sample proportions."></p>
@@ -1202,8 +1054,7 @@ y_{j} &amp; 0 &amp; 1 &amp; \textcolor{#073B4C}{1} &amp; 1 &amp; \textcolor{#073
 </div>
 </div>
 </div><div class="column">
-
-<p data-source-line="76" data-source-end-line="88"><span class="math display">
+<p><span class="math display">
 \color{gray}
 \begin{array}{r|rrrrrr|r}
 j &amp; 1 &amp; 2 &amp; 3 &amp; 4 &amp; 5 &amp; 6 &amp;
@@ -1218,16 +1069,12 @@ y_{j} &amp; \textcolor{#118AB2}{0} &amp; 1 &amp; \textcolor{#118AB2}{1} &amp; \t
 </span></p>
 </div>
 </div>
-<p data-source-line="93" data-source-end-line="93">Sampling was a huge time-saver. But is our estimate trustworthy? How close was our estimate to the actual proportion in the population of 6? We looked into it ahead of time by running a <strong>simulation</strong> of our survey on a fake population. We did exactly what we did in our actual survey, but we did it over and over. This let us look at what our estimator does, knowing what we want it to do: be <span class="math inline">\textcolor{gray}{ \approx 4/6}</span>. Above, we’ve shown the results of three of these simulations. We call the distribution of estimates we get like this our estimator’s <strong>sampling distribution</strong>. These three estimates are three <em>draws</em> from the sampling distribution. That’s three equally-likely outcomes of our survey. And we do ok in these three. But that’s just three. To get a better sense of what’s likely, we should look at a lot more.</p>
-
-
-
-<div id="fig-viz-sampling-dist" class="image-toggle drawable quarto-float quarto-figure quarto-figure-center anchored" data-steps=".viz-step" data-mode="steps" data-labels="Dots,Bars,Histogram" data-source-line="96" data-source-end-line="118">
-<figure class="quarto-float quarto-float-fig figure" data-source-line="175" data-source-end-line="175">
+<p>Sampling was a huge time-saver. But is our estimate trustworthy? How close was our estimate to the actual proportion in the population of 6? We looked into it ahead of time by running a <strong>simulation</strong> of our survey on a fake population. We did exactly what we did in our actual survey, but we did it over and over. This let us look at what our estimator does, knowing what we want it to do: be <span class="math inline">\textcolor{gray}{ \approx 4/6}</span>. Above, we’ve shown the results of three of these simulations. We call the distribution of estimates we get like this our estimator’s <strong>sampling distribution</strong>. These three estimates are three <em>draws</em> from the sampling distribution. That’s three equally-likely outcomes of our survey. And we do ok in these three. But that’s just three. To get a better sense of what’s likely, we should look at a lot more.</p>
+<div id="fig-viz-sampling-dist" class="image-toggle drawable quarto-float quarto-figure quarto-figure-center anchored" data-steps=".viz-step" data-labels="Dots,Bars,Histogram" data-mode="steps">
+<figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-viz-sampling-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
-
-<div class="cell" data-source-line="151" data-source-end-line="155">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1238,8 +1085,7 @@ y_{j} &amp; \textcolor{#118AB2}{0} &amp; 1 &amp; \textcolor{#118AB2}{1} &amp; \t
 </div>
 </div>
 <div>
-
-<div class="cell" data-source-line="159" data-source-end-line="164">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1250,8 +1096,7 @@ y_{j} &amp; \textcolor{#118AB2}{0} &amp; 1 &amp; \textcolor{#118AB2}{1} &amp; \t
 </div>
 </div>
 <div>
-
-<div class="cell" data-source-line="168" data-source-end-line="172">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1268,19 +1113,18 @@ Figure&nbsp;6.1: Visualizing 1000 draws from the sampling distribution.
 </figure>
 </div>
 <div class="viz-step">
-<p data-source-line="179" data-source-end-line="180"><strong>Dots.</strong> 1000 <span class="purple">●</span>s, one per simulated poll. The green line marks the population proportion. Estimates are usually close, but not always.</p>
+<p><strong>Dots.</strong> 1000 <span class="purple">●</span>s, one per simulated poll. The green line marks the population proportion. Estimates are usually close, but not always.</p>
 </div>
 <div class="viz-step">
-<p data-source-line="184" data-source-end-line="185"><strong>Bars.</strong> Count the dots in each column. But the columns have uneven spacing—most dots are in the middle, spread across many columns. No single bar is tall there.</p>
+<p><strong>Bars.</strong> Count the dots in each column. But the columns have uneven spacing—most dots are in the middle, spread across many columns. No single bar is tall there.</p>
 </div>
 <div class="viz-step">
-<p data-source-line="189" data-source-end-line="190"><strong>Histogram.</strong> Group nearby columns into <em>equal-width bins</em>. This shows the <em>density</em> of estimates. The area of the histogram between any two values gives the fraction of estimates there.</p>
+<p><strong>Histogram.</strong> Group nearby columns into <em>equal-width bins</em>. This shows the <em>density</em> of estimates. The area of the histogram between any two values gives the fraction of estimates there.</p>
 </div>
 <section id="sampling-distributions-in-real-studies" class="level2">
-<h2 class="anchored" data-anchor-id="sampling-distributions-in-real-studies" data-source-line="193" data-source-end-line="193">Sampling Distributions in Real Studies</h2>
+<h2 class="anchored" data-anchor-id="sampling-distributions-in-real-studies">Sampling Distributions in Real Studies</h2>
 <div class="linked-cameras">
-
-<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="196" data-source-end-line="209">
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
@@ -1301,13 +1145,12 @@ Figure&nbsp;6.1: Visualizing 1000 draws from the sampling distribution.
 </div>
 </div>
 </div>
-<p data-source-line="211" data-source-end-line="211">It’s easy to think about sampling distributions when we’re running a <strong>simulation</strong> of our study. We can run our simulation as many times as we want and plot the sampling distribution. And we can use our knowledge of the population to see if we’re happy with it.</p>
-<p data-source-line="213" data-source-end-line="213">In a real study, we don’t have any of this. All we get is one estimate. But that doesn’t stop us from filling in the rest of the picture by thinking of it as one draw from our estimator’s sampling distribution, working out where that sampling distribution is in relation to the estimation target, and using the data we have to estimate the sampling distribution.</p>
+<p>It’s easy to think about sampling distributions when we’re running a <strong>simulation</strong> of our study. We can run our simulation as many times as we want and plot the sampling distribution. And we can use our knowledge of the population to see if we’re happy with it.</p>
+<p>In a real study, we don’t have any of this. All we get is one estimate. But that doesn’t stop us from filling in the rest of the picture by thinking of it as one draw from our estimator’s sampling distribution, working out where that sampling distribution is in relation to the estimation target, and using the data we have to estimate the sampling distribution.</p>
 </section>
 <section id="what-do-we-do-with-a-sampling-distribution" class="level2">
-<h2 class="anchored" data-anchor-id="what-do-we-do-with-a-sampling-distribution" data-source-line="216" data-source-end-line="216">What Do We Do with a Sampling Distribution?</h2>
-
-<div class="cell" data-source-line="217" data-source-end-line="223">
+<h2 class="anchored" data-anchor-id="what-do-we-do-with-a-sampling-distribution">What Do We Do with a Sampling Distribution?</h2>
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1316,19 +1159,17 @@ Figure&nbsp;6.1: Visualizing 1000 draws from the sampling distribution.
 </div>
 </div>
 </div>
-
-<p data-source-line="225" data-source-end-line="228">A sampling distribution is an odd summary of the proportion of people who prefer chocolate. It’s not what you asked for. You asked for a single number describing a population. What you got was 1000 numbers describing 1000 samples.</p>
-<p data-source-line="232" data-source-end-line="232">But it does tell you something if you look at it right. How often is the estimate exactly equal to the population proportion? 45% of the time. How often is it off by <span class="math inline">\textcolor{#118AB2}{1/3}</span> or less? 96% of the time.</p>
-<p data-source-line="234" data-source-end-line="234">To make this sound like a statement about the population, we report two things.</p>
+<p>A sampling distribution is an odd summary of the proportion of people who prefer chocolate. It’s not what you asked for. You asked for a single number describing a population. What you got was 1000 numbers describing 1000 samples.</p>
+<p>But it does tell you something if you look at it right. How often is the estimate exactly equal to the population proportion? 45% of the time. How often is it off by <span class="math inline">\textcolor{#118AB2}{1/3}</span> or less? 96% of the time.</p>
+<p>To make this sound like a statement about the population, we report two things.</p>
 <ol type="1">
-<li data-source-line="236" data-source-end-line="236">An <strong>interval</strong> you can expect the population proportion to be in. For example, we think it’s in the interval <span class="math inline">\textcolor{#073B4C}{2/3} \pm \textcolor{#118AB2}{1/3}</span> because <span class="math inline">\textcolor{#073B4C}{2/3}</span> is our sample proportion.</li>
-<li data-source-line="237" data-source-end-line="237">The degree of <strong>confidence</strong> you have that it’s actually in it. For example, it’s in <em>an interval calculated exactly like this</em> in 96% of surveys <em>run exactly like this</em>.</li>
+<li>An <strong>interval</strong> you can expect the population proportion to be in. For example, we think it’s in the interval <span class="math inline">\textcolor{#073B4C}{2/3} \pm \textcolor{#118AB2}{1/3}</span> because <span class="math inline">\textcolor{#073B4C}{2/3}</span> is our sample proportion.</li>
+<li>The degree of <strong>confidence</strong> you have that it’s actually in it. For example, it’s in <em>an interval calculated exactly like this</em> in 96% of surveys <em>run exactly like this</em>.</li>
 </ol>
 </section>
 <section id="sampling-mechanisms" class="level2">
-<h2 class="anchored" data-anchor-id="sampling-mechanisms" data-source-line="239" data-source-end-line="239">Sampling Mechanisms</h2>
-
-<div class="cell" data-source-line="241" data-source-end-line="249">
+<h2 class="anchored" data-anchor-id="sampling-mechanisms">Sampling Mechanisms</h2>
+<div class="cell">
 <div class="cell-output-display">
 <div id="fig-compare-sampling" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Three panels compare sampling distributions for sampling with replacement, without replacement, and by convenience. The two random mechanisms center near the population proportion; convenience sampling produces one fixed estimate.">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1342,11 +1183,10 @@ Figure&nbsp;6.2
 </div>
 </div>
 </div>
-<p data-source-line="251" data-source-end-line="251">Let’s take a moment to get a sense of how different sampling schemes affect our estimate. To do this, we’ll look at 1000 draws from the sampling distribution we get using each. To help it a bit easier, we’ll display a histogram of each too (<a href="#fig-compare-sampling" class="quarto-xref">Figure&nbsp;<span>6.2</span></a>).</p>
-<p data-source-line="253" data-source-end-line="253">2/3 of the mechanisms we’ve plotted give us fairly similar sampling distributions. They have a peak around 2/3, which is the population proportion. That’s where most of our estimates wind up being—where we want them.</p>
-<p data-source-line="255" data-source-end-line="255">The one that’s different is convenience sampling. It was most convenient for me to sample the first three people in our population. That doesn’t change, so neither does our estimate. In this case, it’s a good one. That happens sometimes. But you can’t count on it. Without a random mechanism, it’s hard to <em>know</em> your estimate will be good. Using multiple, meaningfully different fake populations can help you catch stuff that works by luck in one. Today, we’ll focus on <em>sampling with replacement</em>.</p>
-
-<div class="cell" data-source-line="257" data-source-end-line="265">
+<p>Let’s take a moment to get a sense of how different sampling schemes affect our estimate. To do this, we’ll look at 1000 draws from the sampling distribution we get using each. To help it a bit easier, we’ll display a histogram of each too (<a href="#fig-compare-sampling" class="quarto-xref">Figure&nbsp;<span>6.2</span></a>).</p>
+<p>2/3 of the mechanisms we’ve plotted give us fairly similar sampling distributions. They have a peak around 2/3, which is the population proportion. That’s where most of our estimates wind up being—where we want them.</p>
+<p>The one that’s different is convenience sampling. It was most convenient for me to sample the first three people in our population. That doesn’t change, so neither does our estimate. In this case, it’s a good one. That happens sometimes. But you can’t count on it. Without a random mechanism, it’s hard to <em>know</em> your estimate will be good. Using multiple, meaningfully different fake populations can help you catch stuff that works by luck in one. Today, we’ll focus on <em>sampling with replacement</em>.</p>
+<div class="cell">
 <div class="cell-output-display">
 <div id="fig-with-replacement-dist" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Sampling distribution for the sample proportion under sampling with replacement, centered near the green population proportion with outcomes at zero, one-third, two-thirds, and one.">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1360,56 +1200,44 @@ Figure&nbsp;6.3
 </div>
 </div>
 </div>
-<p data-source-line="267" data-source-end-line="267">That’s just to keep things simple and concrete. Most of what we’ll say will apply to any sampling scheme. We’ll really be talking about the relationship between three things.</p>
+<p>That’s just to keep things simple and concrete. Most of what we’ll say will apply to any sampling scheme. We’ll really be talking about the relationship between three things.</p>
 <ol type="1">
-<li data-source-line="269" data-source-end-line="269">Our estimator</li>
-<li data-source-line="270" data-source-end-line="270">Its sampling distribution</li>
-<li data-source-line="271" data-source-end-line="271">Our estimation target</li>
+<li>Our estimator</li>
+<li>Its sampling distribution</li>
+<li>Our estimation target</li>
 </ol>
-<p data-source-line="273" data-source-end-line="273">Later, we’ll look into this more generally. We’ll talk about how we want these three things to be related and when we know they’re related that way.</p>
+<p>Later, we’ll look into this more generally. We’ll talk about how we want these three things to be related and when we know they’re related that way.</p>
 </section>
 </section>
 <section id="polling" class="level1">
-<h1 data-source-line="275" data-source-end-line="275">Polling</h1>
-
-
-
-
-
-
-
-
-
-
-
-<p data-source-line="1" data-source-end-line="5" data-source-file="chapters/ga-turnout.qmd">Suppose that, week before the 2020 presidential election, you did some polling. You use a list of the <span class="math inline">m \approx 7.23M</span> people registered to vote in Georgia. And you make <span class="math inline">n=625</span> phone calls. Each call, you select a voter uniformly at random from the list, e.g.&nbsp;by rolling a 7.23M -sided die. And then you ask the potential voter whether they plan to vote.</p>
-<p data-source-line="294" data-source-end-line="294">Suppose also that all these registered voters will pick up the phone when called, respond honestly to your questions, and not change their minds about voting. That is, suppose they tell us whether they do ultimately vote on election day.</p>
-<p data-source-line="296" data-source-end-line="296">You put your polling results in a table. It has one column for each call. In that columns, you record the call number <span class="math inline">i</span>—a number from <span class="math inline">1 \ldots 625</span>, and the response <span class="math inline">Y_i</span> of the person you called—<span class="math inline">1</span> for ‘yes and <span class="math inline">0</span> for no’.</p>
-
-<p data-source-line="298" data-source-end-line="303"><span class="math display">
+<h1>Polling</h1>
+<p>Suppose that, week before the 2020 presidential election, you did some polling. You use a list of the <span class="math inline">m \approx 7.23M</span> people registered to vote in Georgia. And you make <span class="math inline">n=625</span> phone calls. Each call, you select a voter uniformly at random from the list, e.g.&nbsp;by rolling a 7.23M -sided die. And then you ask the potential voter whether they plan to vote.</p>
+<p>Suppose also that all these registered voters will pick up the phone when called, respond honestly to your questions, and not change their minds about voting. That is, suppose they tell us whether they do ultimately vote on election day.</p>
+<p>You put your polling results in a table. It has one column for each call. In that columns, you record the call number <span class="math inline">i</span>—a number from <span class="math inline">1 \ldots 625</span>, and the response <span class="math inline">Y_i</span> of the person you called—<span class="math inline">1</span> for ‘yes and <span class="math inline">0</span> for no’.</p>
+<p><span class="math display">
 \begin{array}{r|rrrr|r}
 i    &amp;   1 &amp; 2 &amp; \dots &amp; 625 &amp; \bar{Y}_{625}  \\
 Y_i  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
 \end{array}
 </span></p>
-<p data-source-line="305" data-source-end-line="305">You summarized the results with an extra column: the mean of the responses. Remember that the mean of a binary variable is a frequency. Or a proportion.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> You found that 68% of the people polled said they would vote.</p>
-<p data-source-line="307" data-source-end-line="307">We want to estimate the proportion of <em>all registered voters</em> — our population — who will vote. To do this, we use the proportion of <em>polled voters</em> — our sample — who said they would. When the election occurs, we get to see who turns out to vote. 5.05M people, or roughly 70% of registered voters, actually vote.</p>
-<p data-source-line="309" data-source-end-line="309">Outcomes for the population of registered voters. To enumerate our population, we give each registered voter a number <span class="math inline">j \in 1 \ldots 7.23M</span> and write <span class="math inline">y_j</span> for the turnout of the person with ID <span class="math inline">j</span>.</p>
+<p>You summarized the results with an extra column: the mean of the responses. Remember that the mean of a binary variable is a frequency. Or a proportion.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> You found that 68% of the people polled said they would vote.</p>
+<p>We want to estimate the proportion of <em>all registered voters</em> — our population — who will vote. To do this, we use the proportion of <em>polled voters</em> — our sample — who said they would. When the election occurs, we get to see who turns out to vote. 5.05M people, or roughly 70% of registered voters, actually vote.</p>
+<p>Outcomes for the population of registered voters. To enumerate our population, we give each registered voter a number <span class="math inline">j \in 1 \ldots 7.23M</span> and write <span class="math inline">y_j</span> for the turnout of the person with ID <span class="math inline">j</span>.</p>
 <div class="columns">
 <div class="column">
 <section id="before-the-election" class="level3">
-<h3 class="anchored" data-anchor-id="before-the-election" data-source-line="313" data-source-end-line="313">Before the Election</h3>
+<h3 class="anchored" data-anchor-id="before-the-election">Before the Election</h3>
 <p><span class="math display">\
 \begin{array}{r|rrrr|r}\ni    &amp;   1 &amp; 2 &amp; \dots &amp; 625 &amp; \bar{Y}_{625}  \\
 Y_i  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
 \end{array}\
-</span>&nbsp;</p>
+</span><br>
+</p>
 </section>
-</div><div class="column" data-source-line="315" data-source-end-line="319">
+</div><div class="column">
 <section id="after-the-election" class="level3">
-<h3 class="anchored" data-anchor-id="after-the-election" data-source-line="323" data-source-end-line="323">After the Election</h3>
-
-<p data-source-line="325" data-source-end-line="330"><span class="math display">
+<h3 class="anchored" data-anchor-id="after-the-election">After the Election</h3>
+<p><span class="math display">
 \begin{array}{r|rrrrrr|r}
 j &amp; 1 &amp; 2 &amp; 3 &amp; 4 &amp; \dots &amp;   7.23M &amp; \bar{y}_{7.23M}  \\
 y_{j} &amp; 1 &amp; 1 &amp; 1 &amp; 0 &amp; \dots &amp; 1   &amp; 0.70  \\
@@ -1418,26 +1246,25 @@ y_{j} &amp; 1 &amp; 1 &amp; 1 &amp; 0 &amp; \dots &amp; 1   &amp; 0.70  \\
 </section>
 </div>
 </div>
-<p>Our sample proportion <span class="math inline">425 / 625 \approx 0.68</span> is close to the population proportion <span class="math inline">5.05M / 7.23M \approx 0.70</span> </p>
-<p data-source-line="334" data-source-end-line="334">That’s pretty accurate. Our reputation as a turnout pollster is intact for now. But unless we’re looking to retire, one success isn’t enough. We’re going to poll again. If our methods aren’t reliable, we’ve got work to do fixing them. Even if they are, if we overstate our accuracy, we’re going to have to answer for it. For example, we could say we’ll be off by at most 2%, since that’s what happened this time. But if it’s 4% next time, that’s not going to look good.</p>
+<p>Our sample proportion <span class="math inline">425 / 625 \approx 0.68</span> is close to the population proportion <span class="math inline">5.05M / 7.23M \approx 0.70</span></p>
+<p>That’s pretty accurate. Our reputation as a turnout pollster is intact for now. But unless we’re looking to retire, one success isn’t enough. We’re going to poll again. If our methods aren’t reliable, we’ve got work to do fixing them. Even if they are, if we overstate our accuracy, we’re going to have to answer for it. For example, we could say we’ll be off by at most 2%, since that’s what happened this time. But if it’s 4% next time, that’s not going to look good.</p>
 <section id="important-questions" class="level3">
-<h3 class="anchored" data-anchor-id="important-questions" data-source-line="338" data-source-end-line="338">Important Questions</h3>
+<h3 class="anchored" data-anchor-id="important-questions">Important Questions</h3>
 <ol type="1">
-<li data-source-line="340" data-source-end-line="340">Was it luck that we got as close as we did?</li>
-<li data-source-line="341" data-source-end-line="341">Could we have predicted how close we’d get <em>before</em> the election happened?</li>
+<li>Was it luck that we got as close as we did?<br>
+</li>
+<li>Could we have predicted how close we’d get <em>before</em> the election happened?</li>
 </ol>
-<p data-source-line="343" data-source-end-line="343">To find answers, we’ll think about what would happen if our friends had run identical polls. Each friend would choose a different random sample <span class="math inline">Y_1 \ldots Y_{625}</span> and estimate the population proportion using the proportion in their sample. We’ll see how accurate these estimates tend to be.</p>
+<p>To find answers, we’ll think about what would happen if our friends had run identical polls. Each friend would choose a different random sample <span class="math inline">Y_1 \ldots Y_{625}</span> and estimate the population proportion using the proportion in their sample. We’ll see how accurate these estimates tend to be.</p>
 </section>
 <section id="sampling" class="level2">
-<h2 class="anchored" data-anchor-id="sampling" data-source-line="345" data-source-end-line="345">Sampling</h2>
-<p data-source-line="347" data-source-end-line="347">To answer these questions, let’s first be precise about how we run our poll. For each call <span class="math inline">i</span>, we randomly select a voter with an ID we’ll call <span class="math inline">J_i</span>. And we record as that call’s outcome the turnout of that voter: <span class="math inline">Y_i = y_{J_i}</span>. On each call, each registered voter has a <span class="math inline">1/7.23M</span> chance of being called. This is called sampling with replacement because we could call the same person twice—though in our poll, this is unlikely because we’re making a small number of calls relative to population size.</p>
-
-<div id="fig-sampling-process" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".sample-step" data-mode="steps" data-labels="First calls,All calls,Our estimate" data-source-line="349" data-source-end-line="357">
-<figure class="quarto-float quarto-float-fig figure" data-source-line="425" data-source-end-line="425">
+<h2 class="anchored" data-anchor-id="sampling">Sampling</h2>
+<p>To answer these questions, let’s first be precise about how we run our poll. For each call <span class="math inline">i</span>, we randomly select a voter with an ID we’ll call <span class="math inline">J_i</span>. And we record as that call’s outcome the turnout of that voter: <span class="math inline">Y_i = y_{J_i}</span>. On each call, each registered voter has a <span class="math inline">1/7.23M</span> chance of being called. This is called sampling with replacement because we could call the same person twice—though in our poll, this is unlikely because we’re making a small number of calls relative to population size.</p>
+<div id="fig-sampling-process" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-steps=".sample-step" data-layout="sidebar" data-labels="First calls,All calls,Our estimate" data-mode="steps">
+<figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sampling-process-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
-
-<div class="cell" data-source-line="362" data-source-end-line="366">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1446,8 +1273,7 @@ y_{j} &amp; 1 &amp; 1 &amp; 1 &amp; 0 &amp; \dots &amp; 1   &amp; 0.70  \\
 </div>
 </div>
 </div>
-
-<table class="poll-table" data-source-line="368" data-source-end-line="379">
+<table class="poll-table">
 <caption>
 First calls in our poll
 </caption>
@@ -1513,8 +1339,7 @@ call
 </tbody></table>
 </div>
 <div>
-
-<div class="cell" data-source-line="383" data-source-end-line="387">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1523,8 +1348,7 @@ call
 </div>
 </div>
 </div>
-
-<table class="poll-table" data-source-line="389" data-source-end-line="400">
+<table class="poll-table">
 <caption>
 All calls in our poll
 </caption>
@@ -1590,8 +1414,7 @@ call
 </tbody></table>
 </div>
 <div>
-
-<div class="cell" data-source-line="404" data-source-end-line="409">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1600,8 +1423,7 @@ call
 </div>
 </div>
 </div>
-
-<table class="poll-table" data-source-line="411" data-source-end-line="422">
+<table class="poll-table">
 <caption>
 Responses and sample mean after discarding voter identifiers
 </caption>
@@ -1673,26 +1495,24 @@ Figure&nbsp;7.1: The sampling process: making calls and recording responses.
 </figure>
 </div>
 <div class="sample-step">
-<p data-source-line="429" data-source-end-line="430"><strong>First few calls.</strong> The first reaches <span class="math inline">J_1 = 869369</span>, who says <span class="math inline">Y_1 = 1</span>. The second reaches <span class="math inline">J_2 = 4428455</span>, who says <span class="math inline">Y_2 = 1</span>.</p>
+<p><strong>First few calls.</strong> The first reaches <span class="math inline">J_1 = 869369</span>, who says <span class="math inline">Y_1 = 1</span>. The second reaches <span class="math inline">J_2 = 4428455</span>, who says <span class="math inline">Y_2 = 1</span>.</p>
 </div>
 <div class="sample-step">
-<p data-source-line="434" data-source-end-line="435"><strong>All 625 calls.</strong> After 625 calls: <span class="math inline">Y_1 \ldots Y_{625}</span>. Each call is independent.</p>
+<p><strong>All 625 calls.</strong> After 625 calls: <span class="math inline">Y_1 \ldots Y_{625}</span>. Each call is independent.</p>
 </div>
 <div class="sample-step">
-<p data-source-line="439" data-source-end-line="440"><strong>Our estimate.</strong> Now we discard the IDs—all that matters is the responses. Voters (colored) vs non-voters (gray). Sample mean <span class="math inline">\overline{Y}_{625} =</span> <span class="polla">0.68</span>.</p>
+<p><strong>Our estimate.</strong> Now we discard the IDs—all that matters is the responses. Voters (colored) vs non-voters (gray). Sample mean <span class="math inline">\overline{Y}_{625} =</span> <span class="polla">0.68</span>.</p>
 </div>
-<p data-source-line="443" data-source-end-line="443"><strong>What happened?</strong> Our estimate is close to the population mean (0.70). That’s what we wanted. But was that luck?</p>
+<p><strong>What happened?</strong> Our estimate is close to the population mean (0.70). That’s what we wanted. But was that luck?</p>
 </section>
 <section id="sampling-distributions" class="level2">
-<h2 class="anchored" data-anchor-id="sampling-distributions" data-source-line="445" data-source-end-line="445">Sampling Distributions</h2>
-<p data-source-line="447" data-source-end-line="447">To find out, imagine our friends ran identical polls. Same method, same population—but different random samples, so different estimates.</p>
-<div id="fig-friends-polls" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".dist-step" data-mode="steps" data-labels="Our poll,Friend 1,Friend 2,All three,Many more">
-<figure class="quarto-float quarto-float-fig figure" data-source-line="548" data-source-end-line="548">
+<h2 class="anchored" data-anchor-id="sampling-distributions">Sampling Distributions</h2>
+<p>To find out, imagine our friends ran identical polls. Same method, same population—but different random samples, so different estimates.</p>
+<div id="fig-friends-polls" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-steps=".dist-step" data-layout="sidebar" data-labels="Our poll,Friend 1,Friend 2,All three,Many more" data-mode="steps">
+<figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-friends-polls-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-
-<div data-source-line="451" data-source-end-line="464">
-
-<div class="cell" data-source-line="467" data-source-end-line="471">
+<div>
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1701,8 +1521,7 @@ Figure&nbsp;7.1: The sampling process: making calls and recording responses.
 </div>
 </div>
 </div>
-
-<table class="poll-table" data-source-line="473" data-source-end-line="478">
+<table class="poll-table">
 <caption>
 Results from our poll
 </caption>
@@ -1832,8 +1651,7 @@ friend 10k
 </table>
 </div>
 <div>
-
-<div class="cell" data-source-line="482" data-source-end-line="486">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1842,8 +1660,7 @@ friend 10k
 </div>
 </div>
 </div>
-
-<table class="poll-table" data-source-line="488" data-source-end-line="493">
+<table class="poll-table">
 <caption>
 Results from our poll and Friend 1’s poll
 </caption>
@@ -1973,8 +1790,7 @@ friend 10k
 </table>
 </div>
 <div>
-
-<div class="cell" data-source-line="497" data-source-end-line="501">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1983,8 +1799,7 @@ friend 10k
 </div>
 </div>
 </div>
-
-<table class="poll-table" data-source-line="503" data-source-end-line="508">
+<table class="poll-table">
 <caption>
 Results from our poll and two friends’ polls
 </caption>
@@ -2114,8 +1929,7 @@ friend 10k
 </table>
 </div>
 <div>
-
-<div class="cell" data-source-line="512" data-source-end-line="519">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2124,8 +1938,7 @@ friend 10k
 </div>
 </div>
 </div>
-
-<table class="poll-table" data-source-line="521" data-source-end-line="526">
+<table class="poll-table">
 <caption>
 Results from our poll and two friends’ polls
 </caption>
@@ -2255,8 +2068,7 @@ friend 10k
 </table>
 </div>
 <div>
-
-<div class="cell" data-source-line="530" data-source-end-line="538">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2265,8 +2077,7 @@ friend 10k
 </div>
 </div>
 </div>
-
-<table class="poll-table" data-source-line="540" data-source-end-line="545">
+<table class="poll-table">
 <caption>
 Results from our poll and many friends’ polls
 </caption>
@@ -2402,26 +2213,26 @@ Figure&nbsp;7.2: Comparing polls: different random samples yield different estim
 </figure>
 </div>
 <div class="dist-step">
-<p data-source-line="552" data-source-end-line="553"><strong>Our poll.</strong> Estimate: <span class="polla">0.68</span>.</p>
+<p><strong>Our poll.</strong> Estimate: <span class="polla">0.68</span>.</p>
 </div>
 <div class="dist-step">
-<p data-source-line="557" data-source-end-line="558"><strong>Friend 1.</strong> Same method, different luck: <span class="pollb">0.71</span>.</p>
+<p><strong>Friend 1.</strong> Same method, different luck: <span class="pollb">0.71</span>.</p>
 </div>
 <div class="dist-step">
-<p data-source-line="562" data-source-end-line="563"><strong>Friend 2.</strong> Another sample: <span class="pollc">0.70</span>.</p>
+<p><strong>Friend 2.</strong> Another sample: <span class="pollc">0.70</span>.</p>
 </div>
 <div class="dist-step">
-<p data-source-line="567" data-source-end-line="568"><strong>All three.</strong> All close to the truth (0.70).</p>
+<p><strong>All three.</strong> All close to the truth (0.70).</p>
 </div>
 <div class="dist-step">
-<p data-source-line="572" data-source-end-line="573"><strong>Many more friends.</strong> Imagine 10,000 friends, each running the same poll. 10,000 estimates—a whole distribution.</p>
+<p><strong>Many more friends.</strong> Imagine 10,000 friends, each running the same poll. 10,000 estimates—a whole distribution.</p>
 </div>
-<p data-source-line="576" data-source-end-line="576">This thought experiment illustrates the <em>sampling distribution</em>: the distribution of estimates we’d get running the same poll many times.</p>
+<p>This thought experiment illustrates the <em>sampling distribution</em>: the distribution of estimates we’d get running the same poll many times.</p>
 </section>
 <section id="the-sampling-distribution-of-our-estimate" class="level2">
-<h2 class="anchored" data-anchor-id="the-sampling-distribution-of-our-estimate" data-source-line="579" data-source-end-line="579">The Sampling Distribution of our Estimate</h2>
-<p data-source-line="581" data-source-end-line="581">We run 10,000 simulated polls and store who we call (J) and what they say (Y). </p>
-<div class="cell" data-source-line="582" data-source-end-line="592">
+<h2 class="anchored" data-anchor-id="the-sampling-distribution-of-our-estimate">The Sampling Distribution of our Estimate</h2>
+<p>We run 10,000 simulated polls and store who we call (J) and what they say (Y).</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>draw.indices <span class="ot">=</span> <span class="cf">function</span>(y) <span class="fu">sample</span>(<span class="fu">seq_along</span>(y), n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Js <span class="ot">=</span> <span class="fu">rep</span>(<span class="fu">list</span>(y), <span class="dv">10000</span>) <span class="sc">|&gt;</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(draw.indices) <span class="sc">|&gt;</span></span>
@@ -2431,17 +2242,16 @@ Figure&nbsp;7.2: Comparing polls: different random samples yield different estim
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>Ys <span class="ot">=</span> <span class="fu">matrix</span>(y[Js], <span class="at">nrow=</span><span class="dv">10000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="programming-the-sampling-distribution" class="level3">
-<h3 class="anchored" data-anchor-id="programming-the-sampling-distribution" data-source-line="594" data-source-end-line="594">Programming the sampling distribution</h3>
-<p data-source-line="596" data-source-end-line="596">The function <code>draw.indices</code> names one repetition of the sampling process: it draws the row indices for one poll. <code>rep(list(y), 10000)</code> supplies the population to that function 10,000 times, and <code>map()</code> collects the 10,000 index vectors. The final matrix has one simulated poll in each row.</p>
-<p data-source-line="598" data-source-end-line="598">This is the repeat-and-collect pattern from the <a href="../chapters/chapter-programming-reference.html#repeating-and-collecting">programming reference</a>. The statistical operation gets a name; <code>map()</code> handles where each result is stored.</p>
-<p data-source-line="600" data-source-end-line="600">We calculate the sample proportion for each poll. </p>
-<div class="cell" data-source-line="601" data-source-end-line="605">
+<h3 class="anchored" data-anchor-id="programming-the-sampling-distribution">Programming the sampling distribution</h3>
+<p>The function <code>draw.indices</code> names one repetition of the sampling process: it draws the row indices for one poll. <code>rep(list(y), 10000)</code> supplies the population to that function 10,000 times, and <code>map()</code> collects the 10,000 index vectors. The final matrix has one simulated poll in each row.</p>
+<p>This is the repeat-and-collect pattern from the programming reference. The statistical operation gets a name; <code>map()</code> handles where each result is stored.</p>
+<p>We calculate the sample proportion for each poll.</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>meanY.samples <span class="ot">=</span> <span class="fu">rowMeans</span>(Ys)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p data-source-line="607" data-source-end-line="607">And histogram the result. That’s the human-readable version. If you’re a computer or a person who just really like tables, you can just put all the numbers—including our sample proportions—in a table. Before we look at the real thing, let’s sketch the histogram we expect to see.</p>
-<p data-source-line="609" data-source-end-line="610">If you take it seriously, sketching is a great way to develop your intution. As you sketch your histogram, think about what you’re doing. Are you drawing your histogram in the <em>location</em> you think it should be in? What about the <em>shape</em>? Is its <em>spread</em> what you really think it should be?</p>
-
-<div class="cell" data-source-line="612" data-source-end-line="616">
+<p>And histogram the result. That’s the human-readable version. If you’re a computer or a person who just really like tables, you can just put all the numbers—including our sample proportions—in a table. Before we look at the real thing, let’s sketch the histogram we expect to see.</p>
+<p>If you take it seriously, sketching is a great way to develop your intution. As you sketch your histogram, think about what you’re doing. Are you drawing your histogram in the <em>location</em> you think it should be in? What about the <em>shape</em>? Is its <em>spread</em> what you really think it should be?</p>
+<div class="cell">
 <div class="cell-output-display">
 <div id="fig-sketch-space" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Blank plotting area reserved for students to sketch the expected histogram of ten thousand simulated poll estimates.">
 <figure class="quarto-float quarto-float-fig figure">
@@ -2460,15 +2270,14 @@ Figure&nbsp;7.3
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill" data-source-line="619" data-source-end-line="619">
+<div class="callout-title-container flex-fill">
 <span class="screen-reader-only">Note</span>The Histogram
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-
-<div class="cell" data-source-line="621" data-source-end-line="625">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2485,15 +2294,14 @@ Figure&nbsp;7.3
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill" data-source-line="629" data-source-end-line="629">
+<div class="callout-title-container flex-fill">
 <span class="screen-reader-only">Note</span>As a Table
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-
-<p data-source-line="631" data-source-end-line="655"><span class="math display">
+<p><span class="math display">
 \begin{array}{r|rr|rr|r|rr|r}
 \text{call} &amp;  1 &amp; &amp; 2 &amp; &amp; \dots &amp; 625 &amp; &amp;  \\
 \text{pollster} &amp; J_1 &amp; Y_1 &amp; J_2 &amp; Y_2   &amp; \dots &amp; J_{625} &amp; Y_{625}  &amp; \overline{Y}_{625}  \\
@@ -2521,10 +2329,9 @@ Figure&nbsp;7.3
 </div>
 </div>
 </div>
-<p data-source-line="658" data-source-end-line="658">There are a few features of our sampling distribution that we may want to highlight. In <a href="#fig-annotated-hist" class="quarto-xref">Figure&nbsp;<span>7.4</span></a> below, the <em>mean of the sampling distribution</em> is the solid blue line. The middle 2/3 of the sampling distribution lies between the dashed blue lines. The middle 95% of the sampling distribution lies between the dotted blue lines.</p>
-<p data-source-line="660" data-source-end-line="660">Our estimation target — the turnout frequency in the population — is drawn as a wide green line. It’s in exactly the same place as the solid blue line.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> What does this tell us about our estimator?</p>
-
-<div class="cell" data-source-line="662" data-source-end-line="686">
+<p>There are a few features of our sampling distribution that we may want to highlight. In <a href="#fig-annotated-hist" class="quarto-xref">Figure&nbsp;<span>7.4</span></a> below, the <em>mean of the sampling distribution</em> is the solid blue line. The middle 2/3 of the sampling distribution lies between the dashed blue lines. The middle 95% of the sampling distribution lies between the dotted blue lines.</p>
+<p>Our estimation target — the turnout frequency in the population — is drawn as a wide green line. It’s in exactly the same place as the solid blue line.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> What does this tell us about our estimator?</p>
+<div class="cell">
 <div class="cell-output-display">
 <div id="fig-annotated-hist" class="quarto-float quarto-figure quarto-figure-center anchored" height="500px" alt="Histogram of simulated turnout estimates with one observed estimate marked, a green line at the population turnout proportion, and blue lines marking the mean and central two-thirds and 95 percent ranges.">
 <figure class="quarto-float quarto-float-fig figure">
@@ -2538,20 +2345,18 @@ Figure&nbsp;7.4
 </div>
 </div>
 </div>
-<p data-source-line="688" data-source-end-line="688"><strong>Observation</strong>. Our point estimate (the ● in <a href="#fig-annotated-hist" class="quarto-xref">Figure&nbsp;<span>7.4</span></a>) is close to our estimation target. It’s within 2%. Did we get lucky? Not really. In 68% of polls, the estimator is within 2% of the target. In 95% of polls, the estimator is within 4% of the target.</p>
-<p data-source-line="691" data-source-end-line="692">Could we have predicted how close we’d get before the election happened? Yes, in a sense. We will use an interval estimate—a <em>range of values</em> the estimation target is likely to be in. The <em>width</em> of this interval speaks to the ‘how close’ question. The <em>coverage probability</em> — the probability our estimate is actually that close — qualifies this answer.</p>
+<p><strong>Observation</strong>. Our point estimate (the ● in <a href="#fig-annotated-hist" class="quarto-xref">Figure&nbsp;<span>7.4</span></a>) is close to our estimation target. It’s within 2%. Did we get lucky? Not really. In 68% of polls, the estimator is within 2% of the target. In 95% of polls, the estimator is within 4% of the target.</p>
+<p>Could we have predicted how close we’d get before the election happened? Yes, in a sense. We will use an interval estimate—a <em>range of values</em> the estimation target is likely to be in. The <em>width</em> of this interval speaks to the ‘how close’ question. The <em>coverage probability</em> — the probability our estimate is actually that close — qualifies this answer.</p>
 </section>
 </section>
 <section id="interval-estimation" class="level2">
-<h2 class="anchored" data-anchor-id="interval-estimation" data-source-line="695" data-source-end-line="695">Interval Estimation</h2>
-
-<p data-source-line="697" data-source-end-line="700">Our <em>point estimate</em> of the turnout frequency in our population is the turnout frequency in our sample: <span class="math inline">\overline{Y}_{625}</span>. So let’s try an interval of width 0.02 centered on it: <span class="math inline">\overline{Y}_{625} \pm 0.01</span>. This is just a width we chose arbitarily. Maybe it’s wishful thinking. Being off by at most 1% sounds good. What we want is for our interval to <strong>cover</strong> our estimation target, i.e.&nbsp;for the population frequency to be in our interval. This one doesn’t. Is that just bad luck? Or is it typical of <span class="math inline">\pm 0.01</span> intervals? Let’s see what happens when our friends try intervals like this.</p>
-<div id="fig-interval-est" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".interval-step" data-mode="steps" data-labels="Our poll,Friends' polls,100 polls">
-<figure class="quarto-float quarto-float-fig figure" data-source-line="740" data-source-end-line="740">
+<h2 class="anchored" data-anchor-id="interval-estimation">Interval Estimation</h2>
+<p>Our <em>point estimate</em> of the turnout frequency in our population is the turnout frequency in our sample: <span class="math inline">\overline{Y}_{625}</span>. So let’s try an interval of width 0.02 centered on it: <span class="math inline">\overline{Y}_{625} \pm 0.01</span>. This is just a width we chose arbitarily. Maybe it’s wishful thinking. Being off by at most 1% sounds good. What we want is for our interval to <strong>cover</strong> our estimation target, i.e.&nbsp;for the population frequency to be in our interval. This one doesn’t. Is that just bad luck? Or is it typical of <span class="math inline">\pm 0.01</span> intervals? Let’s see what happens when our friends try intervals like this.</p>
+<div id="fig-interval-est" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-steps=".interval-step" data-layout="sidebar" data-labels="Our poll,Friends' polls,100 polls" data-mode="steps">
+<figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-interval-est-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
-
-<div class="cell" data-source-line="707" data-source-end-line="714">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2562,8 +2367,7 @@ Figure&nbsp;7.4
 </div>
 </div>
 <div>
-
-<div class="cell" data-source-line="718" data-source-end-line="725">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2574,8 +2378,7 @@ Figure&nbsp;7.4
 </div>
 </div>
 <div>
-
-<div class="cell" data-source-line="729" data-source-end-line="737">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2592,20 +2395,19 @@ Figure&nbsp;7.5: Interval estimates: how often do they cover the target?
 </figure>
 </div>
 <div class="interval-step">
-<p data-source-line="744" data-source-end-line="745"><strong>Our interval.</strong> We draw <span class="math inline">\pm .01</span> around our estimate. It misses the target (green line). Bad luck?</p>
+<p><strong>Our interval.</strong> We draw <span class="math inline">\pm .01</span> around our estimate. It misses the target (green line). Bad luck?</p>
 </div>
 <div class="interval-step">
-<p data-source-line="749" data-source-end-line="750"><strong>Friends’ intervals.</strong> The <span class="pollb">pink</span> and <span class="pollc">teal</span> intervals from our friends. One covers, one doesn’t. 1/3 coverage so far.</p>
+<p><strong>Friends’ intervals.</strong> The <span class="pollb">pink</span> and <span class="pollc">teal</span> intervals from our friends. One covers, one doesn’t. 1/3 coverage so far.</p>
 </div>
 <div class="interval-step">
-<p data-source-line="754" data-source-end-line="755"><strong>100 polls.</strong> <span class="math inline">45/100</span> cover the target. This gives us a sense of the <em>coverage probability</em>.</p>
+<p><strong>100 polls.</strong> <span class="math inline">45/100</span> cover the target. This gives us a sense of the <em>coverage probability</em>.</p>
 </div>
-<p data-source-line="758" data-source-end-line="758">To be more precise about coverage, we could simulate millions of polls. But there’s a more direct way to calculate the <strong>coverage probability</strong>.</p>
+<p>To be more precise about coverage, we could simulate millions of polls. But there’s a more direct way to calculate the <strong>coverage probability</strong>.</p>
 </section>
 <section id="calculating-the-coverage-probability" class="level2">
-<h2 class="anchored" data-anchor-id="calculating-the-coverage-probability" data-source-line="760" data-source-end-line="760">Calculating the Coverage Probability</h2>
-
-<div class="cell" data-source-line="761" data-source-end-line="769">
+<h2 class="anchored" data-anchor-id="calculating-the-coverage-probability">Calculating the Coverage Probability</h2>
+<div class="cell">
 <div class="cell-output-display">
 <div id="fig-coverage-prob-setup" class="quarto-float quarto-figure quarto-figure-center anchored" height="500px" alt="One hundred narrow poll intervals and their point estimates over the sampling distribution, with the population target marked in green for a coverage-counting activity.">
 <figure class="quarto-float quarto-float-fig figure">
@@ -2619,20 +2421,20 @@ Figure&nbsp;7.6
 </div>
 </div>
 </div>
-<p data-source-line="771" data-source-end-line="771"><strong>Activity</strong>. Explain how to calculate this <em>coverage probability</em> using the <em>sampling distribution</em> of your point estimate <span class="math inline">\bar Y_{625}</span>.</p>
+<p><strong>Activity</strong>. Explain how to calculate this <em>coverage probability</em> using the <em>sampling distribution</em> of your point estimate <span class="math inline">\bar Y_{625}</span>.</p>
 <div class="callout callout-style-simple callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill" data-source-line="774" data-source-end-line="774">
+<div class="callout-title-container flex-fill">
 <span class="screen-reader-only">Tip</span>Step 1. Counting
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p data-source-line="776" data-source-end-line="776">Suppose you want to use a diagram like this to count how many of our 100 intervals cover the estimation target. But you don’t want to look at the horizontal segments for each poll. They’re small and hard to see. You just want to use the dots representing each poll’s point estimate <span class="math inline">\bar Y_{625}</span>. <strong>Sketch</strong> something on top of our diagram to help you count.</p>
+<p>Suppose you want to use a diagram like this to count how many of our 100 intervals cover the estimation target. But you don’t want to look at the horizontal segments for each poll. They’re small and hard to see. You just want to use the dots representing each poll’s point estimate <span class="math inline">\bar Y_{625}</span>. <strong>Sketch</strong> something on top of our diagram to help you count.</p>
 </div>
 </div>
 </div>
@@ -2641,14 +2443,14 @@ Figure&nbsp;7.6
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill" data-source-line="780" data-source-end-line="780">
+<div class="callout-title-container flex-fill">
 <span class="screen-reader-only">Tip</span>Hint for Step 1
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p data-source-line="782" data-source-end-line="782">What should you sketch? Think of an interval estimate as a point—a ‘body’—with ‘arms’ of a certain length. It’s not so different from you. Suppose you had an identical twin. And you’re not sure whether you’re standing close enough to touch them. But you don’t want to put your arms out. You’re tired from all that polling. Could your twin check for you?</p>
+<p>What should you sketch? Think of an interval estimate as a point—a ‘body’—with ‘arms’ of a certain length. It’s not so different from you. Suppose you had an identical twin. And you’re not sure whether you’re standing close enough to touch them. But you don’t want to put your arms out. You’re tired from all that polling. Could your twin check for you?</p>
 </div>
 </div>
 </div>
@@ -2657,14 +2459,14 @@ Figure&nbsp;7.6
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-title-container flex-fill" data-source-line="786" data-source-end-line="786">
+<div class="callout-title-container flex-fill">
 <span class="screen-reader-only">Tip</span>Step 2. From Counting to Probability
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p data-source-line="788" data-source-end-line="788">Now you’ve worked out how to count how many of 100 intervals cover the estimation target. What would you do if you had a million? Or a billion? That’d be good enough. If x% of a billion intervals cover, you’re pretty safe saying that x% is the <em>coverage probability</em>. You can’t look at a billion dots one by one, but you can look at <em>a histogram</em> of a billion dots. <strong>Explain</strong> how to use that histogram to calculate the coverage probability. Use your sketch from Step 1.</p>
+<p>Now you’ve worked out how to count how many of 100 intervals cover the estimation target. What would you do if you had a million? Or a billion? That’d be good enough. If x% of a billion intervals cover, you’re pretty safe saying that x% is the <em>coverage probability</em>. You can’t look at a billion dots one by one, but you can look at <em>a histogram</em> of a billion dots. <strong>Explain</strong> how to use that histogram to calculate the coverage probability. Use your sketch from Step 1.</p>
 </div>
 </div>
 </div>
@@ -2681,8 +2483,7 @@ Figure&nbsp;7.6
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution" data-collapse="true">
-
-<div class="cell" data-source-line="792" data-source-end-line="803">
+<div class="cell">
 <div class="cell-output-display">
 <div id="fig-coverage-calc-viz" class="quarto-float quarto-figure quarto-figure-center anchored" height="500px" alt="The coverage calculation visualized by green shading centered on the population target; a poll interval covers exactly when its point estimate lies inside the shaded region.">
 <figure class="quarto-float quarto-float-fig figure">
@@ -2696,33 +2497,30 @@ Figure&nbsp;7.7
 </div>
 </div>
 </div>
-<p data-source-line="805" data-source-end-line="805">Shade in an interval of width .02 centered on the estimation target. This gives it ‘arms’ the same length as our interval estimates have. And its arms touch a point estimate <em>if and only if</em> the point estimate’s arms touch it. That means we can count the intervals that cover by counting the point estimates between the dotted lines.</p>
-
-<p data-source-line="807" data-source-end-line="810">What, in terms of the sampling distribution of the point estimate, is the coverage probability? It’s the probability that a random draw from the sampling distribution lies in the <span class="green">green</span> shaded area. <span class="math display">
+<p>Shade in an interval of width .02 centered on the estimation target. This gives it ‘arms’ the same length as our interval estimates have. And its arms touch a point estimate <em>if and only if</em> the point estimate’s arms touch it. That means we can count the intervals that cover by counting the point estimates between the dotted lines.</p>
+<p>What, in terms of the sampling distribution of the point estimate, is the coverage probability? It’s the probability that a random draw from the sampling distribution lies in the <span class="green">green</span> shaded area. <span class="math display">
 \text{coverage probability} = P\p*{\overline{Y}_{625} \in \overline{y}_{7.23M} \pm .01}
 </span></p>
-<p data-source-line="812" data-source-end-line="812">And it’s about 43%. We can get that by counting dots.</p>
-
-<div class="cell" data-source-line="814" data-source-end-line="818">
+<p>And it’s about 43%. We can get that by counting dots.</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">mean</span>(y) <span class="sc">-</span> .<span class="dv">01</span> <span class="sc">&lt;=</span> meanY.samples <span class="sc">&amp;</span> meanY.samples <span class="sc">&lt;=</span> <span class="fu">mean</span>(y) <span class="sc">+</span> .<span class="dv">01</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.4278</code></pre>
 </div>
 </div>
-<p data-source-line="820" data-source-end-line="820">Or by finding the area of the histogram that’s shaded <span class="green">green</span>.</p>
+<p>Or by finding the area of the histogram that’s shaded <span class="green">green</span>.</p>
 </div>
 </div>
 </div>
 </div>
 </section>
 <section id="calibrating-interval-estimates" class="level2">
-<h2 class="anchored" data-anchor-id="calibrating-interval-estimates" data-source-line="823" data-source-end-line="823">Calibrating Interval Estimates</h2>
-<div id="fig-calibration" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".calib-step" data-mode="steps" data-labels="Narrow intervals,Wide intervals">
-<figure class="quarto-float quarto-float-fig figure" data-source-line="851" data-source-end-line="851">
+<h2 class="anchored" data-anchor-id="calibrating-interval-estimates">Calibrating Interval Estimates</h2>
+<div id="fig-calibration" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-steps=".calib-step" data-layout="sidebar" data-labels="Narrow intervals,Wide intervals" data-mode="steps">
+<figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-calibration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
-
-<div class="cell" data-source-line="828" data-source-end-line="833">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2733,8 +2531,7 @@ Figure&nbsp;7.7
 </div>
 </div>
 <div>
-
-<div class="cell" data-source-line="837" data-source-end-line="848">
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2751,16 +2548,15 @@ Figure&nbsp;7.8: Calibrating intervals: choosing width to achieve desired covera
 </figure>
 </div>
 <div class="calib-step">
-<p data-source-line="855" data-source-end-line="856"><strong>Narrow intervals (<span class="math inline">\pm .01</span>).</strong> Coverage is about 43%. Think of how you’d advertise: “I’m right about half the time.” Not great.</p>
+<p><strong>Narrow intervals (<span class="math inline">\pm .01</span>).</strong> Coverage is about 43%. Think of how you’d advertise: “I’m right about half the time.” Not great.</p>
 </div>
 <div class="calib-step">
-<p data-source-line="860" data-source-end-line="861"><strong>Wide intervals (95%).</strong> The green shading now spans the dotted lines—the middle 95% of the sampling distribution. Coverage is 95%.</p>
+<p><strong>Wide intervals (95%).</strong> The green shading now spans the dotted lines—the middle 95% of the sampling distribution. Coverage is 95%.</p>
 </div>
-<p data-source-line="864" data-source-end-line="864">What we just did was choose a width and calculate a coverage probability. Instead, let’s go backward. We’ll choose a coverage probability—95% is conventional—and calculate the width we need to get it. An interval estimate <em>calibrated</em> like this is called a <em>confidence interval</em>.</p>
-<p data-source-line="866" data-source-end-line="866"><strong>Question</strong>. How wide do you have to make intervals to actually get 95% coverage?</p>
-<p data-source-line="868" data-source-end-line="868"><strong>Answer</strong>. The width should match the distance between the dotted blue lines. That’s the range containing 95% of estimates from the sampling distribution.</p>
-
-<div class="cell" data-source-line="870" data-source-end-line="875">
+<p>What we just did was choose a width and calculate a coverage probability. Instead, let’s go backward. We’ll choose a coverage probability—95% is conventional—and calculate the width we need to get it. An interval estimate <em>calibrated</em> like this is called a <em>confidence interval</em>.</p>
+<p><strong>Question</strong>. How wide do you have to make intervals to actually get 95% coverage?</p>
+<p><strong>Answer</strong>. The width should match the distance between the dotted blue lines. That’s the range containing 95% of estimates from the sampling distribution.</p>
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>coverage <span class="ot">=</span> <span class="fu">mean</span>(<span class="fu">mean</span>(y)<span class="sc">-</span> dotted.width<span class="sc">/</span><span class="dv">2</span> <span class="sc">&lt;=</span> meanY.samples <span class="sc">&amp;</span> meanY.samples <span class="sc">&lt;=</span> <span class="fu">mean</span>(y) <span class="sc">+</span> dotted.width<span class="sc">/</span><span class="dv">2</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>coverage</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -2768,9 +2564,8 @@ Figure&nbsp;7.8: Calibrating intervals: choosing width to achieve desired covera
 </div>
 </div>
 <section id="a-problem" class="level3">
-<h3 class="anchored" data-anchor-id="a-problem" data-source-line="877" data-source-end-line="877">A Problem</h3>
-
-<div class="cell" data-source-line="879" data-source-end-line="888">
+<h3 class="anchored" data-anchor-id="a-problem">A Problem</h3>
+<div class="cell">
 <div class="cell-output-display">
 <div id="fig-comm-mistake" class="quarto-float quarto-figure quarto-figure-center anchored" height="500px" alt="One hundred calibrated confidence intervals shown against the sampling distribution, with the single observed interval emphasized and the fixed population target marked.">
 <figure class="quarto-float quarto-float-fig figure">
@@ -2784,23 +2579,23 @@ Figure&nbsp;7.9
 </div>
 </div>
 </div>
-<p data-source-line="890" data-source-end-line="890">We can’t calibrate intervals like this in real life. When we run our a poll, we get a single point estimate <span class="math inline">\bar Y_{625}</span> based on our sample. We don’t know the sampling distribution of this point estimate until election day. But what we actually do is <em>almost</em> the same. We <em>do</em> the same thing. But we use an <em>estimate</em> of the sampling distribution in place of the thing itself. That’s what we’ll talk about next class.</p>
+<p>We can’t calibrate intervals like this in real life. When we run our a poll, we get a single point estimate <span class="math inline">\bar Y_{625}</span> based on our sample. We don’t know the sampling distribution of this point estimate until election day. But what we actually do is <em>almost</em> the same. We <em>do</em> the same thing. But we use an <em>estimate</em> of the sampling distribution in place of the thing itself. That’s what we’ll talk about next class.</p>
 </section>
 </section>
 <section id="communication" class="level2">
-<h2 class="anchored" data-anchor-id="communication" data-source-line="892" data-source-end-line="892">Communication</h2>
-<p data-source-line="894" data-source-end-line="894">Talking about calibrated interval estimates, a.k.a. confidence intervals, has some advantages. It focuses on what we actually want to know: where the estimation target is. It reminds us that we’re not (usually) going to be able to know it exactly. It gives us a sense of how close we can expect that we’ve gotten.</p>
-<p data-source-line="896" data-source-end-line="896">But there’s something about them that is a bit infuriating when you’re not used to them. Fundamentally, you’re talking about what would happen in surveys you aren’t doing. You can imagine someone saying ‘I don’t have time for imaginary surveys. What did this one tell you?’ And being pretty unhappy when the answer is ‘If that’s how you want to think about it, almost nothing.’</p>
-<p data-source-line="898" data-source-end-line="898">This isn’t a problem with intervals. This is something that’s fundamentally uncomfortable about sampling. It might feel like a miracle that you can say anything about 7.23M people after 625 phone calls. But once someone thinks you can, it can be hard for them to accept that you also kind of can’t. We really are just saying ‘I think it’s between 64% and 72%, but I’m wrong sometimes.’ We are being clear about what ‘sometimes’ means. But that feels like it’s about you more than it is about what they want to know.</p>
+<h2 class="anchored" data-anchor-id="communication">Communication</h2>
+<p>Talking about calibrated interval estimates, a.k.a. confidence intervals, has some advantages. It focuses on what we actually want to know: where the estimation target is. It reminds us that we’re not (usually) going to be able to know it exactly. It gives us a sense of how close we can expect that we’ve gotten.</p>
+<p>But there’s something about them that is a bit infuriating when you’re not used to them. Fundamentally, you’re talking about what would happen in surveys you aren’t doing. You can imagine someone saying ‘I don’t have time for imaginary surveys. What did this one tell you?’ And being pretty unhappy when the answer is ‘If that’s how you want to think about it, almost nothing.’</p>
+<p>This isn’t a problem with intervals. This is something that’s fundamentally uncomfortable about sampling. It might feel like a miracle that you can say anything about 7.23M people after 625 phone calls. But once someone thinks you can, it can be hard for them to accept that you also kind of can’t. We really are just saying ‘I think it’s between 64% and 72%, but I’m wrong sometimes.’ We are being clear about what ‘sometimes’ means. But that feels like it’s about you more than it is about what they want to know.</p>
 <section id="dont-make-this-mistake" class="level3">
-<h3 class="anchored" data-anchor-id="dont-make-this-mistake" data-source-line="900" data-source-end-line="900">Don’t Make this Mistake!</h3>
-<p data-source-line="902" data-source-end-line="902">Talking about surveys you aren’t doing is pretty awkward. So awkward that you’ll want to try to avoid it. It’s tempting to say something nonsensical, e.g.&nbsp;“the turnout frequency in the election is in my confidence interval, 0.64-0.72, 95% of the time.” This a really weird thing to say. It’s like saying that 95% of the time 2 is between 1 and 3. It either is or it isn’t. The only way it could make sense is if the turnout frequency were random. Because 0.64 and 0.72 aren’t. People do that. Don’t. And please don’t encourage it by saying stuff like this.</p>
-<p data-source-line="904" data-source-end-line="904">This doesn’t come up that often because you can just say ‘confidence interval’ most of the time. So you really only have to deal with all of this awkwardness in two situations.</p>
+<h3 class="anchored" data-anchor-id="dont-make-this-mistake">Don’t Make this Mistake!</h3>
+<p>Talking about surveys you aren’t doing is pretty awkward. So awkward that you’ll want to try to avoid it. It’s tempting to say something nonsensical, e.g.&nbsp;“the turnout frequency in the election is in my confidence interval, 0.64-0.72, 95% of the time.” This a really weird thing to say. It’s like saying that 95% of the time 2 is between 1 and 3. It either is or it isn’t. The only way it could make sense is if the turnout frequency were random. Because 0.64 and 0.72 aren’t. People do that. Don’t. And please don’t encourage it by saying stuff like this.</p>
+<p>This doesn’t come up that often because you can just say ‘confidence interval’ most of the time. So you really only have to deal with all of this awkwardness in two situations.</p>
 <ol type="1">
-<li data-source-line="906" data-source-end-line="906">When you say ‘confidence interval’ and someone asks what that means.</li>
-<li data-source-line="907" data-source-end-line="907">When someone else says ‘confidence interval’ but clearly doesn’t know what it means.</li>
+<li>When you say ‘confidence interval’ and someone asks what that means.</li>
+<li>When someone else says ‘confidence interval’ but clearly doesn’t know what it means.</li>
 </ol>
-<p data-source-line="909" data-source-end-line="909">It takes a bit of practice to get good at this. And you’ll get some.</p>
+<p>It takes a bit of practice to get good at this. And you’ll get some.</p>
 
 
 <script type="ojs-module-contents">
@@ -3296,7 +3091,7 @@ window._ojs.runtime.interpretFromScriptTags();
 
 
 
-
+<!--tlda-publication-body-->
 <script>
 if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 (function() {
@@ -3704,7 +3499,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   function hideEmbeddedTocs() {
     if (window.parent === window) return;
     var style = document.createElement('style');
-    style.textContent = '#quarto-sidebar, #quarto-sidebar-glass, #quarto-sidebar-toc-left, #TOC, #quarto-header .quarto-secondary-nav { display: none !important; }';
+    style.textContent = "#quarto-sidebar, #quarto-sidebar-glass, #quarto-sidebar-toc-left, #TOC, #quarto-header .quarto-secondary-nav { display: none !important; }";
     document.head.appendChild(style);
   }
   // Let the canvas show through: the document's own background goes
@@ -4786,4 +4581,127 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   }
 })();
 }
-</script></body></html>
+</script><!--/tlda-publication-body--><!--tlda-file-app-switch--><a class="presentation-mode-switch" href="../../../app.html?location=static%2Fbook%2Fchapters%2Fchapter-point-and-interval-estimates.html&amp;course=qtm285" hidden style="position:fixed;top:12px;left:12px;z-index:10000">App</a><script data-tlda-app-link-access data-tlda-file-app-switch>(function installAppLinkAccess(anchor, mode, readToken) {
+  anchor.hidden = true
+  const params = new URLSearchParams(location.search)
+  if (params.has('_tldaShape')) return
+  const destination = new URL(anchor.href, location.href)
+  const course = params.get('course')
+  if (course) destination.searchParams.set('course', course)
+  anchor.href = destination.href
+  if (destination.origin !== location.origin || !['http:', 'https:'].includes(destination.protocol)) return
+  let active = null
+  let generation = 0
+
+  async function refresh() {
+    const current = ++generation
+    active?.abort()
+    const controller = new AbortController()
+    active = controller
+    anchor.hidden = true
+    const timeout = setTimeout(() => controller.abort(), 5000)
+    try {
+      const read = async url => {
+        const target = new URL(url, destination)
+        if (target.origin !== destination.origin) throw new Error('Reader resource is not same-origin')
+        const result = await fetch(target.href, { credentials: 'same-origin', redirect: 'error', cache: 'no-store', signal: controller.signal })
+        if (!result.ok || result.redirected) throw new Error('Reader resource is unavailable')
+        return result
+      }
+      const response = await read(destination.href)
+      const doc = new DOMParser().parseFromString(await response.text(), 'text/html')
+      const marker = doc.querySelector('meta[name="tlda-app-reader"]')
+      if (marker?.content !== mode || !marker.dataset.readerBase) return
+      const readerBase = new URL(decodeURIComponent(marker.dataset.readerBase), destination)
+      if (readerBase.origin !== destination.origin || readerBase.search || readerBase.hash
+        || readerBase.username || readerBase.password) return
+      if (!doc.querySelector('script[type="module"][src]')) return
+      let base, wanted, config
+      if (mode === 'files') {
+        base = new URL('./', destination)
+        if (readerBase.href !== base.href) return
+        wanted = destination.searchParams.get('location')
+        const publication = await (await read(new URL('manifest.json', base))).json()
+        const documents = publication?.documents
+        if (!documents || typeof documents !== 'object' || Array.isArray(documents)) return
+        const project = destination.searchParams.get('project')
+        const keys = Object.keys(documents)
+        config = project ? documents[project] : keys.length === 1 ? documents[keys[0]] : null
+        const pages = await (await read(new URL('page-info.json', base))).json()
+        if (!Array.isArray(pages) || !pages.some(page => page?.file === wanted)) return
+      } else {
+        const route = destination.pathname.match(/^\/docs\/([^/]+)\/app\/(.+)$/)
+        if (!route) return
+        const store = readerBase.href.replace(/\/$/, '')
+        base = new URL(`${store}/docs/${route[1]}/`)
+        wanted = route[2].split('/').map(decodeURIComponent).join('/')
+        config = await (await read(`${store}/api/projects/${route[1]}?include=page-info`)).json()
+      }
+      if (!wanted || !config || !(config.pages > 0)) return
+      const manifest = await (await read(new URL('document-manifest.json', base))).json()
+      if (manifest?.version !== 1 || manifest.kind !== 'tlda-document' || !Array.isArray(manifest.pages)
+        || !manifest.source?.format || !manifest.document?.format
+        || !['html-pages', 'slides', 'svg-pages', 'image-pages'].includes(manifest.view?.kind)) return
+      const pages = manifest.view.kind === 'slides' && manifest.pages.some(page => page.variant === 'slides')
+        ? manifest.pages.filter(page => page.variant === 'slides') : manifest.pages
+      // Match the same source/output alternatives used by presentationLocationMatchesPage.
+      const encoded = wanted.split('/').map(encodeURIComponent).join('/')
+      const legacy = wanted.replace(/^book\//, '')
+      const page = pages.find(page => {
+        if (typeof page?.file !== 'string' || !(page.width > 0) || !(page.height > 0)) return false
+        if (mode === 'files') return page.file === wanted
+        const path = new URL(page.file, base).pathname
+        return page.source?.file === wanted || page.source?.file?.replace(/\.qmd$/i, '.html') === legacy
+          || path === `${base.pathname}app/${encoded}` || path === `${base.pathname}${encoded}`
+          || path.endsWith(`/_book/${legacy}`)
+      })
+      if (!page) return
+      const resource = new URL(page.file, base)
+      resource.searchParams.set('_tldaShape', 'app-link-access')
+      if (course) resource.searchParams.set('course', course)
+      await (await read(resource)).arrayBuffer()
+      const readerCourse = destination.searchParams.get('course')
+      if (readerCourse) {
+        // A course reader resolves this same identity before it can connect.
+        // File metadata alone says nothing about that backend's CORS/admission.
+        const identities = JSON.parse(decodeURIComponent(marker.dataset.readerIdentities || ''))
+        if (!Array.isArray(identities) || !identities.length) return
+        const matches = identities.filter(identity => {
+          if (!identity.publicationUrl) return identities.length === 1
+          const declared = new URL(identity.publicationUrl)
+          return declared.origin === destination.origin && destination.pathname.startsWith(declared.pathname)
+        })
+        if (matches.length !== 1) return
+        const identity = matches[0]
+        const backend = new URL(identity.database)
+        if (!['http:', 'https:'].includes(backend.protocol) || backend.username || backend.password
+          || backend.search || backend.hash || !['include', 'same-origin'].includes(identity.credentials)) return
+        const identityUrl = new URL(`${backend.href.replace(/\/$/, '')}/api/classroom/me`)
+        identityUrl.searchParams.set('course', readerCourse)
+        const token = readToken(destination.search, readerCourse, key => window.localStorage.getItem(key))
+        const response = await fetch(identityUrl.href, {
+          credentials: identity.credentials, redirect: 'error', cache: 'no-store', signal: controller.signal,
+          ...(token ? { headers: { 'x-tlda-student-token': token } } : {}),
+        })
+        if (!response.ok || response.redirected) return
+        const principal = await response.json()
+        if (principal.courseId !== readerCourse || !((principal.role === 'student' && principal.studentId)
+          || (principal.role === 'instructor' && principal.instructorId))) return
+      }
+      if (current === generation && !controller.signal.aborted) anchor.hidden = false
+    } catch {
+      // Refusal, missing publication and connectivity failure all leave no link
+      // to an app this page has not established the reader can enter.
+    } finally {
+      clearTimeout(timeout)
+      if (active === controller) active = null
+    }
+  }
+  window.addEventListener('pageshow', refresh)
+  window.addEventListener('pagehide', () => { generation++; active?.abort(); anchor.hidden = true })
+  return refresh()
+})(document.currentScript.previousElementSibling,"files",function readClassroomTokenFrom(search, courseId, getStored) {
+  const fromUrl = new URLSearchParams(search).get('classroomToken')
+  if (fromUrl) return fromUrl
+  try { return getStored(`tlda-classroom-token:${courseId}`) } catch { return null }
+});</script><!--/tlda-file-app-switch--></body></html>

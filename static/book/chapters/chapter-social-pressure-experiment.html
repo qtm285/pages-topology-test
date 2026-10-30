@@ -1,4 +1,5 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><!--tlda-publication-head-->
 <script>
 if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 (function () {
@@ -20,7 +21,13 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       level: 'error',
       ns: ns,
       msg: msg,
-      data: Object.assign({ url: location.href, shapeId: shapeId }, data),
+      data: Object.assign({
+        url: location.href,
+        shapeId: shapeId,
+        userAgent: navigator.userAgent,
+        online: navigator.onLine,
+        embedded: window.parent !== window,
+      }, data),
     };
     try {
       var body = JSON.stringify(payload);
@@ -129,6 +136,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
           source: clip(src),
           tag: target.tagName,
         });
+        if (target.tagName === 'IMG') scheduleImageCheck();
         return;
       }
       send('doc-fault', event.message || 'error', {
@@ -222,6 +230,68 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     return { state: 'ok', slides: document.querySelectorAll('.reveal .slides section').length };
   }
 
+  function requestedImages() {
+    return Array.from(document.querySelectorAll('img')).filter(function (img) {
+      // Reveal keeps future pictures in data-src. They have not failed: the
+      // browser has not been asked to load them yet.
+      return !!(img.currentSrc || img.getAttribute('src'));
+    });
+  }
+
+  function failedImage(img) { return img.complete && img.naturalWidth === 0; }
+
+  function probeImages() {
+    var images = requestedImages();
+    var failed = images.filter(failedImage).length;
+    var pending = images.filter(function (img) { return !img.complete; }).length;
+    return {
+      state: failed ? 'broken' : pending ? 'pending' : images.length ? 'ok' : 'absent',
+      why: failed ? failed + ' images failed to load' : pending ? 'images are still loading' : undefined,
+      failed: failed,
+      pending: pending,
+      loaded: images.length - failed - pending,
+    };
+  }
+
+  var imageCheckTimer = null;
+  function scheduleImageCheck() {
+    // Initial failures are included in the existing after-load health check.
+    // Do not diagnose Reveal or math before their startup has finished.
+    if (document.readyState !== 'complete') return;
+    if (imageCheckTimer !== null) return;
+    imageCheckTimer = setTimeout(function () {
+      imageCheckTimer = null;
+      check();
+    }, 150);
+  }
+
+  function retryFailedImages() {
+    requestedImages().filter(failedImage).forEach(function (img) {
+      // Keep the current document, its Reveal state and the canvas overlay.
+      // A fresh request for this failed resource must not reload the iframe.
+      var url = new URL(img.currentSrc || img.src, location.href);
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+      url.searchParams.set('_tldaImageRetry', String(Date.now()));
+      // currentSrc may have come from srcset. Keep its chosen resource on this
+      // retry so the unchanged srcset cannot select the failed request again.
+      var picture = img.closest('picture');
+      if (picture) picture.querySelectorAll('source[srcset]').forEach(function (source) {
+        source.removeAttribute('srcset');
+      });
+      img.removeAttribute('srcset');
+      img.addEventListener('load', scheduleImageCheck, { once: true });
+      img.addEventListener('error', scheduleImageCheck, { once: true });
+      img.src = url.href;
+    });
+    check();
+  }
+
+  window.addEventListener('message', function (event) {
+    if (window.parent === window || event.source !== window.parent) return;
+    if (event.data && event.data.type === 'tlda-retry-images') retryFailedImages();
+    if (event.data && event.data.type === 'tlda-request-doc-health') check();
+  });
+
   // Without this a throwing probe takes check() down: no report, no badge, and
   // a page that reads as healthy. 'unknown' never folds into 'ok'.
   function attempt(name, probe) {
@@ -237,8 +307,9 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       math: attempt('math', probeMath),
       webr: attempt('webR', probeWebR),
       reveal: attempt('reveal', probeReveal),
+      images: attempt('images', probeImages),
     };
-    var names = ['math', 'webr', 'reveal'];
+    var names = ['math', 'webr', 'reveal', 'images'];
     var broken = names.filter(function (k) { return report[k].state === 'broken'; });
     var unknown = names.filter(function (k) { return report[k].state === 'unknown'; });
     report.broken = broken;
@@ -268,7 +339,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   window.__tldaDocHealthCheck = check;
 })();
 }
-</script>
+</script><!--/tlda-publication-head-->
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -295,29 +366,29 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../_assets/mv9bd7z1-1/site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../_assets/mv9bd7z1-1/site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../_assets/mv9bd7z1-1/site_libs/clipboard/clipboard.min.js"></script>
-<script src="../_assets/mv9bd7z1-1/site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../_assets/mv9bd7z1-1/site_libs/quarto-search/fuse.min.js"></script>
-<script src="../_assets/mv9bd7z1-1/site_libs/quarto-search/quarto-search.js"></script>
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../homework/homework-setup.html" rel="next">
 <link href="../index.html" rel="prev">
-<script src="../_assets/mv9bd7z1-1/site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../_assets/mv9bd7z1-1/site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../_assets/mv9bd7z1-1/site_libs/quarto-html/popper.min.js"></script>
-<script src="../_assets/mv9bd7z1-1/site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../_assets/mv9bd7z1-1/site_libs/quarto-html/anchor.min.js"></script>
-<link href="../_assets/mv9bd7z1-1/site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../_assets/mv9bd7z1-1/site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../_assets/mv9bd7z1-1/site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../_assets/mv9bd7z1-1/site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../_assets/mv9bd7z1-1/site_libs/bootstrap/bootstrap-be13b5e62a53a36e99ca46c948bdaa3d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="../_assets/mv9bd7z1-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
-<link href="../_assets/mv9bd7z1-1/site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
-<script src="../_assets/mv9bd7z1-1/site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
-<link href="../_assets/mv9bd7z1-1/site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6fe1715721786a838a92806728cb6c53.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -345,10 +416,10 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script type="module" src="../_assets/mv9bd7z1-1/site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
-<link href="../_assets/mv9bd7z1-1/site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
-<link href="../_assets/mv9bd7z1-1/site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="../_assets/mv9bd7z1-1/site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script>
 // GENERATED by bin/generate-katex-macros.mjs from the tlda repo's
 // shared/katex-base-macros.mjs. Do not edit here -- edit the source and
@@ -795,7 +866,7 @@ window.__tldaKatexMacros = {
 
 </script>
 
-  <script defer="" src="../_assets/mv9bd7z1-1/katex-assets/dist/katex.min.js"></script>
+  <script defer="" src="../katex-assets/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
  var mathElements = document.getElementsByClassName("math");
  var macros = [];
@@ -810,7 +881,7 @@ window.__tldaKatexMacros = {
    });
 }}});
   </script>
-  <link rel="stylesheet" href="../_assets/mv9bd7z1-1/katex-assets/dist/katex.min.css">
+  <link rel="stylesheet" href="../katex-assets/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -841,238 +912,44 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../index.html">Prediction, Inference, and Causality I</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-social-pressure-experiment.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Social Pressure Experiment</span></a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
-    </div>
-  </nav>
-</header>
+  
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
-    <div class="sidebar-title mb-0 py-0">
-      <a href="../">Prediction, Inference, and Causality</a> 
-    </div>
-      </div>
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
-        </div>
-        </div>
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Prediction, Inference, and Causality I</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-social-pressure-experiment.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Social Pressure Experiment</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Homework: Setting Up</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-descriptive.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework: Basic Descriptive Statistics</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.1 Calibration</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-sampling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-point-and-interval-estimates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Point and Interval Estimates</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-calibration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-calibration-binary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-sampling-with-replacement.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-calibration-binary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-sampling-without-replacement.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../part1-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.2 Moments and approximate calibration</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Means and Markov’s Inequality</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-standard-deviation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Calibrating Intervals with Variance</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-normal-approximation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation and Sample Size Calculation</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-bias-and-coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Power, Bias, and Coverage</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-programming-reference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Programming Reference</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">References</span></a>
-  </div>
-</li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+  
+
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li data-source-line="70" data-source-end-line="70"><a href="#this-chapter-and-the-rest" id="toc-this-chapter-and-the-rest" class="nav-link active" data-scroll-target="#this-chapter-and-the-rest">This Chapter and the Rest</a></li>
-  <li data-source-line="80" data-source-end-line="80"><a href="#the-social-pressure-experiment" id="toc-the-social-pressure-experiment" class="nav-link" data-scroll-target="#the-social-pressure-experiment">The Social Pressure Experiment</a>
+  <li><a href="#this-chapter-and-the-rest" id="toc-this-chapter-and-the-rest" class="nav-link active" data-scroll-target="#this-chapter-and-the-rest">This Chapter and the Rest</a></li>
+  <li><a href="#the-social-pressure-experiment" id="toc-the-social-pressure-experiment" class="nav-link" data-scroll-target="#the-social-pressure-experiment">The Social Pressure Experiment</a>
   <ul class="collapse">
-  <li data-source-line="82" data-source-end-line="82"><a href="#the-experiment" id="toc-the-experiment" class="nav-link" data-scroll-target="#the-experiment">The Experiment</a>
+  <li><a href="#the-experiment" id="toc-the-experiment" class="nav-link" data-scroll-target="#the-experiment">The Experiment</a>
   <ul class="collapse">
-  <li data-source-line="101" data-source-end-line="101"><a href="#the-idea" id="toc-the-idea" class="nav-link" data-scroll-target="#the-idea">The Idea</a></li>
-  <li data-source-line="113" data-source-end-line="113"><a href="#the-experiment-details" id="toc-the-experiment-details" class="nav-link" data-scroll-target="#the-experiment-details">The Experiment Details</a></li>
+  <li><a href="#the-idea" id="toc-the-idea" class="nav-link" data-scroll-target="#the-idea">The Idea</a></li>
+  <li><a href="#the-experiment-details" id="toc-the-experiment-details" class="nav-link" data-scroll-target="#the-experiment-details">The Experiment Details</a></li>
   </ul></li>
-  <li data-source-line="132" data-source-end-line="132"><a href="#making-predictions" id="toc-making-predictions" class="nav-link" data-scroll-target="#making-predictions">Making Predictions</a></li>
-  <li data-source-line="184" data-source-end-line="184"><a href="#predicting-summaries" id="toc-predicting-summaries" class="nav-link" data-scroll-target="#predicting-summaries">Predicting Summaries</a></li>
-  <li data-source-line="196" data-source-end-line="196"><a href="#statistical-inference" id="toc-statistical-inference" class="nav-link" data-scroll-target="#statistical-inference">Statistical Inference</a>
+  <li><a href="#making-predictions" id="toc-making-predictions" class="nav-link" data-scroll-target="#making-predictions">Making Predictions</a></li>
+  <li><a href="#predicting-summaries" id="toc-predicting-summaries" class="nav-link" data-scroll-target="#predicting-summaries">Predicting Summaries</a></li>
+  <li><a href="#statistical-inference" id="toc-statistical-inference" class="nav-link" data-scroll-target="#statistical-inference">Statistical Inference</a>
   <ul class="collapse">
-  <li data-source-line="277" data-source-end-line="277"><a href="#point-estimates" id="toc-point-estimates" class="nav-link" data-scroll-target="#point-estimates">Point Estimates</a></li>
-  <li data-source-line="284" data-source-end-line="284"><a href="#interval-estimates" id="toc-interval-estimates" class="nav-link" data-scroll-target="#interval-estimates">Interval Estimates</a></li>
-  <li data-source-line="291" data-source-end-line="291"><a href="#simulated-samples" id="toc-simulated-samples" class="nav-link" data-scroll-target="#simulated-samples">Simulated Samples</a></li>
-  <li data-source-line="298" data-source-end-line="298"><a href="#our-estimates-distribution" id="toc-our-estimates-distribution" class="nav-link" data-scroll-target="#our-estimates-distribution">Our Estimate’s Distribution</a></li>
+  <li><a href="#point-estimates" id="toc-point-estimates" class="nav-link" data-scroll-target="#point-estimates">Point Estimates</a></li>
+  <li><a href="#interval-estimates" id="toc-interval-estimates" class="nav-link" data-scroll-target="#interval-estimates">Interval Estimates</a></li>
+  <li><a href="#simulated-samples" id="toc-simulated-samples" class="nav-link" data-scroll-target="#simulated-samples">Simulated Samples</a></li>
+  <li><a href="#our-estimates-distribution" id="toc-our-estimates-distribution" class="nav-link" data-scroll-target="#our-estimates-distribution">Our Estimate’s Distribution</a></li>
   </ul></li>
-  <li data-source-line="314" data-source-end-line="314"><a href="#causality" id="toc-causality" class="nav-link" data-scroll-target="#causality">Causality</a></li>
+  <li><a href="#causality" id="toc-causality" class="nav-link" data-scroll-target="#causality">Causality</a></li>
   </ul></li>
-  <li data-source-line="329" data-source-end-line="329"><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix">Appendix</a>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix">Appendix</a>
   <ul class="collapse">
-  <li data-source-line="331" data-source-end-line="331"><a href="#terminology" id="toc-terminology" class="nav-link" data-scroll-target="#terminology">Terminology</a></li>
-  <li data-source-line="344" data-source-end-line="344"><a href="#the-letters" id="toc-the-letters" class="nav-link" data-scroll-target="#the-letters">The Letters</a></li>
+  <li><a href="#terminology" id="toc-terminology" class="nav-link" data-scroll-target="#terminology">Terminology</a></li>
+  <li><a href="#the-letters" id="toc-the-letters" class="nav-link" data-scroll-target="#the-letters">The Letters</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -1099,49 +976,26 @@ window.Quarto = {
 </header>
 
 
-
-
-
-
-
-<div class="hidden" data-source-line="1" data-source-end-line="17" data-source-file="shared-code.qmd">
+<div class="hidden">
 <p>$$ \newcommand{X}{} \newcommand{Y}{} % A hex digit after # inside a macro body is eaten by build-time expansion, so digit-leading hexes spell # via . </p>
-
-
-
-
-
-
-
-<p data-source-line="122" data-source-end-line="130" data-source-file="shared/shared-style.qmd">$$</p>
+<p>$$</p>
 </div>
-
-
-
-
-
-
-
-
-
-
 <section id="this-chapter-and-the-rest" class="level2">
-<h2 class="anchored" data-anchor-id="this-chapter-and-the-rest" data-source-line="181" data-source-end-line="200" data-source-file="shared/shared-style.qmd">This Chapter and the Rest</h2>
-<p data-source-line="72" data-source-end-line="72">In this chapter, we’ll introduce the main ideas we’ll cover in this course through the lens of a real study. We’ll touch on many concepts that we’ll explore in detail throughout the semester, just to give you a sense of the big picture and identify where we’ll start digging in.</p>
-<p data-source-line="74" data-source-end-line="74">As we work through our example today, you’ll notice that the process isn’t always smooth. We’ll take some wrong turns that we’ll need to back out of, and we’ll make some jumps that aren’t fully justified. This is intentional - I want to give you a sense of what it’s like to do this kind of work on your own. Most days in this class will be different; I’ll guide you through the material smoothly, and I’ve chosen topics that fit together well (that’s why we’re doing Trees and Forests at the end instead of Neural Nets, for example).</p>
-<p data-source-line="76" data-source-end-line="76">But today’s approach reflects an important truth about learning and doing this work: it’s not about following a recipe. While you can learn recipes, they don’t always work perfectly. Good bakers adjust for altitude and humidity, and similarly, you’ll need to adapt your approach to different situations. Others might not follow the same methods you know, and you’ll need to understand why things work (or don’t) to get consistent results and diagnose problems.</p>
-<p data-source-line="78" data-source-end-line="78">Learning is about trying things, seeing how they go, and understanding the underlying principles. While we can eventually write smooth explanations of why things work, that’s not how we get there. The process of getting there and writing those explanations are important skills that this class will help you develop. Even with guidance, it takes practice.</p>
+<h2 class="anchored" data-anchor-id="this-chapter-and-the-rest">This Chapter and the Rest</h2>
+<p>In this chapter, we’ll introduce the main ideas we’ll cover in this course through the lens of a real study. We’ll touch on many concepts that we’ll explore in detail throughout the semester, just to give you a sense of the big picture and identify where we’ll start digging in.</p>
+<p>As we work through our example today, you’ll notice that the process isn’t always smooth. We’ll take some wrong turns that we’ll need to back out of, and we’ll make some jumps that aren’t fully justified. This is intentional - I want to give you a sense of what it’s like to do this kind of work on your own. Most days in this class will be different; I’ll guide you through the material smoothly, and I’ve chosen topics that fit together well (that’s why we’re doing Trees and Forests at the end instead of Neural Nets, for example).</p>
+<p>But today’s approach reflects an important truth about learning and doing this work: it’s not about following a recipe. While you can learn recipes, they don’t always work perfectly. Good bakers adjust for altitude and humidity, and similarly, you’ll need to adapt your approach to different situations. Others might not follow the same methods you know, and you’ll need to understand why things work (or don’t) to get consistent results and diagnose problems.</p>
+<p>Learning is about trying things, seeing how they go, and understanding the underlying principles. While we can eventually write smooth explanations of why things work, that’s not how we get there. The process of getting there and writing those explanations are important skills that this class will help you develop. Even with guidance, it takes practice.</p>
 </section>
 <section id="the-social-pressure-experiment" class="level1">
-<h1 data-source-line="80" data-source-end-line="80">The Social Pressure Experiment</h1>
+<h1>The Social Pressure Experiment</h1>
 <section id="the-experiment" class="level2">
-<h2 class="anchored" data-anchor-id="the-experiment" data-source-line="82" data-source-end-line="82">The Experiment</h2>
+<h2 class="anchored" data-anchor-id="the-experiment">The Experiment</h2>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation" data-source-line="85" data-source-end-line="85"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">The Data</a></li><li class="nav-item" role="presentation" data-source-line="92" data-source-end-line="92"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">With Frequencies Drawn In</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">The Data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">With Frequencies Drawn In</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-
-<div class="cell" data-source-line="86" data-source-end-line="90">
+<div class="cell">
 <div class="cell-output-display">
 <div id="fig-social-pressure" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Jittered voter-level scatterplot with age from 20 to 105 on the horizontal axis and 2006 primary turnout, no or yes, on the vertical axis. Red points represent the no-letter control group and green points the neighbors-letter group; point shape distinguishes whether each person voted in the 2002 primary.">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1157,8 +1011,7 @@ Figure&nbsp;2.1
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-
-<div class="cell" data-source-line="93" data-source-end-line="97">
+<div class="cell">
 <div class="cell-output-display">
 <div id="fig-social-pressure-frequencies" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The voter-level scatterplot with larger overlaid dots showing each age-by-2002-voting group's observed 2006 turnout rate. The larger dots generally lie below one-half, while prior 2002 voters tend to have higher turnout rates than prior nonvoters.">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1176,51 +1029,51 @@ Figure&nbsp;2.2
 </div>
 </div>
 <section id="the-idea" class="level3">
-<h3 class="anchored" data-anchor-id="the-idea" data-source-line="101" data-source-end-line="101">The Idea</h3>
-<p data-source-line="103" data-source-end-line="103">In 2006, Gerber, Green, and Larimer ran an experiment in Michigan. They wanted to see what kinds of messages would get people to vote in the primary. So they wrote five letters exercising increasing levels of social pressure:</p>
+<h3 class="anchored" data-anchor-id="the-idea">The Idea</h3>
+<p>In 2006, Gerber, Green, and Larimer ran an experiment in Michigan. They wanted to see what kinds of messages would get people to vote in the primary. So they wrote five letters exercising increasing levels of social pressure:</p>
 <ol type="1">
-<li data-source-line="105" data-source-end-line="105">No letter. This one was easier to write and cheaper to mail. Let’s still count it as ‘a letter’.</li>
-<li>A letter saying it was your civic duty to vote. <span class="quarto-unresolved-ref">?fig-civic-duty-letter</span> </li>
-<li data-source-line="106" data-source-end-line="106">A letter saying that your vote is public record. <span class="quarto-unresolved-ref">?fig-public-record-letter</span> </li>
-<li data-source-line="107" data-source-end-line="107">A letter saying that they’d be watching to see if you voted. <span class="quarto-unresolved-ref">?fig-watched-letter</span> </li>
-<li data-source-line="108" data-source-end-line="108">A letter saying that they’d tell your neighbors whether you voted. <span class="quarto-unresolved-ref">?fig-neighbors-letter</span> 
+<li>No letter. This one was easier to write and cheaper to mail. Let’s still count it as ‘a letter’.</li>
+<li>A letter saying it was your civic duty to vote. <a href="#fig-civic-duty-letter" class="quarto-xref">Figure&nbsp;<span>3.1</span></a></li>
+<li>A letter saying that your vote is public record. <a href="#fig-public-record-letter" class="quarto-xref">Figure&nbsp;<span>3.2</span></a></li>
+<li>A letter saying that they’d be watching to see if you voted. <a href="#fig-watched-letter" class="quarto-xref">Figure&nbsp;<span>3.3</span></a></li>
+<li>A letter saying that they’d tell your neighbors whether you voted. <a href="#fig-neighbors-letter" class="quarto-xref">Figure&nbsp;<span>3.4</span></a>
 <ul>
-<li data-source-line="109" data-source-end-line="109">This one was pretty intense. It included a list of your neighbors.</li>
-<li data-source-line="111" data-source-end-line="111">And it told you whether they’d voted in the last couple elections.</li>
+<li>This one was pretty intense. It included a list of your neighbors.</li>
+<li>And it told you whether they’d voted in the last couple elections.</li>
 </ul></li>
 </ol>
 </section>
 <section id="the-experiment-details" class="level3">
-<h3 class="anchored" data-anchor-id="the-experiment-details" data-source-line="113" data-source-end-line="113">The Experiment Details</h3>
-<p data-source-line="115" data-source-end-line="115">Starting with the complete list of registered voters in Michigan …</p>
+<h3 class="anchored" data-anchor-id="the-experiment-details">The Experiment Details</h3>
+<p>Starting with the complete list of registered voters in Michigan …</p>
 <ol type="1">
-<li data-source-line="117" data-source-end-line="117">They randomly selected 180,000 households to include in their experiment.</li>
-<li data-source-line="118" data-source-end-line="118">They randomly assigned each of these households one of five letters.</li>
-<li data-source-line="119" data-source-end-line="119">They mailed the letters 11 days before the primary.</li>
-<li data-source-line="120" data-source-end-line="120">Then they checked to see who voted.</li>
+<li>They randomly selected 180,000 households to include in their experiment.</li>
+<li>They randomly assigned each of these households one of five letters.</li>
+<li>They mailed the letters 11 days before the primary.</li>
+<li>Then they checked to see who voted.</li>
 </ol>
-<p data-source-line="122" data-source-end-line="122">We have that data. We’re looking at some of it. We’re looking at the people in the households sent either <span class="groupa">no letter</span> or the <span class="groupb"><em>neighbors</em> letter</span>. We’ve got a dot for each one— 229444 dots in all.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> What does a person’s dot look like?</p>
+<p>We have that data. We’re looking at some of it. We’re looking at the people in the households sent either <span class="groupa">no letter</span> or the <span class="groupb"><em>neighbors</em> letter</span>. We’ve got a dot for each one— 229444 dots in all.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> What does a person’s dot look like?</p>
 <ul>
-<li data-source-line="124" data-source-end-line="124">Their current age determines where it is on the x-axis.</li>
-<li data-source-line="125" data-source-end-line="125">It’s a ▲ if they voted in the 2002 primary and a ● if they didn’t.</li>
-<li data-source-line="126" data-source-end-line="126">It’s <span class="groupb">green</span> if they got the <span class="groupb">neighbors letter</span> and <span class="groupa">red</span> if they got <span class="groupa">no letter</span>.</li>
-<li data-source-line="127" data-source-end-line="127">Its location on the y-axis indicates whether they voted in the 2006 primary.
+<li>Their current age determines where it is on the x-axis.</li>
+<li>It’s a ▲ if they voted in the 2002 primary and a ● if they didn’t.</li>
+<li>It’s <span class="groupb">green</span> if they got the <span class="groupb">neighbors letter</span> and <span class="groupa">red</span> if they got <span class="groupa">no letter</span>.</li>
+<li>Its location on the y-axis indicates whether they voted in the 2006 primary.
 <ul>
-<li data-source-line="128" data-source-end-line="128">Yeses in the top row; nos on the bottom.</li>
+<li>Yeses in the top row; nos on the bottom.</li>
 </ul></li>
 </ul>
-<p data-source-line="130" data-source-end-line="130">Flip to the “With Frequencies Drawn In” tab to see the fraction of Yeses within each group shown as a bigger dot. For example, in the <span class="groupb">green</span> column at age 27, the big dot is at about 0.3, meaning about 30% of the <span class="groupb">people who got the letter</span> at age 27 voted.</p>
+<p>Flip to the “With Frequencies Drawn In” tab to see the fraction of Yeses within each group shown as a bigger dot. For example, in the <span class="groupb">green</span> column at age 27, the big dot is at about 0.3, meaning about 30% of the <span class="groupb">people who got the letter</span> at age 27 voted.</p>
 </section>
 </section>
 <section id="making-predictions" class="level2">
-<h2 class="anchored" data-anchor-id="making-predictions" data-source-line="132" data-source-end-line="132">Making Predictions</h2>
-<p data-source-line="134" data-source-end-line="134">Let’s consider a practical scenario. Suppose you work on a political campaign where your candidate lost by a small margin. You learn about this experiment and wonder if sending out high-pressure letters (like the neighbors letter) might have helped you win. Of course, you would only send these letters to people you’re confident would vote for your candidate, and you’d do it anonymously to avoid influencing how people vote.</p>
-<p data-source-line="136" data-source-end-line="136">Let’s make this more concrete. Suppose people aged 25-35 are extremely likely to vote for your candidate — they would vote for your candidate every time they vote. The challenge is that many of them don’t vote in mid-term primaries. You know how many of them actually voted (this is public record), but you need to know how many would have voted if they had received the neighbors letter. The difference between these numbers would tell you how many additional votes your imaginary mailer campaign might have generated.</p>
+<h2 class="anchored" data-anchor-id="making-predictions">Making Predictions</h2>
+<p>Let’s consider a practical scenario. Suppose you work on a political campaign where your candidate lost by a small margin. You learn about this experiment and wonder if sending out high-pressure letters (like the neighbors letter) might have helped you win. Of course, you would only send these letters to people you’re confident would vote for your candidate, and you’d do it anonymously to avoid influencing how people vote.</p>
+<p>Let’s make this more concrete. Suppose people aged 25-35 are extremely likely to vote for your candidate — they would vote for your candidate every time they vote. The challenge is that many of them don’t vote in mid-term primaries. You know how many of them actually voted (this is public record), but you need to know how many would have voted if they had received the neighbors letter. The difference between these numbers would tell you how many additional votes your imaginary mailer campaign might have generated.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation" data-source-line="140" data-source-end-line="140"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">A Question</a></li><li class="nav-item" role="presentation" data-source-line="152" data-source-end-line="152"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">An Answer</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">A Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">An Answer</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<p data-source-line="142" data-source-end-line="142">Let’s start by trying to predict turnout for individual people. Consider two voters from your list:</p>
+<p>Let’s start by trying to predict turnout for individual people. Consider two voters from your list:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1248,19 +1101,19 @@ Figure&nbsp;2.2
 </tr>
 </tbody>
 </table>
-<p data-source-line="149" data-source-end-line="150">How do you think Rush and Mitt would have voted if they’d gotten the <span class="groupb">neighbors letter</span>? Look at <a href="#fig-social-pressure" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>. <em>Hint</em>. What information do you have to help you guess?</p>
+<p>How do you think Rush and Mitt would have voted if they’d gotten the <span class="groupb">neighbors letter</span>? Look at <a href="#fig-social-pressure" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>. <em>Hint</em>. What information do you have to help you guess?</p>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<p data-source-line="154" data-source-end-line="154">My guess is that neither would have voted. Letter or no, very few people did.</p>
-<p data-source-line="156" data-source-end-line="156">To be more precise, let’s look at the <span class="groupb">people who got the letter</span> with features matching Rush and Mitt in <a href="#fig-social-pressure" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>.</p>
+<p>My guess is that neither would have voted. Letter or no, very few people did.</p>
+<p>To be more precise, let’s look at the <span class="groupb">people who got the letter</span> with features matching Rush and Mitt in <a href="#fig-social-pressure" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>.</p>
 <ul>
-<li data-source-line="158" data-source-end-line="158">Rush-types are <span class="groupb">▲s</span> in the x=27 column. 23/70 voted. 33%.</li>
-<li data-source-line="159" data-source-end-line="159">Mitt-types are <span class="groupb">●s</span> in the x=31 column. 52/169 voted. 31%.</li>
+<li>Rush-types are <span class="groupb">▲s</span> in the x=27 column. 23/70 voted. 33%.</li>
+<li>Mitt-types are <span class="groupb">●s</span> in the x=31 column. 52/169 voted. 31%.</li>
 </ul>
-<p data-source-line="161" data-source-end-line="161">Looking at rates within-group like this doesn’t change our conclusion. People like Rush and Mitt, like most people outright, tended not to vote.</p>
-<p data-source-line="163" data-source-end-line="163">Now that we’ve worked out how to make predictions for Rush and Mitt, we can do it for everyone in our list. That is, we can fill in all the <strong>?</strong>s in our table below. I did one more.</p>
+<p>Looking at rates within-group like this doesn’t change our conclusion. People like Rush and Mitt, like most people outright, tended not to vote.</p>
+<p>Now that we’ve worked out how to make predictions for Rush and Mitt, we can do it for everyone in our list. That is, we can fill in all the <strong>?</strong>s in our table below. I did one more.</p>
 <div id="tbl-predictions" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-tbl figure" data-source-line="174" data-source-end-line="174">
+<figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-predictions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;2.1: Counterfactual Vote Predictions
 </figcaption>
@@ -1316,33 +1169,30 @@ Table&nbsp;2.1: Counterfactual Vote Predictions
 </div>
 </figure>
 </div>
-<p data-source-line="177" data-source-end-line="177">Note that the frequencies in the table above are based on all data from the experiment, not just the dots shown. But we get the same conclusion if we use only the dots we’re displaying.</p>
+<p>Note that the frequencies in the table above are based on all data from the experiment, not just the dots shown. But we get the same conclusion if we use only the dots we’re displaying.</p>
 <ul>
-<li data-source-line="179" data-source-end-line="179">3/9 (33%) of the <em>displayed</em> Rush-types voted</li>
-<li data-source-line="180" data-source-end-line="180">4/12 (33%) of the <em>displayed</em> Mitt-types voted</li>
+<li>3/9 (33%) of the <em>displayed</em> Rush-types voted</li>
+<li>4/12 (33%) of the <em>displayed</em> Mitt-types voted</li>
 </ul>
 </div>
 </div>
 </div>
 </section>
 <section id="predicting-summaries" class="level2">
-<h2 class="anchored" data-anchor-id="predicting-summaries" data-source-line="184" data-source-end-line="184">Predicting Summaries</h2>
-<p data-source-line="186" data-source-end-line="186">There’s not a whole lot we can do with this answer. We want to know how many votes we’d have gotten if we mailed everyone in this table the <span class="groupb">letter</span>. How could we use <a href="#tbl-predictions" class="quarto-xref">Table&nbsp;<span>2.1</span></a> to find out?</p>
-<p data-source-line="188" data-source-end-line="188">One approach is to just count up the number of predicted Yeses in the last column of our table. It turns out that doesn’t work. We were choosing Yes/No by majority rule, but the majority within almost every group is No.&nbsp;To see this, we can look at the frequency of “Yes” votes within each age group shown in <a href="#fig-social-pressure-frequencies" class="quarto-xref">Figure&nbsp;<span>2.2</span></a>. If we think of “Yes” as 1 and “No” as 0, majority rule would say “No” if the fraction is below the midline. For people in our target age group (25-35), the majority says “No” in almost every group: 21/22 of the groups.</p>
-<p data-source-line="190" data-source-end-line="190">Let’s do better. We’re still going to count. But this time, we’re not going to think of Rush, Mitt, and Al as 3 Nos. We’re going to think of Rush as 33% of a Yes; Mitt as 31% of a Yes; and Al as 47% of a Yes. Even though the thing we’re predicting is binary, our prediction is a fraction. This sounds a bit odd but the math tends to work out. That way, if we counted up our predictions for 100 people like Rush, we get 32.86 Yeses. Not zero. Some people call this kind of fractional answer to a Yes/No question probabilistic classification.</p>
-<p data-source-line="192" data-source-end-line="192">But we don’t have 100 people like Rush (●s in the <span class="math inline">x=27</span> column). We have 1590 of them. So when we count the number of predicted Yeses in this group, we get <span class="math inline">1590 \times 0.33 = 522.43</span>. We can repeat this process to predict the number of Yeses we’d get if we didn’t mail the letter to anyone: it’s <span class="math inline">1590 \times 0.28 = 451.22</span>. We can think of the difference between these two numbers as the <em>effect</em> of mailing the letter to people like Rush. Roughly 71 more Yeses.</p>
-<p data-source-line="194" data-source-end-line="194">Repeating that process for every group in our target age range of 25-35, we predict an increase in this group’s turnout rate from 24% to 30% which would give us a total of roughly 1667 more Yeses. Not bad!</p>
+<h2 class="anchored" data-anchor-id="predicting-summaries">Predicting Summaries</h2>
+<p>There’s not a whole lot we can do with this answer. We want to know how many votes we’d have gotten if we mailed everyone in this table the <span class="groupb">letter</span>. How could we use <a href="#tbl-predictions" class="quarto-xref">Table&nbsp;<span>2.1</span></a> to find out?</p>
+<p>One approach is to just count up the number of predicted Yeses in the last column of our table. It turns out that doesn’t work. We were choosing Yes/No by majority rule, but the majority within almost every group is No.&nbsp;To see this, we can look at the frequency of “Yes” votes within each age group shown in <a href="#fig-social-pressure-frequencies" class="quarto-xref">Figure&nbsp;<span>2.2</span></a>. If we think of “Yes” as 1 and “No” as 0, majority rule would say “No” if the fraction is below the midline. For people in our target age group (25-35), the majority says “No” in almost every group: 21/22 of the groups.</p>
+<p>Let’s do better. We’re still going to count. But this time, we’re not going to think of Rush, Mitt, and Al as 3 Nos. We’re going to think of Rush as 33% of a Yes; Mitt as 31% of a Yes; and Al as 47% of a Yes. Even though the thing we’re predicting is binary, our prediction is a fraction. This sounds a bit odd but the math tends to work out. That way, if we counted up our predictions for 100 people like Rush, we get 32.86 Yeses. Not zero. Some people call this kind of fractional answer to a Yes/No question probabilistic classification.</p>
+<p>But we don’t have 100 people like Rush (●s in the <span class="math inline">x=27</span> column). We have 1590 of them. So when we count the number of predicted Yeses in this group, we get <span class="math inline">1590 \times 0.33 = 522.43</span>. We can repeat this process to predict the number of Yeses we’d get if we didn’t mail the letter to anyone: it’s <span class="math inline">1590 \times 0.28 = 451.22</span>. We can think of the difference between these two numbers as the <em>effect</em> of mailing the letter to people like Rush. Roughly 71 more Yeses.</p>
+<p>Repeating that process for every group in our target age range of 25-35, we predict an increase in this group’s turnout rate from 24% to 30% which would give us a total of roughly 1667 more Yeses. Not bad!</p>
 </section>
 <section id="statistical-inference" class="level2">
-<h2 class="anchored" data-anchor-id="statistical-inference" data-source-line="196" data-source-end-line="196">Statistical Inference</h2>
-
-
-<p data-source-line="198" data-source-end-line="245">We’ve predicted that the letter makes a big difference, but that alone isn’t particularly interesting. It’s only interesting if our prediction is accurate, i.e.&nbsp;if mailing the letter would really turnout would really increase turnout from <span class="groupa">24%</span> to <span class="groupb">30%</span>. What’s particularly challenging here is that we’re asking about what would have happened if we’d done something we didn’t do.</p>
-<p data-source-line="275" data-source-end-line="275">We call a one-number prediction like <span class="groupb">30%</span> a <em>point estimate</em>. But there are other kinds of estimates we can use to tell us a bit more about our prediction’s accuracy. The simplest is an <em>interval estimate</em>: a range of values that we’re fairly confident that the true value is in.</p>
+<h2 class="anchored" data-anchor-id="statistical-inference">Statistical Inference</h2>
+<p>We’ve predicted that the letter makes a big difference, but that alone isn’t particularly interesting. It’s only interesting if our prediction is accurate, i.e.&nbsp;if mailing the letter would really turnout would really increase turnout from <span class="groupa">24%</span> to <span class="groupb">30%</span>. What’s particularly challenging here is that we’re asking about what would have happened if we’d done something we didn’t do.</p>
+<p>We call a one-number prediction like <span class="groupb">30%</span> a <em>point estimate</em>. But there are other kinds of estimates we can use to tell us a bit more about our prediction’s accuracy. The simplest is an <em>interval estimate</em>: a range of values that we’re fairly confident that the true value is in.</p>
 <section id="point-estimates" class="level3">
-<h3 class="anchored" data-anchor-id="point-estimates" data-source-line="277" data-source-end-line="277">Point Estimates</h3>
-
-<div class="cell" data-source-line="278" data-source-end-line="282">
+<h3 class="anchored" data-anchor-id="point-estimates">Point Estimates</h3>
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1353,9 +1203,8 @@ Table&nbsp;2.1: Counterfactual Vote Predictions
 </div>
 </section>
 <section id="interval-estimates" class="level3">
-<h3 class="anchored" data-anchor-id="interval-estimates" data-source-line="284" data-source-end-line="284">Interval Estimates</h3>
-
-<div class="cell" data-source-line="285" data-source-end-line="289">
+<h3 class="anchored" data-anchor-id="interval-estimates">Interval Estimates</h3>
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1366,9 +1215,8 @@ Table&nbsp;2.1: Counterfactual Vote Predictions
 </div>
 </section>
 <section id="simulated-samples" class="level3">
-<h3 class="anchored" data-anchor-id="simulated-samples" data-source-line="291" data-source-end-line="291">Simulated Samples</h3>
-
-<div class="cell" data-source-line="292" data-source-end-line="296">
+<h3 class="anchored" data-anchor-id="simulated-samples">Simulated Samples</h3>
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1379,9 +1227,8 @@ Table&nbsp;2.1: Counterfactual Vote Predictions
 </div>
 </section>
 <section id="our-estimates-distribution" class="level3">
-<h3 class="anchored" data-anchor-id="our-estimates-distribution" data-source-line="298" data-source-end-line="298">Our Estimate’s Distribution</h3>
-
-<div class="cell" data-source-line="299" data-source-end-line="307">
+<h3 class="anchored" data-anchor-id="our-estimates-distribution">Our Estimate’s Distribution</h3>
+<div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1390,19 +1237,18 @@ Table&nbsp;2.1: Counterfactual Vote Predictions
 </div>
 </div>
 </div>
-<p data-source-line="309" data-source-end-line="310">What’s this confidence actually based on? Let’s imagine we actually did mail the letter to every Michigan voter in our age range, and the data we’ve based our predictions on (the green dots in <a href="#fig-social-pressure" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>) is just a random sample of these voters. If this were the case, we’d be dealing with a statistical inference problem. We’d want to know how the turnout rate we’ve estimated using our random sample compares to the rate in the population.</p>
-<p data-source-line="312" data-source-end-line="312">We can think of our estimate as the result of a procedure we could apply to any sample. If we applied this procedure to 100 different samples, we’d get 100 different numbers. While we don’t have multiple samples (we’d need to time-travel to 2006 and mail letters multiple times), we can simulate this process to get a sense of the uncertainty in our estimates. And by simulating it over and over, we can get a sense of our estimate’s <em>probability distribution</em>.</p>
+<p>What’s this confidence actually based on? Let’s imagine we actually did mail the letter to every Michigan voter in our age range, and the data we’ve based our predictions on (the green dots in <a href="#fig-social-pressure" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>) is just a random sample of these voters. If this were the case, we’d be dealing with a statistical inference problem. We’d want to know how the turnout rate we’ve estimated using our random sample compares to the rate in the population.</p>
+<p>We can think of our estimate as the result of a procedure we could apply to any sample. If we applied this procedure to 100 different samples, we’d get 100 different numbers. While we don’t have multiple samples (we’d need to time-travel to 2006 and mail letters multiple times), we can simulate this process to get a sense of the uncertainty in our estimates. And by simulating it over and over, we can get a sense of our estimate’s <em>probability distribution</em>.</p>
 </section>
 </section>
 <section id="causality" class="level2">
-<h2 class="anchored" data-anchor-id="causality" data-source-line="314" data-source-end-line="314">Causality</h2>
-<p data-source-line="316" data-source-end-line="316">Now let’s return to the issue we set aside earlier. We’ve been talking as if we’d mailed the letter to every voter in Michigan and were using a random sample of them to make our predictions. But that’s not what happened. Gerber, Green, and Larimer didn’t mail the letter to every voter in Michigan. Instead, they:</p>
+<h2 class="anchored" data-anchor-id="causality">Causality</h2>
+<p>Now let’s return to the issue we set aside earlier. We’ve been talking as if we’d mailed the letter to every voter in Michigan and were using a random sample of them to make our predictions. But that’s not what happened. Gerber, Green, and Larimer didn’t mail the letter to every voter in Michigan. Instead, they:</p>
 <ol type="1">
-<li data-source-line="318" data-source-end-line="318">Randomly selected 180,000 households to include in their experiment</li>
-<li data-source-line="319" data-source-end-line="319">Randomly assigned each of these households one of five letters</li>
+<li>Randomly selected 180,000 households to include in their experiment</li>
+<li>Randomly assigned each of these households one of five letters</li>
 </ol>
-
-<div class="cell" data-source-line="321" data-source-end-line="325">
+<div class="cell">
 <div class="cell-output-display">
 <div id="fig-annotated-social-pressure" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Voter-level scatterplot with age on the horizontal axis and 2006 primary turnout on the vertical axis. Red points are the no-letter control group and green points are the randomly assigned neighbors-letter group; larger dots show observed turnout rates within age and prior-voting groups.">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1416,13 +1262,13 @@ Figure&nbsp;2.3
 </div>
 </div>
 </div>
-<p data-source-line="327" data-source-end-line="327">The key question is whether the sample we got looks like one we’d get if we’d mailed the letter to everyone. Is it similar enough that we can get away with pretending that it is? That’s a question we’ll explore in detail using mathematical tools to think about sampling and randomization.</p>
+<p>The key question is whether the sample we got looks like one we’d get if we’d mailed the letter to everyone. Is it similar enough that we can get away with pretending that it is? That’s a question we’ll explore in detail using mathematical tools to think about sampling and randomization.</p>
 </section>
 </section>
 <section id="appendix" class="level1">
-<h1 data-source-line="329" data-source-end-line="329">Appendix</h1>
+<h1>Appendix</h1>
 <section id="terminology" class="level2">
-<h2 class="anchored" data-anchor-id="terminology" data-source-line="331" data-source-end-line="331">Terminology</h2>
+<h2 class="anchored" data-anchor-id="terminology">Terminology</h2>
 <div id="terminology-note" class="callout callout-style-simple callout-note no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1430,35 +1276,71 @@ Figure&nbsp;2.3
 </div>
 <div class="callout-body-container">
 <ul>
-<li data-source-line="334" data-source-end-line="334"><em>Estimand</em>: What we actually want to estimate</li>
-<li data-source-line="335" data-source-end-line="335"><em>Population</em>: The group of people (or whatever) that exists but which we haven’t collected data on in entirety</li>
-<li data-source-line="336" data-source-end-line="336"><em>Sample</em>: The data we use to estimate our estimand</li>
-<li data-source-line="337" data-source-end-line="337"><em>Inference</em>: Making statements about our estimand using our sample</li>
-<li data-source-line="338" data-source-end-line="338"><em>Interval estimate</em>: A claim that our estimand is in some range of values</li>
-<li data-source-line="339" data-source-end-line="339"><em>Point estimate</em>: A single value estimate, like our green dot</li>
-<li data-source-line="340" data-source-end-line="340"><em>Counterfactual population</em>: A population that doesn’t exist because we didn’t do something (like mail letters to everyone)</li>
-<li data-source-line="341" data-source-end-line="341"><em>Causality</em>: When we say mailing the letter <em>caused</em> an increase in turnout, we mean the increase was the <em>effect</em> of mailing the letter</li>
+<li><em>Estimand</em>: What we actually want to estimate</li>
+<li><em>Population</em>: The group of people (or whatever) that exists but which we haven’t collected data on in entirety</li>
+<li><em>Sample</em>: The data we use to estimate our estimand</li>
+<li><em>Inference</em>: Making statements about our estimand using our sample</li>
+<li><em>Interval estimate</em>: A claim that our estimand is in some range of values</li>
+<li><em>Point estimate</em>: A single value estimate, like our green dot</li>
+<li><em>Counterfactual population</em>: A population that doesn’t exist because we didn’t do something (like mail letters to everyone)</li>
+<li><em>Causality</em>: When we say mailing the letter <em>caused</em> an increase in turnout, we mean the increase was the <em>effect</em> of mailing the letter</li>
 </ul>
 </div>
 </div>
 </div>
 </section>
 <section id="the-letters" class="level2">
-<h2 class="anchored" data-anchor-id="the-letters" data-source-line="344" data-source-end-line="344">The Letters</h2>
+<h2 class="anchored" data-anchor-id="the-letters">The Letters</h2>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation" data-source-line="347" data-source-end-line="347"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Civic Duty</a></li><li class="nav-item" role="presentation" data-source-line="350" data-source-end-line="350"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Public Record</a></li><li class="nav-item" role="presentation" data-source-line="353" data-source-end-line="353"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false" href="">Watched</a></li><li class="nav-item" role="presentation" data-source-line="356" data-source-end-line="356"><a class="nav-link" id="tabset-3-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-4" role="tab" aria-controls="tabset-3-4" aria-selected="false" href="">Neighbors</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Civic Duty</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Public Record</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false" href="">Watched</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-4" role="tab" aria-controls="tabset-3-4" aria-selected="false" href="">Neighbors</a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<p><img src="../_assets/mv9bd7z1-1/figs/gerber-green-larimer-civic-duty.png" id="fig-civic-duty-letter" class="img-fluid" alt="Civic-duty treatment letter urging the recipient to vote as a right and responsibility of citizenship."> </p>
+<div id="fig-civic-duty-letter" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Civic-duty treatment letter urging the recipient to vote as a right and responsibility of citizenship.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-civic-duty-letter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figs/gerber-green-larimer-civic-duty.png" id="fig-civic-duty-letter" class="img-fluid figure-img" alt="Civic-duty treatment letter urging the recipient to vote as a right and responsibility of citizenship.">
 </div>
-<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab" data-source-line="348" data-source-end-line="348">
-<p><img src="../_assets/mv9bd7z1-1/figs/gerber-green-larimer-public-record.png" id="fig-public-record-letter" class="img-fluid" alt="Public-record treatment letter explaining that voting is public information and listing the household members' voting records, with a blank column for the August 2006 primary."> </p>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-civic-duty-letter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.1
+</figcaption>
+</figure>
 </div>
-<div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab" data-source-line="351" data-source-end-line="351">
-<p><img src="../_assets/mv9bd7z1-1/figs/gerber-green-larimer-watched.png" id="fig-watched-letter" class="img-fluid" alt="Watched treatment letter telling the recipient that researchers are studying whether they vote in the August 2006 primary."> </p>
 </div>
-<div id="tabset-3-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-4-tab" data-source-line="354" data-source-end-line="354">
-<p><img src="../_assets/mv9bd7z1-1/figs/gerber-green-larimer-neighbors.png" id="fig-neighbors-letter" class="img-fluid" alt="Neighbors treatment letter stating that the recipient and their neighbors will be told who voted, followed by a table of neighbors' names and prior voting records with a blank August 2006 column."> </p>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div id="fig-public-record-letter" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Public-record treatment letter explaining that voting is public information and listing the household members' voting records, with a blank column for the August 2006 primary.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-public-record-letter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figs/gerber-green-larimer-public-record.png" id="fig-public-record-letter" class="img-fluid figure-img" alt="Public-record treatment letter explaining that voting is public information and listing the household members' voting records, with a blank column for the August 2006 primary.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-public-record-letter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.2
+</figcaption>
+</figure>
+</div>
+</div>
+<div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
+<div id="fig-watched-letter" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Watched treatment letter telling the recipient that researchers are studying whether they vote in the August 2006 primary.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-watched-letter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figs/gerber-green-larimer-watched.png" id="fig-watched-letter" class="img-fluid figure-img" alt="Watched treatment letter telling the recipient that researchers are studying whether they vote in the August 2006 primary.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-watched-letter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.3
+</figcaption>
+</figure>
+</div>
+</div>
+<div id="tabset-3-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-4-tab">
+<div id="fig-neighbors-letter" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Neighbors treatment letter stating that the recipient and their neighbors will be told who voted, followed by a table of neighbors' names and prior voting records with a blank August 2006 column.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-neighbors-letter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figs/gerber-green-larimer-neighbors.png" id="fig-neighbors-letter" class="img-fluid figure-img" alt="Neighbors treatment letter stating that the recipient and their neighbors will be told who voted, followed by a table of neighbors' names and prior voting records with a blank August 2006 column.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-neighbors-letter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.4
+</figcaption>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -1467,7 +1349,7 @@ Figure&nbsp;2.3
 <script type="ojs-module-contents">
 eyJjb250ZW50cyI6W119
 </script>
-<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2" data-source-line="357" data-source-end-line="357">
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
 <div id="exercise-loading-status" class="d-flex gap-2">
 
 </div>
@@ -1955,7 +1837,7 @@ window._ojs.runtime.interpretFromScriptTags();
 
 
 
-
+<!--tlda-publication-body-->
 <script>
 if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 (function() {
@@ -2363,7 +2245,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   function hideEmbeddedTocs() {
     if (window.parent === window) return;
     var style = document.createElement('style');
-    style.textContent = '#quarto-sidebar, #quarto-sidebar-glass, #quarto-sidebar-toc-left, #TOC, #quarto-header .quarto-secondary-nav { display: none !important; }';
+    style.textContent = "#quarto-sidebar, #quarto-sidebar-glass, #quarto-sidebar-toc-left, #TOC, #quarto-header .quarto-secondary-nav { display: none !important; }";
     document.head.appendChild(style);
   }
   // Let the canvas show through: the document's own background goes
@@ -3445,4 +3327,127 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   }
 })();
 }
-</script></body></html>
+</script><!--/tlda-publication-body--><!--tlda-file-app-switch--><a class="presentation-mode-switch" href="../../../app.html?location=static%2Fbook%2Fchapters%2Fchapter-social-pressure-experiment.html&amp;course=qtm285" hidden style="position:fixed;top:12px;left:12px;z-index:10000">App</a><script data-tlda-app-link-access data-tlda-file-app-switch>(function installAppLinkAccess(anchor, mode, readToken) {
+  anchor.hidden = true
+  const params = new URLSearchParams(location.search)
+  if (params.has('_tldaShape')) return
+  const destination = new URL(anchor.href, location.href)
+  const course = params.get('course')
+  if (course) destination.searchParams.set('course', course)
+  anchor.href = destination.href
+  if (destination.origin !== location.origin || !['http:', 'https:'].includes(destination.protocol)) return
+  let active = null
+  let generation = 0
+
+  async function refresh() {
+    const current = ++generation
+    active?.abort()
+    const controller = new AbortController()
+    active = controller
+    anchor.hidden = true
+    const timeout = setTimeout(() => controller.abort(), 5000)
+    try {
+      const read = async url => {
+        const target = new URL(url, destination)
+        if (target.origin !== destination.origin) throw new Error('Reader resource is not same-origin')
+        const result = await fetch(target.href, { credentials: 'same-origin', redirect: 'error', cache: 'no-store', signal: controller.signal })
+        if (!result.ok || result.redirected) throw new Error('Reader resource is unavailable')
+        return result
+      }
+      const response = await read(destination.href)
+      const doc = new DOMParser().parseFromString(await response.text(), 'text/html')
+      const marker = doc.querySelector('meta[name="tlda-app-reader"]')
+      if (marker?.content !== mode || !marker.dataset.readerBase) return
+      const readerBase = new URL(decodeURIComponent(marker.dataset.readerBase), destination)
+      if (readerBase.origin !== destination.origin || readerBase.search || readerBase.hash
+        || readerBase.username || readerBase.password) return
+      if (!doc.querySelector('script[type="module"][src]')) return
+      let base, wanted, config
+      if (mode === 'files') {
+        base = new URL('./', destination)
+        if (readerBase.href !== base.href) return
+        wanted = destination.searchParams.get('location')
+        const publication = await (await read(new URL('manifest.json', base))).json()
+        const documents = publication?.documents
+        if (!documents || typeof documents !== 'object' || Array.isArray(documents)) return
+        const project = destination.searchParams.get('project')
+        const keys = Object.keys(documents)
+        config = project ? documents[project] : keys.length === 1 ? documents[keys[0]] : null
+        const pages = await (await read(new URL('page-info.json', base))).json()
+        if (!Array.isArray(pages) || !pages.some(page => page?.file === wanted)) return
+      } else {
+        const route = destination.pathname.match(/^\/docs\/([^/]+)\/app\/(.+)$/)
+        if (!route) return
+        const store = readerBase.href.replace(/\/$/, '')
+        base = new URL(`${store}/docs/${route[1]}/`)
+        wanted = route[2].split('/').map(decodeURIComponent).join('/')
+        config = await (await read(`${store}/api/projects/${route[1]}?include=page-info`)).json()
+      }
+      if (!wanted || !config || !(config.pages > 0)) return
+      const manifest = await (await read(new URL('document-manifest.json', base))).json()
+      if (manifest?.version !== 1 || manifest.kind !== 'tlda-document' || !Array.isArray(manifest.pages)
+        || !manifest.source?.format || !manifest.document?.format
+        || !['html-pages', 'slides', 'svg-pages', 'image-pages'].includes(manifest.view?.kind)) return
+      const pages = manifest.view.kind === 'slides' && manifest.pages.some(page => page.variant === 'slides')
+        ? manifest.pages.filter(page => page.variant === 'slides') : manifest.pages
+      // Match the same source/output alternatives used by presentationLocationMatchesPage.
+      const encoded = wanted.split('/').map(encodeURIComponent).join('/')
+      const legacy = wanted.replace(/^book\//, '')
+      const page = pages.find(page => {
+        if (typeof page?.file !== 'string' || !(page.width > 0) || !(page.height > 0)) return false
+        if (mode === 'files') return page.file === wanted
+        const path = new URL(page.file, base).pathname
+        return page.source?.file === wanted || page.source?.file?.replace(/\.qmd$/i, '.html') === legacy
+          || path === `${base.pathname}app/${encoded}` || path === `${base.pathname}${encoded}`
+          || path.endsWith(`/_book/${legacy}`)
+      })
+      if (!page) return
+      const resource = new URL(page.file, base)
+      resource.searchParams.set('_tldaShape', 'app-link-access')
+      if (course) resource.searchParams.set('course', course)
+      await (await read(resource)).arrayBuffer()
+      const readerCourse = destination.searchParams.get('course')
+      if (readerCourse) {
+        // A course reader resolves this same identity before it can connect.
+        // File metadata alone says nothing about that backend's CORS/admission.
+        const identities = JSON.parse(decodeURIComponent(marker.dataset.readerIdentities || ''))
+        if (!Array.isArray(identities) || !identities.length) return
+        const matches = identities.filter(identity => {
+          if (!identity.publicationUrl) return identities.length === 1
+          const declared = new URL(identity.publicationUrl)
+          return declared.origin === destination.origin && destination.pathname.startsWith(declared.pathname)
+        })
+        if (matches.length !== 1) return
+        const identity = matches[0]
+        const backend = new URL(identity.database)
+        if (!['http:', 'https:'].includes(backend.protocol) || backend.username || backend.password
+          || backend.search || backend.hash || !['include', 'same-origin'].includes(identity.credentials)) return
+        const identityUrl = new URL(`${backend.href.replace(/\/$/, '')}/api/classroom/me`)
+        identityUrl.searchParams.set('course', readerCourse)
+        const token = readToken(destination.search, readerCourse, key => window.localStorage.getItem(key))
+        const response = await fetch(identityUrl.href, {
+          credentials: identity.credentials, redirect: 'error', cache: 'no-store', signal: controller.signal,
+          ...(token ? { headers: { 'x-tlda-student-token': token } } : {}),
+        })
+        if (!response.ok || response.redirected) return
+        const principal = await response.json()
+        if (principal.courseId !== readerCourse || !((principal.role === 'student' && principal.studentId)
+          || (principal.role === 'instructor' && principal.instructorId))) return
+      }
+      if (current === generation && !controller.signal.aborted) anchor.hidden = false
+    } catch {
+      // Refusal, missing publication and connectivity failure all leave no link
+      // to an app this page has not established the reader can enter.
+    } finally {
+      clearTimeout(timeout)
+      if (active === controller) active = null
+    }
+  }
+  window.addEventListener('pageshow', refresh)
+  window.addEventListener('pagehide', () => { generation++; active?.abort(); anchor.hidden = true })
+  return refresh()
+})(document.currentScript.previousElementSibling,"files",function readClassroomTokenFrom(search, courseId, getStored) {
+  const fromUrl = new URLSearchParams(search).get('classroomToken')
+  if (fromUrl) return fromUrl
+  try { return getStored(`tlda-classroom-token:${courseId}`) } catch { return null }
+});</script><!--/tlda-file-app-switch--></body></html>

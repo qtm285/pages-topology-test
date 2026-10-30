@@ -20,6 +20,8 @@ class DeepgramCaptureProcessor extends AudioWorkletProcessor {
     // downsampling stays continuous across 128-sample render quanta (no clicks at
     // frame boundaries, no drift).
     this._phase = 0
+    this._clock = false
+    this.port.onmessage = event => { if (event.data?.type === 'capture-clock') this._clock = true }
   }
 
   process(inputs) {
@@ -42,7 +44,11 @@ class DeepgramCaptureProcessor extends AudioWorkletProcessor {
     if (out.length) {
       const int16 = new Int16Array(out)
       // Transfer the buffer (zero-copy) to the main thread.
-      this.port.postMessage(int16.buffer, [int16.buffer])
+      // Opt in so an older page can keep receiving its original raw buffer.
+      // Audio-thread time survives a backed-up main-thread message queue.
+      this.port.postMessage(this._clock
+        ? { pcm: int16.buffer, endTime: (currentFrame + ch.length) / sampleRate }
+        : int16.buffer, [int16.buffer])
     }
     return true // keep the processor alive
   }

@@ -1,4 +1,357 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html><html lang="en"><head><!--tlda-publication-head-->
+<script>
+if (new URLSearchParams(window.location.search).has("_tldaShape")) {
+(function () {
+  var MAX_FIELD = 2000;
+  var params = new URLSearchParams(window.location.search);
+  var shapeId = params.get('_tldaShape') || '';
+
+  function clip(value) {
+    if (value === undefined || value === null) return undefined;
+    var s = typeof value === 'string' ? value : String(value);
+    if (!s) return undefined;
+    return s.length > MAX_FIELD ? s.slice(0, MAX_FIELD) + '…[+' + (s.length - MAX_FIELD) + ']' : s;
+  }
+
+  // sendBeacon survives a dying page; keepalive fetch is the fallback.
+  function send(ns, msg, data) {
+    var payload = {
+      ts: new Date().toISOString(),
+      level: 'error',
+      ns: ns,
+      msg: msg,
+      data: Object.assign({
+        url: location.href,
+        shapeId: shapeId,
+        userAgent: navigator.userAgent,
+        online: navigator.onLine,
+        embedded: window.parent !== window,
+      }, data),
+    };
+    try {
+      var body = JSON.stringify(payload);
+      if (navigator.sendBeacon &&
+          navigator.sendBeacon('/api/log', new Blob([body], { type: 'application/json' }))) return;
+      fetch('/api/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: body,
+        keepalive: true,
+      }).catch(function () {
+        // Nowhere left to report a failed report, and rethrowing would be
+        // caught by the rejection handler below and posted, which loops.
+      });
+    } catch (e) {
+      // Circular payload, or no Blob. Called FROM the error handlers, so a
+      // throw here re-enters them and buries the original fault.
+    }
+  }
+
+  function tell(report) {
+    try {
+      window.parent.postMessage({ type: 'tlda-doc-health', shapeId: shapeId, report: report }, '*');
+    } catch (e) {
+      // Served standalone, so no parent is listening. Supported, not a fault:
+      // the report has already gone to /api/log.
+    }
+  }
+
+  // KaTeX render errors, caught at render time inside the wrapper. This runs in
+  // <head> before the page's own math block, so it installs first and Quarto's
+  // hardcoded non-throwing loop renders through it. Setting throwOnError here
+  // turns a silent literal-text render into a throw the catch reports — the
+  // throw is the signal. It never looks at the page.
+  var katexReported = {};
+  function reportKatexError(tex, err) {
+    try {
+      var detail = clip(err && err.message);
+      if (!detail) return;
+      // One report per distinct error per page load: a single broken macro
+      // used fifty times is one defect, not fifty cards.
+      if (katexReported[detail]) return;
+      katexReported[detail] = true;
+      send('katex-error', 'KaTeX render error', {
+        error: detail,
+        tex: clip(tex),
+      });
+    } catch (e) {
+      // Called FROM the render path, so a throw here re-enters the wrapper
+      // and buries the original fault.
+    }
+  }
+
+  function installKatexHook() {
+    try {
+      if (!window.katex || !window.katex.render || window.__tldaKatexHooked) return false;
+      var inner = window.katex.render.bind(window.katex);
+      window.katex.render = function (tex, el, opts) {
+        opts = opts || {};
+        // Quarto hardcodes the non-throwing options in its own template and
+        // the schema accepts only method+url, so this cannot be configuration.
+        // Callers that set it explicitly keep their own value.
+        if (opts.throwOnError === undefined || opts.throwOnError === false) opts.throwOnError = true;
+        try {
+          return inner(tex, el, opts);
+        } catch (err) {
+          reportKatexError(tex, err);
+          // Paint what KaTeX would have painted had it not thrown: callers
+          // and page layout see the same shape as a non-throwing render.
+          try {
+            var fallbackOpts = {};
+            for (var k in opts) fallbackOpts[k] = opts[k];
+            fallbackOpts.throwOnError = false;
+            return inner(tex, el, fallbackOpts);
+          } catch (e2) {
+            return el;
+          }
+        }
+      };
+      window.__tldaKatexHooked = true;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // katex.min.js is deferred, so it may not exist yet when this head script
+  // runs. Poll briefly; give up quietly if KaTeX never loads.
+  (function waitForKatex(tries) {
+    if (installKatexHook()) return;
+    if (tries > 0) setTimeout(function () { waitForKatex(tries - 1); }, 250);
+  })(40);
+  window.__tldaKatexHookInstall = installKatexHook;
+
+  window.addEventListener('error', function (event) {
+    try {
+      // 'error' also fires for failed subresources, where target is the element
+      // rather than window. Unlike crashBeacon.ts these are kept — a macros.js
+      // that 404s is the fault we are looking for — but under their own kind.
+      var target = event.target;
+      if (target && target !== window) {
+        var src = target.src || target.href;
+        if (!src) return;
+        send('doc-fault', 'subresource failed to load', {
+          kind: 'subresource',
+          source: clip(src),
+          tag: target.tagName,
+        });
+        if (target.tagName === 'IMG') scheduleImageCheck();
+        return;
+      }
+      send('doc-fault', event.message || 'error', {
+        kind: 'error',
+        message: clip(event.message),
+        stack: clip(event.error && event.error.stack),
+        source: clip(event.filename),
+        line: event.lineno,
+        column: event.colno,
+      });
+    } catch (e) {
+      // This IS the error handler: a throw here fires 'error' again and
+      // recurses. Reading event.target cross-origin can throw.
+    }
+  }, true);
+
+  window.addEventListener('unhandledrejection', function (event) {
+    try {
+      var reason = event.reason;
+      send('doc-fault', 'unhandled rejection', {
+        kind: 'unhandledrejection',
+        message: clip((reason && reason.message) || reason),
+        stack: clip(reason && reason.stack),
+      });
+    } catch (e) {
+      // A rejection can carry a getter that throws when read, and throwing
+      // here rejects again and re-enters this handler.
+    }
+  });
+
+  function probeMath() {
+    var rendered = document.querySelectorAll('.katex, mjx-container').length;
+    var errored = document.querySelectorAll('.katex-error, mjx-merror').length;
+    // Source delimiters still in the text mean the renderer never ran over
+    // them. The backslash is a charcode, not an escape: this script rides
+    // inside a template literal, so every backslash here is read twice and a
+    // written escape ships wrong while looking right.
+    var BS = String.fromCharCode(92);
+    var body = document.body ? (document.body.innerText || '') : '';
+    var residue = (body.split(BS + '(').length - 1) + (body.split(BS + '[').length - 1);
+
+    if (errored > 0) {
+      var sample = document.querySelector('.katex-error, mjx-merror');
+      return {
+        state: 'broken',
+        why: 'math rendered with errors',
+        errored: errored,
+        rendered: rendered,
+        // KaTeX's title names the undefined control sequence; the count alone
+        // does not tell a reader what to fix.
+        detail: clip(sample && (sample.getAttribute('title') || sample.textContent)),
+      };
+    }
+    if (rendered === 0 && residue > 0) {
+      return { state: 'broken', why: 'math present but nothing rendered it', residue: residue, rendered: 0 };
+    }
+    if (rendered === 0) return { state: 'absent', why: 'no math on this page' };
+    return {
+      state: 'ok',
+      rendered: rendered,
+      engine: window.katex ? 'katex' : 'unknown',
+      macros: window.__tldaKatexMacros ? Object.keys(window.__tldaKatexMacros).length : 0,
+    };
+  }
+
+  function probeWebR() {
+    // The markers are a div with id webr-N and class exercise-cell, beside a
+    // script of type webr-N-contents. Match those and nothing broader:
+    // .cell-code .sourceCode is every static code listing on every Quarto page.
+    //
+    // No backticks in this comment — it lives inside a template literal, and one
+    // backtick closes it and takes the module down.
+    var cells = document.querySelectorAll('div.exercise-cell[id^="webr-"]');
+    if (cells.length === 0) return { state: 'absent', why: 'no webR cells on this page' };
+    // The div ships EMPTY and the runtime mounts into it, so liveness is
+    // readable from the DOM alone: no children means a student cannot run it.
+    var live = 0;
+    for (var i = 0; i < cells.length; i++) if (cells[i].childElementCount > 0) live++;
+    if (live === 0) return { state: 'broken', why: 'webR never mounted any cell', cells: cells.length, live: 0 };
+    if (live < cells.length) {
+      return { state: 'broken', why: 'some webR cells never mounted', cells: cells.length, live: live };
+    }
+    return { state: 'ok', cells: cells.length, live: live };
+  }
+
+  function probeReveal() {
+    if (!document.querySelector('.reveal')) return { state: 'absent', why: 'not a deck' };
+    if (!window.Reveal || typeof window.Reveal.isReady !== 'function' || !window.Reveal.isReady()) {
+      return { state: 'broken', why: 'reveal never initialised' };
+    }
+    return { state: 'ok', slides: document.querySelectorAll('.reveal .slides section').length };
+  }
+
+  function requestedImages() {
+    return Array.from(document.querySelectorAll('img')).filter(function (img) {
+      // Reveal keeps future pictures in data-src. They have not failed: the
+      // browser has not been asked to load them yet.
+      return !!(img.currentSrc || img.getAttribute('src'));
+    });
+  }
+
+  function failedImage(img) { return img.complete && img.naturalWidth === 0; }
+
+  function probeImages() {
+    var images = requestedImages();
+    var failed = images.filter(failedImage).length;
+    var pending = images.filter(function (img) { return !img.complete; }).length;
+    return {
+      state: failed ? 'broken' : pending ? 'pending' : images.length ? 'ok' : 'absent',
+      why: failed ? failed + ' images failed to load' : pending ? 'images are still loading' : undefined,
+      failed: failed,
+      pending: pending,
+      loaded: images.length - failed - pending,
+    };
+  }
+
+  var imageCheckTimer = null;
+  function scheduleImageCheck() {
+    // Initial failures are included in the existing after-load health check.
+    // Do not diagnose Reveal or math before their startup has finished.
+    if (document.readyState !== 'complete') return;
+    if (imageCheckTimer !== null) return;
+    imageCheckTimer = setTimeout(function () {
+      imageCheckTimer = null;
+      check();
+    }, 150);
+  }
+
+  function retryFailedImages() {
+    requestedImages().filter(failedImage).forEach(function (img) {
+      // Keep the current document, its Reveal state and the canvas overlay.
+      // A fresh request for this failed resource must not reload the iframe.
+      var url = new URL(img.currentSrc || img.src, location.href);
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+      url.searchParams.set('_tldaImageRetry', String(Date.now()));
+      // currentSrc may have come from srcset. Keep its chosen resource on this
+      // retry so the unchanged srcset cannot select the failed request again.
+      var picture = img.closest('picture');
+      if (picture) picture.querySelectorAll('source[srcset]').forEach(function (source) {
+        source.removeAttribute('srcset');
+      });
+      img.removeAttribute('srcset');
+      img.addEventListener('load', scheduleImageCheck, { once: true });
+      img.addEventListener('error', scheduleImageCheck, { once: true });
+      img.src = url.href;
+    });
+    check();
+  }
+
+  window.addEventListener('message', function (event) {
+    if (window.parent === window || event.source !== window.parent) return;
+    if (event.data && event.data.type === 'tlda-retry-images') retryFailedImages();
+    if (event.data && event.data.type === 'tlda-request-doc-health') check();
+  });
+
+  // Without this a throwing probe takes check() down: no report, no badge, and
+  // a page that reads as healthy. 'unknown' never folds into 'ok'.
+  function attempt(name, probe) {
+    try {
+      return probe();
+    } catch (e) {
+      return { state: 'unknown', why: 'the ' + name + ' check could not run', error: clip(e && e.message) };
+    }
+  }
+
+  function check() {
+    var report = {
+      math: attempt('math', probeMath),
+      webr: attempt('webR', probeWebR),
+      reveal: attempt('reveal', probeReveal),
+      images: attempt('images', probeImages),
+    };
+    var names = ['math', 'webr', 'reveal', 'images'];
+    var broken = names.filter(function (k) { return report[k].state === 'broken'; });
+    var unknown = names.filter(function (k) { return report[k].state === 'unknown'; });
+    report.broken = broken;
+    report.unknown = unknown;
+    // Reported either way: a check that only speaks when unhappy is
+    // indistinguishable from one that never ran.
+    tell(report);
+    if (broken.length || unknown.length) {
+      send('doc-capability',
+        'document capability check: ' +
+          (broken.length ? 'failed ' + broken.join(', ') : '') +
+          (broken.length && unknown.length ? '; ' : '') +
+          (unknown.length ? 'could not measure ' + unknown.join(', ') : ''),
+        report);
+    }
+    return report;
+  }
+
+  // After load plus a settle window: KaTeX renders on a deferred pass and webR
+  // mounts after its wasm load, so probing earlier reports every page broken.
+  function schedule() { setTimeout(check, 1500); }
+  if (document.readyState === 'complete') schedule();
+  else window.addEventListener('load', schedule);
+
+  // Reads the result out. Deliberately not a fault injector: a detector proved
+  // against a failure it staged for itself was measured on a fixture.
+  window.__tldaDocHealthCheck = check;
+})();
+}
+</script>
+<script>
+if (new URLSearchParams(window.location.search).has("_tldaShape")) {
+(function() {
+  try {
+    Object.keys(sessionStorage).forEach(function(k) {
+      if (k.indexOf('reveal') !== -1 || k.indexOf('Reveal') !== -1) {
+        sessionStorage.removeItem(k);
+      }
+    });
+  } catch(e) {}
+})();
+}
+</script><!--/tlda-publication-head-->
 <script src="chapter-bias-and-coverage-slides_files/libs/clipboard/clipboard.min.js"></script>
 <script src="chapter-bias-and-coverage-slides_files/libs/quarto-html/tabby.min.js"></script>
 <script src="chapter-bias-and-coverage-slides_files/libs/quarto-html/popper.min.js"></script>
@@ -651,290 +1004,7 @@
   })()
 
   </script>
-
-<script>
-if (new URLSearchParams(window.location.search).has("_tldaShape")) {
-(function () {
-  var MAX_FIELD = 2000;
-  var params = new URLSearchParams(window.location.search);
-  var shapeId = params.get('_tldaShape') || '';
-
-  function clip(value) {
-    if (value === undefined || value === null) return undefined;
-    var s = typeof value === 'string' ? value : String(value);
-    if (!s) return undefined;
-    return s.length > MAX_FIELD ? s.slice(0, MAX_FIELD) + '…[+' + (s.length - MAX_FIELD) + ']' : s;
-  }
-
-  // sendBeacon survives a dying page; keepalive fetch is the fallback.
-  function send(ns, msg, data) {
-    var payload = {
-      ts: new Date().toISOString(),
-      level: 'error',
-      ns: ns,
-      msg: msg,
-      data: Object.assign({ url: location.href, shapeId: shapeId }, data),
-    };
-    try {
-      var body = JSON.stringify(payload);
-      if (navigator.sendBeacon &&
-          navigator.sendBeacon('/api/log', new Blob([body], { type: 'application/json' }))) return;
-      fetch('/api/log', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: body,
-        keepalive: true,
-      }).catch(function () {
-        // Nowhere left to report a failed report, and rethrowing would be
-        // caught by the rejection handler below and posted, which loops.
-      });
-    } catch (e) {
-      // Circular payload, or no Blob. Called FROM the error handlers, so a
-      // throw here re-enters them and buries the original fault.
-    }
-  }
-
-  function tell(report) {
-    try {
-      window.parent.postMessage({ type: 'tlda-doc-health', shapeId: shapeId, report: report }, '*');
-    } catch (e) {
-      // Served standalone, so no parent is listening. Supported, not a fault:
-      // the report has already gone to /api/log.
-    }
-  }
-
-  // KaTeX render errors, caught at render time inside the wrapper. This runs in
-  // <head> before the page's own math block, so it installs first and Quarto's
-  // hardcoded non-throwing loop renders through it. Setting throwOnError here
-  // turns a silent literal-text render into a throw the catch reports — the
-  // throw is the signal. It never looks at the page.
-  var katexReported = {};
-  function reportKatexError(tex, err) {
-    try {
-      var detail = clip(err && err.message);
-      if (!detail) return;
-      // One report per distinct error per page load: a single broken macro
-      // used fifty times is one defect, not fifty cards.
-      if (katexReported[detail]) return;
-      katexReported[detail] = true;
-      send('katex-error', 'KaTeX render error', {
-        error: detail,
-        tex: clip(tex),
-      });
-    } catch (e) {
-      // Called FROM the render path, so a throw here re-enters the wrapper
-      // and buries the original fault.
-    }
-  }
-
-  function installKatexHook() {
-    try {
-      if (!window.katex || !window.katex.render || window.__tldaKatexHooked) return false;
-      var inner = window.katex.render.bind(window.katex);
-      window.katex.render = function (tex, el, opts) {
-        opts = opts || {};
-        // Quarto hardcodes the non-throwing options in its own template and
-        // the schema accepts only method+url, so this cannot be configuration.
-        // Callers that set it explicitly keep their own value.
-        if (opts.throwOnError === undefined || opts.throwOnError === false) opts.throwOnError = true;
-        try {
-          return inner(tex, el, opts);
-        } catch (err) {
-          reportKatexError(tex, err);
-          // Paint what KaTeX would have painted had it not thrown: callers
-          // and page layout see the same shape as a non-throwing render.
-          try {
-            var fallbackOpts = {};
-            for (var k in opts) fallbackOpts[k] = opts[k];
-            fallbackOpts.throwOnError = false;
-            return inner(tex, el, fallbackOpts);
-          } catch (e2) {
-            return el;
-          }
-        }
-      };
-      window.__tldaKatexHooked = true;
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  // katex.min.js is deferred, so it may not exist yet when this head script
-  // runs. Poll briefly; give up quietly if KaTeX never loads.
-  (function waitForKatex(tries) {
-    if (installKatexHook()) return;
-    if (tries > 0) setTimeout(function () { waitForKatex(tries - 1); }, 250);
-  })(40);
-  window.__tldaKatexHookInstall = installKatexHook;
-
-  window.addEventListener('error', function (event) {
-    try {
-      // 'error' also fires for failed subresources, where target is the element
-      // rather than window. Unlike crashBeacon.ts these are kept — a macros.js
-      // that 404s is the fault we are looking for — but under their own kind.
-      var target = event.target;
-      if (target && target !== window) {
-        var src = target.src || target.href;
-        if (!src) return;
-        send('doc-fault', 'subresource failed to load', {
-          kind: 'subresource',
-          source: clip(src),
-          tag: target.tagName,
-        });
-        return;
-      }
-      send('doc-fault', event.message || 'error', {
-        kind: 'error',
-        message: clip(event.message),
-        stack: clip(event.error && event.error.stack),
-        source: clip(event.filename),
-        line: event.lineno,
-        column: event.colno,
-      });
-    } catch (e) {
-      // This IS the error handler: a throw here fires 'error' again and
-      // recurses. Reading event.target cross-origin can throw.
-    }
-  }, true);
-
-  window.addEventListener('unhandledrejection', function (event) {
-    try {
-      var reason = event.reason;
-      send('doc-fault', 'unhandled rejection', {
-        kind: 'unhandledrejection',
-        message: clip((reason && reason.message) || reason),
-        stack: clip(reason && reason.stack),
-      });
-    } catch (e) {
-      // A rejection can carry a getter that throws when read, and throwing
-      // here rejects again and re-enters this handler.
-    }
-  });
-
-  function probeMath() {
-    var rendered = document.querySelectorAll('.katex, mjx-container').length;
-    var errored = document.querySelectorAll('.katex-error, mjx-merror').length;
-    // Source delimiters still in the text mean the renderer never ran over
-    // them. The backslash is a charcode, not an escape: this script rides
-    // inside a template literal, so every backslash here is read twice and a
-    // written escape ships wrong while looking right.
-    var BS = String.fromCharCode(92);
-    var body = document.body ? (document.body.innerText || '') : '';
-    var residue = (body.split(BS + '(').length - 1) + (body.split(BS + '[').length - 1);
-
-    if (errored > 0) {
-      var sample = document.querySelector('.katex-error, mjx-merror');
-      return {
-        state: 'broken',
-        why: 'math rendered with errors',
-        errored: errored,
-        rendered: rendered,
-        // KaTeX's title names the undefined control sequence; the count alone
-        // does not tell a reader what to fix.
-        detail: clip(sample && (sample.getAttribute('title') || sample.textContent)),
-      };
-    }
-    if (rendered === 0 && residue > 0) {
-      return { state: 'broken', why: 'math present but nothing rendered it', residue: residue, rendered: 0 };
-    }
-    if (rendered === 0) return { state: 'absent', why: 'no math on this page' };
-    return {
-      state: 'ok',
-      rendered: rendered,
-      engine: window.katex ? 'katex' : 'unknown',
-      macros: window.__tldaKatexMacros ? Object.keys(window.__tldaKatexMacros).length : 0,
-    };
-  }
-
-  function probeWebR() {
-    // The markers are a div with id webr-N and class exercise-cell, beside a
-    // script of type webr-N-contents. Match those and nothing broader:
-    // .cell-code .sourceCode is every static code listing on every Quarto page.
-    //
-    // No backticks in this comment — it lives inside a template literal, and one
-    // backtick closes it and takes the module down.
-    var cells = document.querySelectorAll('div.exercise-cell[id^="webr-"]');
-    if (cells.length === 0) return { state: 'absent', why: 'no webR cells on this page' };
-    // The div ships EMPTY and the runtime mounts into it, so liveness is
-    // readable from the DOM alone: no children means a student cannot run it.
-    var live = 0;
-    for (var i = 0; i < cells.length; i++) if (cells[i].childElementCount > 0) live++;
-    if (live === 0) return { state: 'broken', why: 'webR never mounted any cell', cells: cells.length, live: 0 };
-    if (live < cells.length) {
-      return { state: 'broken', why: 'some webR cells never mounted', cells: cells.length, live: live };
-    }
-    return { state: 'ok', cells: cells.length, live: live };
-  }
-
-  function probeReveal() {
-    if (!document.querySelector('.reveal')) return { state: 'absent', why: 'not a deck' };
-    if (!window.Reveal || typeof window.Reveal.isReady !== 'function' || !window.Reveal.isReady()) {
-      return { state: 'broken', why: 'reveal never initialised' };
-    }
-    return { state: 'ok', slides: document.querySelectorAll('.reveal .slides section').length };
-  }
-
-  // Without this a throwing probe takes check() down: no report, no badge, and
-  // a page that reads as healthy. 'unknown' never folds into 'ok'.
-  function attempt(name, probe) {
-    try {
-      return probe();
-    } catch (e) {
-      return { state: 'unknown', why: 'the ' + name + ' check could not run', error: clip(e && e.message) };
-    }
-  }
-
-  function check() {
-    var report = {
-      math: attempt('math', probeMath),
-      webr: attempt('webR', probeWebR),
-      reveal: attempt('reveal', probeReveal),
-    };
-    var names = ['math', 'webr', 'reveal'];
-    var broken = names.filter(function (k) { return report[k].state === 'broken'; });
-    var unknown = names.filter(function (k) { return report[k].state === 'unknown'; });
-    report.broken = broken;
-    report.unknown = unknown;
-    // Reported either way: a check that only speaks when unhappy is
-    // indistinguishable from one that never ran.
-    tell(report);
-    if (broken.length || unknown.length) {
-      send('doc-capability',
-        'document capability check: ' +
-          (broken.length ? 'failed ' + broken.join(', ') : '') +
-          (broken.length && unknown.length ? '; ' : '') +
-          (unknown.length ? 'could not measure ' + unknown.join(', ') : ''),
-        report);
-    }
-    return report;
-  }
-
-  // After load plus a settle window: KaTeX renders on a deferred pass and webR
-  // mounts after its wasm load, so probing earlier reports every page broken.
-  function schedule() { setTimeout(check, 1500); }
-  if (document.readyState === 'complete') schedule();
-  else window.addEventListener('load', schedule);
-
-  // Reads the result out. Deliberately not a fault injector: a detector proved
-  // against a failure it staged for itself was measured on a fixture.
-  window.__tldaDocHealthCheck = check;
-})();
-}
-</script>
-<script>
-if (new URLSearchParams(window.location.search).has("_tldaShape")) {
-(function() {
-  try {
-    Object.keys(sessionStorage).forEach(function(k) {
-      if (k.indexOf('reveal') !== -1 || k.indexOf('Reveal') !== -1) {
-        sessionStorage.removeItem(k);
-      }
-    });
-  } catch(e) {}
-})();
-}
-</script></head>
+</head>
 <body class="quarto-light">
   <div class="reveal">
     <div class="slides">
@@ -3375,7 +3445,7 @@ W10=
       </script>
     
 
-
+<!--tlda-publication-body-->
 <script>
 if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 (function() {
@@ -3384,6 +3454,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   var indexh = parseInt(params.get('_tldaH') || '0', 10);
   var indexv = parseInt(params.get('_tldaV') || '0', 10);
   var deckMode = params.get('_tldaDeck') === '1';
+  var captureHold = deckMode && params.get('_tldaCapture') === '1';
   // Legacy per-slide iframes lock to their slide; a standalone deck page
   // (no parent) navigates natively instead. The lock exists for book-viewer
   // iframes that each show one slide -- without it, keys inside one frame
@@ -3843,6 +3914,9 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   var pendingDeckLayout = null;
   var deckLayoutRetry = null;
   var deckLayoutStyle = null;
+  // The page the parent last addressed: { section, index }. The only legitimate
+  // moves in the strip are the parent's gotos, so this is where reveal belongs.
+  var deckHeld = null;
 
   // The pages reveal actually built, in the order it built them.
   //
@@ -3857,6 +3931,18 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 
   function deckSectionOf(page) {
     return page.querySelector('section');
+  }
+
+  // The page that holds a given slide element, by element: the scroll view's
+  // own address is a page index that reveal reports as h, so it cannot say
+  // which slide is current.
+  function deckPageOfSection(section) {
+    if (!section) return null;
+    var pages = document.querySelectorAll('.scroll-page');
+    for (var i = 0; i < pages.length; i++) {
+      if (deckSectionOf(pages[i]) === section) return { section: section, index: i };
+    }
+    return null;
   }
 
   // The page whose slide carries a given reveal address.
@@ -3891,8 +3977,33 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     if (!data || data.indexh === undefined || data.indexh === null) return;
     if (!Reveal.isScrollView || !Reveal.isScrollView() || !Reveal.setCurrentScrollPage) return;
     var found = deckPageAtAddress(data.indexh, data.indexv || 0);
+    // Hold what the parent last addressed even when reveal is already there.
+    if (found) deckHeld = { section: found.section, index: found.index };
     if (!found || Reveal.getCurrentSlide() === found.section) return;
     Reveal.setCurrentScrollPage(found.section, found.index, 0);
+    // Moving the page ran reveal's stretch sizing against the pinned section
+    // height; put the authored figure sizes back.
+    restoreStretchFigures();
+  }
+
+  // Put reveal back on the page the parent addressed after a layout pass moved
+  // it. In the strip nothing scrolls, so reveal's scroll-view address resolves
+  // to the first page on every layout or resize pass (see addressFragmentTarget),
+  // and it does so after layout() returns, so a re-assert made inside the pass
+  // sees nothing to correct. A change onto the first page that the parent did
+  // not ask for is that reset; any other move is left alone. It holds from the
+  // first address, before the strip layout exists: the pass that resets the
+  // address can come first.
+  function holdDeckAddress(current) {
+    if (!deckHeld || !Reveal.setCurrentScrollPage || !Reveal.isScrollView || !Reveal.isScrollView()) return false;
+    if (current === deckHeld.section || deckHeld.index === 0) return false;
+    var pages = document.querySelectorAll('.scroll-page');
+    if (!pages.length || current !== deckSectionOf(pages[0])) return false;
+    Reveal.setCurrentScrollPage(deckHeld.section, deckHeld.index, 0);
+    // Moving the page ran reveal's stretch sizing against the pinned section
+    // height, which leaves every stretch figure on the page at 0x0.
+    restoreStretchFigures();
+    return true;
   }
 
   // The extent is enumerated per slide. Reveal's own getHorizontalSlides() and
@@ -4107,13 +4218,10 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     // slide (see addressFragmentTarget), so re-assert the slide that was
     // current before laying out.
     if (Reveal.layout && Reveal.isScrollView && Reveal.isScrollView()) {
-      var addrBefore = (Reveal.getIndices && Reveal.getIndices()) || {};
+      var backTo = deckHeld || deckPageOfSection(Reveal.getCurrentSlide && Reveal.getCurrentSlide());
       Reveal.layout();
-      if (addrBefore.h !== undefined && addrBefore.h !== null && Reveal.setCurrentScrollPage) {
-        var backTo = deckPageAtAddress(addrBefore.h, addrBefore.v || 0);
-        if (backTo && Reveal.getCurrentSlide() !== backTo.section) {
-          Reveal.setCurrentScrollPage(backTo.section, backTo.index, 0);
-        }
+      if (backTo && Reveal.setCurrentScrollPage && Reveal.getCurrentSlide() !== backTo.section) {
+        Reveal.setCurrentScrollPage(backTo.section, backTo.index, 0);
       }
       // The pass above also re-ran reveal's stretch sizing against the
       // pinned section height (see restoreStretchFigures); put the authored
@@ -4175,7 +4283,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   // exactly before return. Unloaded elements are skipped untouched, which
   // matches reveal's ignored-NaNpx net effect. Nothing else is sized, and
   // the pass calls neither layout nor configure, so it cannot recurse.
-  function restoreStretchFigures() {
+  function restoreStretchFigures(section) {
     if (!deckMode) return;
     if (typeof Reveal === 'undefined' || !Reveal.getSlidesElement || !Reveal.getConfig) return;
     var slidesEl = Reveal.getSlidesElement();
@@ -4184,7 +4292,11 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     var slideW = config.width;
     var slideH = config.height;
     if (typeof slideW !== 'number' || typeof slideH !== 'number' || !(slideW > 0) || !(slideH > 0)) return;
-    var els = slidesEl.querySelectorAll('section > .stretch, section > .r-stretch');
+    // A media load changes only its containing slide. Measuring every slide
+    // for every arriving image repeatedly forces layout across the whole deck.
+    var els = section
+      ? section.querySelectorAll(':scope > .stretch, :scope > .r-stretch')
+      : slidesEl.querySelectorAll('section > .stretch, section > .r-stretch');
     for (var i = 0; i < els.length; i++) {
       var el = els[i];
       var isMedia = /(img|video)/i.test(el.nodeName || '');
@@ -4355,11 +4467,13 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   // native signal below; same pass, no separate sizing.
   document.addEventListener('load', function(e) {
     if (!deckMode || !e.target || (e.target.nodeName || '').toLowerCase() !== 'img') return;
-    restoreStretchFigures();
+    var section = e.target.closest('section');
+    if (section) restoreStretchFigures(section);
   }, true);
   document.addEventListener('loadedmetadata', function(e) {
     if (!deckMode || !e.target || (e.target.nodeName || '').toLowerCase() !== 'video') return;
-    restoreStretchFigures();
+    var section = e.target.closest('section');
+    if (section) restoreStretchFigures(section);
   }, true);
 
   // Window resize is the one native trigger that re-runs reveal's sizing
@@ -4377,6 +4491,18 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     if (typeof Reveal === 'undefined' || !Reveal.isReady || !Reveal.isReady()) {
       setTimeout(init, 100);
       return;
+    }
+
+    // MathJax can lay out the scroll-view deck after navigation has settled.
+    // Reveal collapses stretch figures during that pass; restore them before
+    // it returns so a capture cannot paint between layout and a later timer.
+    if (deckMode && typeof Reveal.layout === 'function') {
+      var revealLayout = Reveal.layout;
+      Reveal.layout = function() {
+        var result = revealLayout.apply(this, arguments);
+        restoreStretchFigures();
+        return result;
+      };
     }
 
     bindXrefHovers();
@@ -4400,9 +4526,9 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       })();
       // Size whatever reveal's own initialize-time passes left behind: images
       // already loaded get authored sizes now, and later arrivals are covered
-      // by the load listener above. (Goto and fragment stepping need no call
-      // here — in scroll view neither lays out, and any loads they start fire
-      // that same listener.)
+      // by the load listener above. (Moving the scroll-view page does run
+      // reveal's stretch sizing: goto, and the bridge's own re-addressing, call
+      // restoreStretchFigures after the move.)
       restoreStretchFigures();
     }
 
@@ -4439,6 +4565,13 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       if (legacySlideLock && (ev.indexh !== indexh || ev.indexv !== indexv)) {
         Reveal.slide(indexh, indexv, 0);
       }
+      // Reveal's scroll view moves its current page on its own (the first
+      // page at load, then whichever the strip's tracking picks), and each move
+      // runs its stretch sizing against the pinned section height, which leaves
+      // every lone figure in the strip at 0x0. The sizing lands after this event
+      // returns, so the authored sizes go back on the next task.
+      if (deckMode) setTimeout(restoreStretchFigures, 0);
+      if (deckMode && holdDeckAddress(ev.currentSlide)) return;
       if (deckMode) {
         reportFragmentState();
         reportSlideHeight();
@@ -4461,6 +4594,14 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       '.reveal, .reveal .slides, .reveal .slides section { overflow: visible !important; }',
       '.reveal { background: transparent !important; }',
     ];
+    // The capture clone uses Reveal's own scroll view. Keep its viewport as
+    // the scroller: the strip's overflow-visible rule otherwise scrolls the
+    // outer document while Reveal sees scrollTop=0 and reselects slide one.
+    if (captureHold) styleRules.push(
+      'html { height: 100%; overflow: hidden !important; }',
+      'body.reveal-viewport.reveal-scroll { height: 100%; overflow-y: auto !important; }',
+      '.reveal-scroll .scroll-page-content { overflow: visible !important; }'
+    );
     if (!deckMode) styleRules = styleRules.concat(tldaNavHideRules);
     var style = document.createElement('style');
     style.textContent = styleRules.join('\n');
@@ -4517,7 +4658,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     }
 
     // Report fragment state to parent (for SlidesNavigator)
-    function reportFragmentState() {
+    function reportFragmentState(requestId) {
       if (window.parent === window) return;
       var slide = Reveal.getCurrentSlide();
       if (!slide) return;
@@ -4559,10 +4700,18 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       var slideBox = null;
       try {
         var rect = slide.getBoundingClientRect();
-        if (rect) slideBox = { x: rect.left, y: rect.top, w: rect.width, h: rect.height };
+        if (rect) {
+          // Reveal pins the section to the authored slide height even when
+          // its content is taller. The reader must capture that overflow too.
+          var captureHeight = captureHold && slide.offsetHeight > 0
+            ? Math.max(rect.height, slide.scrollHeight * rect.height / slide.offsetHeight)
+            : rect.height;
+          slideBox = { x: rect.left, y: rect.top, w: rect.width, h: captureHeight };
+        }
       } catch (boxError) { slideBox = null; }
       window.parent.postMessage({
         type: 'tlda-fragment-state',
+        requestId: typeof requestId === 'string' ? requestId : null,
         shapeId: shapeId,
         indexh: at.h,
         indexv: at.v || 0,
@@ -4625,6 +4774,44 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     // The distance is reveal's own configured viewDistance rather than a
     // literal -- and when reveal does not state one we load the target alone
     // rather than inventing a number. Unloading is deliberately left to reveal.
+    // Run done once every img in the current slide has finished loading
+    // (or failed), promoting a still-lazy data-src first, within maxMs.
+    //
+    // The target argument is the section the goto addressed. In the scroll-view strip
+    // Reveal's own current slide can still be the one before it (setCurrentScrollPage
+    // sets the address, not Reveal's pointer), so asking Reveal answers for the
+    // wrong slide: a single-slide capture then waited on slide 1's pictures and
+    // screenshotted slide 3 before its figure had loaded. A range from slide 1
+    // hid it, because visiting slide 2 had already preloaded slide 3.
+    function whenCurrentSlideImagesLoaded(maxMs, done, target) {
+      var section = target || (Reveal.getCurrentSlide && Reveal.getCurrentSlide());
+      var imgs = section ? Array.prototype.slice.call(section.querySelectorAll('img')) : [];
+      var pending = 0;
+      var finished = false;
+      var timer = null;
+      function finish() {
+        if (finished) return;
+        finished = true;
+        if (timer) clearTimeout(timer);
+        done();
+      }
+      function one() { pending -= 1; if (pending <= 0) finish(); }
+      for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+        if (!img.getAttribute('src') && img.getAttribute('data-src')) img.setAttribute('src', img.getAttribute('data-src'));
+        if (!img.getAttribute('src')) continue;
+        // complete is terminal either way: loaded (naturalWidth > 0) or already
+        // failed (naturalWidth 0). A failed image fired its error before any
+        // listener could be attached, so waiting on it would run to the bound.
+        if (img.complete) continue;
+        pending += 1;
+        img.addEventListener('load', one, { once: true });
+        img.addEventListener('error', one, { once: true });
+      }
+      if (pending <= 0) { finish(); return; }
+      timer = setTimeout(finish, maxMs);
+    }
+
     function loadSlidesNear(pages, index) {
       if (!Reveal.loadSlide || !pages || !pages.length) return;
       var config = Reveal.getConfig ? Reveal.getConfig() : null;
@@ -4689,7 +4876,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         var avail = Reveal.availableFragments();
         if (avail && avail.next) {
           if (Reveal.nextFragment) Reveal.nextFragment(); else Reveal.next();
-          setTimeout(reportFragmentState, 50);
+          setTimeout(function() { reportFragmentState(e.data.requestId); }, 50);
         }
       }
       if (e.data.type === 'tlda-fragment-prev') {
@@ -4697,13 +4884,13 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         var avail = Reveal.availableFragments();
         if (avail && avail.prev) {
           if (Reveal.prevFragment) Reveal.prevFragment(); else Reveal.prev();
-          setTimeout(reportFragmentState, 50);
+          setTimeout(function() { reportFragmentState(e.data.requestId); }, 50);
         }
       }
       if (e.data.type === 'tlda-fragment-goto') {
         addressFragmentTarget(e.data);
         goToVisibleFragmentCount(parseInt(e.data.current || '0', 10) || 0);
-        setTimeout(reportFragmentState, 50);
+        setTimeout(function() { reportFragmentState(e.data.requestId); }, 50);
         setTimeout(reportSlideHeight, 50);
       }
       if (e.data.type === 'tlda-slide-goto') {
@@ -4720,6 +4907,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         // once it is right, availableFragments() and next() drive fragments
         // normally, so nothing else here has to change.
         var movedByScrollPage = false;
+        var gotoTargetSection = null;
         if (Reveal.isScrollView && Reveal.isScrollView() && Reveal.setCurrentScrollPage) {
           var gotoPages = document.querySelectorAll('.scroll-page');
           for (var gi = 0; gi < gotoPages.length; gi++) {
@@ -4727,9 +4915,15 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
             if (!gotoSection) continue;
             var gotoIdx = Reveal.getIndices(gotoSection);
             if (gotoIdx && gotoIdx.h === gotoH && (gotoIdx.v || 0) === gotoV) {
+              deckHeld = { section: gotoSection, index: gi };
               Reveal.setCurrentScrollPage(gotoSection, gi, 0);
               loadSlidesNear(gotoPages, gi);
+              // Same move as the bridge's other re-addressing: reveal's stretch
+              // sizing ran and left the page's figures at 0x0, and no image
+              // load follows when the page's images are already loaded.
+              restoreStretchFigures();
               movedByScrollPage = true;
+              gotoTargetSection = gotoSection;
               break;
             }
           }
@@ -4751,8 +4945,27 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
             });
           } catch (scrollError) { /* report still goes out; the box shows where we are */ }
         }
-        setTimeout(reportFragmentState, 50);
-        setTimeout(reportSlideHeight, 50);
+        // Capture hold only (the scrollIntoView flag is walk-only): answer
+        // when the addressed slide's images have loaded, not 50 ms after the
+        // address. The walk publishes the frame for a native screenshot as
+        // soon as this report arrives, and a lazily loaded figure that is
+        // still in flight screenshots as an empty body under its bullets.
+        // Measured 2026-10-21 on Skip's quality-assurance deck: the 1 MB
+        // coverage figure (sb-5-3, 9,608 points) came back empty in capture
+        // after capture while the 11 KB one beside it rendered; both are
+        // complete on disk and served. Bounded: a figure that never loads
+        // still gets its report, with whatever is there.
+        if (e.data.scrollIntoView === true) {
+          var gotoRequestId = e.data.requestId;
+          whenCurrentSlideImagesLoaded(10000, function() {
+            restoreStretchFigures();
+            reportFragmentState(gotoRequestId);
+            reportSlideHeight();
+          }, gotoTargetSection);
+        } else {
+          setTimeout(function() { reportFragmentState(e.data.requestId); }, 50);
+          setTimeout(reportSlideHeight, 50);
+        }
       }
       if (e.data.type === 'tlda-deck-layout') {
         // Arrives whenever the parent recomputes placement, including before
@@ -4925,4 +5138,127 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   }
 })();
 }
-</script></body></html>
+</script><!--/tlda-publication-body--><!--tlda-file-app-switch--><a class="presentation-mode-switch" href="../../../app.html?location=static%2Fbook%2Fdecks%2Fchapter-bias-and-coverage-slides.html&amp;course=qtm285" hidden style="position:fixed;top:12px;left:12px;z-index:10000">App</a><script data-tlda-app-link-access data-tlda-file-app-switch>(function installAppLinkAccess(anchor, mode, readToken) {
+  anchor.hidden = true
+  const params = new URLSearchParams(location.search)
+  if (params.has('_tldaShape')) return
+  const destination = new URL(anchor.href, location.href)
+  const course = params.get('course')
+  if (course) destination.searchParams.set('course', course)
+  anchor.href = destination.href
+  if (destination.origin !== location.origin || !['http:', 'https:'].includes(destination.protocol)) return
+  let active = null
+  let generation = 0
+
+  async function refresh() {
+    const current = ++generation
+    active?.abort()
+    const controller = new AbortController()
+    active = controller
+    anchor.hidden = true
+    const timeout = setTimeout(() => controller.abort(), 5000)
+    try {
+      const read = async url => {
+        const target = new URL(url, destination)
+        if (target.origin !== destination.origin) throw new Error('Reader resource is not same-origin')
+        const result = await fetch(target.href, { credentials: 'same-origin', redirect: 'error', cache: 'no-store', signal: controller.signal })
+        if (!result.ok || result.redirected) throw new Error('Reader resource is unavailable')
+        return result
+      }
+      const response = await read(destination.href)
+      const doc = new DOMParser().parseFromString(await response.text(), 'text/html')
+      const marker = doc.querySelector('meta[name="tlda-app-reader"]')
+      if (marker?.content !== mode || !marker.dataset.readerBase) return
+      const readerBase = new URL(decodeURIComponent(marker.dataset.readerBase), destination)
+      if (readerBase.origin !== destination.origin || readerBase.search || readerBase.hash
+        || readerBase.username || readerBase.password) return
+      if (!doc.querySelector('script[type="module"][src]')) return
+      let base, wanted, config
+      if (mode === 'files') {
+        base = new URL('./', destination)
+        if (readerBase.href !== base.href) return
+        wanted = destination.searchParams.get('location')
+        const publication = await (await read(new URL('manifest.json', base))).json()
+        const documents = publication?.documents
+        if (!documents || typeof documents !== 'object' || Array.isArray(documents)) return
+        const project = destination.searchParams.get('project')
+        const keys = Object.keys(documents)
+        config = project ? documents[project] : keys.length === 1 ? documents[keys[0]] : null
+        const pages = await (await read(new URL('page-info.json', base))).json()
+        if (!Array.isArray(pages) || !pages.some(page => page?.file === wanted)) return
+      } else {
+        const route = destination.pathname.match(/^\/docs\/([^/]+)\/app\/(.+)$/)
+        if (!route) return
+        const store = readerBase.href.replace(/\/$/, '')
+        base = new URL(`${store}/docs/${route[1]}/`)
+        wanted = route[2].split('/').map(decodeURIComponent).join('/')
+        config = await (await read(`${store}/api/projects/${route[1]}?include=page-info`)).json()
+      }
+      if (!wanted || !config || !(config.pages > 0)) return
+      const manifest = await (await read(new URL('document-manifest.json', base))).json()
+      if (manifest?.version !== 1 || manifest.kind !== 'tlda-document' || !Array.isArray(manifest.pages)
+        || !manifest.source?.format || !manifest.document?.format
+        || !['html-pages', 'slides', 'svg-pages', 'image-pages'].includes(manifest.view?.kind)) return
+      const pages = manifest.view.kind === 'slides' && manifest.pages.some(page => page.variant === 'slides')
+        ? manifest.pages.filter(page => page.variant === 'slides') : manifest.pages
+      // Match the same source/output alternatives used by presentationLocationMatchesPage.
+      const encoded = wanted.split('/').map(encodeURIComponent).join('/')
+      const legacy = wanted.replace(/^book\//, '')
+      const page = pages.find(page => {
+        if (typeof page?.file !== 'string' || !(page.width > 0) || !(page.height > 0)) return false
+        if (mode === 'files') return page.file === wanted
+        const path = new URL(page.file, base).pathname
+        return page.source?.file === wanted || page.source?.file?.replace(/\.qmd$/i, '.html') === legacy
+          || path === `${base.pathname}app/${encoded}` || path === `${base.pathname}${encoded}`
+          || path.endsWith(`/_book/${legacy}`)
+      })
+      if (!page) return
+      const resource = new URL(page.file, base)
+      resource.searchParams.set('_tldaShape', 'app-link-access')
+      if (course) resource.searchParams.set('course', course)
+      await (await read(resource)).arrayBuffer()
+      const readerCourse = destination.searchParams.get('course')
+      if (readerCourse) {
+        // A course reader resolves this same identity before it can connect.
+        // File metadata alone says nothing about that backend's CORS/admission.
+        const identities = JSON.parse(decodeURIComponent(marker.dataset.readerIdentities || ''))
+        if (!Array.isArray(identities) || !identities.length) return
+        const matches = identities.filter(identity => {
+          if (!identity.publicationUrl) return identities.length === 1
+          const declared = new URL(identity.publicationUrl)
+          return declared.origin === destination.origin && destination.pathname.startsWith(declared.pathname)
+        })
+        if (matches.length !== 1) return
+        const identity = matches[0]
+        const backend = new URL(identity.database)
+        if (!['http:', 'https:'].includes(backend.protocol) || backend.username || backend.password
+          || backend.search || backend.hash || !['include', 'same-origin'].includes(identity.credentials)) return
+        const identityUrl = new URL(`${backend.href.replace(/\/$/, '')}/api/classroom/me`)
+        identityUrl.searchParams.set('course', readerCourse)
+        const token = readToken(destination.search, readerCourse, key => window.localStorage.getItem(key))
+        const response = await fetch(identityUrl.href, {
+          credentials: identity.credentials, redirect: 'error', cache: 'no-store', signal: controller.signal,
+          ...(token ? { headers: { 'x-tlda-student-token': token } } : {}),
+        })
+        if (!response.ok || response.redirected) return
+        const principal = await response.json()
+        if (principal.courseId !== readerCourse || !((principal.role === 'student' && principal.studentId)
+          || (principal.role === 'instructor' && principal.instructorId))) return
+      }
+      if (current === generation && !controller.signal.aborted) anchor.hidden = false
+    } catch {
+      // Refusal, missing publication and connectivity failure all leave no link
+      // to an app this page has not established the reader can enter.
+    } finally {
+      clearTimeout(timeout)
+      if (active === controller) active = null
+    }
+  }
+  window.addEventListener('pageshow', refresh)
+  window.addEventListener('pagehide', () => { generation++; active?.abort(); anchor.hidden = true })
+  return refresh()
+})(document.currentScript.previousElementSibling,"files",function readClassroomTokenFrom(search, courseId, getStored) {
+  const fromUrl = new URLSearchParams(search).get('classroomToken')
+  if (fromUrl) return fromUrl
+  try { return getStored(`tlda-classroom-token:${courseId}`) } catch { return null }
+});</script><!--/tlda-file-app-switch--></body></html>
