@@ -776,9 +776,12 @@
 <li>Each person <span class="math inline">j \in \{1 \ldots m\}</span> in our study has two potential outcomes, <span class="math inline">\ingroupb{y_j(1)}</span> and <span class="math inline">\ingroupa{y_j(0)}</span>.
 <ul>
 <li>Their difference <span class="math inline">\tau_j = \ingroupb{y_j(1)} - \ingroupa{y_j(0)}</span> is person <span class="math inline">j</span>’s individual treatment effect.</li>
-<li>Because each person receives only one treatment, we never observe both ends of the pair for the same person.</li>
+<li>Each person receives only one treatment, so we never observe both outcomes for one person.</li>
 </ul></li>
-<li>Instead, we shuffle <span class="math inline">m_1</span> people into <span class="groupb">treatment</span> and <span class="math inline">m_0 = m - m_1</span> into <span class="groupa">control</span>, and take the difference in observed group means. <span class="math display">\hat\tau = \ingroupb{\hat\mu(1)} - \ingroupa{\hat\mu(0)} = \ingroupb{\frac{1}{m_1}\sum_{j:W_j=1} y_j(W_j)} - \ingroupa{\frac{1}{m_0}\sum_{j:W_j=0} y_j(W_j)}.</span></li>
+<li>Instead, we shuffle <span class="math inline">m_1</span> people into <span class="groupb">treatment</span> and <span class="math inline">m_0 = m - m_1</span> into <span class="groupa">control</span>.
+<ul>
+<li>Then we take the difference in observed group means. <span class="math display">\hat\tau = \ingroupb{\hat\mu(1)} - \ingroupa{\hat\mu(0)} = \ingroupb{\frac{1}{m_1}\sum_{j:W_j=1} y_j(W_j)} - \ingroupa{\frac{1}{m_0}\sum_{j:W_j=0} y_j(W_j)}.</span></li>
+</ul></li>
 <li>Last time we saw that the centre <span class="math inline">\E(\hat\tau)</span> (<span class="blue">blue</span>) lands right on the average treatment effect <span class="math inline">\bar\tau</span> (<span class="target">green</span>).
 <ul>
 <li>Today we work out the spread around it.</li>
@@ -868,7 +871,8 @@
 <section id="why-the-difference-of-group-means-targets-the-average-of-individual-effects" class="slide level2">
 <h2>Why the Difference of Group Means Targets the Average of Individual Effects</h2>
 <ul>
-<li>Using the indicator trick, each group mean can be written as a sum over all <span class="math inline">m</span> people in the study. <span class="math display">\hat\mu(w) = \frac{1}{m_w}\sum_{j=1}^m y_j(w) 1_{=w}(W_j) \qqtext{where} \E\{1_{=w}(W_j)\} = \frac{m_w}{m} \qqtext{so} \E\{\hat\mu(w)\} = \frac{1}{m}\sum_{j=1}^m y_j(w) = \mu(w).</span></li>
+<li>Using the indicator trick, each group mean can be written as a sum over all <span class="math inline">m</span> people in the study. <span class="math display">\hat\mu(w) = \frac{1}{m_w}\sum_{j=1}^m y_j(w) 1_{=w}(W_j).</span></li>
+<li>Every person has the same chance of being in group <span class="math inline">w</span>, <span class="math inline">\E\{1_{=w}(W_j)\} = \frac{m_w}{m}</span>, so we can take expectations. <span class="math display">\E\{\hat\mu(w)\} = \frac{1}{m_w}\sum_{j=1}^m y_j(w)\frac{m_w}{m} = \frac{1}{m}\sum_{j=1}^m y_j(w) = \mu(w).</span></li>
 <li>Now take the expectation of <span class="math inline">\hat\tau = \ingroupb{\hat\mu(1)} - \ingroupa{\hat\mu(0)}</span> and combine the two population sums person by person. <span class="math display">\begin{aligned}
 \E(\hat\tau)
 &amp;= \E\{\ingroupb{\hat\mu(1)} - \ingroupa{\hat\mu(0)}\} \\
@@ -880,8 +884,6 @@
 \frac{1}{m}\sum_{j=1}^m \{\ingroupb{y_j(1)} - \ingroupa{y_j(0)}\}
 = \frac{1}{m}\sum_{j=1}^m \tau_j = \bar\tau.
 \end{aligned}</span></li>
-<li>Because both expectations average over the same <span class="math inline">m</span> people with weight <span class="math inline">\frac{1}{m}</span>, we can pair each person’s <span class="math inline">\ingroupb{y_j(1)}</span> with their own <span class="math inline">\ingroupa{y_j(0)}</span>.</li>
-<li>Now that the indicator rewrite puts all the randomness in <span class="math inline">1_{=w}(W_j)</span>, what does it tell us about the variance <span class="math inline">\Var(\hat\tau)</span>?</li>
 </ul>
 <!-- Added Nov 8 by class-handoff-owner-opus. Skip accepted this exercise and its placement after the unbiasedness proof ("That sounds good", chat#10221622, after #10221516, #10221547, #10221557, #10221593). Wording is agent-written and not yet reviewed by him. Data: candy_population in decks/candy-oct27.qmd. -->
 </section>
@@ -910,18 +912,21 @@ j &amp; w_j &amp; y_j(w_j) &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp;
 </span></p>
 </div>
 <ul>
-<li>In the candy survey, each of us <em>chose</em> whether to eat bitter dark chocolate (<span class="math inline">w_j = 1</span>).</li>
-<li>Then we tasted a salty and a fruity bar, with <span class="math inline">y_j = 1</span> for salty.
+<li>In the candy survey, each of us <em>chose</em> whether to eat bitter dark chocolate.
+<ul>
+<li><span class="math inline">w_j = 1</span> if person <span class="math inline">j</span> ate it, and <span class="math inline">w_j = 0</span> if not.</li>
+</ul></li>
+<li>Then we tasted a salty and a fruity bar, with <span class="math inline">y_j(w_j) = 1</span> for salty.
 <ul>
 <li><span class="math inline">4</span> of the <span class="math inline">5</span> who chose it prefer salty, against <span class="math inline">2</span> of the <span class="math inline">5</span> who declined.</li>
-<li>So <span class="math inline">\hat\Delta = 0.8 - 0.4 = 0.4</span>.</li>
+<li>So the difference in group means is <span class="math inline">\hat\Delta = 0.8 - 0.4 = 0.4</span>.</li>
 </ul></li>
 <li><strong>Q.</strong> Fill in everyone’s other potential outcome in two ways that match what we observed.
 <ol type="1">
 <li>So that the dark chocolate has no effect on anyone.</li>
 <li>So that the average treatment effect <span class="math inline">\bar\tau</span> is negative.</li>
 </ol></li>
-<li><em>Remember</em> In CausalDoku, randomization let us pretend both groups have the same values.
+<li><em>Remember</em> that in CausalDoku, randomization let us pretend both groups have the same values.
 <ul>
 <li>Here nobody shuffled, so that rule is gone.</li>
 </ul></li>
@@ -990,7 +995,7 @@ j &amp; w_j &amp; y_j(w_j) &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp;
 <li>When people choose, <span class="math inline">w_j</span> is a property of person <span class="math inline">j</span>, not a random <span class="math inline">W_j</span>.</li>
 <li>Choosers are in the dark-chocolate group for sure, and decliners never are.</li>
 <li>So <span class="math inline">\hat\mu(1)</span> averages <span class="math inline">y_j(1)</span> only over the people who chose.</li>
-<li>They may be exactly the people who lean salty anyway. That is imbalance.</li>
+<li>They may be exactly the people who lean salty anyway, so the groups are imbalanced.</li>
 </ul></li>
 </ul>
 </div>
@@ -1059,13 +1064,15 @@ j &amp; w_j &amp; y_j(w_j) &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp;
 </div>
 </div></div>
 <ul>
+<li>Back to our proof. All the randomness is in <span class="math inline">1_{=w}(W_j)</span>. What does that tell us about <span class="math inline">\Var(\hat\tau)</span>?</li>
 <li>With <span class="math inline">m = 6</span> people and <span class="math inline">m_1 = 3</span> treated, there are <span class="math inline">\binom{6}{3} = 20</span> equally likely shuffles.
 <ul>
 <li>Enumerating all 20 shuffles gives the exact randomization distribution of <span class="math inline">\hat\tau</span> shown on the right.</li>
 </ul></li>
 <li>The <span class="target">green line</span> is <span class="math inline">\bar\tau \approx 2.17</span> and the <span class="blue">solid blue line</span> is <span class="math inline">\E(\hat\tau) \approx 2.17</span>.
 <ul>
-<li>The <span class="blue">dashed</span> and <span class="blue">dotted blue lines</span> mark intervals around the mean holding two-thirds and 95% of the 20 estimates.</li>
+<li>The <span class="blue">dashed blue lines</span> mark an interval holding two-thirds of the 20 estimates.</li>
+<li>The <span class="blue">dotted blue lines</span> mark one holding 95% of them.</li>
 </ul></li>
 <li>Averaging the squared deviations across all 20 shuffles gives the exact variance of <span class="math inline">\hat\tau</span>. <span class="math display">\Var(\hat\tau) = \frac{1}{20}\sum_{s=1}^{20} \{\hat\tau_s - \E(\hat\tau)\}^2 \approx 5.094.</span></li>
 </ul>
@@ -1081,8 +1088,14 @@ j &amp; w_j &amp; y_j(w_j) &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp;
 <ul>
 <li>Two things happen when a shuffle splits <span class="math inline">m</span> people into <span class="math inline">m_1</span> treated and <span class="math inline">m_0 = m - m_1</span> control.
 <ol type="1">
-<li><em>Within each arm</em>, the <span class="math inline">m_w</span> people are drawn <strong>without replacement</strong> from the <span class="math inline">m</span> people in the study, so <span class="math inline">1_{=w}(W_j)</span> and <span class="math inline">1_{=w}(W_k)</span> are negatively correlated.</li>
-<li><em>Across the two arms</em>, <span class="math inline">\ingroupb{\hat\mu(1)}</span> and <span class="math inline">\ingroupa{\hat\mu(0)}</span> are <strong>not independent</strong> because everyone not placed in treatment lands in control.</li>
+<li><em>Within each arm</em>, the <span class="math inline">m_w</span> people are drawn <strong>without replacement</strong> from all <span class="math inline">m</span>.
+<ul>
+<li>So <span class="math inline">1_{=w}(W_j)</span> and <span class="math inline">1_{=w}(W_k)</span> are negatively correlated.</li>
+</ul></li>
+<li><em>Across the two arms</em>, <span class="math inline">\ingroupb{\hat\mu(1)}</span> and <span class="math inline">\ingroupa{\hat\mu(0)}</span> are <strong>not independent</strong>.
+<ul>
+<li>Whoever is not placed in treatment lands in control.</li>
+</ul></li>
 </ol></li>
 <li>Because <span class="math inline">\hat\tau = \ingroupb{\hat\mu(1)} - \ingroupa{\hat\mu(0)}</span> is a difference of two dependent random variables, we must keep their covariance. <span class="math display">\Var(\hat\tau) = \Var\{\ingroupb{\hat\mu(1)}\} + \Var\{\ingroupa{\hat\mu(0)}\} - 2\Cov\{\ingroupb{\hat\mu(1)}, \ingroupa{\hat\mu(0)}\}.</span></li>
 </ul>
@@ -1096,14 +1109,17 @@ j &amp; w_j &amp; y_j(w_j) &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp;
 <section id="finite-population-variances-and-covariance" class="slide level2">
 <h2>Finite-Population Variances and Covariance</h2>
 <ul>
-<li>Before working out the three pieces of <span class="math inline">\Var(\hat\tau)</span>, we define the potential-outcome variances with denominator <span class="math inline">m - 1</span>. <span class="math display">S_w^2 = \frac{1}{m-1}\sum_{j=1}^m \{y_j(w) - \mu(w)\}^2 \qqtext{and} S_\tau^2 = \frac{1}{m-1}\sum_{j=1}^m (\tau_j - \bar\tau)^2.</span></li>
+<li>Before computing <span class="math inline">\Var(\hat\tau)</span>, we define variances with denominator <span class="math inline">{m - 1}</span>. <span class="math display">S_w^2 = \frac{1}{m-1}\sum_{j=1}^m \{y_j(w) - \mu(w)\}^2 \qqtext{and} S_\tau^2 = \frac{1}{m-1}\sum_{j=1}^m (\tau_j - \bar\tau)^2.</span></li>
 <li>Compared to the population variance <span class="math inline">\sigma^2(w)</span> with denominator <span class="math inline">m</span>, this rescales by <span class="math inline">\frac{m}{m-1}</span>. <span class="math display">S_w^2 = \frac{m}{m-1}\sigma^2(w) \qqtext{where} \sigma^2(w) = \frac{1}{m}\sum_{j=1}^m \{y_j(w) - \mu(w)\}^2.</span></li>
 <li>Why switch from <span class="math inline">\sigma^2(w)</span> to <span class="math inline">S_w^2</span> when we study shuffling without replacement?</li>
 </ul>
 <div class="fragment">
 <ul>
-<li>In our without-replacement sampling formula, <span class="math inline">\frac{\sigma^2(w)}{m_w}\frac{m - m_w}{m - 1}</span> carried <span class="math inline">m - 1</span> in the denominator of the correction factor.</li>
-<li>Absorbing <span class="math inline">\frac{m}{m-1}</span> into <span class="math inline">S_w^2</span> turns the correction factor into <span class="math inline">\frac{m - m_w}{m} = 1 - \frac{m_w}{m}</span> and makes every <span class="math inline">\frac{1}{m}</span> term line up cleanly.</li>
+<li>Our without-replacement formula <span class="math inline">\frac{\sigma^2(w)}{m_w}\frac{m - m_w}{m - 1}</span> carried <span class="math inline">{m - 1}</span> in its correction factor.</li>
+<li>Absorbing <span class="math inline">\frac{m}{m-1}</span> into <span class="math inline">S_w^2</span> turns that factor into <span class="math inline">\frac{m - m_w}{m} = 1 - \frac{m_w}{m}</span>.
+<ul>
+<li>That makes every <span class="math inline">\frac{1}{m}</span> term line up.</li>
+</ul></li>
 <li>We define the covariance between the two potential outcomes with the same denominator <span class="math inline">m - 1</span>. <span class="math display">S_{10} = \frac{1}{m-1}\sum_{j=1}^m \{\ingroupb{y_j(1)} - \ingroupb{\mu(1)}\}\{\ingroupa{y_j(0)} - \ingroupa{\mu(0)}\}.</span></li>
 </ul>
 </div>
@@ -1113,7 +1129,7 @@ j &amp; w_j &amp; y_j(w_j) &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp;
 <ul>
 <li>Look again at our indicator rewrite for a single group mean. <span class="math display">\hat\mu(w) = \frac{1}{m_w}\sum_{j=1}^m y_j(w) 1_{=w}(W_j).</span></li>
 <li>Shuffling picks <span class="math inline">m_w</span> people uniformly without replacement from the <span class="math inline">m</span> people in the study.</li>
-<li>So <span class="math inline">\hat\mu(w)</span> is the sample mean of a simple random sample of size <span class="math inline">m_w</span> drawn without replacement from the fixed numbers <span class="math inline">y_1(w) \ldots y_m(w)</span>.</li>
+<li>So <span class="math inline">\hat\mu(w)</span> is the mean of a simple random sample of size <span class="math inline">m_w</span> from the numbers <span class="math inline">y_1(w) \ldots y_m(w)</span>.</li>
 <li>Applying our without-replacement variance formula gives the variance of each group mean. <span class="math display">\Var\{\hat\mu(w)\} = \frac{\sigma^2(w)}{m_w}\frac{m - m_w}{m - 1} = \frac{S_w^2}{m_w}\left(1 - \frac{m_w}{m}\right) = \frac{S_w^2}{m_w} - \frac{S_w^2}{m}.</span></li>
 <li>That gives the first two pieces of <span class="math inline">\Var(\hat\tau)</span>. <span class="math display">\Var\{\ingroupb{\hat\mu(1)}\} = \frac{\ingroupb{S_1^2}}{m_1} - \frac{\ingroupb{S_1^2}}{m} \qqtext{and} \Var\{\ingroupa{\hat\mu(0)}\} = \frac{\ingroupa{S_0^2}}{m_0} - \frac{\ingroupa{S_0^2}}{m}.</span></li>
 </ul>
@@ -1123,13 +1139,18 @@ j &amp; w_j &amp; y_j(w_j) &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp;
 <ul>
 <li>Now what about the covariance <span class="math inline">\Cov\{\ingroupb{\hat\mu(1)}, \ingroupa{\hat\mu(0)}\}</span> between the treated mean and the control mean?</li>
 <li>Suppose people with high <span class="math inline">\ingroupb{y_j(1)}</span> also tend to have high <span class="math inline">\ingroupa{y_j(0)}</span>, so <span class="math inline">S_{10} &gt; 0</span>.</li>
-<li>When a shuffle puts the high earners into the <span class="groupb">treated group</span>, who is left for the <span class="groupa">control group</span>?</li>
+<li>If a shuffle treats the people with high <span class="math inline">\ingroupb{y_j(1)}</span>, who is left for the <span class="groupa">control group</span>?</li>
 </ul>
 <div class="fragment">
 <ul>
-<li>The low earners are left in control, so when <span class="math inline">\ingroupb{\hat\mu(1)}</span> is above its mean, <span class="math inline">\ingroupa{\hat\mu(0)}</span> is below its mean.</li>
-<li>We can see this algebraically by comparing <span class="math inline">\ingroupa{\hat\mu(0)}</span> with the counterfactual control mean <span class="math inline">\hat\mu_{0,T} = \frac{1}{m_1}\sum_{j=1}^m 1_{=1}(W_j)\ingroupa{y_j(0)}</span> of the treated people. <span class="math display">m_1 \hat\mu_{0,T} + m_0 \ingroupa{\hat\mu(0)} = m\ingroupa{\mu(0)} \qqtext{so} \ingroupa{\hat\mu(0)} = \frac{m\ingroupa{\mu(0)} - m_1 \hat\mu_{0,T}}{m_0}.</span></li>
-<li>Because <span class="math inline">\ingroupb{\hat\mu(1)}</span> and <span class="math inline">\hat\mu_{0,T}</span> average over the <em>same</em> <span class="math inline">m_1</span> treated people, their without-replacement covariance is <span class="math inline">\left(1 - \frac{m_1}{m}\right)\frac{S_{10}}{m_1} = \frac{m_0}{m}\frac{S_{10}}{m_1}</span>. <span class="math display">\Cov\{\ingroupb{\hat\mu(1)}, \ingroupa{\hat\mu(0)}\} = -\frac{m_1}{m_0}\Cov\{\ingroupb{\hat\mu(1)}, \hat\mu_{0,T}\} = -\frac{m_1}{m_0}\cdot\frac{m_0}{m}\frac{S_{10}}{m_1} = -\frac{S_{10}}{m}.</span></li>
+<li>The people with low <span class="math inline">\ingroupa{y_j(0)}</span> are left in control.
+<ul>
+<li>So when <span class="math inline">\ingroupb{\hat\mu(1)}</span> is above its mean, <span class="math inline">\ingroupa{\hat\mu(0)}</span> is below its mean.</li>
+</ul></li>
+<li>To see this algebraically, use the treated people’s counterfactual control mean <span class="math inline">\hat\mu_{0,T}</span>. <span class="math display">\hat\mu_{0,T} = \frac{1}{m_1}\sum_{j=1}^m 1_{=1}(W_j)\ingroupa{y_j(0)}.</span></li>
+<li>The treated and the controls together are everyone, which writes <span class="math inline">\ingroupa{\hat\mu(0)}</span> in terms of <span class="math inline">\hat\mu_{0,T}</span>. <span class="math display">m_1 \hat\mu_{0,T} + m_0 \ingroupa{\hat\mu(0)} = m\ingroupa{\mu(0)} \qqtext{so} \ingroupa{\hat\mu(0)} = \frac{m\ingroupa{\mu(0)} - m_1 \hat\mu_{0,T}}{m_0}.</span></li>
+<li><span class="math inline">\ingroupb{\hat\mu(1)}</span> and <span class="math inline">\hat\mu_{0,T}</span> average over the <em>same</em> <span class="math inline">m_1</span> treated people, drawn without replacement. <span class="math display">\Cov\{\ingroupb{\hat\mu(1)}, \hat\mu_{0,T}\} = \left(1 - \frac{m_1}{m}\right)\frac{S_{10}}{m_1} = \frac{m_0}{m}\frac{S_{10}}{m_1}.</span></li>
+<li>Since <span class="math inline">m\ingroupa{\mu(0)}</span> is a constant, the covariance with <span class="math inline">\ingroupa{\hat\mu(0)}</span> is <span class="math inline">-\frac{m_1}{m_0}</span> times that one. <span class="math display">\Cov\{\ingroupb{\hat\mu(1)}, \ingroupa{\hat\mu(0)}\} = -\frac{m_1}{m_0}\Cov\{\ingroupb{\hat\mu(1)}, \hat\mu_{0,T}\} = -\frac{m_1}{m_0}\cdot\frac{m_0}{m}\frac{S_{10}}{m_1} = -\frac{S_{10}}{m}.</span></li>
 </ul>
 </div>
 </section>
@@ -1146,7 +1167,10 @@ j &amp; w_j &amp; y_j(w_j) &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp;
 </ul>
 <div class="fragment">
 <ul>
-<li>Because each centered effect is <span class="math inline">\tau_j - \bar\tau = \{\ingroupb{y_j(1)} - \ingroupb{\mu(1)}\} - \{\ingroupa{y_j(0)} - \ingroupa{\mu(0)}\}</span>, squaring and summing over <span class="math inline">j = 1 \ldots m</span> gives the variance of the individual treatment effects. <span class="math display">S_\tau^2 = \frac{1}{m-1}\sum_{j=1}^m (\tau_j - \bar\tau)^2 = \ingroupb{S_1^2} + \ingroupa{S_0^2} - 2S_{10}.</span></li>
+<li>Each centered effect is <span class="math inline">\tau_j - \bar\tau = \{\ingroupb{y_j(1)} - \ingroupb{\mu(1)}\} - \{\ingroupa{y_j(0)} - \ingroupa{\mu(0)}\}</span>.
+<ul>
+<li>Squaring and summing over <span class="math inline">j = 1 \ldots m</span> gives the variance of the individual effects. <span class="math display">S_\tau^2 = \frac{1}{m-1}\sum_{j=1}^m (\tau_j - \bar\tau)^2 = \ingroupb{S_1^2} + \ingroupa{S_0^2} - 2S_{10}.</span></li>
+</ul></li>
 <li>Substituting <span class="math inline">S_\tau^2</span> gives <strong>Neyman’s variance formula</strong> under complete randomization. <span class="math display">\Var(\hat\tau) = \frac{\ingroupb{S_1^2}}{m_1} + \frac{\ingroupa{S_0^2}}{m_0} - \frac{S_\tau^2}{m}.</span></li>
 </ul>
 </div>
@@ -1215,15 +1239,16 @@ j &amp; w_j &amp; y_j(w_j) &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp;
 </div>
 </div></div>
 <ul>
-<li>In our 6-person table with <span class="math inline">m = 6</span> and <span class="math inline">m_1 = m_0 = 3</span>, the column means are <span class="math inline">\ingroupb{\mu(1) = 4.50}</span>, <span class="math inline">\ingroupa{\mu(0) \approx 2.33}</span> and <span class="math inline">\bar\tau \approx 2.17</span>.</li>
+<li>In our 6-person table with <span class="math inline">m = 6</span> and <span class="math inline">m_1 = m_0 = 3</span>, these are the column means. <span class="math display">\ingroupb{\mu(1) = 4.50} \qqtext{and} \ingroupa{\mu(0) \approx 2.33} \qqtext{and} \bar\tau \approx 2.17.</span></li>
 <li>Computing the three column variances with denominator <span class="math inline">m - 1 = 5</span> gives the inputs to Neyman’s formula. <span class="math display">\ingroupb{S_1^2} = 9.500 \qqtext{and} \ingroupa{S_0^2} \approx 7.467 \qqtext{and} S_\tau^2 \approx 3.367.</span></li>
-<li>Plugging these into Neyman’s formula reproduces the exact variance across all 20 shuffles to the last decimal place. <span class="math display">\Var(\hat\tau) = \frac{\ingroupb{9.500}}{3} + \frac{\ingroupa{7.467}}{3} - \frac{3.367}{6} \approx \frac{19}{6} + \frac{112}{45} - \frac{101}{180} = \frac{917}{180} \approx 5.094.</span></li>
+<li>Plugging these into Neyman’s formula reproduces the exact variance of all 20 shuffles. <span class="math display">\Var(\hat\tau) = \frac{\ingroupb{9.500}}{3} + \frac{\ingroupa{7.467}}{3} - \frac{3.367}{6} \approx \frac{19}{6} + \frac{112}{45} - \frac{101}{180} = \frac{917}{180} \approx 5.094.</span></li>
 </ul>
 </section>
 <section id="exercise-1" class="slide level2 scrollable">
 <h2>Exercise</h2>
+<div style="font-size: 0.76em;">
 <p><span class="math display">
-\text{Table A (constant effect)}\quad
+\overset{\textbf{Table A (constant effect)}}{
 \begin{array}{c|c|c|c}
 j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 \hline
@@ -1233,9 +1258,9 @@ j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 4 &amp; 4 &amp; 3 &amp; 1 \\
 5 &amp; 3 &amp; 2 &amp; 1 \\
 6 &amp; 2 &amp; 1 &amp; 1
-\end{array}
+\end{array}}
 \qquad\qquad
-\text{Table B (varying effects)}\quad
+\overset{\textbf{Table B (varying effects)}}{
 \begin{array}{c|c|c|c}
 j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 \hline
@@ -1245,20 +1270,21 @@ j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 4 &amp; 2 &amp; 3 &amp; -1 \\
 5 &amp; 3 &amp; 2 &amp; 1 \\
 6 &amp; 4 &amp; 1 &amp; 3
-\end{array}
+\end{array}}
 </span></p>
+</div>
 <ul>
-<li><em>Suppose</em> we randomize <span class="math inline">m_1 = 3</span> of <span class="math inline">m = 6</span> people to treatment and <span class="math inline">m_0 = 3</span> to control in Thursday’s two CausalDoku tables above.</li>
+<li><em>Suppose</em> we randomize <span class="math inline">m_1 = 3</span> of <span class="math inline">m = 6</span> people to treatment in the two CausalDoku tables above.</li>
 <li><strong>Q.</strong> What are <span class="math inline">\ingroupb{S_1^2}</span>, <span class="math inline">\ingroupa{S_0^2}</span>, <span class="math inline">S_\tau^2</span> and <span class="math inline">\Var(\hat\tau)</span> in Table A and in Table B?</li>
-<li><em>Remember</em> Neyman’s variance formula under complete randomization and the definition of each column’s variance.</li>
+<li><em>Remember</em> Neyman’s variance formula and the definition of each column’s variance.</li>
 </ul>
 <p><span class="math display">
 \Var(\hat\tau) = \frac{\ingroupb{S_1^2}}{m_1} + \frac{\ingroupa{S_0^2}}{m_0} - \frac{S_\tau^2}{m}.
 </span></p>
 <p><span class="math display">
 \begin{aligned}
-S_w^2 &amp;= \frac{1}{m-1}\sum_{j=1}^m \{y_j(w) - \mu(w)\}^2 &amp; \text{with column means } \ingroupb{\mu(1) = 3} \text{ and } \ingroupa{\mu(0) = 2} \text{ in both tables, and} \\
-S_\tau^2 &amp;= \frac{1}{m-1}\sum_{j=1}^m (\tau_j - \bar\tau)^2 &amp; \text{with average treatment effect } \bar\tau = 1 \text{ in both tables.}
+S_w^2 &amp;= \frac{1}{m-1}\sum_{j=1}^m \{y_j(w) - \mu(w)\}^2 &amp; \text{with } \ingroupb{\mu(1) = 3} \text{ and } \ingroupa{\mu(0) = 2} \text{ in both tables, and} \\
+S_\tau^2 &amp;= \frac{1}{m-1}\sum_{j=1}^m (\tau_j - \bar\tau)^2 &amp; \text{with } \bar\tau = 1 \text{ in both tables.}
 \end{aligned}
 </span></p>
 <ul>
@@ -1271,8 +1297,9 @@ S_\tau^2 &amp;= \frac{1}{m-1}\sum_{j=1}^m (\tau_j - \bar\tau)^2 &amp; \text{with
 </section>
 <section id="solution-1" class="slide level2">
 <h2>Solution</h2>
+<div style="font-size: 0.76em;">
 <p><span class="math display">
-\text{Table A (constant effect)}\quad
+\overset{\textbf{Table A (constant effect)}}{
 \begin{array}{c|c|c|c}
 j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 \hline
@@ -1282,9 +1309,9 @@ j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 4 &amp; 4 &amp; 3 &amp; 1 \\
 5 &amp; 3 &amp; 2 &amp; 1 \\
 6 &amp; 2 &amp; 1 &amp; 1
-\end{array}
+\end{array}}
 \qquad\qquad
-\text{Table B (varying effects)}\quad
+\overset{\textbf{Table B (varying effects)}}{
 \begin{array}{c|c|c|c}
 j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 \hline
@@ -1294,10 +1321,16 @@ j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 4 &amp; 2 &amp; 3 &amp; -1 \\
 5 &amp; 3 &amp; 2 &amp; 1 \\
 6 &amp; 4 &amp; 1 &amp; 3
-\end{array}
+\end{array}}
 </span></p>
+</div>
 <ul>
-<li>Both tables have the same six values <span class="math inline">\{4, 3, 2, 4, 3, 2\}</span> around <span class="math inline">\ingroupb{\mu(1) = 3}</span> and <span class="math inline">\{3, 2, 1, 3, 2, 1\}</span> around <span class="math inline">\ingroupa{\mu(0) = 2}</span>. <span class="math display">\ingroupb{S_1^2} = \frac{1^2 + 0^2 + (-1)^2 + 1^2 + 0^2 + (-1)^2}{5} = \frac{4}{5} = 0.8 \qqtext{and} \ingroupa{S_0^2} = \frac{4}{5} = 0.8.</span></li>
+<li>Both tables have the same two columns of potential outcomes.
+<ul>
+<li>The <span class="math inline">\ingroupb{y_j(1)}</span> are <span class="math inline">\{4, 3, 2, 4, 3, 2\}</span>, around <span class="math inline">\ingroupb{\mu(1) = 3}</span>.</li>
+<li>The <span class="math inline">\ingroupa{y_j(0)}</span> are <span class="math inline">\{3, 2, 1, 3, 2, 1\}</span>, around <span class="math inline">\ingroupa{\mu(0) = 2}</span>.</li>
+</ul></li>
+<li>So the two column variances are the same in both tables. <span class="math display">\ingroupb{S_1^2} = \frac{(4-3)^2 + (3-3)^2 + (2-3)^2 + \cdots}{5} = \frac{1^2 + 0^2 + (-1)^2 + 1^2 + 0^2 + (-1)^2}{5} = \frac{4}{5} = 0.8 \qqtext{and} \ingroupa{S_0^2} = \frac{4}{5} = 0.8.</span></li>
 <li>Now how do <span class="math inline">S_\tau^2</span> and <span class="math inline">\Var(\hat\tau) = \frac{\ingroupb{S_1^2}}{3} + \frac{\ingroupa{S_0^2}}{3} - \frac{S_\tau^2}{6}</span> compare across the two tables?</li>
 </ul>
 <div class="fragment">
@@ -1318,7 +1351,7 @@ j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 <ul>
 <li>Look again at the three terms in Neyman’s variance formula. <span class="math display">\Var(\hat\tau) = \frac{\ingroupb{S_1^2}}{m_1} + \frac{\ingroupa{S_0^2}}{m_0} - \frac{S_\tau^2}{m}.</span></li>
 <li>From the <span class="math inline">m_1</span> people we actually treated, we observe <span class="math inline">\ingroupb{y_j(1)}</span> and estimate <span class="math inline">\ingroupb{S_1^2}</span> with the sample variance <span class="math inline">\ingroupb{\hat S_1^2}</span>. <span class="math display">\ingroupb{\hat S_1^2} = \frac{1}{m_1 - 1}\sum_{j:W_j=1} \{\ingroupb{y_j(1)} - \ingroupb{\hat\mu(1)}\}^2 \qqtext{and} \ingroupa{\hat S_0^2} = \frac{1}{m_0 - 1}\sum_{j:W_j=0} \{\ingroupa{y_j(0)} - \ingroupa{\hat\mu(0)}\}^2.</span></li>
-<li>Because each arm is a simple random sample without replacement from all <span class="math inline">m</span> people, <span class="math inline">\E(\ingroupb{\hat S_1^2}) = \ingroupb{S_1^2}</span> and <span class="math inline">\E(\ingroupa{\hat S_0^2}) = \ingroupa{S_0^2}</span>.</li>
+<li>Each arm is a simple random sample without replacement from all <span class="math inline">m</span> people, so both are unbiased. <span class="math display">\E(\ingroupb{\hat S_1^2}) = \ingroupb{S_1^2} \qqtext{and} \E(\ingroupa{\hat S_0^2}) = \ingroupa{S_0^2}.</span></li>
 <li>Why can’t we estimate the third term <span class="math inline">S_\tau^2</span> from our experiment in the same way?</li>
 </ul>
 <div class="fragment">
@@ -1345,23 +1378,36 @@ j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 <!-- Exact NSW plot chunk from pinned two-sample homework. -->
 
 <img data-src="nsw-precision-nov05_files/figure-revealjs/plot-earnings-by-group-1.svg" alt="Jittered 1978 incomes for National Supported Work participants in control and treated groups, with each group mean plus or minus one standard deviation." class="r-stretch"><ul>
-<li>In the National Supported Work experiment, <span class="math inline">m = 445</span> participants were randomized between <span class="math inline">m_1 = 185</span> in <span class="groupb">job training</span> and <span class="math inline">m_0 = 260</span> in <span class="groupa">control</span>.</li>
-<li>Each faint dot is one participant’s 1978 earnings, and the black dot and whiskers show the group mean <span class="math inline">\hat\mu(w)</span> plus or minus one group standard deviation <span class="math inline">\hat S_w</span>.</li>
+<li>In the National Supported Work experiment, <span class="math inline">m = 445</span> participants were randomized.
+<ul>
+<li><span class="math inline">m_1 = 185</span> went to <span class="groupb">job training</span> and <span class="math inline">m_0 = 260</span> to <span class="groupa">control</span>.</li>
+</ul></li>
+<li>Each faint dot is one participant’s 1978 earnings.
+<ul>
+<li>The black dot and whiskers show <span class="math inline">\hat\mu(w)</span> plus or minus one standard deviation <span class="math inline">\hat S_w</span>.</li>
+</ul></li>
 </ul>
 </section>
 <section id="exercise-3.-randomization" class="slide level2">
 <h2>Exercise 3. Randomization</h2>
 <ul>
-<li>In our last two NSW exercises, we tried to understand the <span class="groupb">treated participants</span> without using the randomized comparison group.</li>
-<li>We tried to find people like the NSW participants in CPS.
+<li>In our last two NSW exercises, we tried to understand the <span class="groupb">treated participants</span>.
 <ul>
-<li>Even after making a pretty thoughtful comparison, seemingly secondary differences in population composition created bias.</li>
-<li>Our rough CPS peers were 51.4% married against 18.9% of the NSW treated group, and changing only that mixture moved the CPS mean by $324.</li>
+<li>We did that without using the randomized comparison group.</li>
 </ul></li>
-<li>The NSW investigators did not need to locate observational “people like them” after the fact. <strong>They randomized.</strong>
+<li>We tried to find people like the NSW participants in the Current Population Survey (CPS).
+<ul>
+<li>We made a pretty thoughtful comparison.</li>
+<li>Even so, seemingly secondary differences in population composition created bias.</li>
+<li>Our rough CPS peers were 51.4% married against 18.9% of the NSW treated group.</li>
+<li>Changing only that mixture moved the CPS mean by $324.</li>
+</ul></li>
+<li>The NSW investigators did not need to locate observational “people like them” afterwards.</li>
+<li><strong>They randomized.</strong>
 <ul>
 <li>The randomized <span class="groupa">control group</span> provides the comparison generated by the study design itself.</li>
-<li>We no longer need to decide which observed characteristics define “people like them,” measure all of those characteristics correctly, and construct a comparison population with the right composition.</li>
+<li>We no longer need to decide which observed characteristics define “people like them.”</li>
+<li>Nor must we measure them all and build a comparison with the right composition.</li>
 <li>Randomization handles that problem probabilistically through the design.</li>
 </ul></li>
 </ul>
@@ -1369,8 +1415,9 @@ j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 <section id="exercise-2" class="slide level2">
 <h2>Exercise</h2>
 <ul>
-<li><em>Suppose</em> we use the randomized comparison in NSW, with <span class="math inline">m_1 = 185</span> participants in <span class="groupb">job training</span> and <span class="math inline">m_0 = 260</span> in <span class="groupa">control</span>, and these group means and standard deviations of 1978 earnings. <span class="math display">\ingroupb{\hat\mu(1)} = \$6{,}349 \qqtext{and} \ingroupb{\hat S_1} = \$7{,}867 \qqtext{whereas} \ingroupa{\hat\mu(0)} = \$4{,}555 \qqtext{and} \ingroupa{\hat S_0} = \$5{,}484.</span></li>
-<li><strong>Q.</strong> What is our estimate <span class="math inline">\hat\tau</span> of the effect of job training on 1978 earnings, and what is our conservative 95% confidence interval for the average treatment effect <span class="math inline">\bar\tau</span>?</li>
+<li><em>Suppose</em> we use the randomized comparison in NSW, with <span class="math inline">m_1 = 185</span> in <span class="groupb">job training</span> and <span class="math inline">m_0 = 260</span> in <span class="groupa">control</span>.</li>
+<li>Their group means and standard deviations of 1978 earnings are these. <span class="math display">\ingroupb{\hat\mu(1)} = \$6{,}349 \qqtext{and} \ingroupb{\hat S_1} = \$7{,}867 \qqtext{whereas} \ingroupa{\hat\mu(0)} = \$4{,}555 \qqtext{and} \ingroupa{\hat S_0} = \$5{,}484.</span></li>
+<li><strong>Q.</strong> What are our estimate <span class="math inline">\hat\tau</span> and our conservative 95% confidence interval for <span class="math inline">\bar\tau</span>?</li>
 <li><em>Remember</em> the difference in group means, Neyman’s conservative standard error and the normal-approximation interval. <span class="math display">\hat\tau = \ingroupb{\hat\mu(1)} - \ingroupa{\hat\mu(0)} \qqtext{and} \mathrm{se} = \sqrt{\frac{\ingroupb{\hat S_1^2}}{m_1} + \frac{\ingroupa{\hat S_0^2}}{m_0}} \qqtext{and the interval is} \hat\tau \pm 1.96\,\mathrm{se}.</span></li>
 </ul>
 </section>
@@ -1386,8 +1433,9 @@ j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 <div class="fragment">
 <ul>
 <li>Subtracting the group means gives <span class="math inline">\hat\tau</span>, and plugging <span class="math inline">\ingroupb{\hat S_1}</span> and <span class="math inline">\ingroupa{\hat S_0}</span> into Neyman’s formula gives the standard error. <span class="math display">\hat\tau = \ingroupb{6{,}349} - \ingroupa{4{,}555} = \$1{,}794 \qqtext{and} \mathrm{se} = \sqrt{\frac{\ingroupb{7{,}867^2}}{185} + \frac{\ingroupa{5{,}484^2}}{260}} \approx \$671.</span></li>
-<li>Using the normal approximation, our conservative 95% confidence interval for <span class="math inline">\bar\tau</span> is <span class="math inline">\$1{,}794 \pm 1.96(\$671) = [\$479,\; \$3{,}109]</span>.</li>
-<li>The comparison is valid because the investigators randomized. How much does this estimate tell us about the effect of job training?</li>
+<li>Using the normal approximation, this is our conservative 95% confidence interval for <span class="math inline">\bar\tau</span>. <span class="math display">\$1{,}794 \pm 1.96(\$671) = [\$479,\; \$3{,}109].</span></li>
+<li>The comparison is valid because the investigators randomized.</li>
+<li>How much does this estimate tell us about the effect of job training?</li>
 </ul>
 </div>
 <div class="fragment">
@@ -1411,25 +1459,25 @@ j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 <ul>
 <li>In the power deck, we used NSW as a pilot and looked at the <span class="groupb">treated men</span> alone.
 <ul>
-<li>Success meant an interval entirely above 75% of their CPS peers’ mean, <span class="math inline">\$5{,}327</span>.</li>
+<li>Success meant an interval entirely above 75% of their CPS peers’ mean, $5,327.</li>
 <li>Taking their mean of $6,349 as the truth, 64% of intervals cleared that line.</li>
 <li>That was with 185 treated men, and 273 would have reached 80%. It looked fixable.</li>
 <li>Then we found that the CPS benchmark itself was biased.</li>
 </ul></li>
 <li>Randomization gives us the right benchmark, the <span class="groupa">control group</span>, whose mean is $4,555.
 <ul>
-<li>Success now means an interval for the effect entirely above <span class="math inline">\$5{,}327 - \$4{,}555 = \$772</span>.</li>
+<li>Success now means an interval for the effect entirely above $5,327 − $4,555 = $772.</li>
 </ul></li>
 <li>If our estimate of $1,794 were the truth, how often would a study NSW’s size get that evidence?</li>
 </ul>
 <div class="fragment">
 <ul>
-<li>Our estimate is 1.52 standard errors above $772. With <span class="math inline">Z</span> standard normal, here is the power. <span class="math display">\frac{\$1{,}794 - \$772}{\$671} \approx 1.52 \qqtext{so} \text{power} \approx \P(Z \ge 1.96 - 1.52) \approx 33\%.</span></li>
+<li>Our estimate is 1.52 standard errors above $772. With <span class="math inline">Z</span> standard normal, here is the power. <span class="math display">\frac{\$1{,}794 - \$772}{\$671} \approx 1.52 \qqtext{so} \text{power} \approx \P(Z \ge 1.96 - 1.52) \approx 0.33.</span></li>
 <li>For 80% power, that distance must be <span class="math inline">2.80</span> standard errors, and the standard error shrinks like <span class="math inline">1/\sqrt{m}</span>. <span class="math display">\mathrm{se} \le \frac{\$1{,}022}{2.80} \approx \$365 \qqtext{so} m \ge 445 \times \left(\frac{671}{365}\right)^2 \approx 1{,}500.</span></li>
 <li>That is more than three times the 445 people the study had.</li>
 <li>Our interval, $479 to $3,109, puts treated earnings anywhere from $5,034 to $7,664.
 <ul>
-<li>That runs from short of the success standard to past their peers’ mean.</li>
+<li>That runs from short of the success standard to past their peers’ mean of $7,103.</li>
 </ul></li>
 </ul>
 </div>
@@ -1443,7 +1491,8 @@ j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 </ul></li>
 <li><strong>Exercise 2. More data can make things worse when the estimator is biased.</strong>
 <ul>
-<li>A small population-composition error that seems innocuous at low precision becomes disastrous at high precision.</li>
+<li>A small population-composition error seems innocuous at low precision.</li>
+<li>It becomes disastrous at high precision.</li>
 </ul></li>
 <li><strong>Exercise 3. Randomization addresses the bias problem—but not the information problem.</strong>
 <ul>
@@ -1461,13 +1510,18 @@ j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 <h2>Application 2. The Michigan Social-Pressure Experiment</h2>
 <ul>
 <li>Now apply the exact same formula to Gerber, Green and Larimer’s Michigan turnout experiment from Thursday.</li>
-<li>Among the <span class="math inline">m = 229{,}444</span> voters in the two arms we compared, <span class="math inline">m_1 = 38{,}201</span> received the <span class="groupb">Neighbors letter</span> and <span class="math inline">m_0 = 191{,}243</span> received <span class="groupa">no letter</span>.</li>
-<li>Because turnout is binary (<span class="math inline">0</span> or <span class="math inline">1</span>), each group’s sample variance is <span class="math inline">\hat S_w^2 = \frac{m_w}{m_w - 1}\hat\mu(w)\{1 - \hat\mu(w)\} \approx \hat\mu(w)\{1 - \hat\mu(w)\}</span>. <span class="math display">\begin{aligned}
+<li>Among the <span class="math inline">m = 229{,}444</span> voters in the two arms we compared:
+<ul>
+<li><span class="math inline">m_1 = 38{,}201</span> received the <span class="groupb">Neighbors letter</span>;</li>
+<li><span class="math inline">m_0 = 191{,}243</span> received <span class="groupa">no letter</span>.</li>
+</ul></li>
+<li>Because turnout is binary (<span class="math inline">0</span> or <span class="math inline">1</span>), each group’s sample variance is nearly <span class="math inline">\hat\mu(w)\{1 - \hat\mu(w)\}</span>. <span class="math display">\hat S_w^2 = \frac{m_w}{m_w - 1}\hat\mu(w)\{1 - \hat\mu(w)\} \approx \hat\mu(w)\{1 - \hat\mu(w)\}.</span></li>
+<li>In our two groups, that gives these variances. <span class="math display">\begin{aligned}
 \ingroupb{\hat\mu(1)} &amp;= \frac{14{,}438}{38{,}201} \approx 0.3779 \qqtext{so} \ingroupb{\hat S_1^2} \approx 0.3779(1 - 0.3779) \approx 0.2351 \qqtext{and} \\
 \ingroupa{\hat\mu(0)} &amp;= \frac{56{,}730}{191{,}243} \approx 0.2966 \qqtext{so} \ingroupa{\hat S_0^2} \approx 0.2966(1 - 0.2966) \approx 0.2086.
 \end{aligned}</span></li>
 <li>The estimated increase in turnout is <span class="math inline">8.13</span> percentage points, with a conservative standard error of <span class="math inline">0.27</span> percentage points. <span class="math display">\hat\tau = \ingroupb{0.3779} - \ingroupa{0.2966} \approx 0.0813 \qqtext{and} \mathrm{se} = \sqrt{\frac{\ingroupb{\hat S_1^2}}{m_1} + \frac{\ingroupa{\hat S_0^2}}{m_0}} = \sqrt{\frac{\ingroupb{0.2351}}{38{,}201} + \frac{\ingroupa{0.2086}}{191{,}243}} \approx 0.0027.</span></li>
-<li>Our conservative 95% confidence interval for the average treatment effect is <span class="math inline">[0.0760,\; 0.0866]</span>, or <span class="math inline">7.6</span> to <span class="math inline">8.7</span> percentage points.</li>
+<li>Our conservative 95% confidence interval for <span class="math inline">\bar\tau</span> is <span class="math inline">[0.0760,\; 0.0866]</span>, or <span class="math inline">7.6</span> to <span class="math inline">8.7</span> points.</li>
 </ul>
 </section></section>
 <section>
@@ -1478,25 +1532,34 @@ j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
 <section id="planning-an-experiment-before-we-run-it" class="slide level2">
 <h2>Planning an Experiment Before We Run It</h2>
 <ul>
-<li>Neyman’s conservative variance has the exact same two-group form we used to design our Georgia survey on Tuesday.</li>
-<li>Suppose we plan to randomize <span class="math inline">m</span> people in total, placing a share <span class="math inline">f = m_1 / m</span> in <span class="groupb">treatment</span> and the remaining share <span class="math inline">1 - f = m_0 / m</span> in <span class="groupa">control</span>.</li>
-<li>Writing <span class="math inline">\ingroupb{\sigma^2(1)}</span> and <span class="math inline">\ingroupa{\sigma^2(0)}</span> for our planned outcome variances in the two arms, we factor total study size <span class="math inline">m</span> out of <span class="math inline">\mathrm{se}^2</span>. <span class="math display">\mathrm{se}^2 = \frac{\ingroupb{\sigma^2(1)}}{fm} + \frac{\ingroupa{\sigma^2(0)}}{(1-f)m} = \frac{g(f)}{m} \qqtext{where} g(f) = \frac{\ingroupb{\sigma^2(1)}}{f} + \frac{\ingroupa{\sigma^2(0)}}{1-f}.</span></li>
+<li>Neyman’s conservative variance has the same two-group form we used to design our Georgia survey.</li>
+<li>Suppose we plan to randomize <span class="math inline">m</span> people, a share <span class="math inline">f</span> to <span class="groupb">treatment</span> and <span class="math inline">1 - f</span> to <span class="groupa">control</span>. <span class="math display">f = \frac{m_1}{m} \qqtext{and} 1 - f = \frac{m_0}{m}.</span></li>
+<li>Writing <span class="math inline">\ingroupb{\sigma^2(1)}</span> and <span class="math inline">\ingroupa{\sigma^2(0)}</span> for planned outcome variances, we factor <span class="math inline">m</span> out of <span class="math inline">\mathrm{se}^2</span>. <span class="math display">\mathrm{se}^2 = \frac{\ingroupb{\sigma^2(1)}}{fm} + \frac{\ingroupa{\sigma^2(0)}}{(1-f)m} = \frac{g(f)}{m} \qqtext{where} g(f) = \frac{\ingroupb{\sigma^2(1)}}{f} + \frac{\ingroupa{\sigma^2(0)}}{1-f}.</span></li>
 <li>Why do we plan sample size using the conservative variance without <span class="math inline">-S_\tau^2 / m</span>?</li>
 </ul>
 <div class="fragment">
 <ul>
 <li>Before running the experiment, we do not know how much <span class="math inline">\tau_j</span> varies from person to person.</li>
-<li>Planning with <span class="math inline">S_\tau^2 = 0</span> guarantees that our study meets its precision target even if the treatment effect is constant, and gives us extra precision if <span class="math inline">S_\tau^2 &gt; 0</span>.</li>
-<li>Just as in Georgia, a two-sided 95% confidence interval has 80% power to detect an <span class="target">alternative effect</span> <span class="math inline">\tau_{\text{alt}}</span> when <span class="math inline">\tau_{\text{alt}}</span> is <span class="math inline">1.96 + 0.84 = 2.80</span> standard errors from zero. <span class="math display">\mathrm{se} \le \frac{|\tau_{\text{alt}}|}{2.80} \qqtext{and therefore} m \ge \frac{g(f)}{\mathrm{se}^2}.</span></li>
+<li>Planning with <span class="math inline">S_\tau^2 = 0</span> meets the precision target even if the effect is constant.
+<ul>
+<li>If <span class="math inline">S_\tau^2 &gt; 0</span>, it gives us extra precision.</li>
+</ul></li>
+<li>As in Georgia, a two-sided 95% interval has 80% power against an <span class="target">alternative effect</span> <span class="math inline">\tau_{\text{alt}}</span>.
+<ul>
+<li>That holds when <span class="math inline">\tau_{\text{alt}}</span> is <span class="math inline">1.96 + 0.84 = 2.80</span> standard errors from zero. <span class="math display">\mathrm{se} \le \frac{|\tau_{\text{alt}}|}{2.80} \qqtext{and therefore} m \ge \frac{g(f)}{\mathrm{se}^2}.</span></li>
+</ul></li>
 </ul>
 </div>
 </section>
 <section id="exercise-3" class="slide level2 scrollable">
 <h2>Exercise</h2>
 <ul>
-<li><em>Suppose</em> we are planning a follow-up job-training experiment with earnings in thousands of dollars, where we want 80% power at the 95% confidence level (two-sided) to detect an <span class="target">increase of <span class="math inline">1.4</span> thousand dollars</span>.</li>
-<li><strong>Q.</strong> How many participants <span class="math inline">m</span> do we need under an even split (<span class="math inline">f = 0.50</span>), and how many under the optimal split <span class="math inline">f^\star</span>?</li>
-<li><em>Remember</em> that two-sided 80% power for a <span class="math inline">1.4</span> thousand dollar increase means <span class="math inline">\mathrm{se} \le \frac{1.4}{2.80} = 0.50</span>. And this is the <span class="math inline">\mathrm{se}</span>.</li>
+<li><em>Suppose</em> we are planning a follow-up job-training experiment, with earnings in thousands of dollars.
+<ul>
+<li>We want two-sided 80% power at the 95% level for an <span class="target">increase of <span class="math inline">1.4</span> thousand dollars</span>.</li>
+</ul></li>
+<li><strong>Q.</strong> How many participants <span class="math inline">m</span> do we need with <span class="math inline">f = 0.50</span>, and with the optimal split <span class="math inline">f^\star</span>?</li>
+<li><em>Remember</em> that 80% power for a <span class="math inline">1.4</span> thousand dollar increase needs <span class="math inline">\mathrm{se} \le \frac{1.4}{2.80} = 0.50</span>.</li>
 </ul>
 <p><span class="math display">
 \mathrm{se}^2 = \frac{g(f)}{m}
@@ -1505,14 +1568,12 @@ g(f) = \frac{\ingroupb{\sigma^2(1)}}{f} + \frac{\ingroupa{\sigma^2(0)}}{1-f}
 \qqtext{and}
 f^\star = \frac{\ingroupb{\sigma(1)}}{\ingroupb{\sigma(1)} + \ingroupa{\sigma(0)}}.
 </span></p>
-<p><span class="math display">
-\begin{aligned}
-f &amp;= \text{the share of participants assigned to job training,} \\
-\ingroupb{\sigma(1)} &amp;= 8 \text{ thousand dollars} &amp; \text{the planned spread of treated earnings, and} \\
-\ingroupa{\sigma(0)} &amp;= 6 \text{ thousand dollars} &amp; \text{the planned spread of control earnings.}
-\end{aligned}
-</span></p>
 <ul>
+<li>Here <span class="math inline">f</span> is the share assigned to job training, and these are the planned spreads.
+<ul>
+<li><span class="math inline">\ingroupb{\sigma(1) = 8}</span> thousand dollars for treated earnings.</li>
+<li><span class="math inline">\ingroupa{\sigma(0) = 6}</span> thousand dollars for control earnings.</li>
+</ul></li>
 <li><em>Tip</em>
 <ol type="1">
 <li>Compute <span class="math inline">g(0.50)</span> and solve <span class="math inline">\frac{g(0.50)}{m} \le 0.50^2</span> for <span class="math inline">m</span>.</li>
@@ -1524,13 +1585,20 @@ f &amp;= \text{the share of participants assigned to job training,} \\
 <h2>Solution</h2>
 
 <img data-src="nsw-precision-nov05_files/figure-revealjs/nsw-allocation-solution-plot-1.svg" style="width:100.0%" class="r-stretch"><ul>
-<li>To hit the precision target <span class="math inline">\mathrm{se} \le 0.50</span> for our <span class="target"><span class="math inline">1.4</span> thousand dollar increase</span> with <span class="math inline">\ingroupb{\sigma(1) = 8}</span> and <span class="math inline">\ingroupa{\sigma(0) = 6}</span>, how many participants <span class="math inline">m</span> do we need under the <span class="pollb">even split</span> (<span class="math inline">f = 0.50</span>) and under the <span class="pollc">optimal split</span> <span class="math inline">f^\star</span>? <span class="math display">m \ge \frac{g(f)}{0.50^2} = \frac{g(f)}{0.25} \qqtext{where} g(f) = \frac{\ingroupb{\sigma^2(1)}}{f} + \frac{\ingroupa{\sigma^2(0)}}{1-f} \qqtext{and} f^\star = \frac{\ingroupb{\sigma(1)}}{\ingroupb{\sigma(1)} + \ingroupa{\sigma(0)}}.</span></li>
+<li>We need <span class="math inline">\mathrm{se} \le 0.50</span>, with <span class="math inline">\ingroupb{\sigma(1) = 8}</span> and <span class="math inline">\ingroupa{\sigma(0) = 6}</span>, so we solve for <span class="math inline">m</span>. <span class="math display">m \ge \frac{g(f)}{0.50^2} = \frac{g(f)}{0.25} \qqtext{where} g(f) = \frac{\ingroupb{\sigma^2(1)}}{f} + \frac{\ingroupa{\sigma^2(0)}}{1-f} \qqtext{and} f^\star = \frac{\ingroupb{\sigma(1)}}{\ingroupb{\sigma(1)} + \ingroupa{\sigma(0)}}.</span></li>
+<li>How many participants <span class="math inline">m</span> do we need under the <span class="pollb">even split</span> and the <span class="pollc">optimal split</span>?</li>
 </ul>
 <div class="fragment">
 <ul>
-<li>Under an <span class="pollb">even split</span> (<span class="math inline">f = 0.50</span>), we need <span class="math inline">m = 800</span> participants (<span class="math inline">400</span> treated and <span class="math inline">400</span> control). <span class="math display">g(0.50) = \frac{\ingroupb{64}}{0.50} + \frac{\ingroupa{36}}{0.50} = 128 + 72 = 200 \qqtext{so} m \ge \frac{200}{0.25} = 800.</span></li>
-<li>Under the <span class="pollc">optimal split</span>, we assign a larger share to the noisier <span class="groupb">treated group</span> and need <span class="math inline">m = 784</span> participants (<span class="math inline">448</span> treated and <span class="math inline">336</span> control). <span class="math display">f^\star = \frac{\ingroupb{8}}{\ingroupb{8} + \ingroupa{6}} = \frac{8}{14} \approx 0.571 \qqtext{and} g(f^\star) = (\ingroupb{8} + \ingroupa{6})^2 = 196 \qqtext{so} m \ge \frac{196}{0.25} = 784.</span></li>
-<li>Even though <span class="math inline">\ingroupb{\sigma(1) = 8}</span> is a third larger than <span class="math inline">\ingroupa{\sigma(0) = 6}</span>, an even split needs only <span class="math inline">800 - 784 = 16</span> extra people (<span class="math inline">2\%</span>).</li>
+<li>Under an <span class="pollb">even split</span> (<span class="math inline">f = 0.50</span>), we need <span class="math inline">m = 800</span> participants, <span class="math inline">400</span> in each group. <span class="math display">g(0.50) = \frac{\ingroupb{64}}{0.50} + \frac{\ingroupa{36}}{0.50} = 128 + 72 = 200 \qqtext{so} m \ge \frac{200}{0.25} = 800.</span></li>
+<li>The <span class="pollc">optimal split</span> gives a larger share to the noisier <span class="groupb">treated group</span>.
+<ul>
+<li>We need <span class="math inline">m = 784</span> participants: <span class="math inline">448</span> treated and <span class="math inline">336</span> control. <span class="math display">f^\star = \frac{\ingroupb{8}}{\ingroupb{8} + \ingroupa{6}} = \frac{8}{14} \approx 0.571 \qqtext{and} g(f^\star) = (\ingroupb{8} + \ingroupa{6})^2 = 196 \qqtext{so} m \ge \frac{196}{0.25} = 784.</span></li>
+</ul></li>
+<li>Even though <span class="math inline">\ingroupb{\sigma(1) = 8}</span> is a third larger than <span class="math inline">\ingroupa{\sigma(0) = 6}</span>, an even split costs little.
+<ul>
+<li>It needs only <span class="math inline">800 - 784 = 16</span> extra people, about <span class="math inline">2\%</span>.</li>
+</ul></li>
 </ul>
 </div>
 
