@@ -1,0 +1,2237 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="nsw-precision-nov05_files/libs/clipboard/clipboard.min.js"></script>
+<script src="nsw-precision-nov05_files/libs/quarto-html/tabby.min.js"></script>
+<script src="nsw-precision-nov05_files/libs/quarto-html/popper.min.js"></script>
+<script src="nsw-precision-nov05_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="nsw-precision-nov05_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="nsw-precision-nov05_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="nsw-precision-nov05_files/libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="nsw-precision-nov05_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="nsw-precision-nov05_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.38">
+
+  <title>Randomization: Precision and Power</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="nsw-precision-nov05_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="nsw-precision-nov05_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="nsw-precision-nov05_files/libs/revealjs/dist/theme/quarto-5a14feb3a0fd8d1a5399f7a55cff0f68.css">
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+  <link href="nsw-precision-nov05_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="nsw-precision-nov05_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="nsw-precision-nov05_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="nsw-precision-nov05_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script type="text/x-tex" id="qtm285-macros">
+  % The course's TeX macros. This file is the only place they are defined.
+  % Every format loads it with include-in-header (Skip, chat#9215600: "macros in
+  % a tex file or whatever included in the like, config yaml file as
+  % include-in-header"). Edit the definitions here; the script below hands them
+  % to KaTeX.
+  \providecommand{\invlogit}{\operatorname{logit}^{-1}}
+  \providecommand{\E}{\operatorname{E}}
+  \providecommand{\V}{\operatorname{V}}
+  \providecommand{\Var}{\operatorname{V}}
+  \providecommand{\sd}{\operatorname{sd}}
+  \providecommand{\hVar}{\widehat{\operatorname{V}}}
+  \providecommand{\bias}{\operatorname{bias}}
+  \providecommand{\Cov}{\operatorname{Cov}}
+  \providecommand{\argmin}{\operatorname*{argmin}}
+  \providecommand{\qqtext}[1]{\quad\text{#1}\quad}
+  \providecommand{\sb}[1]{[#1]}
+  \providecommand{\p}[1]{(#1)}
+  \providecommand{\cb}[1]{\{#1\}}
+  \newcommand{\se}[1]{\mathrm{se}_{#1}}
+  \newcommand{\ind}[1]{1_{\{#1\}}}
+  \newcommand{\R}{\mathbb{R}}
+  \newcommand{\model}{\mathcal{M}}
+  \newcommand{\all}{\text{all}}
+  \newcommand{\lcb}[1]{\color{gray}\left\{ \color{black} #1 \color{gray} \right\} \color{black}}
+  % KaTeX reads # inside a macro body as an argument marker, so colour hexes spell # as \hashmark.
+  \newcommand{\hashmark}{#}
+  \newcommand{\pcb}[1]{\color{\hashmark EF476F}\left\{ \color{black} #1 \color{\hashmark EF476F} \right\} \color{black}}
+  \newcommand{\tcb}[1]{\color{\hashmark118AB2}\left\{ \color{black} #1 \color{\hashmark118AB2} \right\} \color{black}}
+
+  \newcommand{\mapbg}{\color{\hashmark06D6A0}}
+  \newcommand{\polla}{\color{\hashmark073B4C}}
+  \newcommand{\pollb}{\color{\hashmark EF476F}}
+  \newcommand{\pollc}{\color{\hashmark118AB2}}
+  \newcommand{\polld}{\color{\hashmark06D6A0}}
+  \newcommand{\polle}{\color{\hashmark FFD166}}
+  \newcommand{\groupa}{\color{\hashmark F8766D}}
+  \newcommand{\groupb}{\color{\hashmark00BFC4}}
+  \newcommand{\faded}{\color{\hashmark404040}}
+
+  \newcommand{\inmapbg}[1]{\textcolor{\hashmark06D6A0}{#1}}
+  \newcommand{\inpolla}[1]{\textcolor{\hashmark073B4C}{#1}}
+  \newcommand{\inpollb}[1]{\textcolor{\hashmark EF476F}{#1}}
+  \newcommand{\inpollc}[1]{\textcolor{\hashmark118AB2}{#1}}
+  \newcommand{\inpolld}[1]{\textcolor{\hashmark06D6A0}{#1}}
+  \newcommand{\inpolle}[1]{\textcolor{\hashmark FFD166}{#1}}
+  \newcommand{\ingroupa}[1]{\textcolor{\hashmark F8766D}{#1}}
+  \newcommand{\ingroupb}[1]{\textcolor{\hashmark00BFC4}{#1}}
+
+  \newcommand{\inred}[1]{\ingroupa{#1}}
+  \newcommand{\ingreen}[1]{\ingroupb{#1}}
+  \newcommand{\inblue}[1]{\textcolor{\hashmark0000FF}{#1}}
+  \newcommand{\inmidnight}[1]{\inpolla{#1}}
+  \newcommand{\inpink}[1]{\inpollb{#1}}
+  \newcommand{\inteal}[1]{\inpollc{#1}}
+  \newcommand{\inpurple}[1]{\textcolor{\hashmark A020F0}{#1}}
+  \newcommand{\ingray}[1]{\textcolor{\hashmark969696}{#1}}
+
+  \newcommand{\alert}[1]{\textcolor{\hashmark808080}{#1}}
+  \newcommand{\faint}[1]{\textcolor{\hashmark808080}{#1}}
+  \newcommand{\veryfaint}[1]{\textcolor{\hashmark C0C0C0}{#1}}
+
+  \newcommand{\with}{\ingroupb{\text{degree}}}
+  \newcommand{\without}{\ingroupa{\text{no degree}}}
+
+  \newcommand{\explain}[2]{\overset{\texttip{\small{\text{?}}}{#2}}{#1}}
+  \newcommand{\mathexplain}[2]{\overset{\mathtip{\small{\text{?}}}{#2}}{#1}}
+
+  \newcommand{\wone}{\overset{\veryfaint{w}}{1}}
+  \newcommand{\wzero}{\overset{\veryfaint{w}}{0}}
+  \newcommand{\xone}{\overset{\veryfaint{x}}{1}}
+  \newcommand{\xzero}{\overset{\veryfaint{x}}{0}}
+
+  \newcommand{\Deltaall}{\Delta_{\text{all}}}
+  \newcommand{\mua}[1]{\ingroupa{\mu(0, #1)}}
+  \newcommand{\mub}[1]{\ingroupb{\mu(1, #1)}}
+  \newcommand{\pa}[1]{\ingroupa{p_{#1 \mid 0}}}
+  \newcommand{\pb}[1]{\ingroupb{p_{#1 \mid 1}}}
+  \newcommand{\pall}[1]{\inpurple{p_{#1}}}
+  \newcommand{\hmua}[1]{\ingroupa{\hat\mu(0, #1)}}
+  \newcommand{\hmub}[1]{\ingroupb{\hat\mu(1, #1)}}
+  \newcommand{\tmua}[1]{\ingroupa{\tilde\mu(0, #1)}}
+  \newcommand{\tmub}[1]{\ingroupb{\tilde\mu(1, #1)}}
+  \newcommand{\effect}[1]{\mub{x}-\mua{x}}
+  \newcommand{\heffect}[1]{\hmub{x}-\hmua{x}}
+  </script>
+  <script>
+  // Hand the definitions above to KaTeX.
+  //
+  // Pandoc's KaTeX loop and Quarto's typesetMath both call katex.render with an
+  // empty macros object of their own, so no configuration reaches them; the seam
+  // is katex.render itself. This wraps it once, before those loops run (a window
+  // capture listener fires ahead of every document listener), and defines the
+  // macros into whatever macros object each call carries. A page that also loads
+  // the tlda base set wraps katex.render after this, so its shared object arrives
+  // here and gets the course definitions on first use. \providecommand leaves an
+  // existing definition alone; \newcommand replaces it.
+  (function () {
+    var tex = document.getElementById('qtm285-macros').textContent
+    var defs = []
+    var re = /\\(newcommand|providecommand|renewcommand)\s*\{\s*(\\[A-Za-z]+)\s*\}\s*(?:\[(\d)\])?\s*\{/g
+    var m
+    while ((m = re.exec(tex))) {
+      var depth = 1, i = re.lastIndex
+      while (i < tex.length && depth > 0) {
+        var c = tex[i]
+        if (c === '\\') { i += 2; continue }
+        if (c === '{') depth++
+        else if (c === '}') depth--
+        i++
+      }
+      defs.push({ provide: m[1] === 'providecommand', name: m[2], body: tex.slice(re.lastIndex, i - 1) })
+      re.lastIndex = i
+    }
+    var seeded = typeof WeakSet === 'function' ? new WeakSet() : null
+    function seed(macros) {
+      if (seeded && seeded.has(macros)) return
+      for (var k = 0; k < defs.length; k++) {
+        var d = defs[k]
+        if (d.provide && Object.prototype.hasOwnProperty.call(macros, d.name)) continue
+        macros[d.name] = d.body
+      }
+      if (seeded) seeded.add(macros)
+    }
+    function install() {
+      if (!window.katex || !window.katex.render || window.katex.render.__qtm285) return
+      var inner = window.katex.render
+      var wrapped = function (input, el, opts) {
+        opts = opts || {}
+        if (!opts.macros) opts.macros = {}
+        seed(opts.macros)
+        return inner.call(window.katex, input, el, opts)
+      }
+      wrapped.__qtm285 = true
+      window.katex.render = wrapped
+    }
+    window.addEventListener('DOMContentLoaded', install, true)
+  })()
+  </script>
+  <script type="module" src="nsw-precision-nov05_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+  <link href="nsw-precision-nov05_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+  <link href="nsw-precision-nov05_files/libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+  <script src="nsw-precision-nov05_files/libs/pagedtable-1.1/js/pagedtable.js"></script>
+  <script>
+  // GENERATED by bin/generate-katex-macros.mjs from the tlda repo's
+  // shared/katex-base-macros.mjs. Do not edit here -- edit the source and
+  // re-run the generator, or the two copies drift and the book renders
+  // different mathematics from the app.
+  //
+  // Course-side entries below are NOT generated and NOT in the tlda
+  // source: \rmse, \MSE, \class, \texttip, \mathtip, \unicode. Edit them here.
+
+  // Universal KaTeX base macros — given to everybody, superseded by a paper's own
+  // extracted definitions.
+  //
+  // KaTeX has NO `\usepackage` mechanism and ships only a fixed built-in macro set
+  // (plus the mhchem contrib). So commands provided by the LaTeX `physics` package
+  // — \qty, \norm, \abs, \grad, the \q… text helpers, etc. — are unknown to KaTeX
+  // unless we define them. This file is that physics.sty → KaTeX port.
+  //
+  // It contains ONLY commands that live in a package (nothing a paper writes in its
+  // own preamble). Paper-specific macros (\chis, \hgamma, \dzetase, …) come from the
+  // build's `*-macros.json` extraction and override anything here via merge order:
+  //   { ...baseMacros, ...extractedPaperMacros }
+  //
+  // Single source of truth: imported by the browser renderer (src/katexMacros.ts)
+  // and the server-side chat linter (mcp-server/fleet-tools.mjs).
+
+  // Bare is fixed, starred stretches. KaTeX has no \DeclarePairedDelimiter and no
+  // \@ifstar, so the star is read here by peeking at the next token.
+  function pairedDelimiter(open, close) {
+    return (ctx) => {
+      const next = ctx.future()
+      if (next && next.text === "*") {
+        ctx.popToken()
+        return `\\left${open}#1\\right${close}`
+      }
+      return `${open}#1${close}`
+    }
+  }
+
+  // TeX source of a consumed group, spaces intact. Token texts alone lose
+  // whitespace (the lexer skips it); the token offsets recover it exactly.
+  // Falls back to joined texts if the lexer internals ever move.
+  function groupSource(toks) {
+    const first = toks[toks.length - 1];
+    const last = toks[0];
+    const input = first && first.loc && first.loc.lexer && first.loc.lexer.input;
+    if (typeof input === 'string' && first.loc.start != null && last.loc.end != null) {
+      return input.slice(first.loc.start, last.loc.end);
+    }
+    return toks.map((t) => t.text).reverse().join('');
+  }
+
+  // Tip payload encoding for the hover script below. The tip TeX travels
+  // in an htmlData attribute, whose values split on commas and take no
+  // escapes, so raw TeX cannot ride there. Unpadded base64url carries
+  // arbitrary TeX (dollars, commas, braces, backslashes) in [A-Za-z0-9-_].
+  function tipEncode(str) {
+    const bytes = new TextEncoder().encode(str)
+    let bin = ''
+    bytes.forEach((b) => { bin += String.fromCharCode(b) })
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+  }
+
+  // The one trust rule for course math. KaTeX gates its html extension
+  // (\htmlClass, \htmlData, \htmlId, \htmlStyle, \href, \url,
+  // \includegraphics) on this callback; anything it rejects renders as
+  // an unsupported-command error rather than HTML. Only the commands
+  // our own macros emit are admitted, and only in the shapes they emit:
+  // fragment classes, lone data-tip attributes, and data-tip plus a
+  // data-mode of math (the mathtip marker). Strict is untouched.
+  function tldaTrust(ctx) {
+    if (ctx.command === '\\htmlClass') {
+      return typeof ctx.class === 'string' &&
+        ctx.class.split(/\s+/).every((c) => c === 'fragment')
+    }
+    if (ctx.command === '\\htmlData') {
+      const attrs = ctx.attributes || {}
+      const keys = Object.keys(attrs)
+      // Numeric fragment grouping only: exactly that one attribute, digits
+      // only. Deliberately not a general data-* admission.
+      if (keys.length === 1 && keys[0] === 'data-fragment-index') {
+        return /^\d+$/.test(String(attrs['data-fragment-index']))
+      }
+      return keys.length <= 2 &&
+        ('data-tip' in attrs) &&
+        keys.every((k) => k === 'data-tip' || k === 'data-mode') &&
+        (!('data-mode' in attrs) || attrs['data-mode'] === 'math')
+    }
+    return false
+  }
+  window.__tldaKatexMacros = {
+    // physics: text spacers (\q… family)
+    "\\qq": "\\quad\\text{#1}\\quad",
+    // physics spells this one both ways and the long form is the one the course
+    // actually writes -- 358 uses against \qq's handful. It was absent here, so a
+    // course moving to KaTeX would have lost all 358 SILENTLY: an undefined macro
+    // renders as literal text with a clean console. Same expansion as \qq; they
+    // are the same command in physics.
+    "\\qqtext": "\\quad\\text{#1}\\quad",
+    "\\qwhere": "\\quad\\text{where}\\quad",
+    "\\qfor": "\\quad\\text{for}\\quad",
+    "\\qand": "\\quad\\text{and}\\quad",
+    "\\qor": "\\quad\\text{or}\\quad",
+    "\\qthen": "\\quad\\text{then}\\quad",
+    "\\qif": "\\quad\\text{if}\\quad",
+    "\\qelse": "\\quad\\text{else}\\quad",
+    "\\qotherwise": "\\quad\\text{otherwise}\\quad",
+    "\\qgiven": "\\quad\\text{given}\\quad",
+    "\\qall": "\\quad\\text{for all}\\quad",
+    "\\qsince": "\\quad\\text{since}\\quad",
+    "\\qlet": "\\quad\\text{let}\\quad",
+    "\\qimplies": "\\quad\\Rightarrow\\quad",
+    "\\qas": "\\quad\\text{as}\\quad",
+    "\\qc": ",",
+
+    // physics: delimiters & operators
+    // \qty dispatches on its delimiter: \qty(x) → (x), \qty[x] → [x], and
+    // \qty{x} keeps visible braces. The old "" no-op was exact for parens and
+    // brackets but dropped the curlies — 288 such sites in the course, rendering
+    // bare content where physics puts braces. KaTeX binds the following group to
+    // #1 once the expansion names it, so only the curly branch needs one.
+    "\\qty": (ctx) => {
+      const next = ctx.future();
+      if (next && next.text === '{') {
+        return '\\left\\{#1\\right\\}';
+      }
+      return '';
+    },
+    "\\abs": "\\left|#1\\right|",
+    "\\norm": "\\left\\|#1\\right\\|",
+    "\\eval": "\\left.#1\\right|",
+    "\\order": "\\mathcal{O}\\left(#1\\right)",
+    "\\dv": "\\frac{d#1}{d#2}",
+    "\\pdv": "\\frac{\\partial #1}{\\partial #2}",
+    "\\fdv": "\\frac{\\delta #1}{\\delta #2}",
+    "\\bra": "\\left\\langle #1\\right|",
+    "\\ket": "\\left|#1\\right\\rangle",
+    "\\braket": "\\left\\langle #1\\middle|#2\\right\\rangle",
+    "\\expval": "\\left\\langle #1\\right\\rangle",
+    "\\ev": "\\left\\langle #1\\right\\rangle",
+    "\\comm": "\\left[#1,\\,#2\\right]",
+    "\\acomm": "\\left\\{#1,\\,#2\\right\\}",
+    "\\vb": "\\mathbf{#1}",
+    "\\vbu": "\\hat{#1}",
+    "\\grad": "\\nabla",
+    "\\curl": "\\nabla\\times",
+    // physics defines \cross and this port had omitted it, so it would have gone
+    // silently literal at the renderer switch. Found by the used-minus-defined
+    // gate rather than by anyone noticing a formula.
+    "\\cross": "\\times",
+    // Course shorthands that arrive undefined: single-use spellings, each with one
+    // meaning in the tree. Defined here (not edited at the call sites) per the
+    // course owner's call — the call sites render literal-or-red without them,
+    // and these restore the evidently intended mathematics.
+    "\\rmse": "\\operatorname{rmse}",
+    "\\MSE": "\\operatorname{MSE}",
+    // reveal.js fragment wrapper. Emits a real fragment class so reveal
+    // steps the content on decks; in the book the span is inert (no
+    // reveal runtime, no fragment styling) and the content reads as
+    // before. Any other class name falls back to bare content.
+    "\\class": (ctx) => {
+      const args = ctx.consumeArgs(2);
+      const cls = groupSource(args[0]).trim();
+      if (cls === 'fragment') {
+        return '\\htmlClass{fragment}{' + groupSource(args[1]) + '}';
+      }
+      // fragment=N puts both cells of an aligned row in one reveal step:
+      // reveal groups fragments sharing a data-fragment-index. KaTeX emits
+      // htmlClass and htmlData on separate nested spans, so the index is
+      // carried here and the fragment class is added after render, below.
+      const grouped = cls.match(/^fragment=(\d+)$/);
+      if (grouped) {
+        return '\\htmlData{fragment-index=' + grouped[1] + '}{' + groupSource(args[1]) + '}';
+      }
+      ctx.pushTokens(args[1]);
+      return '';
+    },
+    "\\tr": "\\operatorname{Tr}",
+    "\\Tr": "\\operatorname{Tr}",
+    "\\rank": "\\operatorname{rank}",
+    "\\diag": "\\operatorname{diag}",
+    "\\sgn": "\\operatorname{sgn}",
+
+    // The course's \DeclareMathOperator declarations, as plain entries. KaTeX has
+    // no \DeclareMathOperator and fails silently on it -- literal text, no console
+    // error -- so the operators have to live here instead.
+    //
+    // Skip, 2026-09-12: "um just define \E to be \operatorname{E} no? ... like
+    // it's not that hard?" It is not. The alarming 2,577-call-site number came
+    // from costing a TeX-level rewrite, where \newcommand vs \renewcommand is
+    // fragile -- one line changed there killed eight working operators while the
+    // error count went from 1 to 0. Here each declaration is one string and no
+    // call site changes at all.
+    //
+    // \argmin is defined by stock KaTeX; a later key wins, which is what makes
+    // redefining it safe here and was NOT safe in the TeX route.
+    "\\E": "\\operatorname{E}",
+    "\\P": "\\operatorname{P}",
+    "\\V": "\\operatorname{V}",
+    "\\Var": "\\operatorname{V}",
+    "\\Cov": "\\operatorname{Cov}",
+    "\\CATE": "\\operatorname{CATE}",
+    "\\RMSE": "\\operatorname{RMSE}",
+    "\\sd": "\\operatorname{sd}",
+    "\\bias": "\\operatorname{bias}",
+    "\\argmin": "\\operatorname{argmin}",
+    "\\invlogit": "\\operatorname{logit}^{-1}",
+    "\\hVar": "\\widehat{\\operatorname{V}}",
+
+    // Course annotations: \explain{X}{tip} is \overset{\texttip{marker}{tip}}{X}
+    // (and \mathexplain the math-mode twin). The marker renders; the tip
+    // rides encoded in a data-tip attribute (plus a data-mode marker on the
+    // math-mode twin) for the hover script below,
+    // which typesets it with this same KaTeX. Encoding (not parsing)
+    // carries dollars, commas and braces through the attribute intact.
+    "\\texttip": (ctx) => {
+      const args = ctx.consumeArgs(2);
+      return '\\htmlData{tip=' + tipEncode(groupSource(args[1])) + '}{' + groupSource(args[0]) + '}';
+    },
+    "\\mathtip": (ctx) => {
+      const args = ctx.consumeArgs(2);
+      return '\\htmlData{tip=' + tipEncode(groupSource(args[1])) + ',mode=math}{' + groupSource(args[0]) + '}';
+    },
+    // MathJax's [tex]/unicode package. KaTeX has no
+    // \unicode: hex or decimal becomes the character, anything else renders as
+    // text rather than literal backslash-soup. (The course's `r square` /
+    // `r triangle` / `r circle` shapes are not valid \unicode args —
+    // decimal-or-hex only — and the real glyph mapping is a content call, not this.)
+    "\\unicode": (ctx) => {
+      const raw = groupSource(ctx.consumeArgs(1)[0]);
+      const m = raw.match(/^x([0-9a-fA-F]{1,6})$/) || raw.match(/^([0-9]{1,7})$/);
+      if (m) {
+        const cp = parseInt(m[1], m[0][0] === 'x' ? 16 : 10);
+        if (cp <= 0x10ffff) {
+          return String.fromCodePoint(cp);
+        }
+      }
+      return `\\text{${raw}}`;
+    },
+
+    // Paired delimiters. Skip, 2026-09-12: "i said \p \cb \sb".
+    //
+    // Bare is fixed, starred stretches -- he uses * for tacit \left\right
+    // consistently. KaTeX has no \DeclarePairedDelimiter and no \@ifstar, so the
+    // star is read by a function macro peeking at the next token. Verified
+    // against KaTeX 0.16.47, including the counterfactual that a BARE macro on
+    // tall content stays fixed, so the check is not merely detecting \frac.
+    "\\p": pairedDelimiter("(", ")"),
+    "\\sb": pairedDelimiter("[", "]"),
+    "\\cb": pairedDelimiter("\\{", "\\}"),
+  }
+  </script>
+  <script>
+  // Give KaTeX the course's macro set.
+  //
+  // pandoc emits its own render loop and hardcodes `var macros = []` inside it --
+  // function-scoped, unreachable from config, and there is no Quarto option that
+  // reaches it either. Quarto's own re-render helper (window.Quarto.typesetMath)
+  // hardcodes the same empty array. So the macros cannot be delivered by
+  // configuration on the plain-HTML path; the only seam is katex.render itself,
+  // which both of those call.
+  //
+  // This wraps it. The capture listener below fires before pandoc's
+  // document-level bubble listener even when registered later; katex.min.js
+  // is deferred, so by DOMContentLoaded it has executed and window.katex exists.
+  //
+  // Deliberately does NOT override a caller that supplied its own non-empty macros
+  // object -- that is somebody meaning something specific, and this is a default.
+  // Trust gets the same treatment: a supplied value wins, otherwise
+  // the course allowlist above. Strict is untouched.
+  (function () {
+    function install() {
+      if (!window.katex || !window.katex.render || window.__tldaKatexShimmed) return
+      var base = window.__tldaKatexMacros
+      if (!base) { console.error('[tlda] katex macro set missing; math will render without it'); return }
+      var inner = window.katex.render.bind(window.katex)
+      // One shared object, because KaTeX writes \def definitions back into it and
+      // they are expected to persist across calls within a page.
+      var shared = {}
+      for (var k in base) shared[k] = base[k]
+      window.katex.render = function (tex, el, opts) {
+        opts = opts || {}
+        if (!opts.macros || Object.keys(opts.macros).length === 0) opts.macros = shared
+        if (opts.trust == null) opts.trust = tldaTrust
+        const out = inner(tex, el, opts)
+        // Reveal reads data-fragment-index from the .fragment node itself,
+        // and KaTeX cannot put the class and the index on one span, so the
+        // class is added here -- scoped to the element just rendered.
+        if (el && el.querySelectorAll) {
+          el.querySelectorAll('[data-fragment-index]').forEach(function (n) {
+            if (/^\d+$/.test(n.getAttribute('data-fragment-index') || '')) n.classList.add('fragment')
+          })
+        }
+        return out
+      }
+      window.__tldaKatexShimmed = true
+    }
+    // Capture fires before pandoc's document-level bubble listener;
+    // immediate call if the document is already parsed.
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, true)
+    else install()
+  })()
+  </script>
+  <style>
+  /* Explanation hover tips (see the script below). No visual change to
+     the equation itself besides the help cursor on the marker. */
+  [data-tip] { cursor: help; position: relative; z-index: 1; }
+  #tlda-tip {
+    position: fixed; z-index: 60; display: none; max-width: min(34em, 90vw);
+    background: #fff; color: #222; border: 1px solid #888; border-radius: 6px;
+    padding: .5em .7em; box-shadow: 0 4px 18px rgba(0,0,0,.25);
+    font-size: .85rem; line-height: 1.35; pointer-events: none;
+  }
+  #tlda-tip.on { display: block; }
+  .tlda-tip-err { color: #c00; font-weight: bold; }
+  </style>
+  <script>
+  // Explanation hovers. Marker spans carry the tip as encoded TeX in
+  // data-tip (see \texttip above); this typesets it with the page KaTeX
+  // on hover. Delegated listeners: no per-element binding, survives math
+  // re-renders. Markers inside unrevealed fragments are skipped.
+  (function () {
+    function markerOf(node) {
+      while (node && node !== document) {
+        if (node.getAttribute && node.getAttribute('data-tip') != null) return node
+        node = node.parentNode
+      }
+      return null
+    }
+    // Hidden markers never open: display:none ancestors (non-current slides)
+    // anywhere, plus any unrevealed ancestor fragment up to the reveal root —
+    // a visible inner fragment beneath a hidden outer stays hidden. The
+    // fragment walk runs only inside a reveal deck (book fragment spans never
+    // gain .visible, so it is deck-only there).
+    function isHidden(marker) {
+      if (marker.getClientRects().length === 0) return true
+      if (marker.closest && marker.closest('.reveal')) {
+        let node = marker.parentNode
+        while (node && node !== document) {
+          if (node.classList && node.classList.contains('reveal')) break
+          if (node.classList && node.classList.contains('fragment') && !node.classList.contains('visible')) return true
+          node = node.parentNode
+        }
+      }
+      return false
+    }
+    function tipDecode(s) {
+      const b64 = s.replace(/-/g, '+').replace(/_/g, '/')
+      const bin = atob(b64)
+      const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0))
+      return new TextDecoder().decode(bytes)
+    }
+    function errSpan(text, detail) {
+      const err = document.createElement('span')
+      err.className = 'tlda-tip-err'
+      err.textContent = text
+      err.title = String(detail)
+      return err
+    }
+    // Mixed mode (texttip): text with $...$ math. Math mode (mathtip): the
+    // whole tip is math. Failed math shows an explicit error naming the
+    // failure; it never substitutes raw TeX silently.
+    function renderTip(tex, mode, box) {
+      box.textContent = ''
+      if (mode === 'math') {
+        const s = document.createElement('span')
+        box.appendChild(s)
+        try { window.katex.render(tex, s, {}) }
+        catch (e) { s.appendChild(errSpan('(math error)', (e && e.message) || e)) }
+        return
+      }
+      const parts = tex.split(/(?<!\\)\$/)
+      parts.forEach((seg, i) => {
+        if (seg === '') return
+        if (i % 2 === 1) {
+          const s = document.createElement('span')
+          box.appendChild(s)
+          try { window.katex.render(seg, s, {}) }
+          catch (e) { s.appendChild(errSpan('(math error)', (e && e.message) || e)) }
+        } else {
+          box.appendChild(document.createTextNode(seg))
+        }
+      })
+    }
+    var box = null
+    var current = null
+    function open(marker) {
+      if (!window.katex) return
+      if (isHidden(marker)) { close(); return }
+      const payload = marker.getAttribute('data-tip')
+      if (!payload) return
+      if (box && box.classList.contains('on') && current === marker) return
+      if (!box) {
+        box = document.createElement('div')
+        box.id = 'tlda-tip'
+        document.body.appendChild(box)
+      }
+      current = marker
+      try {
+        renderTip(tipDecode(payload), marker.getAttribute('data-mode'), box)
+      } catch (e) {
+        box.textContent = ''
+        box.appendChild(errSpan('(tip error)', (e && e.message) || e))
+      }
+      var r = marker.getBoundingClientRect()
+      box.classList.add('on')
+      var bw = box.offsetWidth, bh = box.offsetHeight
+      var x = Math.min(Math.max(8, r.left + r.width / 2 - bw / 2), window.innerWidth - bw - 8)
+      var y = r.top - bh - 10
+      if (y < 8) y = r.bottom + 10
+      box.style.left = x + 'px'
+      box.style.top = y + 'px'
+    }
+    function close() {
+      current = null
+      if (box) box.classList.remove('on')
+    }
+    document.addEventListener('mouseover', (e) => {
+      const m = markerOf(e.target)
+      if (m) open(m); else close()
+    })
+    document.addEventListener('mouseout', (e) => {
+      const m = markerOf(e.target)
+      if (m && !(e.relatedTarget && m.contains(e.relatedTarget))) close()
+    })
+    // Touch: a tap opens (and stays until tap elsewhere, scroll, or slide).
+    document.addEventListener('click', (e) => {
+      const m = markerOf(e.target)
+      if (m) open(m); else close()
+    })
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close() })
+    window.addEventListener('scroll', close, true)
+    window.addEventListener('resize', close)
+    // Reveal (a body-end synchronous script) exists by DOMContentLoaded, so
+    // the slide/fragment dismissal binds there rather than at parse time.
+    function bindReveal() {
+      if (!window.Reveal || !Reveal.on) return
+      Reveal.on('slidechanged', close)
+      Reveal.on('fragmenthidden', () => { if (current && isHidden(current)) close() })
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindReveal)
+    else bindReveal()
+  })()
+
+  </script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Randomization: Precision and Power</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section>
+<section id="picking-up-where-we-left-off" class="title-slide slide level1 center">
+<h1>Picking Up Where We Left Off</h1>
+<div class="hidden">
+
+</div>
+</section>
+<section id="where-we-are-substantively" class="slide level2">
+<h2>Where We Are Substantively</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="nsw-precision-nov05_files/figure-revealjs/recap-realized-1.svg"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="nsw-precision-nov05_files/figure-revealjs/recap-closing-dist-1.svg"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+<ul>
+<li>Each person <span class="math inline">j \in \{1 \ldots m\}</span> in our study has two potential outcomes, <span class="math inline">\ingroupb{y_j(1)}</span> and <span class="math inline">\ingroupa{y_j(0)}</span>.
+<ul>
+<li>Their difference <span class="math inline">\tau_j = \ingroupb{y_j(1)} - \ingroupa{y_j(0)}</span> is person <span class="math inline">j</span>’s individual treatment effect.</li>
+<li>Because each person receives only one treatment, we never observe both ends of the pair for the same person.</li>
+</ul></li>
+<li>Instead, we shuffle <span class="math inline">m_1</span> people into <span class="groupb">treatment</span> and <span class="math inline">m_0 = m - m_1</span> into <span class="groupa">control</span>, and take the difference in observed group means. <span class="math display">\hat\tau = \ingroupb{\hat\mu(1)} - \ingroupa{\hat\mu(0)} = \ingroupb{\frac{1}{m_1}\sum_{j:W_j=1} y_j(W_j)} - \ingroupa{\frac{1}{m_0}\sum_{j:W_j=0} y_j(W_j)}.</span></li>
+<li>Last time we saw that the centre <span class="math inline">\E(\hat\tau)</span> (<span class="blue">blue</span>) lands right on the average treatment effect <span class="math inline">\bar\tau</span> (<span class="target">green</span>).
+<ul>
+<li>Today we work out the spread around it.</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-indicator-trick" class="slide level2">
+<h2>The Indicator Trick</h2>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="nsw-precision-nov05_files/figure-revealjs/indicator-trick-plot-1.svg"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th><span class="math inline">j</span></th>
+<th><span class="math inline">\ingroupb{y_j(1)}</span></th>
+<th><span class="math inline">\ingroupa{y_j(0)}</span></th>
+<th><span class="math inline">\tau_j</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>6</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>4</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>7</td>
+<td>7</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>8</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+<ul>
+<li>Look at person <span class="math inline">j = 3</span> in the table, with <span class="math inline">\ingroupb{y_3(1) = 4}</span> and <span class="math inline">\ingroupa{y_3(0) = 1}</span>.
+<ul>
+<li>Under a shuffle, treatment <span class="math inline">W_3</span> is random, so the realized outcome <span class="math inline">y_3(W_3)</span> is random too.</li>
+</ul></li>
+<li>What is the product <span class="math inline">1_{=1}(W_3) y_3(W_3)</span> for each possible value of <span class="math inline">W_3</span>?</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Checking both values of <span class="math inline">W_3</span> shows that we can replace the random <span class="math inline">W_3</span> inside <span class="math inline">y_3(W_3)</span> with the constant <span class="math inline">1</span>. <span class="math display">1_{=1}(W_3) y_3(W_3) = \begin{cases} 0 \times \ingroupa{y_3(0)} = 0 &amp; \text{when } W_3 = 0 \\ 1 \times \ingroupb{y_3(1)} = \ingroupb{4} &amp; \text{when } W_3 = 1 \end{cases} = 1_{=1}(W_3) \ingroupb{y_3(1)}.</span></li>
+<li>More generally, for any person <span class="math inline">j</span> and treatment <span class="math inline">w</span>, multiplying by <span class="math inline">1_{=w}(W_j)</span> fixes the argument of <span class="math inline">y_j(\cdot)</span> at <span class="math inline">w</span>.
+<ul>
+<li>That lets us write the group mean as a sum over all <span class="math inline">m</span> people. <span class="math display">1_{=w}(W_j) y_j(W_j) = 1_{=w}(W_j) y_j(w) \qqtext{so} \hat\mu(w) = \frac{1}{m_w}\sum_{j=1}^m y_j(w) 1_{=w}(W_j).</span></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="why-the-difference-of-group-means-targets-the-average-of-individual-effects" class="slide level2">
+<h2>Why the Difference of Group Means Targets the Average of Individual Effects</h2>
+<ul>
+<li>Using the indicator trick, each group mean can be written as a sum over all <span class="math inline">m</span> people in the study. <span class="math display">\hat\mu(w) = \frac{1}{m_w}\sum_{j=1}^m y_j(w) 1_{=w}(W_j) \qqtext{where} \E\{1_{=w}(W_j)\} = \frac{m_w}{m} \qqtext{so} \E\{\hat\mu(w)\} = \frac{1}{m}\sum_{j=1}^m y_j(w) = \mu(w).</span></li>
+<li>Now take the expectation of <span class="math inline">\hat\tau = \ingroupb{\hat\mu(1)} - \ingroupa{\hat\mu(0)}</span> and combine the two population sums person by person. <span class="math display">\begin{aligned}
+\E(\hat\tau)
+&amp;= \E\{\ingroupb{\hat\mu(1)} - \ingroupa{\hat\mu(0)}\} \\
+&amp;\explain{=}{linearity of $\E$}
+\E\{\ingroupb{\hat\mu(1)}\} - \E\{\ingroupa{\hat\mu(0)}\} \\
+&amp;\explain{=}{substituting $\E\{\hat\mu(w)\} = \frac{1}{m}\sum_{j=1}^m y_j(w)$ for $w=1$ and $w=0$}
+\frac{1}{m}\sum_{j=1}^m \ingroupb{y_j(1)} - \frac{1}{m}\sum_{j=1}^m \ingroupa{y_j(0)} \\
+&amp;\explain{=}{factoring out $\frac{1}{m}$ and pairing each person's two potential outcomes}
+\frac{1}{m}\sum_{j=1}^m \{\ingroupb{y_j(1)} - \ingroupa{y_j(0)}\}
+= \frac{1}{m}\sum_{j=1}^m \tau_j = \bar\tau.
+\end{aligned}</span></li>
+<li>Because both expectations average over the same <span class="math inline">m</span> people with weight <span class="math inline">\frac{1}{m}</span>, we can pair each person’s <span class="math inline">\ingroupb{y_j(1)}</span> with their own <span class="math inline">\ingroupa{y_j(0)}</span>.</li>
+<li>Now that the indicator rewrite puts all the randomness in <span class="math inline">1_{=w}(W_j)</span>, what does it tell us about the variance <span class="math inline">\Var(\hat\tau)</span>?</li>
+</ul>
+<!-- Added Nov 8 by class-handoff-owner-opus. Skip accepted this exercise and its placement after the unbiasedness proof ("That sounds good", chat#10221622, after #10221516, #10221547, #10221557, #10221593). Wording is agent-written and not yet reviewed by him. Data: candy_population in decks/candy-oct27.qmd. -->
+</section>
+<section id="exercise" class="slide level2 scrollable">
+<h2>Exercise</h2>
+<div style="font-size: 0.76em;">
+<p><span class="math display">
+\begin{array}{ccc||c|c|c}
+j &amp; w_j &amp; y_j(w_j) &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
+\hline
+\hline
+1 &amp; 0 &amp; 0 &amp; &amp; \ingroupa{0} &amp; \\
+2 &amp; 0 &amp; 1 &amp; &amp; \ingroupa{1} &amp; \\
+3 &amp; 0 &amp; 0 &amp; &amp; \ingroupa{0} &amp; \\
+4 &amp; 0 &amp; 1 &amp; &amp; \ingroupa{1} &amp; \\
+5 &amp; 0 &amp; 0 &amp; &amp; \ingroupa{0} &amp; \\
+\hline
+6 &amp; 1 &amp; 1 &amp; \ingroupb{1} &amp; &amp; \\
+7 &amp; 1 &amp; 1 &amp; \ingroupb{1} &amp; &amp; \\
+8 &amp; 1 &amp; 0 &amp; \ingroupb{0} &amp; &amp; \\
+9 &amp; 1 &amp; 1 &amp; \ingroupb{1} &amp; &amp; \\
+10 &amp; 1 &amp; 1 &amp; \ingroupb{1} &amp; &amp; \\
+\hline
+\hline
+\end{array}
+</span></p>
+</div>
+<ul>
+<li>In the candy survey, each of us <em>chose</em> whether to eat bitter dark chocolate (<span class="math inline">w_j = 1</span>).</li>
+<li>Then we tasted a salty and a fruity bar, with <span class="math inline">y_j = 1</span> for salty.
+<ul>
+<li><span class="math inline">4</span> of the <span class="math inline">5</span> who chose it prefer salty, against <span class="math inline">2</span> of the <span class="math inline">5</span> who declined.</li>
+<li>So <span class="math inline">\hat\Delta = 0.8 - 0.4 = 0.4</span>.</li>
+</ul></li>
+<li><strong>Q.</strong> Fill in everyone’s other potential outcome in two ways that match what we observed.
+<ol type="1">
+<li>So that the dark chocolate has no effect on anyone.</li>
+<li>So that the average treatment effect <span class="math inline">\bar\tau</span> is negative.</li>
+</ol></li>
+<li><em>Remember</em> In CausalDoku, randomization let us pretend both groups have the same values.
+<ul>
+<li>Here nobody shuffled, so that rule is gone.</li>
+</ul></li>
+</ul>
+</section>
+<section id="solution" class="slide level2">
+<h2>Solution</h2>
+<div style="font-size: 0.76em;">
+<p><span class="math display">
+\overset{\textbf{(1) No effect}}{
+\begin{array}{ccc||c|c|c}
+j &amp; w_j &amp; y_j(w_j) &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
+\hline
+\hline
+1 &amp; 0 &amp; 0 &amp; \ingroupb{0} &amp; \ingroupa{0} &amp; 0 \\
+2 &amp; 0 &amp; 1 &amp; \ingroupb{1} &amp; \ingroupa{1} &amp; 0 \\
+3 &amp; 0 &amp; 0 &amp; \ingroupb{0} &amp; \ingroupa{0} &amp; 0 \\
+4 &amp; 0 &amp; 1 &amp; \ingroupb{1} &amp; \ingroupa{1} &amp; 0 \\
+5 &amp; 0 &amp; 0 &amp; \ingroupb{0} &amp; \ingroupa{0} &amp; 0 \\
+\hline
+6 &amp; 1 &amp; 1 &amp; \ingroupb{1} &amp; \ingroupa{1} &amp; 0 \\
+7 &amp; 1 &amp; 1 &amp; \ingroupb{1} &amp; \ingroupa{1} &amp; 0 \\
+8 &amp; 1 &amp; 0 &amp; \ingroupb{0} &amp; \ingroupa{0} &amp; 0 \\
+9 &amp; 1 &amp; 1 &amp; \ingroupb{1} &amp; \ingroupa{1} &amp; 0 \\
+10 &amp; 1 &amp; 1 &amp; \ingroupb{1} &amp; \ingroupa{1} &amp; 0 \\
+\hline
+\hline
+\end{array}}
+\qquad\qquad
+\overset{\textbf{(2) Negative average effect}}{
+\begin{array}{ccc||c|c|c}
+j &amp; w_j &amp; y_j(w_j) &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
+\hline
+\hline
+1 &amp; 0 &amp; 0 &amp; \ingroupb{0} &amp; \ingroupa{0} &amp; 0 \\
+2 &amp; 0 &amp; 1 &amp; \ingroupb{0} &amp; \ingroupa{1} &amp; -1 \\
+3 &amp; 0 &amp; 0 &amp; \ingroupb{0} &amp; \ingroupa{0} &amp; 0 \\
+4 &amp; 0 &amp; 1 &amp; \ingroupb{0} &amp; \ingroupa{1} &amp; -1 \\
+5 &amp; 0 &amp; 0 &amp; \ingroupb{0} &amp; \ingroupa{0} &amp; 0 \\
+\hline
+6 &amp; 1 &amp; 1 &amp; \ingroupb{1} &amp; \ingroupa{1} &amp; 0 \\
+7 &amp; 1 &amp; 1 &amp; \ingroupb{1} &amp; \ingroupa{1} &amp; 0 \\
+8 &amp; 1 &amp; 0 &amp; \ingroupb{0} &amp; \ingroupa{1} &amp; -1 \\
+9 &amp; 1 &amp; 1 &amp; \ingroupb{1} &amp; \ingroupa{1} &amp; 0 \\
+10 &amp; 1 &amp; 1 &amp; \ingroupb{1} &amp; \ingroupa{1} &amp; 0 \\
+\hline
+\hline
+\end{array}}
+</span></p>
+</div>
+<ul>
+<li><strong>(1)</strong> Give each person their own observed preference at the other end of the pair.
+<ul>
+<li>Every <span class="math inline">\tau_j = 0</span>, so all of <span class="math inline">\hat\Delta = 0.4</span> comes from who chose the chocolate.</li>
+</ul></li>
+<li><strong>(2)</strong> Give every chooser <span class="math inline">\ingroupa{y_j(0) = 1}</span> and every decliner <span class="math inline">\ingroupb{y_j(1) = 0}</span>.
+<ul>
+<li>Three people have <span class="math inline">\tau_j = -1</span>, so <span class="math inline">\bar\tau = -3/10</span> while <span class="math inline">\hat\Delta = +0.4</span>.</li>
+</ul></li>
+<li>Which step of our unbiasedness proof breaks?</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>The step <span class="math inline">\E\{1_{=w}(W_j)\} = \frac{m_w}{m}</span>, which says everyone is equally likely to land in group <span class="math inline">w</span>.
+<ul>
+<li>When people choose, <span class="math inline">w_j</span> is a property of person <span class="math inline">j</span>, not a random <span class="math inline">W_j</span>.</li>
+<li>Choosers are in the dark-chocolate group for sure, and decliners never are.</li>
+<li>So <span class="math inline">\hat\mu(1)</span> averages <span class="math inline">y_j(1)</span> only over the people who chose.</li>
+<li>They may be exactly the people who lean salty anyway. That is imbalance.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="all-20-shuffles-of-our-six-people" class="slide level2">
+<h2>All 20 Shuffles of Our Six People</h2>
+<div class="columns">
+<div class="column" style="width:45%;">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th><span class="math inline">j</span></th>
+<th><span class="math inline">\ingroupb{y_j(1)}</span></th>
+<th><span class="math inline">\ingroupa{y_j(0)}</span></th>
+<th><span class="math inline">\tau_j</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>6</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>4</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>7</td>
+<td>7</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>8</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:55%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="nsw-precision-nov05_files/figure-revealjs/exact-20-shuffles-1.svg"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+<ul>
+<li>With <span class="math inline">m = 6</span> people and <span class="math inline">m_1 = 3</span> treated, there are <span class="math inline">\binom{6}{3} = 20</span> equally likely shuffles.
+<ul>
+<li>Enumerating all 20 shuffles gives the exact randomization distribution of <span class="math inline">\hat\tau</span> shown on the right.</li>
+</ul></li>
+<li>The <span class="target">green line</span> is <span class="math inline">\bar\tau \approx 2.17</span> and the <span class="blue">solid blue line</span> is <span class="math inline">\E(\hat\tau) \approx 2.17</span>.
+<ul>
+<li>The <span class="blue">dashed</span> and <span class="blue">dotted blue lines</span> mark intervals around the mean holding two-thirds and 95% of the 20 estimates.</li>
+</ul></li>
+<li>Averaging the squared deviations across all 20 shuffles gives the exact variance of <span class="math inline">\hat\tau</span>. <span class="math display">\Var(\hat\tau) = \frac{1}{20}\sum_{s=1}^{20} \{\hat\tau_s - \E(\hat\tau)\}^2 \approx 5.094.</span></li>
+</ul>
+</section>
+<section id="why-isnt-this-just-our-georgia-variance-formula" class="slide level2 scrollable">
+<h2>Why Isn’t This Just Our Georgia Variance Formula?</h2>
+<ul>
+<li>In Georgia, we drew <span class="math inline">n_1</span> voters from group <span class="math inline">1</span> and <span class="math inline">n_0</span> voters from group <span class="math inline">0</span> independently.</li>
+<li>If <span class="math inline">\ingroupb{\hat\mu(1)}</span> and <span class="math inline">\ingroupa{\hat\mu(0)}</span> were independent with-replacement sample means, the variance would be <span class="math inline">\frac{\ingroupb{\sigma^2(1)}}{m_1} + \frac{\ingroupa{\sigma^2(0)}}{m_0}</span>.</li>
+<li>Why doesn’t that simple sum give the exact variance when we shuffle one population of <span class="math inline">m</span> people?</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Two things happen when a shuffle splits <span class="math inline">m</span> people into <span class="math inline">m_1</span> treated and <span class="math inline">m_0 = m - m_1</span> control.
+<ol type="1">
+<li><em>Within each arm</em>, the <span class="math inline">m_w</span> people are drawn <strong>without replacement</strong> from the <span class="math inline">m</span> people in the study, so <span class="math inline">1_{=w}(W_j)</span> and <span class="math inline">1_{=w}(W_k)</span> are negatively correlated.</li>
+<li><em>Across the two arms</em>, <span class="math inline">\ingroupb{\hat\mu(1)}</span> and <span class="math inline">\ingroupa{\hat\mu(0)}</span> are <strong>not independent</strong> because everyone not placed in treatment lands in control.</li>
+</ol></li>
+<li>Because <span class="math inline">\hat\tau = \ingroupb{\hat\mu(1)} - \ingroupa{\hat\mu(0)}</span> is a difference of two dependent random variables, we must keep their covariance. <span class="math display">\Var(\hat\tau) = \Var\{\ingroupb{\hat\mu(1)}\} + \Var\{\ingroupa{\hat\mu(0)}\} - 2\Cov\{\ingroupb{\hat\mu(1)}, \ingroupa{\hat\mu(0)}\}.</span></li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="variance-under-complete-randomization" class="title-slide slide level1 center">
+<h1>Variance Under Complete Randomization</h1>
+
+</section>
+<section id="finite-population-variances-and-covariance" class="slide level2">
+<h2>Finite-Population Variances and Covariance</h2>
+<ul>
+<li>Before working out the three pieces of <span class="math inline">\Var(\hat\tau)</span>, we define the potential-outcome variances with denominator <span class="math inline">m - 1</span>. <span class="math display">S_w^2 = \frac{1}{m-1}\sum_{j=1}^m \{y_j(w) - \mu(w)\}^2 \qqtext{and} S_\tau^2 = \frac{1}{m-1}\sum_{j=1}^m (\tau_j - \bar\tau)^2.</span></li>
+<li>Compared to the population variance <span class="math inline">\sigma^2(w)</span> with denominator <span class="math inline">m</span>, this rescales by <span class="math inline">\frac{m}{m-1}</span>. <span class="math display">S_w^2 = \frac{m}{m-1}\sigma^2(w) \qqtext{where} \sigma^2(w) = \frac{1}{m}\sum_{j=1}^m \{y_j(w) - \mu(w)\}^2.</span></li>
+<li>Why switch from <span class="math inline">\sigma^2(w)</span> to <span class="math inline">S_w^2</span> when we study shuffling without replacement?</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>In our without-replacement sampling formula, <span class="math inline">\frac{\sigma^2(w)}{m_w}\frac{m - m_w}{m - 1}</span> carried <span class="math inline">m - 1</span> in the denominator of the correction factor.</li>
+<li>Absorbing <span class="math inline">\frac{m}{m-1}</span> into <span class="math inline">S_w^2</span> turns the correction factor into <span class="math inline">\frac{m - m_w}{m} = 1 - \frac{m_w}{m}</span> and makes every <span class="math inline">\frac{1}{m}</span> term line up cleanly.</li>
+<li>We define the covariance between the two potential outcomes with the same denominator <span class="math inline">m - 1</span>. <span class="math display">S_{10} = \frac{1}{m-1}\sum_{j=1}^m \{\ingroupb{y_j(1)} - \ingroupb{\mu(1)}\}\{\ingroupa{y_j(0)} - \ingroupa{\mu(0)}\}.</span></li>
+</ul>
+</div>
+</section>
+<section id="step-1.-variance-of-each-group-mean" class="slide level2">
+<h2>Step 1. Variance of Each Group Mean</h2>
+<ul>
+<li>Look again at our indicator rewrite for a single group mean. <span class="math display">\hat\mu(w) = \frac{1}{m_w}\sum_{j=1}^m y_j(w) 1_{=w}(W_j).</span></li>
+<li>Shuffling picks <span class="math inline">m_w</span> people uniformly without replacement from the <span class="math inline">m</span> people in the study.</li>
+<li>So <span class="math inline">\hat\mu(w)</span> is the sample mean of a simple random sample of size <span class="math inline">m_w</span> drawn without replacement from the fixed numbers <span class="math inline">y_1(w) \ldots y_m(w)</span>.</li>
+<li>Applying our without-replacement variance formula gives the variance of each group mean. <span class="math display">\Var\{\hat\mu(w)\} = \frac{\sigma^2(w)}{m_w}\frac{m - m_w}{m - 1} = \frac{S_w^2}{m_w}\left(1 - \frac{m_w}{m}\right) = \frac{S_w^2}{m_w} - \frac{S_w^2}{m}.</span></li>
+<li>That gives the first two pieces of <span class="math inline">\Var(\hat\tau)</span>. <span class="math display">\Var\{\ingroupb{\hat\mu(1)}\} = \frac{\ingroupb{S_1^2}}{m_1} - \frac{\ingroupb{S_1^2}}{m} \qqtext{and} \Var\{\ingroupa{\hat\mu(0)}\} = \frac{\ingroupa{S_0^2}}{m_0} - \frac{\ingroupa{S_0^2}}{m}.</span></li>
+</ul>
+</section>
+<section id="step-2.-covariance-between-the-two-group-means" class="slide level2">
+<h2>Step 2. Covariance Between the Two Group Means</h2>
+<ul>
+<li>Now what about the covariance <span class="math inline">\Cov\{\ingroupb{\hat\mu(1)}, \ingroupa{\hat\mu(0)}\}</span> between the treated mean and the control mean?</li>
+<li>Suppose people with high <span class="math inline">\ingroupb{y_j(1)}</span> also tend to have high <span class="math inline">\ingroupa{y_j(0)}</span>, so <span class="math inline">S_{10} &gt; 0</span>.</li>
+<li>When a shuffle puts the high earners into the <span class="groupb">treated group</span>, who is left for the <span class="groupa">control group</span>?</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>The low earners are left in control, so when <span class="math inline">\ingroupb{\hat\mu(1)}</span> is above its mean, <span class="math inline">\ingroupa{\hat\mu(0)}</span> is below its mean.</li>
+<li>We can see this algebraically by comparing <span class="math inline">\ingroupa{\hat\mu(0)}</span> with the counterfactual control mean <span class="math inline">\hat\mu_{0,T} = \frac{1}{m_1}\sum_{j=1}^m 1_{=1}(W_j)\ingroupa{y_j(0)}</span> of the treated people. <span class="math display">m_1 \hat\mu_{0,T} + m_0 \ingroupa{\hat\mu(0)} = m\ingroupa{\mu(0)} \qqtext{so} \ingroupa{\hat\mu(0)} = \frac{m\ingroupa{\mu(0)} - m_1 \hat\mu_{0,T}}{m_0}.</span></li>
+<li>Because <span class="math inline">\ingroupb{\hat\mu(1)}</span> and <span class="math inline">\hat\mu_{0,T}</span> average over the <em>same</em> <span class="math inline">m_1</span> treated people, their without-replacement covariance is <span class="math inline">\left(1 - \frac{m_1}{m}\right)\frac{S_{10}}{m_1} = \frac{m_0}{m}\frac{S_{10}}{m_1}</span>. <span class="math display">\Cov\{\ingroupb{\hat\mu(1)}, \ingroupa{\hat\mu(0)}\} = -\frac{m_1}{m_0}\Cov\{\ingroupb{\hat\mu(1)}, \hat\mu_{0,T}\} = -\frac{m_1}{m_0}\cdot\frac{m_0}{m}\frac{S_{10}}{m_1} = -\frac{S_{10}}{m}.</span></li>
+</ul>
+</div>
+</section>
+<section id="step-3.-combining-the-pieces-into-neymans-formula" class="slide level2">
+<h2>Step 3. Combining the Pieces into Neyman’s Formula</h2>
+<ul>
+<li>Now we substitute the two group variances and the covariance into <span class="math inline">\Var(\hat\tau)</span>. <span class="math display">\begin{aligned}
+\Var(\hat\tau)
+&amp;= \Var\{\ingroupb{\hat\mu(1)}\} + \Var\{\ingroupa{\hat\mu(0)}\} - 2\Cov\{\ingroupb{\hat\mu(1)}, \ingroupa{\hat\mu(0)}\} \\
+&amp;= \left(\frac{\ingroupb{S_1^2}}{m_1} - \frac{\ingroupb{S_1^2}}{m}\right) + \left(\frac{\ingroupa{S_0^2}}{m_0} - \frac{\ingroupa{S_0^2}}{m}\right) - 2\left(-\frac{S_{10}}{m}\right) \\
+&amp;= \frac{\ingroupb{S_1^2}}{m_1} + \frac{\ingroupa{S_0^2}}{m_0} - \frac{\ingroupb{S_1^2} + \ingroupa{S_0^2} - 2S_{10}}{m}.
+\end{aligned}</span></li>
+<li>Look at the numerator <span class="math inline">\ingroupb{S_1^2} + \ingroupa{S_0^2} - 2S_{10}</span> in that last fraction. What is it?</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Because each centered effect is <span class="math inline">\tau_j - \bar\tau = \{\ingroupb{y_j(1)} - \ingroupb{\mu(1)}\} - \{\ingroupa{y_j(0)} - \ingroupa{\mu(0)}\}</span>, squaring and summing over <span class="math inline">j = 1 \ldots m</span> gives the variance of the individual treatment effects. <span class="math display">S_\tau^2 = \frac{1}{m-1}\sum_{j=1}^m (\tau_j - \bar\tau)^2 = \ingroupb{S_1^2} + \ingroupa{S_0^2} - 2S_{10}.</span></li>
+<li>Substituting <span class="math inline">S_\tau^2</span> gives <strong>Neyman’s variance formula</strong> under complete randomization. <span class="math display">\Var(\hat\tau) = \frac{\ingroupb{S_1^2}}{m_1} + \frac{\ingroupa{S_0^2}}{m_0} - \frac{S_\tau^2}{m}.</span></li>
+</ul>
+</div>
+</section>
+<section id="checking-the-formula-on-our-six-people" class="slide level2">
+<h2>Checking the Formula on Our Six People</h2>
+<div class="columns">
+<div class="column" style="width:45%;">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th><span class="math inline">j</span></th>
+<th><span class="math inline">\ingroupb{y_j(1)}</span></th>
+<th><span class="math inline">\ingroupa{y_j(0)}</span></th>
+<th><span class="math inline">\tau_j</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>6</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>4</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>7</td>
+<td>7</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>8</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>2</td>
+<td>0</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:55%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="nsw-precision-nov05_files/figure-revealjs/check-20-shuffles-1.svg"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+<ul>
+<li>In our 6-person table with <span class="math inline">m = 6</span> and <span class="math inline">m_1 = m_0 = 3</span>, the column means are <span class="math inline">\ingroupb{\mu(1) = 4.50}</span>, <span class="math inline">\ingroupa{\mu(0) \approx 2.33}</span> and <span class="math inline">\bar\tau \approx 2.17</span>.</li>
+<li>Computing the three column variances with denominator <span class="math inline">m - 1 = 5</span> gives the inputs to Neyman’s formula. <span class="math display">\ingroupb{S_1^2} = 9.500 \qqtext{and} \ingroupa{S_0^2} \approx 7.467 \qqtext{and} S_\tau^2 \approx 3.367.</span></li>
+<li>Plugging these into Neyman’s formula reproduces the exact variance across all 20 shuffles to the last decimal place. <span class="math display">\Var(\hat\tau) = \frac{\ingroupb{9.500}}{3} + \frac{\ingroupa{7.467}}{3} - \frac{3.367}{6} \approx \frac{19}{6} + \frac{112}{45} - \frac{101}{180} = \frac{917}{180} \approx 5.094.</span></li>
+</ul>
+</section>
+<section id="exercise-1" class="slide level2 scrollable">
+<h2>Exercise</h2>
+<p><span class="math display">
+\text{Table A (constant effect)}\quad
+\begin{array}{c|c|c|c}
+j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
+\hline
+1 &amp; 4 &amp; 3 &amp; 1 \\
+2 &amp; 3 &amp; 2 &amp; 1 \\
+3 &amp; 2 &amp; 1 &amp; 1 \\
+4 &amp; 4 &amp; 3 &amp; 1 \\
+5 &amp; 3 &amp; 2 &amp; 1 \\
+6 &amp; 2 &amp; 1 &amp; 1
+\end{array}
+\qquad\qquad
+\text{Table B (varying effects)}\quad
+\begin{array}{c|c|c|c}
+j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
+\hline
+1 &amp; 4 &amp; 1 &amp; 3 \\
+2 &amp; 3 &amp; 2 &amp; 1 \\
+3 &amp; 2 &amp; 3 &amp; -1 \\
+4 &amp; 2 &amp; 3 &amp; -1 \\
+5 &amp; 3 &amp; 2 &amp; 1 \\
+6 &amp; 4 &amp; 1 &amp; 3
+\end{array}
+</span></p>
+<ul>
+<li><em>Suppose</em> we randomize <span class="math inline">m_1 = 3</span> of <span class="math inline">m = 6</span> people to treatment and <span class="math inline">m_0 = 3</span> to control in Thursday’s two CausalDoku tables above.</li>
+<li><strong>Q.</strong> What are <span class="math inline">\ingroupb{S_1^2}</span>, <span class="math inline">\ingroupa{S_0^2}</span>, <span class="math inline">S_\tau^2</span> and <span class="math inline">\Var(\hat\tau)</span> in Table A and in Table B?</li>
+<li><em>Remember</em> Neyman’s variance formula under complete randomization and the definition of each column’s variance.</li>
+</ul>
+<p><span class="math display">
+\Var(\hat\tau) = \frac{\ingroupb{S_1^2}}{m_1} + \frac{\ingroupa{S_0^2}}{m_0} - \frac{S_\tau^2}{m}.
+</span></p>
+<p><span class="math display">
+\begin{aligned}
+S_w^2 &amp;= \frac{1}{m-1}\sum_{j=1}^m \{y_j(w) - \mu(w)\}^2 &amp; \text{with column means } \ingroupb{\mu(1) = 3} \text{ and } \ingroupa{\mu(0) = 2} \text{ in both tables, and} \\
+S_\tau^2 &amp;= \frac{1}{m-1}\sum_{j=1}^m (\tau_j - \bar\tau)^2 &amp; \text{with average treatment effect } \bar\tau = 1 \text{ in both tables.}
+\end{aligned}
+</span></p>
+<ul>
+<li><em>Tip</em>
+<ol type="1">
+<li>Compute <span class="math inline">\ingroupb{S_1^2}</span> and <span class="math inline">\ingroupa{S_0^2}</span> once, since both tables have the same six numbers in the <span class="math inline">\ingroupb{y_j(1)}</span> and <span class="math inline">\ingroupa{y_j(0)}</span> columns.</li>
+<li>Compute <span class="math inline">S_\tau^2</span> for Table A and for Table B, then plug into <span class="math inline">\Var(\hat\tau)</span>.</li>
+</ol></li>
+</ul>
+</section>
+<section id="solution-1" class="slide level2">
+<h2>Solution</h2>
+<p><span class="math display">
+\text{Table A (constant effect)}\quad
+\begin{array}{c|c|c|c}
+j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
+\hline
+1 &amp; 4 &amp; 3 &amp; 1 \\
+2 &amp; 3 &amp; 2 &amp; 1 \\
+3 &amp; 2 &amp; 1 &amp; 1 \\
+4 &amp; 4 &amp; 3 &amp; 1 \\
+5 &amp; 3 &amp; 2 &amp; 1 \\
+6 &amp; 2 &amp; 1 &amp; 1
+\end{array}
+\qquad\qquad
+\text{Table B (varying effects)}\quad
+\begin{array}{c|c|c|c}
+j &amp; \ingroupb{y_j(1)} &amp; \ingroupa{y_j(0)} &amp; \tau_j \\
+\hline
+1 &amp; 4 &amp; 1 &amp; 3 \\
+2 &amp; 3 &amp; 2 &amp; 1 \\
+3 &amp; 2 &amp; 3 &amp; -1 \\
+4 &amp; 2 &amp; 3 &amp; -1 \\
+5 &amp; 3 &amp; 2 &amp; 1 \\
+6 &amp; 4 &amp; 1 &amp; 3
+\end{array}
+</span></p>
+<ul>
+<li>Both tables have the same six values <span class="math inline">\{4, 3, 2, 4, 3, 2\}</span> around <span class="math inline">\ingroupb{\mu(1) = 3}</span> and <span class="math inline">\{3, 2, 1, 3, 2, 1\}</span> around <span class="math inline">\ingroupa{\mu(0) = 2}</span>. <span class="math display">\ingroupb{S_1^2} = \frac{1^2 + 0^2 + (-1)^2 + 1^2 + 0^2 + (-1)^2}{5} = \frac{4}{5} = 0.8 \qqtext{and} \ingroupa{S_0^2} = \frac{4}{5} = 0.8.</span></li>
+<li>Now how do <span class="math inline">S_\tau^2</span> and <span class="math inline">\Var(\hat\tau) = \frac{\ingroupb{S_1^2}}{3} + \frac{\ingroupa{S_0^2}}{3} - \frac{S_\tau^2}{6}</span> compare across the two tables?</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>In <strong>Table A</strong>, every person has <span class="math inline">\tau_j = 1 = \bar\tau</span>, so <span class="math inline">S_\tau^2 = 0</span> and the third term drops out. <span class="math display">\Var(\hat\tau) = \frac{\ingroupb{0.8}}{3} + \frac{\ingroupa{0.8}}{3} - \frac{0}{6} = \frac{1.6}{3} \approx 0.533.</span></li>
+<li>In <strong>Table B</strong>, the individual effects are <span class="math inline">(3, 1, -1, -1, 1, 3)</span> around <span class="math inline">\bar\tau = 1</span>, which gives a positive <span class="math inline">S_\tau^2</span>. <span class="math display">S_\tau^2 = \frac{2^2 + 0^2 + (-2)^2 + (-2)^2 + 0^2 + 2^2}{5} = \frac{16}{5} = 3.2 \qqtext{so} \Var(\hat\tau) = \frac{\ingroupb{0.8}}{3} + \frac{\ingroupa{0.8}}{3} - \frac{3.2}{6} = 0.</span></li>
+<li>Holding the marginal spreads <span class="math inline">\ingroupb{S_1^2}</span> and <span class="math inline">\ingroupa{S_0^2}</span> fixed, effect heterogeneity (<span class="math inline">S_\tau^2 &gt; 0</span>) makes <span class="math inline">\Var(\hat\tau)</span> <em>smaller</em>, not larger!</li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="the-unobservable-term-and-conservative-standard-errors" class="title-slide slide level1 center">
+<h1>The Unobservable Term and Conservative Standard Errors</h1>
+
+</section>
+<section id="what-we-can-estimate-and-what-we-cannot" class="slide level2">
+<h2>What We Can Estimate and What We Cannot</h2>
+<ul>
+<li>Look again at the three terms in Neyman’s variance formula. <span class="math display">\Var(\hat\tau) = \frac{\ingroupb{S_1^2}}{m_1} + \frac{\ingroupa{S_0^2}}{m_0} - \frac{S_\tau^2}{m}.</span></li>
+<li>From the <span class="math inline">m_1</span> people we actually treated, we observe <span class="math inline">\ingroupb{y_j(1)}</span> and estimate <span class="math inline">\ingroupb{S_1^2}</span> with the sample variance <span class="math inline">\ingroupb{\hat S_1^2}</span>. <span class="math display">\ingroupb{\hat S_1^2} = \frac{1}{m_1 - 1}\sum_{j:W_j=1} \{\ingroupb{y_j(1)} - \ingroupb{\hat\mu(1)}\}^2 \qqtext{and} \ingroupa{\hat S_0^2} = \frac{1}{m_0 - 1}\sum_{j:W_j=0} \{\ingroupa{y_j(0)} - \ingroupa{\hat\mu(0)}\}^2.</span></li>
+<li>Because each arm is a simple random sample without replacement from all <span class="math inline">m</span> people, <span class="math inline">\E(\ingroupb{\hat S_1^2}) = \ingroupb{S_1^2}</span> and <span class="math inline">\E(\ingroupa{\hat S_0^2}) = \ingroupa{S_0^2}</span>.</li>
+<li>Why can’t we estimate the third term <span class="math inline">S_\tau^2</span> from our experiment in the same way?</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Because we never observe <span class="math inline">\ingroupb{y_j(1)}</span> and <span class="math inline">\ingroupa{y_j(0)}</span> for the same person <span class="math inline">j</span>, we never observe even a single <span class="math inline">\tau_j</span>.</li>
+<li>In our CausalDoku puzzle, Table A (<span class="math inline">S_\tau^2 = 0</span>) and Table B (<span class="math inline">S_\tau^2 = 3.2</span>) came from the exact same observed data!</li>
+<li>So no formula built from the observed data alone can tell <span class="math inline">S_\tau^2 = 0</span> apart from <span class="math inline">S_\tau^2 &gt; 0</span>.</li>
+</ul>
+</div>
+</section>
+<section id="neymans-conservative-standard-error" class="slide level2">
+<h2>Neyman’s Conservative Standard Error</h2>
+<ul>
+<li>Even though we cannot observe <span class="math inline">S_\tau^2</span>, we know that <span class="math inline">S_\tau^2 \ge 0</span> because it is an average of squares.</li>
+<li>Dropping the non-negative term <span class="math inline">S_\tau^2 / m</span> gives an upper bound on the true variance <span class="math inline">\Var(\hat\tau)</span>. <span class="math display">\Var(\hat\tau) = \frac{\ingroupb{S_1^2}}{m_1} + \frac{\ingroupa{S_0^2}}{m_0} - \frac{S_\tau^2}{m} \le \frac{\ingroupb{S_1^2}}{m_1} + \frac{\ingroupa{S_0^2}}{m_0}.</span></li>
+<li>Plugging the observed sample variances <span class="math inline">\ingroupb{\hat S_1^2}</span> and <span class="math inline">\ingroupa{\hat S_0^2}</span> into that upper bound defines <strong>Neyman’s conservative standard error</strong> <span class="math inline">\mathrm{se}</span>. <span class="math display">\mathrm{se}^2 = \frac{\ingroupb{\hat S_1^2}}{m_1} + \frac{\ingroupa{\hat S_0^2}}{m_0} \qqtext{so} \mathrm{se} = \sqrt{\frac{\ingroupb{\hat S_1^2}}{m_1} + \frac{\ingroupa{\hat S_0^2}}{m_0}}.</span></li>
+<li>On average across shuffles, <span class="math inline">\E(\mathrm{se}^2)</span> is at least as large as the true variance <span class="math inline">\Var(\hat\tau)</span>. <span class="math display">\E(\mathrm{se}^2) = \frac{\ingroupb{S_1^2}}{m_1} + \frac{\ingroupa{S_0^2}}{m_0} = \Var(\hat\tau) + \frac{S_\tau^2}{m} \ge \Var(\hat\tau).</span></li>
+<li>When the treatment effect is constant across people (<span class="math inline">S_\tau^2 = 0</span>), <span class="math inline">\E(\mathrm{se}^2) = \Var(\hat\tau)</span> is exact.</li>
+<li>When treatment effects vary (<span class="math inline">S_\tau^2 &gt; 0</span>), our 95% confidence interval <span class="math inline">\hat\tau \pm 1.96\,\mathrm{se}</span> is conservative.</li>
+</ul>
+</section>
+<section id="application-1.-the-nsw-job-training-experiment" class="slide level2">
+<h2>Application 1. The NSW Job-Training Experiment</h2>
+<!-- Exact NSW plot chunk from pinned two-sample homework. -->
+
+<img data-src="nsw-precision-nov05_files/figure-revealjs/plot-earnings-by-group-1.svg" alt="Jittered 1978 incomes for National Supported Work participants in control and treated groups, with each group mean plus or minus one standard deviation." class="r-stretch"><ul>
+<li>In the National Supported Work experiment, <span class="math inline">m = 445</span> participants were randomized between <span class="math inline">m_1 = 185</span> in <span class="groupb">job training</span> and <span class="math inline">m_0 = 260</span> in <span class="groupa">control</span>.</li>
+<li>Each faint dot is one participant’s 1978 earnings, and the black dot and whiskers show the group mean <span class="math inline">\hat\mu(w)</span> plus or minus one group standard deviation <span class="math inline">\hat S_w</span>.</li>
+</ul>
+</section>
+<section id="exercise-3.-randomization" class="slide level2">
+<h2>Exercise 3. Randomization</h2>
+<ul>
+<li>In our last two NSW exercises, we tried to understand the <span class="groupb">treated participants</span> without using the randomized comparison group.</li>
+<li>We tried to find people like the NSW participants in CPS.
+<ul>
+<li>Even after making a pretty thoughtful comparison, seemingly secondary differences in population composition created bias.</li>
+<li>Our rough CPS peers were 51.4% married against 18.9% of the NSW treated group, and changing only that mixture moved the CPS mean by $324.</li>
+</ul></li>
+<li>The NSW investigators did not need to locate observational “people like them” after the fact. <strong>They randomized.</strong>
+<ul>
+<li>The randomized <span class="groupa">control group</span> provides the comparison generated by the study design itself.</li>
+<li>We no longer need to decide which observed characteristics define “people like them,” measure all of those characteristics correctly, and construct a comparison population with the right composition.</li>
+<li>Randomization handles that problem probabilistically through the design.</li>
+</ul></li>
+</ul>
+</section>
+<section id="exercise-2" class="slide level2">
+<h2>Exercise</h2>
+<ul>
+<li><em>Suppose</em> we use the randomized comparison in NSW, with <span class="math inline">m_1 = 185</span> participants in <span class="groupb">job training</span> and <span class="math inline">m_0 = 260</span> in <span class="groupa">control</span>, and these group means and standard deviations of 1978 earnings. <span class="math display">\ingroupb{\hat\mu(1)} = \$6{,}349 \qqtext{and} \ingroupb{\hat S_1} = \$7{,}867 \qqtext{whereas} \ingroupa{\hat\mu(0)} = \$4{,}555 \qqtext{and} \ingroupa{\hat S_0} = \$5{,}484.</span></li>
+<li><strong>Q.</strong> What is our estimate <span class="math inline">\hat\tau</span> of the effect of job training on 1978 earnings, and what is our conservative 95% confidence interval for the average treatment effect <span class="math inline">\bar\tau</span>?</li>
+<li><em>Remember</em> the difference in group means, Neyman’s conservative standard error and the normal-approximation interval. <span class="math display">\hat\tau = \ingroupb{\hat\mu(1)} - \ingroupa{\hat\mu(0)} \qqtext{and} \mathrm{se} = \sqrt{\frac{\ingroupb{\hat S_1^2}}{m_1} + \frac{\ingroupa{\hat S_0^2}}{m_0}} \qqtext{and the interval is} \hat\tau \pm 1.96\,\mathrm{se}.</span></li>
+</ul>
+</section>
+<section id="solution-2" class="slide level2">
+<h2>Solution</h2>
+<ul>
+<li>The randomized groups give us these means and standard deviations of 1978 earnings. <span class="math display">\begin{aligned}
+\ingroupb{\hat\mu(1)} &amp;= \$6{,}349 \qqtext{and} \ingroupb{\hat S_1} = \$7{,}867 \qqtext{with} m_1 = 185 \qqtext{whereas} \\
+\ingroupa{\hat\mu(0)} &amp;= \$4{,}555 \qqtext{and} \ingroupa{\hat S_0} = \$5{,}484 \qqtext{with} m_0 = 260.
+\end{aligned}</span></li>
+<li>What are <span class="math inline">\hat\tau</span> and our conservative 95% confidence interval for <span class="math inline">\bar\tau</span>?</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Subtracting the group means gives <span class="math inline">\hat\tau</span>, and plugging <span class="math inline">\ingroupb{\hat S_1}</span> and <span class="math inline">\ingroupa{\hat S_0}</span> into Neyman’s formula gives the standard error. <span class="math display">\hat\tau = \ingroupb{6{,}349} - \ingroupa{4{,}555} = \$1{,}794 \qqtext{and} \mathrm{se} = \sqrt{\frac{\ingroupb{7{,}867^2}}{185} + \frac{\ingroupa{5{,}484^2}}{260}} \approx \$671.</span></li>
+<li>Using the normal approximation, our conservative 95% confidence interval for <span class="math inline">\bar\tau</span> is <span class="math inline">\$1{,}794 \pm 1.96(\$671) = [\$479,\; \$3{,}109]</span>.</li>
+<li>The comparison is valid because the investigators randomized. How much does this estimate tell us about the effect of job training?</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>The estimate is still extremely imprecise.
+<ul>
+<li>The interval runs from $479, about 11% of the control mean, to $3,109, about 68% of it.</li>
+<li>The experiment treated too few people to reliably distinguish effects of substantively very different sizes.</li>
+</ul></li>
+<li>This returns directly to Exercise 1, where the treated mean alone came with an interval of <span class="math inline">\$6{,}349 \pm \$1{,}134</span>.
+<ul>
+<li>Our interval for the effect is wider still, at <span class="math inline">\pm\$1{,}315</span>.</li>
+<li>The study’s original problem with precision did not disappear merely because the design was randomized.</li>
+</ul></li>
+</ul>
+</div>
+<!-- Added Nov 8 by class-handoff-owner-opus. Skip asked for the two-sample version of the power deck's NSW story ("I'd like to see this happen. This really matters to me a lot.", chat#10221787, after #10221734, #10221741, #10221768). Wording is agent-written and not yet reviewed by him. Success standard and peers as in decks/chapter-bias-and-coverage-slides.qmd. -->
+</section>
+<section id="was-nsw-big-enough" class="slide level2">
+<h2>Was NSW Big Enough?</h2>
+<ul>
+<li>In the power deck, we used NSW as a pilot and looked at the <span class="groupb">treated men</span> alone.
+<ul>
+<li>Success meant an interval entirely above 75% of their CPS peers’ mean, <span class="math inline">\$5{,}327</span>.</li>
+<li>Taking their mean of $6,349 as the truth, 64% of intervals cleared that line.</li>
+<li>That was with 185 treated men, and 273 would have reached 80%. It looked fixable.</li>
+<li>Then we found that the CPS benchmark itself was biased.</li>
+</ul></li>
+<li>Randomization gives us the right benchmark, the <span class="groupa">control group</span>, whose mean is $4,555.
+<ul>
+<li>Success now means an interval for the effect entirely above <span class="math inline">\$5{,}327 - \$4{,}555 = \$772</span>.</li>
+</ul></li>
+<li>If our estimate of $1,794 were the truth, how often would a study NSW’s size get that evidence?</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Our estimate is 1.52 standard errors above $772. With <span class="math inline">Z</span> standard normal, here is the power. <span class="math display">\frac{\$1{,}794 - \$772}{\$671} \approx 1.52 \qqtext{so} \text{power} \approx \P(Z \ge 1.96 - 1.52) \approx 33\%.</span></li>
+<li>For 80% power, that distance must be <span class="math inline">2.80</span> standard errors, and the standard error shrinks like <span class="math inline">1/\sqrt{m}</span>. <span class="math display">\mathrm{se} \le \frac{\$1{,}022}{2.80} \approx \$365 \qqtext{so} m \ge 445 \times \left(\frac{671}{365}\right)^2 \approx 1{,}500.</span></li>
+<li>That is more than three times the 445 people the study had.</li>
+<li>Our interval, $479 to $3,109, puts treated earnings anywhere from $5,034 to $7,664.
+<ul>
+<li>That runs from short of the success standard to past their peers’ mean.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="takeaway" class="slide level2">
+<h2>Takeaway</h2>
+<ul>
+<li><strong>Exercise 1. We need more data.</strong>
+<ul>
+<li>The treated-group estimate is extremely noisy.</li>
+</ul></li>
+<li><strong>Exercise 2. More data can make things worse when the estimator is biased.</strong>
+<ul>
+<li>A small population-composition error that seems innocuous at low precision becomes disastrous at high precision.</li>
+</ul></li>
+<li><strong>Exercise 3. Randomization addresses the bias problem—but not the information problem.</strong>
+<ul>
+<li>The NSW experiment gives us the comparison we wanted.</li>
+<li>It still cannot tell us very much because it did not treat enough people.</li>
+</ul></li>
+<li>The running example separates two requirements for useful statistical evidence. <span class="math display">\boxed{\text{Are we estimating the right thing?}} \qqtext{and} \boxed{\text{Are we estimating it precisely enough?}}</span></li>
+<li>Large samples address the second question, not necessarily the first.</li>
+<li>Randomization can address the first question, but does not guarantee the second.</li>
+<li><strong>Observational comparisons can be precisely wrong.</strong></li>
+<li><strong>Randomized experiments can be validly uninformative.</strong></li>
+</ul>
+</section>
+<section id="application-2.-the-michigan-social-pressure-experiment" class="slide level2">
+<h2>Application 2. The Michigan Social-Pressure Experiment</h2>
+<ul>
+<li>Now apply the exact same formula to Gerber, Green and Larimer’s Michigan turnout experiment from Thursday.</li>
+<li>Among the <span class="math inline">m = 229{,}444</span> voters in the two arms we compared, <span class="math inline">m_1 = 38{,}201</span> received the <span class="groupb">Neighbors letter</span> and <span class="math inline">m_0 = 191{,}243</span> received <span class="groupa">no letter</span>.</li>
+<li>Because turnout is binary (<span class="math inline">0</span> or <span class="math inline">1</span>), each group’s sample variance is <span class="math inline">\hat S_w^2 = \frac{m_w}{m_w - 1}\hat\mu(w)\{1 - \hat\mu(w)\} \approx \hat\mu(w)\{1 - \hat\mu(w)\}</span>. <span class="math display">\begin{aligned}
+\ingroupb{\hat\mu(1)} &amp;= \frac{14{,}438}{38{,}201} \approx 0.3779 \qqtext{so} \ingroupb{\hat S_1^2} \approx 0.3779(1 - 0.3779) \approx 0.2351 \qqtext{and} \\
+\ingroupa{\hat\mu(0)} &amp;= \frac{56{,}730}{191{,}243} \approx 0.2966 \qqtext{so} \ingroupa{\hat S_0^2} \approx 0.2966(1 - 0.2966) \approx 0.2086.
+\end{aligned}</span></li>
+<li>The estimated increase in turnout is <span class="math inline">8.13</span> percentage points, with a conservative standard error of <span class="math inline">0.27</span> percentage points. <span class="math display">\hat\tau = \ingroupb{0.3779} - \ingroupa{0.2966} \approx 0.0813 \qqtext{and} \mathrm{se} = \sqrt{\frac{\ingroupb{\hat S_1^2}}{m_1} + \frac{\ingroupa{\hat S_0^2}}{m_0}} = \sqrt{\frac{\ingroupb{0.2351}}{38{,}201} + \frac{\ingroupa{0.2086}}{191{,}243}} \approx 0.0027.</span></li>
+<li>Our conservative 95% confidence interval for the average treatment effect is <span class="math inline">[0.0760,\; 0.0866]</span>, or <span class="math inline">7.6</span> to <span class="math inline">8.7</span> percentage points.</li>
+</ul>
+</section></section>
+<section>
+<section id="designing-an-experiment-power-and-allocation" class="title-slide slide level1 center">
+<h1>Designing an Experiment: Power and Allocation</h1>
+
+</section>
+<section id="planning-an-experiment-before-we-run-it" class="slide level2">
+<h2>Planning an Experiment Before We Run It</h2>
+<ul>
+<li>Neyman’s conservative variance has the exact same two-group form we used to design our Georgia survey on Tuesday.</li>
+<li>Suppose we plan to randomize <span class="math inline">m</span> people in total, placing a share <span class="math inline">f = m_1 / m</span> in <span class="groupb">treatment</span> and the remaining share <span class="math inline">1 - f = m_0 / m</span> in <span class="groupa">control</span>.</li>
+<li>Writing <span class="math inline">\ingroupb{\sigma^2(1)}</span> and <span class="math inline">\ingroupa{\sigma^2(0)}</span> for our planned outcome variances in the two arms, we factor total study size <span class="math inline">m</span> out of <span class="math inline">\mathrm{se}^2</span>. <span class="math display">\mathrm{se}^2 = \frac{\ingroupb{\sigma^2(1)}}{fm} + \frac{\ingroupa{\sigma^2(0)}}{(1-f)m} = \frac{g(f)}{m} \qqtext{where} g(f) = \frac{\ingroupb{\sigma^2(1)}}{f} + \frac{\ingroupa{\sigma^2(0)}}{1-f}.</span></li>
+<li>Why do we plan sample size using the conservative variance without <span class="math inline">-S_\tau^2 / m</span>?</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Before running the experiment, we do not know how much <span class="math inline">\tau_j</span> varies from person to person.</li>
+<li>Planning with <span class="math inline">S_\tau^2 = 0</span> guarantees that our study meets its precision target even if the treatment effect is constant, and gives us extra precision if <span class="math inline">S_\tau^2 &gt; 0</span>.</li>
+<li>Just as in Georgia, a two-sided 95% confidence interval has 80% power to detect an <span class="target">alternative effect</span> <span class="math inline">\tau_{\text{alt}}</span> when <span class="math inline">\tau_{\text{alt}}</span> is <span class="math inline">1.96 + 0.84 = 2.80</span> standard errors from zero. <span class="math display">\mathrm{se} \le \frac{|\tau_{\text{alt}}|}{2.80} \qqtext{and therefore} m \ge \frac{g(f)}{\mathrm{se}^2}.</span></li>
+</ul>
+</div>
+</section>
+<section id="exercise-3" class="slide level2 scrollable">
+<h2>Exercise</h2>
+<ul>
+<li><em>Suppose</em> we are planning a follow-up job-training experiment with earnings in thousands of dollars, where we want 80% power at the 95% confidence level (two-sided) to detect an <span class="target">increase of <span class="math inline">1.4</span> thousand dollars</span>.</li>
+<li><strong>Q.</strong> How many participants <span class="math inline">m</span> do we need under an even split (<span class="math inline">f = 0.50</span>), and how many under the optimal split <span class="math inline">f^\star</span>?</li>
+<li><em>Remember</em> that two-sided 80% power for a <span class="math inline">1.4</span> thousand dollar increase means <span class="math inline">\mathrm{se} \le \frac{1.4}{2.80} = 0.50</span>. And this is the <span class="math inline">\mathrm{se}</span>.</li>
+</ul>
+<p><span class="math display">
+\mathrm{se}^2 = \frac{g(f)}{m}
+\qqtext{where}
+g(f) = \frac{\ingroupb{\sigma^2(1)}}{f} + \frac{\ingroupa{\sigma^2(0)}}{1-f}
+\qqtext{and}
+f^\star = \frac{\ingroupb{\sigma(1)}}{\ingroupb{\sigma(1)} + \ingroupa{\sigma(0)}}.
+</span></p>
+<p><span class="math display">
+\begin{aligned}
+f &amp;= \text{the share of participants assigned to job training,} \\
+\ingroupb{\sigma(1)} &amp;= 8 \text{ thousand dollars} &amp; \text{the planned spread of treated earnings, and} \\
+\ingroupa{\sigma(0)} &amp;= 6 \text{ thousand dollars} &amp; \text{the planned spread of control earnings.}
+\end{aligned}
+</span></p>
+<ul>
+<li><em>Tip</em>
+<ol type="1">
+<li>Compute <span class="math inline">g(0.50)</span> and solve <span class="math inline">\frac{g(0.50)}{m} \le 0.50^2</span> for <span class="math inline">m</span>.</li>
+<li>Find <span class="math inline">f^\star</span> and <span class="math inline">g(f^\star)</span>, then solve <span class="math inline">\frac{g(f^\star)}{m} \le 0.50^2</span> for <span class="math inline">m</span>.</li>
+</ol></li>
+</ul>
+</section>
+<section id="solution-3" class="slide level2">
+<h2>Solution</h2>
+
+<img data-src="nsw-precision-nov05_files/figure-revealjs/nsw-allocation-solution-plot-1.svg" style="width:100.0%" class="r-stretch"><ul>
+<li>To hit the precision target <span class="math inline">\mathrm{se} \le 0.50</span> for our <span class="target"><span class="math inline">1.4</span> thousand dollar increase</span> with <span class="math inline">\ingroupb{\sigma(1) = 8}</span> and <span class="math inline">\ingroupa{\sigma(0) = 6}</span>, how many participants <span class="math inline">m</span> do we need under the <span class="pollb">even split</span> (<span class="math inline">f = 0.50</span>) and under the <span class="pollc">optimal split</span> <span class="math inline">f^\star</span>? <span class="math display">m \ge \frac{g(f)}{0.50^2} = \frac{g(f)}{0.25} \qqtext{where} g(f) = \frac{\ingroupb{\sigma^2(1)}}{f} + \frac{\ingroupa{\sigma^2(0)}}{1-f} \qqtext{and} f^\star = \frac{\ingroupb{\sigma(1)}}{\ingroupb{\sigma(1)} + \ingroupa{\sigma(0)}}.</span></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Under an <span class="pollb">even split</span> (<span class="math inline">f = 0.50</span>), we need <span class="math inline">m = 800</span> participants (<span class="math inline">400</span> treated and <span class="math inline">400</span> control). <span class="math display">g(0.50) = \frac{\ingroupb{64}}{0.50} + \frac{\ingroupa{36}}{0.50} = 128 + 72 = 200 \qqtext{so} m \ge \frac{200}{0.25} = 800.</span></li>
+<li>Under the <span class="pollc">optimal split</span>, we assign a larger share to the noisier <span class="groupb">treated group</span> and need <span class="math inline">m = 784</span> participants (<span class="math inline">448</span> treated and <span class="math inline">336</span> control). <span class="math display">f^\star = \frac{\ingroupb{8}}{\ingroupb{8} + \ingroupa{6}} = \frac{8}{14} \approx 0.571 \qqtext{and} g(f^\star) = (\ingroupb{8} + \ingroupa{6})^2 = 196 \qqtext{so} m \ge \frac{196}{0.25} = 784.</span></li>
+<li>Even though <span class="math inline">\ingroupb{\sigma(1) = 8}</span> is a third larger than <span class="math inline">\ingroupa{\sigma(0) = 6}</span>, an even split needs only <span class="math inline">800 - 784 = 16</span> extra people (<span class="math inline">2\%</span>).</li>
+</ul>
+</div>
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="nsw-precision-nov05_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="nsw-precision-nov05_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="nsw-precision-nov05_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="nsw-precision-nov05_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="nsw-precision-nov05_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="nsw-precision-nov05_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="nsw-precision-nov05_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="nsw-precision-nov05_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="nsw-precision-nov05_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': false,
+'previewLinksAuto': false,
+'pdfSeparateFragments': true,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': true,
+ 
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1290,
+
+        height: 1000,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 2.0e-2,
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script type="ojs-module-contents">
+    eyJjb250ZW50cyI6W119
+    </script>
+    <script type="module">
+    if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+    window._ojs.paths.runtimeToDoc = "../../..";
+    window._ojs.paths.runtimeToRoot = "../../../..";
+    window._ojs.paths.docToRoot = "..";
+    window._ojs.selfContained = false;
+    window._ojs.runtime.interpretFromScriptTags();
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const xrefs = window.document.querySelectorAll('a.quarto-xref');
+        const processXRef = (id, note) => {
+          // Strip column container classes
+          const stripColumnClz = (el) => {
+            el.classList.remove("page-full", "page-columns");
+            if (el.children) {
+              for (const child of el.children) {
+                stripColumnClz(child);
+              }
+            }
+          }
+          stripColumnClz(note)
+          if (id === null || id.startsWith('sec-')) {
+            // Special case sections, only their first couple elements
+            const container = document.createElement("div");
+            if (note.children && note.children.length > 2) {
+              container.appendChild(note.children[0].cloneNode(true));
+              for (let i = 1; i < note.children.length; i++) {
+                const child = note.children[i];
+                if (child.tagName === "P" && child.innerText === "") {
+                  continue;
+                } else {
+                  container.appendChild(child.cloneNode(true));
+                  break;
+                }
+              }
+              if (window.Quarto?.typesetMath) {
+                window.Quarto.typesetMath(container);
+              }
+              return container.innerHTML
+            } else {
+              if (window.Quarto?.typesetMath) {
+                window.Quarto.typesetMath(note);
+              }
+              return note.innerHTML;
+            }
+          } else {
+            // Remove any anchor links if they are present
+            const anchorLink = note.querySelector('a.anchorjs-link');
+            if (anchorLink) {
+              anchorLink.remove();
+            }
+            if (window.Quarto?.typesetMath) {
+              window.Quarto.typesetMath(note);
+            }
+            if (note.classList.contains("callout")) {
+              return note.outerHTML;
+            } else {
+              return note.innerHTML;
+            }
+          }
+        }
+        for (var i=0; i<xrefs.length; i++) {
+          const xref = xrefs[i];
+          tippyHover(xref, undefined, function(instance) {
+            instance.disable();
+            let url = xref.getAttribute('href');
+            let hash = undefined; 
+            if (url.startsWith('#')) {
+              hash = url;
+            } else {
+              try { hash = new URL(url).hash; } catch {}
+            }
+            if (hash) {
+              const id = hash.replace(/^#\/?/, "");
+              const note = window.document.getElementById(id);
+              if (note !== null) {
+                try {
+                  const html = processXRef(id, note.cloneNode(true));
+                  instance.setContent(html);
+                } finally {
+                  instance.enable();
+                  instance.show();
+                }
+              } else {
+                // See if we can fetch this
+                fetch(url.split('#')[0])
+                .then(res => res.text())
+                .then(html => {
+                  const parser = new DOMParser();
+                  const htmlDoc = parser.parseFromString(html, "text/html");
+                  const note = htmlDoc.getElementById(id);
+                  if (note !== null) {
+                    const html = processXRef(id, note);
+                    instance.setContent(html);
+                  } 
+                }).finally(() => {
+                  instance.enable();
+                  instance.show();
+                });
+              }
+            } else {
+              // See if we can fetch a full url (with no hash to target)
+              // This is a special case and we should probably do some content thinning / targeting
+              fetch(url)
+              .then(res => res.text())
+              .then(html => {
+                const parser = new DOMParser();
+                const htmlDoc = parser.parseFromString(html, "text/html");
+                const note = htmlDoc.querySelector('main.content');
+                if (note !== null) {
+                  // This should only happen for chapter cross references
+                  // (since there is no id in the URL)
+                  // remove the first header
+                  if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                    note.children[0].remove();
+                  }
+                  const html = processXRef(null, note);
+                  instance.setContent(html);
+                } 
+              }).finally(() => {
+                instance.enable();
+                instance.show();
+              });
+            }
+          }, function(instance) {
+          });
+        }
+            let selectedAnnoteEl;
+            const selectorForAnnotation = ( cell, annotation) => {
+              let cellAttr = 'data-code-cell="' + cell + '"';
+              let lineAttr = 'data-code-annotation="' +  annotation + '"';
+              const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+              return selector;
+            }
+            const selectCodeLines = (annoteEl) => {
+              const doc = window.document;
+              const targetCell = annoteEl.getAttribute("data-target-cell");
+              const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+              const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+              const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+              const lineIds = lines.map((line) => {
+                return targetCell + "-" + line;
+              })
+              let top = null;
+              let height = null;
+              let parent = null;
+              if (lineIds.length > 0) {
+                  //compute the position of the single el (top and bottom and make a div)
+                  const el = window.document.getElementById(lineIds[0]);
+                  top = el.offsetTop;
+                  height = el.offsetHeight;
+                  parent = el.parentElement.parentElement;
+                if (lineIds.length > 1) {
+                  const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+                  const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+                  height = bottom - top;
+                }
+                if (top !== null && height !== null && parent !== null) {
+                  // cook up a div (if necessary) and position it 
+                  let div = window.document.getElementById("code-annotation-line-highlight");
+                  if (div === null) {
+                    div = window.document.createElement("div");
+                    div.setAttribute("id", "code-annotation-line-highlight");
+                    div.style.position = 'absolute';
+                    parent.appendChild(div);
+                  }
+                  div.style.top = top - 2 + "px";
+                  div.style.height = height + 4 + "px";
+                  div.style.left = 0;
+                  let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+                  if (gutterDiv === null) {
+                    gutterDiv = window.document.createElement("div");
+                    gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                    gutterDiv.style.position = 'absolute';
+                    const codeCell = window.document.getElementById(targetCell);
+                    const gutter = codeCell.querySelector('.code-annotation-gutter');
+                    gutter.appendChild(gutterDiv);
+                  }
+                  gutterDiv.style.top = top - 2 + "px";
+                  gutterDiv.style.height = height + 4 + "px";
+                }
+                selectedAnnoteEl = annoteEl;
+              }
+            };
+            const unselectCodeLines = () => {
+              const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+              elementsIds.forEach((elId) => {
+                const div = window.document.getElementById(elId);
+                if (div) {
+                  div.remove();
+                }
+              });
+              selectedAnnoteEl = undefined;
+            };
+              // Handle positioning of the toggle
+          window.addEventListener(
+            "resize",
+            throttle(() => {
+              elRect = undefined;
+              if (selectedAnnoteEl) {
+                selectCodeLines(selectedAnnoteEl);
+              }
+            }, 10)
+          );
+          function throttle(fn, ms) {
+          let throttle = false;
+          let timer;
+            return (...args) => {
+              if(!throttle) { // first call gets through
+                  fn.apply(this, args);
+                  throttle = true;
+              } else { // all the others get throttled
+                  if(timer) clearTimeout(timer); // cancel #2
+                  timer = setTimeout(() => {
+                    fn.apply(this, args);
+                    timer = throttle = false;
+                  }, ms);
+              }
+            };
+          }
+            const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+            for (let i=0; i<annoteTargets.length; i++) {
+              const annoteTarget = annoteTargets[i];
+              const targetCell = annoteTarget.getAttribute("data-target-cell");
+              const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+              const contentFn = () => {
+                const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+                if (content) {
+                  const tipContent = content.cloneNode(true);
+                  tipContent.classList.add("code-annotation-tip-content");
+                  return tipContent.outerHTML;
+                }
+              }
+              const config = {
+                allowHTML: true,
+                content: contentFn,
+                onShow: (instance) => {
+                  selectCodeLines(instance.reference);
+                  instance.reference.classList.add('code-annotation-active');
+                  window.tippy.hideAll();
+                },
+                onHide: (instance) => {
+                  unselectCodeLines();
+                  instance.reference.classList.remove('code-annotation-active');
+                },
+                maxWidth: 300,
+                delay: [50, 0],
+                duration: [200, 0],
+                offset: [5, 10],
+                arrow: true,
+                appendTo: function(el) {
+                  return el.parentElement.parentElement.parentElement;
+                },
+                interactive: true,
+                interactiveBorder: 10,
+                theme: 'light-border',
+                placement: 'right',
+                popperOptions: {
+                  modifiers: [
+                  {
+                    name: 'flip',
+                    options: {
+                      flipVariations: false, // true by default
+                      allowedAutoPlacements: ['right'],
+                      fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                    },
+                  },
+                  {
+                    name: 'preventOverflow',
+                    options: {
+                      mainAxis: false,
+                      altAxis: false
+                    }
+                  }
+                  ]        
+                }      
+              };
+              window.tippy(annoteTarget, config); 
+            }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>

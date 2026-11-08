@@ -1,0 +1,4413 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="Lecture6_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Lecture6_files/libs/quarto-html/tabby.min.js"></script>
+<script src="Lecture6_files/libs/quarto-html/popper.min.js"></script>
+<script src="Lecture6_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="Lecture6_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Lecture6_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="Lecture6_files/libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.38">
+
+  <title>Comparing Two Groups</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Lecture6_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="Lecture6_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; } /* Alert */
+    code span.an { color: #008000; } /* Annotation */
+    code span.at { } /* Attribute */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #0000ff; } /* ControlFlow */
+    code span.ch { color: #008080; } /* Char */
+    code span.cn { } /* Constant */
+    code span.co { color: #008000; } /* Comment */
+    code span.cv { color: #008000; } /* CommentVar */
+    code span.do { color: #008000; } /* Documentation */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.im { } /* Import */
+    code span.in { color: #008000; } /* Information */
+    code span.kw { color: #0000ff; } /* Keyword */
+    code span.op { } /* Operator */
+    code span.ot { color: #ff4000; } /* Other */
+    code span.pp { color: #ff4000; } /* Preprocessor */
+    code span.sc { color: #008080; } /* SpecialChar */
+    code span.ss { color: #008080; } /* SpecialString */
+    code span.st { color: #008080; } /* String */
+    code span.va { } /* Variable */
+    code span.vs { color: #008080; } /* VerbatimString */
+    code span.wa { color: #008000; font-weight: bold; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="Lecture6_files/libs/revealjs/dist/theme/quarto-dadc5e30687f5fea6d7a7b1168a05c4c.css">
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+  <link href="Lecture6_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="Lecture6_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="Lecture6_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="Lecture6_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <link href="Lecture6_files/libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+  <script src="Lecture6_files/libs/pagedtable-1.1/js/pagedtable.js"></script>
+  <script>
+  // GENERATED by bin/generate-katex-macros.mjs from the tlda repo's
+  // shared/katex-base-macros.mjs. Do not edit here -- edit the source and
+  // re-run the generator, or the two copies drift and the book renders
+  // different mathematics from the app.
+  //
+  // Course-side entries below are NOT generated and NOT in the tlda
+  // source: \rmse, \MSE, \class, \texttip, \mathtip, \unicode. Edit them here.
+
+  // Universal KaTeX base macros — given to everybody, superseded by a paper's own
+  // extracted definitions.
+  //
+  // KaTeX has NO `\usepackage` mechanism and ships only a fixed built-in macro set
+  // (plus the mhchem contrib). So commands provided by the LaTeX `physics` package
+  // — \qty, \norm, \abs, \grad, the \q… text helpers, etc. — are unknown to KaTeX
+  // unless we define them. This file is that physics.sty → KaTeX port.
+  //
+  // It contains ONLY commands that live in a package (nothing a paper writes in its
+  // own preamble). Paper-specific macros (\chis, \hgamma, \dzetase, …) come from the
+  // build's `*-macros.json` extraction and override anything here via merge order:
+  //   { ...baseMacros, ...extractedPaperMacros }
+  //
+  // Single source of truth: imported by the browser renderer (src/katexMacros.ts)
+  // and the server-side chat linter (mcp-server/fleet-tools.mjs).
+
+  // Bare is fixed, starred stretches. KaTeX has no \DeclarePairedDelimiter and no
+  // \@ifstar, so the star is read here by peeking at the next token.
+  function pairedDelimiter(open, close) {
+    return (ctx) => {
+      const next = ctx.future()
+      if (next && next.text === "*") {
+        ctx.popToken()
+        return `\\left${open}#1\\right${close}`
+      }
+      return `${open}#1${close}`
+    }
+  }
+
+  // TeX source of a consumed group, spaces intact. Token texts alone lose
+  // whitespace (the lexer skips it); the token offsets recover it exactly.
+  // Falls back to joined texts if the lexer internals ever move.
+  function groupSource(toks) {
+    const first = toks[toks.length - 1];
+    const last = toks[0];
+    const input = first && first.loc && first.loc.lexer && first.loc.lexer.input;
+    if (typeof input === 'string' && first.loc.start != null && last.loc.end != null) {
+      return input.slice(first.loc.start, last.loc.end);
+    }
+    return toks.map((t) => t.text).reverse().join('');
+  }
+
+  // Tip payload encoding for the hover script below. The tip TeX travels
+  // in an htmlData attribute, whose values split on commas and take no
+  // escapes, so raw TeX cannot ride there. Unpadded base64url carries
+  // arbitrary TeX (dollars, commas, braces, backslashes) in [A-Za-z0-9-_].
+  function tipEncode(str) {
+    const bytes = new TextEncoder().encode(str)
+    let bin = ''
+    bytes.forEach((b) => { bin += String.fromCharCode(b) })
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+  }
+
+  // The one trust rule for course math. KaTeX gates its html extension
+  // (\htmlClass, \htmlData, \htmlId, \htmlStyle, \href, \url,
+  // \includegraphics) on this callback; anything it rejects renders as
+  // an unsupported-command error rather than HTML. Only the commands
+  // our own macros emit are admitted, and only in the shapes they emit:
+  // fragment classes, lone data-tip attributes, and data-tip plus a
+  // data-mode of math (the mathtip marker). Strict is untouched.
+  function tldaTrust(ctx) {
+    if (ctx.command === '\\htmlClass') {
+      return typeof ctx.class === 'string' &&
+        ctx.class.split(/\s+/).every((c) => c === 'fragment')
+    }
+    if (ctx.command === '\\htmlData') {
+      const attrs = ctx.attributes || {}
+      const keys = Object.keys(attrs)
+      // Numeric fragment grouping only: exactly that one attribute, digits
+      // only. Deliberately not a general data-* admission.
+      if (keys.length === 1 && keys[0] === 'data-fragment-index') {
+        return /^\d+$/.test(String(attrs['data-fragment-index']))
+      }
+      return keys.length <= 2 &&
+        ('data-tip' in attrs) &&
+        keys.every((k) => k === 'data-tip' || k === 'data-mode') &&
+        (!('data-mode' in attrs) || attrs['data-mode'] === 'math')
+    }
+    return false
+  }
+  window.__tldaKatexMacros = {
+    // physics: text spacers (\q… family)
+    "\\qq": "\\quad\\text{#1}\\quad",
+    // physics spells this one both ways and the long form is the one the course
+    // actually writes -- 358 uses against \qq's handful. It was absent here, so a
+    // course moving to KaTeX would have lost all 358 SILENTLY: an undefined macro
+    // renders as literal text with a clean console. Same expansion as \qq; they
+    // are the same command in physics.
+    "\\qqtext": "\\quad\\text{#1}\\quad",
+    "\\qwhere": "\\quad\\text{where}\\quad",
+    "\\qfor": "\\quad\\text{for}\\quad",
+    "\\qand": "\\quad\\text{and}\\quad",
+    "\\qor": "\\quad\\text{or}\\quad",
+    "\\qthen": "\\quad\\text{then}\\quad",
+    "\\qif": "\\quad\\text{if}\\quad",
+    "\\qelse": "\\quad\\text{else}\\quad",
+    "\\qotherwise": "\\quad\\text{otherwise}\\quad",
+    "\\qgiven": "\\quad\\text{given}\\quad",
+    "\\qall": "\\quad\\text{for all}\\quad",
+    "\\qsince": "\\quad\\text{since}\\quad",
+    "\\qlet": "\\quad\\text{let}\\quad",
+    "\\qimplies": "\\quad\\Rightarrow\\quad",
+    "\\qas": "\\quad\\text{as}\\quad",
+    "\\qc": ",",
+
+    // physics: delimiters & operators
+    // \qty dispatches on its delimiter: \qty(x) → (x), \qty[x] → [x], and
+    // \qty{x} keeps visible braces. The old "" no-op was exact for parens and
+    // brackets but dropped the curlies — 288 such sites in the course, rendering
+    // bare content where physics puts braces. KaTeX binds the following group to
+    // #1 once the expansion names it, so only the curly branch needs one.
+    "\\qty": (ctx) => {
+      const next = ctx.future();
+      if (next && next.text === '{') {
+        return '\\left\\{#1\\right\\}';
+      }
+      return '';
+    },
+    "\\abs": "\\left|#1\\right|",
+    "\\norm": "\\left\\|#1\\right\\|",
+    "\\eval": "\\left.#1\\right|",
+    "\\order": "\\mathcal{O}\\left(#1\\right)",
+    "\\dv": "\\frac{d#1}{d#2}",
+    "\\pdv": "\\frac{\\partial #1}{\\partial #2}",
+    "\\fdv": "\\frac{\\delta #1}{\\delta #2}",
+    "\\bra": "\\left\\langle #1\\right|",
+    "\\ket": "\\left|#1\\right\\rangle",
+    "\\braket": "\\left\\langle #1\\middle|#2\\right\\rangle",
+    "\\expval": "\\left\\langle #1\\right\\rangle",
+    "\\ev": "\\left\\langle #1\\right\\rangle",
+    "\\comm": "\\left[#1,\\,#2\\right]",
+    "\\acomm": "\\left\\{#1,\\,#2\\right\\}",
+    "\\vb": "\\mathbf{#1}",
+    "\\vbu": "\\hat{#1}",
+    "\\grad": "\\nabla",
+    "\\curl": "\\nabla\\times",
+    // physics defines \cross and this port had omitted it, so it would have gone
+    // silently literal at the renderer switch. Found by the used-minus-defined
+    // gate rather than by anyone noticing a formula.
+    "\\cross": "\\times",
+    // Course shorthands that arrive undefined: single-use spellings, each with one
+    // meaning in the tree. Defined here (not edited at the call sites) per the
+    // course owner's call — the call sites render literal-or-red without them,
+    // and these restore the evidently intended mathematics.
+    "\\rmse": "\\operatorname{rmse}",
+    "\\MSE": "\\operatorname{MSE}",
+    // reveal.js fragment wrapper. Emits a real fragment class so reveal
+    // steps the content on decks; in the book the span is inert (no
+    // reveal runtime, no fragment styling) and the content reads as
+    // before. Any other class name falls back to bare content.
+    "\\class": (ctx) => {
+      const args = ctx.consumeArgs(2);
+      const cls = groupSource(args[0]).trim();
+      if (cls === 'fragment') {
+        return '\\htmlClass{fragment}{' + groupSource(args[1]) + '}';
+      }
+      // fragment=N puts both cells of an aligned row in one reveal step:
+      // reveal groups fragments sharing a data-fragment-index. KaTeX emits
+      // htmlClass and htmlData on separate nested spans, so the index is
+      // carried here and the fragment class is added after render, below.
+      const grouped = cls.match(/^fragment=(\d+)$/);
+      if (grouped) {
+        return '\\htmlData{fragment-index=' + grouped[1] + '}{' + groupSource(args[1]) + '}';
+      }
+      ctx.pushTokens(args[1]);
+      return '';
+    },
+    "\\tr": "\\operatorname{Tr}",
+    "\\Tr": "\\operatorname{Tr}",
+    "\\rank": "\\operatorname{rank}",
+    "\\diag": "\\operatorname{diag}",
+    "\\sgn": "\\operatorname{sgn}",
+
+    // The course's \DeclareMathOperator declarations, as plain entries. KaTeX has
+    // no \DeclareMathOperator and fails silently on it -- literal text, no console
+    // error -- so the operators have to live here instead.
+    //
+    // Skip, 2026-09-12: "um just define \E to be \operatorname{E} no? ... like
+    // it's not that hard?" It is not. The alarming 2,577-call-site number came
+    // from costing a TeX-level rewrite, where \newcommand vs \renewcommand is
+    // fragile -- one line changed there killed eight working operators while the
+    // error count went from 1 to 0. Here each declaration is one string and no
+    // call site changes at all.
+    //
+    // \argmin is defined by stock KaTeX; a later key wins, which is what makes
+    // redefining it safe here and was NOT safe in the TeX route.
+    "\\E": "\\operatorname{E}",
+    "\\P": "\\operatorname{P}",
+    "\\V": "\\operatorname{V}",
+    "\\Var": "\\operatorname{V}",
+    "\\Cov": "\\operatorname{Cov}",
+    "\\CATE": "\\operatorname{CATE}",
+    "\\RMSE": "\\operatorname{RMSE}",
+    "\\sd": "\\operatorname{sd}",
+    "\\bias": "\\operatorname{bias}",
+    "\\argmin": "\\operatorname{argmin}",
+    "\\invlogit": "\\operatorname{logit}^{-1}",
+    "\\hVar": "\\widehat{\\operatorname{V}}",
+
+    // Course annotations: \explain{X}{tip} is \overset{\texttip{marker}{tip}}{X}
+    // (and \mathexplain the math-mode twin). The marker renders; the tip
+    // rides encoded in a data-tip attribute (plus a data-mode marker on the
+    // math-mode twin) for the hover script below,
+    // which typesets it with this same KaTeX. Encoding (not parsing)
+    // carries dollars, commas and braces through the attribute intact.
+    "\\texttip": (ctx) => {
+      const args = ctx.consumeArgs(2);
+      return '\\htmlData{tip=' + tipEncode(groupSource(args[1])) + '}{' + groupSource(args[0]) + '}';
+    },
+    "\\mathtip": (ctx) => {
+      const args = ctx.consumeArgs(2);
+      return '\\htmlData{tip=' + tipEncode(groupSource(args[1])) + ',mode=math}{' + groupSource(args[0]) + '}';
+    },
+    // MathJax's [tex]/unicode package. KaTeX has no
+    // \unicode: hex or decimal becomes the character, anything else renders as
+    // text rather than literal backslash-soup. (The course's `r square` /
+    // `r triangle` / `r circle` shapes are not valid \unicode args —
+    // decimal-or-hex only — and the real glyph mapping is a content call, not this.)
+    "\\unicode": (ctx) => {
+      const raw = groupSource(ctx.consumeArgs(1)[0]);
+      const m = raw.match(/^x([0-9a-fA-F]{1,6})$/) || raw.match(/^([0-9]{1,7})$/);
+      if (m) {
+        const cp = parseInt(m[1], m[0][0] === 'x' ? 16 : 10);
+        if (cp <= 0x10ffff) {
+          return String.fromCodePoint(cp);
+        }
+      }
+      return `\\text{${raw}}`;
+    },
+
+    // Paired delimiters. Skip, 2026-09-12: "i said \p \cb \sb".
+    //
+    // Bare is fixed, starred stretches -- he uses * for tacit \left\right
+    // consistently. KaTeX has no \DeclarePairedDelimiter and no \@ifstar, so the
+    // star is read by a function macro peeking at the next token. Verified
+    // against KaTeX 0.16.47, including the counterfactual that a BARE macro on
+    // tall content stays fixed, so the check is not merely detecting \frac.
+    "\\p": pairedDelimiter("(", ")"),
+    "\\sb": pairedDelimiter("[", "]"),
+    "\\cb": pairedDelimiter("\\{", "\\}"),
+  }
+  </script>
+  <script>
+  // Give KaTeX the course's macro set.
+  //
+  // pandoc emits its own render loop and hardcodes `var macros = []` inside it --
+  // function-scoped, unreachable from config, and there is no Quarto option that
+  // reaches it either. Quarto's own re-render helper (window.Quarto.typesetMath)
+  // hardcodes the same empty array. So the macros cannot be delivered by
+  // configuration on the plain-HTML path; the only seam is katex.render itself,
+  // which both of those call.
+  //
+  // This wraps it. The capture listener below fires before pandoc's
+  // document-level bubble listener even when registered later; katex.min.js
+  // is deferred, so by DOMContentLoaded it has executed and window.katex exists.
+  //
+  // Deliberately does NOT override a caller that supplied its own non-empty macros
+  // object -- that is somebody meaning something specific, and this is a default.
+  // Trust gets the same treatment: a supplied value wins, otherwise
+  // the course allowlist above. Strict is untouched.
+  (function () {
+    function install() {
+      if (!window.katex || !window.katex.render || window.__tldaKatexShimmed) return
+      var base = window.__tldaKatexMacros
+      if (!base) { console.error('[tlda] katex macro set missing; math will render without it'); return }
+      var inner = window.katex.render.bind(window.katex)
+      // One shared object, because KaTeX writes \def definitions back into it and
+      // they are expected to persist across calls within a page.
+      var shared = {}
+      for (var k in base) shared[k] = base[k]
+      window.katex.render = function (tex, el, opts) {
+        opts = opts || {}
+        if (!opts.macros || Object.keys(opts.macros).length === 0) opts.macros = shared
+        if (opts.trust == null) opts.trust = tldaTrust
+        const out = inner(tex, el, opts)
+        // Reveal reads data-fragment-index from the .fragment node itself,
+        // and KaTeX cannot put the class and the index on one span, so the
+        // class is added here -- scoped to the element just rendered.
+        if (el && el.querySelectorAll) {
+          el.querySelectorAll('[data-fragment-index]').forEach(function (n) {
+            if (/^\d+$/.test(n.getAttribute('data-fragment-index') || '')) n.classList.add('fragment')
+          })
+        }
+        return out
+      }
+      window.__tldaKatexShimmed = true
+    }
+    // Capture fires before pandoc's document-level bubble listener;
+    // immediate call if the document is already parsed.
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, true)
+    else install()
+  })()
+  </script>
+  <style>
+  /* Explanation hover tips (see the script below). No visual change to
+     the equation itself besides the help cursor on the marker. */
+  [data-tip] { cursor: help; position: relative; z-index: 1; }
+  #tlda-tip {
+    position: fixed; z-index: 60; display: none; max-width: min(34em, 90vw);
+    background: #fff; color: #222; border: 1px solid #888; border-radius: 6px;
+    padding: .5em .7em; box-shadow: 0 4px 18px rgba(0,0,0,.25);
+    font-size: .85rem; line-height: 1.35; pointer-events: none;
+  }
+  #tlda-tip.on { display: block; }
+  .tlda-tip-err { color: #c00; font-weight: bold; }
+  /* DO NOT CHANGE — SLIDE UNCLIPPING INVARIANT:
+     Never clip slide sections or scroll-page containers vertically;
+     slides must expand to their natural height without inner scrollbars,
+     and r-stack children must share top margin 0 so overlays align. */
+  .reveal-scroll .scroll-page,
+  .reveal-scroll .scroll-page-sticky,
+  .reveal-scroll .scroll-page-content,
+  .reveal .slides section,
+  .reveal .slides section.scrollable {
+    overflow: visible !important;
+    max-height: none !important;
+    contain: none !important;
+  }
+  .reveal .r-stack > * {
+    margin-top: 0 !important;
+  }
+  </style>
+  <script>
+  // Explanation hovers. Marker spans carry the tip as encoded TeX in
+  // data-tip (see \texttip above); this typesets it with the page KaTeX
+  // on hover. Delegated listeners: no per-element binding, survives math
+  // re-renders. Markers inside unrevealed fragments are skipped.
+  (function () {
+    function markerOf(node) {
+      while (node && node !== document) {
+        if (node.getAttribute && node.getAttribute('data-tip') != null) return node
+        node = node.parentNode
+      }
+      return null
+    }
+    // Hidden markers never open: display:none ancestors (non-current slides)
+    // anywhere, plus any unrevealed ancestor fragment up to the reveal root —
+    // a visible inner fragment beneath a hidden outer stays hidden. The
+    // fragment walk runs only inside a reveal deck (book fragment spans never
+    // gain .visible, so it is deck-only there).
+    function isHidden(marker) {
+      if (marker.getClientRects().length === 0) return true
+      if (marker.closest && marker.closest('.reveal')) {
+        let node = marker.parentNode
+        while (node && node !== document) {
+          if (node.classList && node.classList.contains('reveal')) break
+          if (node.classList && node.classList.contains('fragment') && !node.classList.contains('visible')) return true
+          node = node.parentNode
+        }
+      }
+      return false
+    }
+    function tipDecode(s) {
+      const b64 = s.replace(/-/g, '+').replace(/_/g, '/')
+      const bin = atob(b64)
+      const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0))
+      return new TextDecoder().decode(bytes)
+    }
+    function errSpan(text, detail) {
+      const err = document.createElement('span')
+      err.className = 'tlda-tip-err'
+      err.textContent = text
+      err.title = String(detail)
+      return err
+    }
+    // Mixed mode (texttip): text with $...$ math. Math mode (mathtip): the
+    // whole tip is math. Failed math shows an explicit error naming the
+    // failure; it never substitutes raw TeX silently.
+    function renderTip(tex, mode, box) {
+      box.textContent = ''
+      if (mode === 'math') {
+        const s = document.createElement('span')
+        box.appendChild(s)
+        try { window.katex.render(tex, s, {}) }
+        catch (e) { s.appendChild(errSpan('(math error)', (e && e.message) || e)) }
+        return
+      }
+      const parts = tex.split(/(?<!\\)\$/)
+      parts.forEach((seg, i) => {
+        if (seg === '') return
+        if (i % 2 === 1) {
+          const s = document.createElement('span')
+          box.appendChild(s)
+          try { window.katex.render(seg, s, {}) }
+          catch (e) { s.appendChild(errSpan('(math error)', (e && e.message) || e)) }
+        } else {
+          box.appendChild(document.createTextNode(seg))
+        }
+      })
+    }
+    var box = null
+    var current = null
+    function open(marker) {
+      if (!window.katex) return
+      if (isHidden(marker)) { close(); return }
+      const payload = marker.getAttribute('data-tip')
+      if (!payload) return
+      if (box && box.classList.contains('on') && current === marker) return
+      if (!box) {
+        box = document.createElement('div')
+        box.id = 'tlda-tip'
+        document.body.appendChild(box)
+      }
+      current = marker
+      try {
+        renderTip(tipDecode(payload), marker.getAttribute('data-mode'), box)
+      } catch (e) {
+        box.textContent = ''
+        box.appendChild(errSpan('(tip error)', (e && e.message) || e))
+      }
+      var r = marker.getBoundingClientRect()
+      box.classList.add('on')
+      var bw = box.offsetWidth, bh = box.offsetHeight
+      var x = Math.min(Math.max(8, r.left + r.width / 2 - bw / 2), window.innerWidth - bw - 8)
+      var y = r.top - bh - 10
+      if (y < 8) y = r.bottom + 10
+      box.style.left = x + 'px'
+      box.style.top = y + 'px'
+    }
+    function close() {
+      current = null
+      if (box) box.classList.remove('on')
+    }
+    document.addEventListener('mouseover', (e) => {
+      const m = markerOf(e.target)
+      if (m) open(m); else close()
+    })
+    document.addEventListener('mouseout', (e) => {
+      const m = markerOf(e.target)
+      if (m && !(e.relatedTarget && m.contains(e.relatedTarget))) close()
+    })
+    // Touch: a tap opens (and stays until tap elsewhere, scroll, or slide).
+    document.addEventListener('click', (e) => {
+      const m = markerOf(e.target)
+      if (m) open(m); else close()
+    })
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close() })
+    window.addEventListener('scroll', close, true)
+    window.addEventListener('resize', close)
+    // Reveal (a body-end synchronous script) exists by DOMContentLoaded, so
+    // the slide/fragment dismissal binds there rather than at parse time.
+    function bindReveal() {
+      if (!window.Reveal || !Reveal.on) return
+      Reveal.on('slidechanged', close)
+      Reveal.on('fragmenthidden', () => { if (current && isHidden(current)) close() })
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindReveal)
+    else bindReveal()
+  })()
+
+  </script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Comparing Two Groups</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section>
+<section id="examples-and-introduction" class="title-slide slide level1 center">
+<h1>Examples and Introduction</h1>
+
+</section>
+<section id="black-vs.-non-black-voters-in-ga" class="slide level2">
+<h2><span class="groupb">Black</span> vs.&nbsp;<span class="groupa">non-Black</span> Voters in GA</h2>
+<div class="hidden">
+<p>$$ \newcommand{X}{} \newcommand{Y}{} % A hex digit after # inside a macro body is eaten by build-time expansion, so digit-leading hexes spell # via . </p>
+<p>$$</p>
+</div>
+
+<img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-2-1.svg" class="r-stretch"><p><span class="math display">
+\small{
+\begin{array}{r|rr|rr|r|rr|rrrrr}
+\text{call} &amp;  1  &amp; &amp; 2  &amp; &amp; \dots &amp; 625  &amp; &amp; &amp; &amp; &amp; &amp; \\
+\text{question}  &amp; X_1 &amp; Y_1 &amp;  X_2 &amp; Y_2 &amp; \dots &amp;  X_{625} &amp; Y_{625} &amp; \overline{X}_{625} &amp; \overline{Y}_{625} &amp;\frac{\sum_{i:X_i=0} Y_i}{\sum_{i:X_i=0} 1} &amp; \frac{\sum_{i:X_i=1} Y_i}{\sum_{i:X_i=1} 1} &amp; \text{difference} \\
+\text{outcome}    &amp;  \underset{\textcolor{gray}{x_{869369}}}{\textcolor{#F8766D}{0}} &amp; \underset{\textcolor{gray}{y_{869369}}}{\textcolor{#F8766D}{1}}
+                  &amp; \underset{\textcolor{gray}{x_{4428455}}}{\textcolor{#00BFC4}{1}} &amp; \underset{\textcolor{gray}{y_{4428455}}}{\textcolor{#00BFC4}{1}}
+                  &amp; \dots
+                  &amp; \underset{\textcolor{gray}{x_{1268868}}}{\textcolor{#F8766D}{0}} &amp; \underset{\textcolor{gray}{y_{1268868}}}{\textcolor{#F8766D}{1}}
+                  &amp; 0.28 &amp; 0.68 &amp; \textcolor{#F8766D}{0.68} &amp; \textcolor{#00BFC4}{0.69}
+                  &amp; 0.01 \\
+\end{array}
+}
+</span></p>
+</section>
+<section id="recipients-of-threatening-letters-vs.-others-in-mi" class="slide level2">
+<h2><span class="groupb">Recipients of Threatening Letters</span> vs.&nbsp;<span class="groupa">Others</span> in MI</h2>
+
+<img data-src="Lecture6_files/figure-revealjs/fig-social-pressure-1.svg" id="fig-social-pressure" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;1
+</p><ul>
+<li>The green dots are people who received a letter pressuring them to vote. <a href="#/fig-social-pressure-letter" class="quarto-xref">Figure&nbsp;2</a>.</li>
+<li>The red dots are people who didn’t.</li>
+</ul>
+</section>
+<section id="residents-with-vs.-without-4-year-degrees-in-ca" class="slide level2">
+<h2><span class="groupb">Residents With</span> vs.&nbsp;<span class="groupa">Without</span> 4-Year Degrees in CA</h2>
+<div class="columns">
+<div class="column">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/map-sample-1.svg"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column">
+<div class="cell">
+<div class="cell-output-display">
+<div id="juklevjobs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#juklevjobs table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#juklevjobs thead, #juklevjobs tbody, #juklevjobs tfoot, #juklevjobs tr, #juklevjobs td, #juklevjobs th {
+  border-style: none;
+}
+
+#juklevjobs p {
+  margin: 0;
+  padding: 0;
+}
+
+#juklevjobs .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#juklevjobs .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#juklevjobs .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#juklevjobs .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#juklevjobs .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#juklevjobs .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#juklevjobs .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#juklevjobs .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#juklevjobs .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#juklevjobs .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#juklevjobs .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#juklevjobs .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#juklevjobs .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#juklevjobs .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#juklevjobs .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#juklevjobs .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#juklevjobs .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#juklevjobs .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#juklevjobs .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#juklevjobs .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#juklevjobs .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#juklevjobs .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#juklevjobs .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#juklevjobs .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#juklevjobs .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#juklevjobs .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#juklevjobs .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#juklevjobs .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#juklevjobs .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#juklevjobs .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#juklevjobs .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#juklevjobs .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#juklevjobs .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#juklevjobs .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#juklevjobs .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#juklevjobs .gt_left {
+  text-align: left;
+}
+
+#juklevjobs .gt_center {
+  text-align: center;
+}
+
+#juklevjobs .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#juklevjobs .gt_font_normal {
+  font-weight: normal;
+}
+
+#juklevjobs .gt_font_bold {
+  font-weight: bold;
+}
+
+#juklevjobs .gt_font_italic {
+  font-style: italic;
+}
+
+#juklevjobs .gt_super {
+  font-size: 65%;
+}
+
+#juklevjobs .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#juklevjobs .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#juklevjobs .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#juklevjobs .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#juklevjobs .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#juklevjobs .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#juklevjobs .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#juklevjobs .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#juklevjobs div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="a::stub" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"></th>
+<th id="income" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">income</th>
+<th id="education" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">education</th>
+<th id="county" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">county</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<th id="stub_1_1" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">1</th>
+<td class="gt_row gt_left" headers="stub_1_1 income" style="background-color: #00BFC4">$266k</td>
+<td class="gt_row gt_right" headers="stub_1_1 education" style="background-color: #00BFC4">16</td>
+<td class="gt_row gt_left" headers="stub_1_1 county" style="background-color: #00BFC4">LA</td>
+</tr>
+<tr class="even">
+<th id="stub_1_2" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">2</th>
+<td class="gt_row gt_left" headers="stub_1_2 income" style="background-color: #F8766D">$51k</td>
+<td class="gt_row gt_right" headers="stub_1_2 education" style="background-color: #F8766D">13</td>
+<td class="gt_row gt_left" headers="stub_1_2 county" style="background-color: #F8766D">san joaquin</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_3" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">3</th>
+<td class="gt_row gt_left" headers="stub_1_3 income" style="background-color: #00BFC4">$0k</td>
+<td class="gt_row gt_right" headers="stub_1_3 education" style="background-color: #00BFC4">16</td>
+<td class="gt_row gt_left" headers="stub_1_3 county" style="background-color: #00BFC4">orange</td>
+</tr>
+<tr class="even">
+<th id="stub_1_4" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">4</th>
+<td class="gt_row gt_left" headers="stub_1_4 income" style="background-color: #00BFC4">$53k</td>
+<td class="gt_row gt_right" headers="stub_1_4 education" style="background-color: #00BFC4">20</td>
+<td class="gt_row gt_left" headers="stub_1_4 county" style="background-color: #00BFC4">san diego</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_5" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">⋮</th>
+<td class="gt_row gt_left" headers="stub_1_5 income">NA</td>
+<td class="gt_row gt_right" headers="stub_1_5 education">NA</td>
+<td class="gt_row gt_left" headers="stub_1_5 county">NA</td>
+</tr>
+<tr class="even">
+<th id="stub_1_6" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">2271</th>
+<td class="gt_row gt_left" headers="stub_1_6 income" style="background-color: #00BFC4">$45k</td>
+<td class="gt_row gt_right" headers="stub_1_6 education" style="background-color: #00BFC4">16</td>
+<td class="gt_row gt_left" headers="stub_1_6 county" style="background-color: #00BFC4">LA</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div></div>
+<ul>
+<li>In these examples, our sample was drawn with replacement from some population. Or we’re pretending it was.</li>
+<li>In this one, it’s the population of all California residents between 25 and 35 with at least an 8th grade education.</li>
+</ul>
+
+<aside><div>
+<p>The locations shown on the map are made up. They’re not the actual locations of the people in the sample.<br>
+The survey includes some location information for some people, but as you can see in the table, not for everyone.</p>
+</div></aside></section>
+<section id="section" class="slide level2">
+<h2></h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-5-1.svg"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-5-2.svg"></p>
+</div>
+</div>
+</div>
+<div class="columns">
+<div class="column">
+<h3 id="population">Population</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div id="gaurkckyhr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gaurkckyhr table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#gaurkckyhr thead, #gaurkckyhr tbody, #gaurkckyhr tfoot, #gaurkckyhr tr, #gaurkckyhr td, #gaurkckyhr th {
+  border-style: none;
+}
+
+#gaurkckyhr p {
+  margin: 0;
+  padding: 0;
+}
+
+#gaurkckyhr .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#gaurkckyhr .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#gaurkckyhr .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#gaurkckyhr .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#gaurkckyhr .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#gaurkckyhr .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gaurkckyhr .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#gaurkckyhr .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#gaurkckyhr .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#gaurkckyhr .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#gaurkckyhr .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#gaurkckyhr .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#gaurkckyhr .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#gaurkckyhr .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#gaurkckyhr .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#gaurkckyhr .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#gaurkckyhr .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#gaurkckyhr .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#gaurkckyhr .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gaurkckyhr .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#gaurkckyhr .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#gaurkckyhr .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#gaurkckyhr .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gaurkckyhr .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#gaurkckyhr .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#gaurkckyhr .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gaurkckyhr .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gaurkckyhr .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#gaurkckyhr .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gaurkckyhr .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#gaurkckyhr .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gaurkckyhr .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#gaurkckyhr .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gaurkckyhr .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#gaurkckyhr .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gaurkckyhr .gt_left {
+  text-align: left;
+}
+
+#gaurkckyhr .gt_center {
+  text-align: center;
+}
+
+#gaurkckyhr .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#gaurkckyhr .gt_font_normal {
+  font-weight: normal;
+}
+
+#gaurkckyhr .gt_font_bold {
+  font-weight: bold;
+}
+
+#gaurkckyhr .gt_font_italic {
+  font-style: italic;
+}
+
+#gaurkckyhr .gt_super {
+  font-size: 65%;
+}
+
+#gaurkckyhr .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#gaurkckyhr .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#gaurkckyhr .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#gaurkckyhr .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#gaurkckyhr .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#gaurkckyhr .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#gaurkckyhr .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#gaurkckyhr .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#gaurkckyhr div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="a::stub" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"></th>
+<th id="income" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">income</th>
+<th id="education" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">education</th>
+<th id="county" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">county</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<th id="stub_1_1" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">1</th>
+<td class="gt_row gt_left" headers="stub_1_1 income" style="background-color: #00BFC4">$50k</td>
+<td class="gt_row gt_right" headers="stub_1_1 education" style="background-color: #00BFC4">16</td>
+<td class="gt_row gt_left" headers="stub_1_1 county" style="background-color: #00BFC4">LA</td>
+</tr>
+<tr class="even">
+<th id="stub_1_2" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">2</th>
+<td class="gt_row gt_left" headers="stub_1_2 income" style="background-color: #F8766D">$31k</td>
+<td class="gt_row gt_right" headers="stub_1_2 education" style="background-color: #F8766D">12</td>
+<td class="gt_row gt_left" headers="stub_1_2 county" style="background-color: #F8766D">unknown</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_3" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">3</th>
+<td class="gt_row gt_left" headers="stub_1_3 income" style="background-color: #00BFC4">$44k</td>
+<td class="gt_row gt_right" headers="stub_1_3 education" style="background-color: #00BFC4">16</td>
+<td class="gt_row gt_left" headers="stub_1_3 county" style="background-color: #00BFC4">LA</td>
+</tr>
+<tr class="even">
+<th id="stub_1_4" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">⋮</th>
+<td class="gt_row gt_left" headers="stub_1_4 income">NA</td>
+<td class="gt_row gt_right" headers="stub_1_4 education">NA</td>
+<td class="gt_row gt_left" headers="stub_1_4 county">NA</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_5" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">5677500</th>
+<td class="gt_row gt_left" headers="stub_1_5 income" style="background-color: #F8766D">$173k</td>
+<td class="gt_row gt_right" headers="stub_1_5 education" style="background-color: #F8766D">12</td>
+<td class="gt_row gt_left" headers="stub_1_5 county" style="background-color: #F8766D">orange</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div><div class="column">
+<h3 id="sample">Sample</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div id="cfunkdkxho" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#cfunkdkxho table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#cfunkdkxho thead, #cfunkdkxho tbody, #cfunkdkxho tfoot, #cfunkdkxho tr, #cfunkdkxho td, #cfunkdkxho th {
+  border-style: none;
+}
+
+#cfunkdkxho p {
+  margin: 0;
+  padding: 0;
+}
+
+#cfunkdkxho .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#cfunkdkxho .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#cfunkdkxho .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#cfunkdkxho .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#cfunkdkxho .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#cfunkdkxho .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cfunkdkxho .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#cfunkdkxho .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#cfunkdkxho .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#cfunkdkxho .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#cfunkdkxho .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#cfunkdkxho .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#cfunkdkxho .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#cfunkdkxho .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#cfunkdkxho .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#cfunkdkxho .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#cfunkdkxho .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#cfunkdkxho .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#cfunkdkxho .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cfunkdkxho .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#cfunkdkxho .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#cfunkdkxho .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#cfunkdkxho .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cfunkdkxho .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#cfunkdkxho .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#cfunkdkxho .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cfunkdkxho .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cfunkdkxho .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#cfunkdkxho .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cfunkdkxho .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#cfunkdkxho .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cfunkdkxho .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#cfunkdkxho .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cfunkdkxho .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#cfunkdkxho .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cfunkdkxho .gt_left {
+  text-align: left;
+}
+
+#cfunkdkxho .gt_center {
+  text-align: center;
+}
+
+#cfunkdkxho .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#cfunkdkxho .gt_font_normal {
+  font-weight: normal;
+}
+
+#cfunkdkxho .gt_font_bold {
+  font-weight: bold;
+}
+
+#cfunkdkxho .gt_font_italic {
+  font-style: italic;
+}
+
+#cfunkdkxho .gt_super {
+  font-size: 65%;
+}
+
+#cfunkdkxho .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#cfunkdkxho .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#cfunkdkxho .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#cfunkdkxho .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#cfunkdkxho .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#cfunkdkxho .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#cfunkdkxho .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#cfunkdkxho .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#cfunkdkxho div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="a::stub" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"></th>
+<th id="income" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">income</th>
+<th id="education" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">education</th>
+<th id="county" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">county</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<th id="stub_1_1" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">1</th>
+<td class="gt_row gt_left" headers="stub_1_1 income" style="background-color: #00BFC4">$266k</td>
+<td class="gt_row gt_right" headers="stub_1_1 education" style="background-color: #00BFC4">16</td>
+<td class="gt_row gt_left" headers="stub_1_1 county" style="background-color: #00BFC4">LA</td>
+</tr>
+<tr class="even">
+<th id="stub_1_2" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">2</th>
+<td class="gt_row gt_left" headers="stub_1_2 income" style="background-color: #F8766D">$51k</td>
+<td class="gt_row gt_right" headers="stub_1_2 education" style="background-color: #F8766D">13</td>
+<td class="gt_row gt_left" headers="stub_1_2 county" style="background-color: #F8766D">san joaquin</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_3" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">3</th>
+<td class="gt_row gt_left" headers="stub_1_3 income" style="background-color: #00BFC4">$0k</td>
+<td class="gt_row gt_right" headers="stub_1_3 education" style="background-color: #00BFC4">16</td>
+<td class="gt_row gt_left" headers="stub_1_3 county" style="background-color: #00BFC4">orange</td>
+</tr>
+<tr class="even">
+<th id="stub_1_4" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">⋮</th>
+<td class="gt_row gt_left" headers="stub_1_4 income">NA</td>
+<td class="gt_row gt_right" headers="stub_1_4 education">NA</td>
+<td class="gt_row gt_left" headers="stub_1_4 county">NA</td>
+</tr>
+<tr class="odd">
+<th id="stub_1_5" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row">2271</th>
+<td class="gt_row gt_left" headers="stub_1_5 income" style="background-color: #00BFC4">$45k</td>
+<td class="gt_row gt_right" headers="stub_1_5 education" style="background-color: #00BFC4">16</td>
+<td class="gt_row gt_left" headers="stub_1_5 county" style="background-color: #00BFC4">LA</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div></div>
+<p>For illustration, I’ve made up a fake population that looks like a bigger version of the sample.</p>
+</section>
+<section id="our-estimator-and-target" class="slide level2">
+<h2>Our Estimator and Target</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-8-1.svg"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-8-2.svg"></p>
+</div>
+</div>
+</div>
+<div class="columns">
+<div class="column">
+<h3 id="estimation-target">Estimation Target</h3>
+<p><span class="math display">
+\begin{aligned}
+\mu(1) - \mu(0) \qfor \mu(x)
+&amp;= \frac{1}{m_x}\sum_{j:x_j = x } y_j \\
+\qqtext{ where } \quad m_x &amp;= \sum_{j:x_j=x} 1
+\end{aligned}
+</span></p>
+</div><div class="column">
+<h3 id="estimator">Estimator</h3>
+<p><span class="math display">
+\begin{aligned}
+\hat\mu(1) - \hat\mu(0)
+\qfor \hat\mu(x) &amp;= \frac{1}{N_x}\sum_{i:X_i=x} Y_i \\
+\qqtext{ where } \quad N_x &amp;= \sum_{i:X_i=x} 1.
+\end{aligned}
+</span></p>
+</div></div>
+</section>
+<section id="is-this-estimator-good" class="slide level2">
+<h2>Is This Estimator Good?</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-10-1.svg"></p>
+<figcaption>An Unbiased Estimator’s Sampling Distribution</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-10-2.svg"></p>
+<figcaption>A Biased Estimator’s Sampling Distribution</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<ul>
+<li>We want to know about our estimator’s …
+<ul>
+<li>bias. That’s the location of the sampling distribution relative to the <span class="target">estimation target</span>.</li>
+<li>standard deviation. Roughly speaking, that determines the width of our 95% confidence intervals.</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="probability-review" class="title-slide slide level1 center">
+<h1>Probability Review</h1>
+
+</section>
+<section id="population-means-and-variances-as-expectations" class="slide level2">
+<h2>Population Means and Variances as Expectations</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-11-1.svg"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-11-2.svg"></p>
+</div>
+</div>
+</div>
+<ul>
+<li>If a random variable <span class="math inline">Y</span> is <em>equally likely</em> to be any member of a population <span class="math inline">y_1 \ldots y_m</span>, …</li>
+<li>… then its expectation is the population mean <span class="math inline">\mu=\frac{1}{m}\sum_{j=1}^m y_j</span>.</li>
+<li>… and its variance is the population variance <span class="math inline">\sigma^2 = \frac{1}{m}\sum_{j=1}^m (y_j - \mu)^2</span>.</li>
+<li><em>Terminology.</em> When each of our observations <span class="math inline">Y_i</span> is like this, we’re <em>sampling uniformly-at-random</em>.</li>
+</ul>
+<p><span class="math display">
+\begin{aligned}
+\mathop{\mathrm{E}}[Y]
+&amp;= \sum_{j=1}^m \underset{\text{response}}{y_j} \times \underset{\text{probability}}{\frac{1}{m}} = \frac{1}{m}\sum_{j=1}^m y_j = \mu \\
+\mathop{\mathrm{E}}[(Y-\mathop{\mathrm{E}}[Y])^2]  
+&amp;= \sum_{j=1}^m \underset{\text{deviation}^2}{(y_j - \mu)^2} \times \underset{\text{probability}}{\frac{1}{m}} = \frac{1}{m}\sum_{j=1}^m (y_j - \mu)^2 = \sigma^2
+\end{aligned}
+</span></p>
+</section>
+<section id="subpopulations-and-conditioning" class="slide level2">
+<h2>Subpopulations and Conditioning</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-12-1.svg"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-12-2.svg"></p>
+</div>
+</div>
+</div>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Conditioning</a></li><li><a href="#tabset-1-2">Conditional Probability</a></li><li><a href="#tabset-1-3">Conditional Expectation</a></li><li><a href="#tabset-1-4">Conditional Variance</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<ul>
+<li><strong>Conditioning</strong> is, in effect, a way of thinking about sampling as a two-stage process.
+<ul>
+<li>First, we choose the color of our dot, i.e., the value of <span class="math inline">X_i</span>, according to it frequency in the population.</li>
+<li>Then, we choose a specific one of those dots, i.e.&nbsp;<span class="math inline">J_i</span>, from those with that color—with equal probability.</li>
+</ul></li>
+<li>Because this is just a way of thinking, each person still gets chosen with probability <span class="math inline">1/m</span>.</li>
+</ul>
+<p><span class="math display">
+\begin{aligned}
+P(J_i=j) =
+\begin{cases}
+   \frac{m_{green}}{m} \ \times \frac{1}{m_{green}}  \ = \ \frac{1}{m} &amp; \text{if the $j$th dot is green  ($x_j=1$) } \\
+    \frac{m_{red}}{m} \ \times \frac{1}{m_{red}}  \  = \ \frac{1}{m} &amp; \text{otherwise}
+\end{cases}
+\end{aligned}
+</span></p>
+<ul>
+<li>The first stage is ‘a coin flip’ that decides whether we roll the ‘red die’ or the ‘green die’ in the second.</li>
+</ul>
+</div>
+<div id="tabset-1-2">
+<ul>
+<li>The <strong>Conditional Probability</strong> of <span class="math inline">Y_i</span> is the probability resulting from the second stage.
+<ul>
+<li><span class="math inline">P(Y_i=y \mid X_i=1)</span> is the probability distribution of <span class="math inline">Y_i</span> when we’re ‘rolling the green die’.</li>
+<li><span class="math inline">P(Y_i=y \mid X_i=0)</span> is the probability distribution of <span class="math inline">Y_i</span> when we’re ‘rolling the red die’.</li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-1-3">
+<ul>
+<li>The <strong>Conditional Expectation</strong> of <span class="math inline">Y_i</span> is the ‘second stage expected value’ in the same sense.
+<ul>
+<li><span class="math inline">\mathop{\mathrm{E}}[Y_i \mid X_i=1]</span> is the expected value of <span class="math inline">Y_i</span> when we’re ‘rolling the green die’.</li>
+<li>It’s the mean value <span class="math inline">\mu(1)</span> of <span class="math inline">y_j</span> in the subpopulation drawn as little green dots.</li>
+<li><span class="math inline">\mathop{\mathrm{E}}[Y_i \mid X_i=0]</span> is the expected value of <span class="math inline">Y_i</span> when we’re ‘rolling the red die’.</li>
+<li>It’s the mean value <span class="math inline">\mu(0)</span> of <span class="math inline">y_j</span> in the subpopulation drawn as little red dots.</li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-1-4">
+<ul>
+<li>The <strong>Conditional Variance</strong> of <span class="math inline">Y_i</span> is like this too. It’s the ‘second stage variance.’
+<ul>
+<li><span class="math inline">\mathop{\mathrm{\mathop{\mathrm{V}}}}[Y_i \mid X_i=1]</span> is the variance of <span class="math inline">Y_i</span> when we’re ‘rolling the green die’.</li>
+<li>It’s the variance <span class="math inline">\sigma^2(1)</span> of <span class="math inline">y_j</span> in the subpopulation drawn as little green dots.</li>
+<li><span class="math inline">\mathop{\mathrm{\mathop{\mathrm{V}}}}[Y_i \mid X_i=0]</span> is the variance of <span class="math inline">Y_i</span> when we’re ‘rolling the red die’.</li>
+<li>It’s the variance <span class="math inline">\sigma^2(0)</span> of <span class="math inline">y_j</span> in the subpopulation drawn as little red dots.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="about-conditional-expectations-and-variances" class="slide level2 scrollable">
+<h2>About Conditional Expectations and Variances</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-13-1.svg"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-13-2.svg"></p>
+</div>
+</div>
+</div>
+<div class="panel-tabset">
+<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Conditional Expectations</a></li><li><a href="#tabset-2-2">Conditional Variance</a></li><li><a href="#tabset-2-3">Conditional Variance as a Conditional Expectation</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1">
+<ol type="1">
+<li>The <strong>conditional expectation function</strong> <span class="math inline">\mu(x)=E[Y \mid X=x]</span>.
+<ul>
+<li><span class="math inline">\mu</span> is a function; evaluated at <span class="math inline">x</span>, it’s a number. It’s not random.</li>
+<li>It’s the mean of the subpopulation of people with <span class="math inline">X=x</span>.</li>
+</ul></li>
+<li>The conditional expectation <span class="math inline">\mu(X)=E[Y \mid X]</span>.
+<ul>
+<li><span class="math inline">\mu(X)</span> is the mean of a <strong>random subpopulation</strong> of people.</li>
+<li>It’s the conditional expectation function <strong>evaluated at</strong> the random variable <span class="math inline">X</span>.</li>
+</ul></li>
+</ol>
+</div>
+<div id="tabset-2-2">
+<ol type="1">
+<li>The <strong>conditional variance function</strong> <span class="math inline">\sigma^2(x)=E[\{Y - \mu(x)\}^2 \mid X=x]</span>.
+<ul>
+<li><span class="math inline">\sigma^2</span> is a function; evaluated at <span class="math inline">x</span>, it’s a number. It’s not random.</li>
+<li>It’s the variance of the subpopulation of people with <span class="math inline">X=x</span>.</li>
+</ul></li>
+<li>The conditional variance <span class="math inline">\sigma^2(X)=E[\{Y - \mu(X)\}^2 \mid X]</span>.
+<ul>
+<li><span class="math inline">\sigma^2(X)</span> is the variance of a <strong>random subpopulation</strong> of people.</li>
+<li>It’s the conditional variance function <strong>evaluated at</strong> the random variable <span class="math inline">X</span>.</li>
+</ul></li>
+</ol>
+<ul>
+<li>This is like what happens with conditional expectations because it is one.</li>
+<li>It’s the conditional expectation of some random variable. What random variable?</li>
+</ul>
+</div>
+<div id="tabset-2-3">
+<ul>
+<li>It’s the conditional expectation of the square of <span class="math inline">\textcolor{#0000FF}{Y-\mu(X)}</span>, a <em>conditionally centered</em> version of <span class="math inline">Y</span>.</li>
+</ul>
+<p><span class="math display">
+\mathop{\mathrm{\mathop{\mathrm{V}}}}[Y \mid X] = \mathop{\mathrm{E}}[\textcolor{#0000FF}{\{Y-\mu(X)\}}^2 \mid X] \qfor \mu(X) = \mathop{\mathrm{E}}[Y \mid X]
+</span></p>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="working-with-expectations" class="title-slide slide level1 center">
+<h1>Working with Expectations</h1>
+
+</section>
+<section id="sec-linearity" class="slide level2">
+<h2>Linearity</h2>
+<p><span class="math display">
+\begin{aligned}
+E ( a Y + b Z )
+&amp;= E (aY) + E (bZ)
+= aE(Y) + bE(Z) \\
+&amp;\text{ for random variables $Y, Z$ and numbers $a,b$ }
+\end{aligned}
+</span></p>
+<p><strong>Application</strong>. When we sample uniformly-at-random, the sample mean is unbiased.</p>
+<p><span class="math display">
+\begin{aligned}
+\mathop{\mathrm{E}}[\hat\mu]
+&amp;= \mathop{\mathrm{E}}\sb*{\frac1n\sum_{i=1}^n Y_i} \\
+&amp;= \frac1n\sum_{i=1}^n \mathop{\mathrm{E}}[Y_i]  \\
+&amp;= \frac1n\sum_{i=1}^n \mu     \\
+&amp;= \frac1n \times n \times \mu = \mu.
+\end{aligned}
+</span></p>
+<p><strong>Conditional Version</strong>. <span class="math display">
+\begin{aligned}
+E\{ a(X) Y + b(X) Z \mid X \}
+&amp;= E\{a(X)Y \mid X\} + E\{ b(X)Z \mid X\} \\
+&amp;= a(X)E(Y \mid X) + b(X)E(Z \mid X) \\
+&amp; \text{ for random variables $X, Y, Z$ and functions $a,b$ }
+\end{aligned}
+</span></p>
+</section>
+<section id="sec-factorization" class="slide level2">
+<h2>Expectations of Products Factor into Products of Expectations</h2>
+<p><span class="math display">
+\color{gray}
+\mathop{\mathrm{E}}[\textcolor{#EF476F}{Y}\textcolor{#118AB2}{Z}] = \textcolor{#EF476F}{\mathop{\mathrm{E}}[Y]}\textcolor{#118AB2}{\mathop{\mathrm{E}}[Z]} \qqtext{when $\textcolor{#EF476F}{Y}$ and $\textcolor{#118AB2}{Z}$ are independent}
+</span></p>
+<p><strong>Application</strong>. When we sample with replacement, the sample mean’s variance is the population variance divided by <span class="math inline">n</span>.</p>
+<p><span class="math display">
+\color{gray}
+\begin{aligned}
+\mathop{\mathrm{\mathop{\mathrm{V}}}}[\hat\mu]
+&amp;= \mathop{\mathrm{E}}\sb*{ \cb*{ \frac{1}{n}\sum_{i=1}^n Y_i - \mathop{\mathrm{E}}\sb*{ \frac{1}{n}\sum_{i=1}^n Y_i } }^2 } \\
+&amp;= \mathop{\mathrm{E}}\sb*{ \cb*{ \frac{1}{n}\sum_{i=1}^n (Y_i - \mathop{\mathrm{E}}[Y_i]) }^2 }  \\
+&amp;= \mathop{\mathrm{E}}\sb*{ \cb*{ \frac{1}{n}\sum_{i=1}^n Z_i }^2 }
+&amp;&amp; \text{ for } \ Z_i = Y_i - \mathop{\mathrm{E}}[Y_i] \\
+&amp;= \mathop{\mathrm{E}}\sb*{ \cb*{ \textcolor{#EF476F}{\frac{1}{n}\sum_{i=1}^n Z_i }} \times \cb*{\textcolor{#118AB2}{\frac{1}{n}\sum_{j=1}^n Z_j}} }
+&amp;&amp;\text{ with }  \mathop{\mathrm{E}}[ Z_i  ] =  \mathop{\mathrm{E}}[ Y_i  ] - \mathop{\mathrm{E}}[Y_i] = \mu - \mu = 0 \\
+&amp;= \mathop{\mathrm{E}}\sb*{ \frac{1}{n^2}\textcolor{#EF476F}{\sum_{i=1}^n} \textcolor{#118AB2}{\sum_{j=1}^n} \textcolor{#EF476F}{Z_i} \textcolor{#118AB2}{Z_j} }    
+&amp;&amp;\text{ and } \ \mathop{\mathrm{E}}[ Z_i^2] = \mathop{\mathrm{E}}[ \{ Y_i - \mathop{\mathrm{E}}[Y_i] \}^2 ] = \mathop{\mathrm{\mathop{\mathrm{V}}}}[Y_i] = \sigma^2 \\
+&amp;= \frac{1}{n^2} \textcolor{#EF476F}{\sum_{i=1}^n} \textcolor{#118AB2}{\sum_{j=1}^n} \mathop{\mathrm{E}}\sb*{\textcolor{#EF476F}{Z_i} \textcolor{#118AB2}{Z_j} }  \\
+&amp;= \frac{1}{n^2} \textcolor{#EF476F}{\sum_{i=1}^n} \textcolor{#118AB2}{\sum_{j=1}^n} \begin{cases}
+\mathop{\mathrm{E}}[Z_i^2]=\sigma^2 &amp; \text{if } j=i \\
+\textcolor{#EF476F}{\mathop{\mathrm{E}}[Z_i]}\textcolor{#118AB2}{\mathop{\mathrm{E}}[Z_j]} = 0 \times 0  &amp; \text{if } j\neq i \end{cases} \\
+&amp;= \frac{1}{n^2} \textcolor{#EF476F}{\sum_{i=1}^n} \sigma^2 =  \frac{1}{n^2} \times n \times \sigma^2 = \frac{\sigma^2}{n}
+\end{aligned}
+</span></p>
+</section>
+<section id="the-law-of-iterated-expectations" class="slide level2">
+<h2>The Law of Iterated Expectations</h2>
+<div class="panel-tabset">
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">A Tiny Example</a></li><li><a href="#tabset-3-2">A Realistic Example</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-15-1.svg"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-3-2">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-16-1.svg"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><span class="math display">
+\mathop{\mathrm{E}}[Y] = \mathop{\mathrm{E}}\sb*{ \mathop{\mathrm{E}}( Y \mid X ) } \quad \text{ for any random variables $X, Y$}
+</span></p>
+<div class="panel-tabset">
+<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">A Tiny Example</a></li><li><a href="#tabset-4-2">A Realistic Example</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1">
+<div class="columns">
+<div class="column">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th><span class="math inline">p</span></th>
+<th><span class="math inline">X_i</span></th>
+<th><span class="math inline">\mathop{\mathrm{E}}[Y_i \mid X_i]</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\frac{3}{6}</span></td>
+<td><span class="math inline">0</span></td>
+<td><span class="math inline">1</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\frac{3}{6}</span></td>
+<td><span class="math inline">1</span></td>
+<td><span class="math inline">1.25</span></td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<p>What is <span class="math inline">\mathop{\mathrm{E}}[Y_i]</span>?</p>
+</div></div>
+</div>
+<div id="tabset-4-2">
+<div class="columns">
+<div class="column">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th><span class="math inline">p</span></th>
+<th><span class="math inline">X_i</span></th>
+<th><span class="math inline">\mathop{\mathrm{E}}[Y_i \mid X_i]</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">0.58</span></td>
+<td>0</td>
+<td><span class="math inline">29.96K</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">0.42</span></td>
+<td>1</td>
+<td><span class="math inline">73.22K</span></td>
+</tr>
+</tbody>
+</table>
+</div><div class="column">
+<p>What is <span class="math inline">\mathop{\mathrm{E}}[Y_i]</span>?</p>
+</div></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-iterated-iterated" class="slide level2 scrollable">
+<h2>The Law of Iterated Iterated Expectations<a href="#/footnotes" class="footnote-ref" id="fnref1" role="doc-noteref" data-footnote-href="#/fn1" onclick=""><sup>1</sup></a></h2>
+<div class="panel-tabset">
+<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">A Tiny Example</a></li><li><a href="#tabset-5-2">Annotated</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-18-1.svg"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-5-2">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-19-1.svg"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><span class="math display">
+\mathop{\mathrm{E}}\sb*{Y \mid X} = \mathop{\mathrm{E}}\sb*{ \ \mathop{\mathrm{E}}[Y \mid W, X] \ \mid X} \quad \text{ for any random variables $W, X, Y$}
+</span></p>
+<div class="panel-tabset">
+<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">What It Is</a></li><li><a href="#tabset-6-2">What It Says</a></li><li><a href="#tabset-6-3">An Exercise</a></li><li><a href="#tabset-6-4">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1">
+<ul>
+<li>This says the law of iterated expectations works when we’re one stage into ‘3 stage sampling’.</li>
+<li>It’s the law of iterated expectations for the probability distribution we get when …
+<ul>
+<li>We’ve flipped ‘color coin’ to choose <span class="math inline">X</span>.</li>
+<li>But we haven’t flipped the ‘shape coin’ to choose <span class="math inline">W</span>.</li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-6-2">
+<ul>
+<li>It says that if we want to calculate the expectation of <span class="math inline">Y</span> given a column <span class="math inline">X</span>, we can …
+<ul>
+<li>First average over <span class="math inline">Y</span> given a column <span class="math inline">X</span> <em>and</em> a shape <span class="math inline">W</span> to get a random variable taking on <span class="math inline">4</span> values.</li>
+<li>Then average that over the shape <span class="math inline">W</span> to get a random variable taking on only <span class="math inline">2</span> values.</li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-6-3">
+<ul>
+<li>Suppose we’re sampling with replacement from the tiny population above.</li>
+</ul>
+<ol type="1">
+<li>Annotate the plot to show the function versions of <span class="math inline">\mathop{\mathrm{E}}[Y\mid W, X]</span> and <span class="math inline">\mathop{\mathrm{E}}[Y\mid X]</span>.</li>
+<li>Make a table describing the random variable <span class="math inline">\mathop{\mathrm{E}}[Y\mid W, X]</span></li>
+<li>Marginalize to get a table describing <span class="math inline">\mathop{\mathrm{E}}[Y\mid X]</span>.</li>
+<li>Marginalize again to get the number <span class="math inline">\mathop{\mathrm{E}}[Y]</span>.</li>
+</ol>
+</div>
+<div id="tabset-6-4">
+<div class="columns">
+<div class="column" style="width:40%;">
+<h3 id="mathopmathrmey-mid-w-x"><span class="math inline">\mathop{\mathrm{E}}[Y \mid W, X]</span></h3>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th><span class="math inline">p</span></th>
+<th><span class="math inline">W</span></th>
+<th><span class="math inline">X</span></th>
+<th><span class="math inline">\mathop{\mathrm{E}}[Y \mid W, X]</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\frac{3}{12}</span></td>
+<td>●</td>
+<td><span class="groupa">0</span></td>
+<td><span class="math inline">1</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\frac{3}{12}</span></td>
+<td>▲</td>
+<td><span class="groupa">0</span></td>
+<td><span class="math inline">1.75</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\frac{3}{12}</span></td>
+<td>●</td>
+<td><span class="groupb">1</span></td>
+<td><span class="math inline">1.25</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\frac{3}{12}</span></td>
+<td>▲</td>
+<td><span class="groupb">1</span></td>
+<td><span class="math inline">2</span></td>
+</tr>
+</tbody>
+</table>
+<p>The function is the gray ● and ▲ in the plot.</p>
+</div><div class="column" style="width:40%;">
+<h3 id="mathopmathrmey-mid-x"><span class="math inline">\mathop{\mathrm{E}}[Y \mid X]</span></h3>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th><span class="math inline">p</span></th>
+<th><span class="math inline">X</span></th>
+<th><span class="math inline">\mathop{\mathrm{E}}[Y \mid X]</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\frac{6}{12}</span></td>
+<td><span class="groupa">0</span></td>
+<td><span class="math inline">1.375</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\frac{6}{12}</span></td>
+<td><span class="groupb">1</span></td>
+<td><span class="math inline">1.625</span></td>
+</tr>
+</tbody>
+</table>
+<p>The function is the gray ◆ in the plot.</p>
+</div><div class="column" style="width:20%;">
+<h3 id="mathopmathrmey"><span class="math inline">\mathop{\mathrm{E}}[Y]</span></h3>
+<p>1.5</p>
+<p>That’s midway<br>
+between the<br>
+two diamonds.</p>
+</div></div>
+</div>
+</div>
+</div>
+<aside></aside></section>
+<section id="sec-irrelevance" class="slide level2">
+<h2>Irrelevance of independent conditioning variables</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-20-1.svg"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-20-2.svg"></p>
+</div>
+</div>
+</div>
+<p><span class="math display"> \mathop{\mathrm{E}}[ \textcolor{#118AB2}{Y} \mid \textcolor{#118AB2}{X}, \textcolor{#EF476F}{X'} ] = \textcolor{#118AB2}{\mathop{\mathrm{E}}[ Y \mid X ]} \quad \text{ when $X'$ is independent of $X,Y$ } </span></p>
+<p><strong>Application.</strong> When we sample with replacement, the conditional expectation of <span class="math inline">Y_i</span> given <span class="math inline">X_1 \ldots X_n</span> is the conditional mean of <span class="math inline">Y_i</span> given <span class="math inline">X_i</span> alone.</p>
+<p><span class="math display">
+\mathop{\mathrm{E}}[Y_i \mid X_1 \ldots X_n] = \mathop{\mathrm{E}}[Y_i \mid X_i] = \mu(X_i) \qqtext{ when $(X_1, Y_1) \ldots (X_n, Y_n)$ are independent.}
+</span></p>
+</section>
+<section id="the-indicator-trick" class="slide level2">
+<h2>The Indicator Trick</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-21-1.svg"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-21-2.svg"></p>
+</div>
+</div>
+</div>
+<p><span class="math display">
+1_{=x}(X)\mu(X) =
+\begin{cases}
+1 \times \mu(X)  &amp; \text{ when } X=x \\
+0 \times \mu(X)  &amp; \text{ when } X \neq x
+\end{cases}
+=
+\begin{cases}
+1 \times \mu(x) &amp; \text{ when } X=x \\
+0 \times \mu(x) &amp; \text{ when } X \neq x
+\end{cases}
+=
+1_{=x}(X)\mu(x)
+</span></p>
+<p><strong>Application.</strong></p>
+<p><span class="math display">
+\mathop{\mathrm{E}}[1_{=x}(X)\mu(X)] = \mathop{\mathrm{E}}[ 1_{X=x} \mu(x) ] = \mu(x) \mathop{\mathrm{E}}[1_{=x}(X)] = \mu(x) \times P(X=x)
+</span></p>
+</section></section>
+<section>
+<section id="unbiasedness" class="title-slide slide level1 center">
+<h1>Unbiasedness</h1>
+
+</section>
+<section id="a-sample-mean-is-unbiased" class="slide level2">
+<h2>A Sample Mean is Unbiased</h2>
+<p><strong>Claim.</strong> When we sample uniformly-at-random, the sample mean is an unbiased estimator of the population mean. <span class="math display"> \mathop{\mathrm{E}}[\hat\mu] = \mu </span></p>
+<p>We proved this earlier today using linearity of expectations. See <a href="#/sec-linearity" class="quarto-xref">Slide&nbsp;3.1</a>.</p>
+</section>
+<section id="a-subsample-mean-is-conditionally-unbiased" class="slide level2">
+<h2>A Subsample Mean is Conditionally Unbiased</h2>
+<p><strong>Claim.</strong> When we sample with replacement, a subsample mean is a <em>conditionally unbiased</em> estimator of the corresponding subpopulation mean as long as there’s at least one person with <span class="math inline">X_i=1</span> <span class="math display">
+\mathop{\mathrm{E}}[\hat\mu(1) \mid X_1 \ldots X_n] = \mu(1) \quad \text{ if } \quad \sum_{i=1}^{n} 1_{=1}(X_i) &gt; 0.
+</span></p>
+<div class="panel-tabset">
+<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">Proof Sketch</a></li><li><a href="#tabset-7-2">How to Write Subsample Means</a></li><li><a href="#tabset-7-3">Proof</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1">
+<ul>
+<li>Use the <strong>linearity of conditional expectations</strong> to push the conditional expectation into the sum.</li>
+<li>Then use the <strong>irrelevance of independent conditioning variables</strong> to write things in terms of the <em>random variable</em> <span class="math inline">\mu(X_i)</span><br>
+</li>
+<li>Then the <strong>indicator trick</strong>. What’s <span class="math inline">1_{=1}(X_i) \mu(X_i)</span>? How is it related to <span class="math inline">\mu(1)</span>?</li>
+</ul>
+</div>
+<div id="tabset-7-2">
+<p><span class="math display">
+\hat\mu(1) = \frac{\sum_{i:X_i=1} Y_i}{\sum_{i:X_i=1} 1} = \frac{\sum_{i=1}^{n} 1_{=1}(X_i) Y_{i}}{\sum_{i=1}^{n} 1_{=1}(X_i)}
+</span></p>
+<ul>
+<li>It’s easy to make mistakes using <em>linearity of expectations</em> when we’re summing over a subsample.
+<ul>
+<li>Can we or can we not ‘push’ or ‘pull’ and expectation through a sum …</li>
+<li>… when the terms in that sum depend on the value of a random variable?</li>
+</ul></li>
+<li>To make this a lot more obvious, we can rewrite these as sums over the whole sample.
+<ul>
+<li>Instead of ‘excluding’ the terms where <span class="math inline">X_i=0</span>, we ‘make them zero’ by multiplying in the indicator <span class="math inline">1_{=1}(X_i)</span>.</li>
+<li>Then, of course we can distribute expectations through the sum.</li>
+<li>The question becomes whether we can ‘pull out’ the indicator.</li>
+<li>And we have a rule for that. We can do it if we’re conditioning on <span class="math inline">X_i</span>.</li>
+</ul></li>
+<li>When we write a subsample mean, we can do that …
+<ul>
+<li>in the numerator, the sum of observations in the subsample.</li>
+<li>in the denominator, the number of those terms, which is a <em>sum of ones</em> over the subsample.</li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-7-3">
+<p><span class="math display">
+\begin{aligned}
+\mathop{\mathrm{E}}[\hat\mu(1) \mid X_1 \ldots X_n]
+&amp;=\mathop{\mathrm{E}}\sb*{\frac{\sum_{i=1}^{n} 1_{=1}(X_i) Y_{i}}{\sum_{i=1}^{n} 1_{=1}(X_i)} \mid X_1 \ldots X_n} \\
+&amp;\overset{\texttip{\small{\text{?}}}{via linearity. All the indicators (and their sum) are functions of $X_1\ldots X_n$.}}{=}
+\frac{\sum_{i=1}^{n} 1_{=1}(X_i) \mathop{\mathrm{E}}\cb*{ Y_{i} \mid X_1 \ldots X_n}}{\sum_{i=1}^{n}1_{=1}(X_i)} \\
+&amp;\overset{\texttip{\small{\text{?}}}{via irrelevance of independent conditioning variables. $(X_i,Y_i)$ are independent of the other $X$s.}}{=}
+\frac{\sum_{i=1}^{n} 1_{=1}(X_i) \mathop{\mathrm{E}}\cb*{ Y_{i} \mid X_i}}{\sum_{i=1}^{n}1_{=1}(X_i)} \\
+&amp;\overset{\texttip{\small{\text{?}}}{This is just a change of notation, as $\mu(X_i)=\mathop{\mathrm{E}}[Y_i \mid X_i]$, but it makes it easier to understand what happens next.}}{=}
+\frac{\sum_{i=1}^{n} 1_{=1}(X_i) \mu(X_i)}{\sum_{i=1}^{n}1_{=1}(X_i)} \\
+&amp;\overset{\texttip{\small{\text{?}}}{via the indicator trick.}}{=}\frac{\sum_{i=1}^{n}1_{=1}(X_i) \mu(1)}{\sum_{i=1}^{n}1_{=1}(X_{i})} \\
+&amp;\overset{\texttip{\small{\text{?}}}{via linearity}}{=} \mu(1) \ \frac{\sum_{i=1}^{n} 1_{=1}(X_i) }{\sum_{i=1}^{n}1_{=1}(X_{i})} = \mu(1)
+\end{aligned}
+</span></p>
+</div>
+</div>
+</div>
+</section>
+<section id="differences-in-subsample-means" class="slide level2">
+<h2>Differences in Subsample Means</h2>
+<p><strong>Claim.</strong> A difference in subsample means is <em>conditionally unbiased</em> for the corresponding difference in subpopulation means as long as there sample includes at least one person in each group.</p>
+<p><span class="math display">
+\mathop{\mathrm{E}}[\hat\mu(1) - \hat\mu(0) \mid X_1 \ldots X_n] = \mu(1) - \mu(0) \quad \text{ if } \quad \sum_{i=1}^{n} 1_{=1}(X_i) &gt; 0 \ \text{ and } \ \sum_{i=1}^{n} 1_{=0}(X_i) &gt; 0.
+</span></p>
+<p><strong>Why?</strong></p>
+<p>This follows from the linearity of expectations and conditional unbiasedness of the subsample means.</p>
+<p><span class="math display">
+\mathop{\mathrm{E}}[\hat\mu(1) - \hat\mu(0) \mid X_1 \ldots X_n] = \mathop{\mathrm{E}}[\hat\mu(1) \mid X_1 \ldots X_n] - \mathop{\mathrm{E}}[\hat\mu(0) \mid X_1 \ldots X_n] =  \mu(1) - \mu(0)
+</span></p>
+</section>
+<section id="conditional-vs.-unconditional-unbiasedness" class="slide level2">
+<h2>Conditional vs.&nbsp;Unconditional Unbiasedness</h2>
+<p>Conditional unbiasedness without the ‘if’ implies unconditional unbiasedness. That’s the law of iterated expectations.</p>
+<p><span class="math display">
+\mathop{\mathrm{E}}[\hat\mu(1)] = \mathop{\mathrm{E}}\sb*{\mathop{\mathrm{E}}[\hat\mu(1) \mid X_1 \ldots X_n]} = \mathop{\mathrm{E}}[\mu(1)] = \mu(1) \qif \mathop{\mathrm{E}}[\hat\mu(1) \mid X_1 \ldots X_n] = \mu(1)
+</span></p>
+<p>But the ‘if’ is a problem. Fundamentally, the problem is that if there’s nobody with <span class="math inline">X_i=1</span>, there isn’t a subsample mean for that group. There’s nobody in the subsample to average. The best we could do is just make something up. However, when our sample is large, it’s very unlikely that there’s nobody in the subsample for any group, so if we make up anything at all reasonable, we’ll get an estimator that’s pretty close to unbiased.</p>
+<p><span class="math display">
+\begin{aligned}
+\mathop{\mathrm{E}}[\hat\mu(1)]
+&amp;= \mathop{\mathrm{E}}\sb*{\mathop{\mathrm{E}}[\hat\mu(1) \mid X_1 \ldots X_n]} \\
+&amp;= \sum_{\substack{x_1 \ldots x_n \\ \sum_{i=1}^{n} 1_{=1}(x_i) &gt; 0}} \mu(1) \times P(X_1=x_1, \ldots, X_n=x_n) \\
+&amp;+ \sum_{\substack{x_1 \ldots x_n \\ \sum_{i=1}^{n} 1_{=1}(x_i) = 0}} \text{whatever} \times P(X_1=x_1, \ldots, X_n=x_n) \\
+&amp;= (1-p_0) \ \mu(1) \ + \ p_0 \ \text{whatever} \qfor p_0 = P(X_i=0 \text{ for all } i) \\
+&amp;\approx \mu(1) \qif p_0 \approx 0
+\end{aligned}
+</span></p>
+<p>For this reason, we’ll mostly ignore this issue from here on. We’ll call subsample means unbiased estimators of subpopulation means because they’re close enough, but you should be aware that there is a subtle issue here.</p>
+</section>
+<section id="implications-of-unbiasedness" class="slide level2">
+<h2>Implications of Unbiasedness</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-22-1.svg"></p>
+<figcaption>Like this.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-22-2.svg"></p>
+<figcaption>Not like this.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<ul>
+<li>If we can estimate the width of its sampling distribution, we can get interval estimates with the coverage we want.</li>
+<li>The question that remains is whether those interval estimates are narrow enough to be useful.</li>
+</ul>
+</section></section>
+<section>
+<section id="spread" class="title-slide slide level1 center">
+<h1>Spread</h1>
+
+</section>
+<section id="the-question" class="slide level2">
+<h2>The Question</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-23-1.svg"></p>
+<figcaption>Is it like this?</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-23-2.svg"></p>
+<figcaption>Or like this?</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="spread-within-and-between-groups" class="slide level2 scrollable">
+<h2>Spread Within and Between Groups</h2>
+
+<img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-24-1.svg" class="r-stretch"><ul>
+<li>You can think of there being two kinds of variation in a population.</li>
+</ul>
+<ol type="1">
+<li>Within-group variation.
+<ul>
+<li>That’s illustrated above by the ‘arms’ on our subpopulation means in the plot above.</li>
+<li>The arm length is, in fact, the <em>subpopulation standard deviation</em>.</li>
+<li>That’s the square root of the <em>conditional variance function</em> <span class="math inline">\sigma^2(x) = \mathop{\mathrm{\mathop{\mathrm{V}}}}[Y \mid X=x]</span>.</li>
+</ul></li>
+<li>Between-group variation.
+<ul>
+<li>That’s about the difference <em>between</em> those subsample means.</li>
+<li>One reasonable summary is the <em>standard deviation</em> of the subpopulation means <span class="math inline">\mu(x) = \mathop{\mathrm{E}}[Y \mid X=x]</span>.</li>
+</ul></li>
+</ol>
+</section>
+<section id="the-law-of-total-variance" class="slide level2">
+<h2>The Law of Total Variance</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-25-1.svg"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-25-2.svg"></p>
+</div>
+</div>
+</div>
+<p><span class="math display">
+\mathop{\mathrm{\mathop{\mathrm{V}}}}[Y] = \mathop{\mathrm{E}}\cb*{\mathop{\mathrm{\mathop{\mathrm{V}}}}( Y \mid X ) } + \mathop{\mathrm{\mathop{\mathrm{V}}}}\cb*{\mathop{\mathrm{E}}( Y \mid X ) }  
+</span></p>
+<ul>
+<li>The Law of Total Variance breaks Variance into within-group and between-group terms.</li>
+<li>It’s like the Law of Iterated Expectations, but for Variance.</li>
+<li>It’s a useful way to decompose the variance of a random variable.</li>
+<li>Think about where most of the variance in <span class="math inline">Y</span> is coming from in the two populations shown above.</li>
+</ul>
+<p>We won’t prove this, but it’s in the slides if you’re interested. See <a href="#/sec-proving-total-variance" class="quarto-xref">Slide&nbsp;8</a>.</p>
+</section>
+<section id="check-your-understanding" class="slide level2 scrollable">
+<h2>Check Your Understanding</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-26-1.svg" height="250"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>Try to put the three terms into words.
+<ul>
+<li><span class="math inline">\mathop{\mathrm{\mathop{\mathrm{V}}}}[Y]</span> is the …</li>
+<li><span class="math inline">\mathop{\mathrm{E}}\cb*{ \mathop{\mathrm{\mathop{\mathrm{V}}}}(Y \mid X) }</span> is the …</li>
+<li><span class="math inline">\mathop{\mathrm{\mathop{\mathrm{V}}}}\cb*{\mathop{\mathrm{E}}( Y \mid X)}</span> is the …</li>
+</ul></li>
+<li>Do this in two ways.
+<ol type="1">
+<li>Using ‘Random Variables Language’,
+<ul>
+<li>e.g.&nbsp;‘the expected value of the conditional variance of Y given X’</li>
+</ul></li>
+<li>Using ‘Population Language’
+<ul>
+<li>e.g.&nbsp;‘the variance of income (Y) within the random subpopulation with degree status X’</li>
+</ul></li>
+</ol></li>
+</ul>
+</section>
+<section id="the-variance-of-the-sample-mean" class="slide level2">
+<h2>The Variance of the Sample Mean</h2>
+<p><strong>Claim.</strong> When we sample w/ replacement, the variance of the sample mean<br>
+is the population variance divided by the number of people in the sample.</p>
+<p><span class="math display">
+\mathop{\mathrm{\mathop{\mathrm{V}}}}[\hat\mu] = \frac{\sigma^2}{n}  
+</span></p>
+<ul>
+<li>We proved this earlier today using. See <a href="#/sec-factorization" class="quarto-xref">Slide&nbsp;3.2</a>.</li>
+<li>We used, among other things, the property that expectations of products factor into products of expectations.</li>
+<li>Our proof for the subsample mean will be similar with more conditioning.
+<ul>
+<li>We’ll use a conditional version of that we can derive using the ‘law of iterated iterated expectations’.</li>
+</ul></li>
+</ul>
+</section>
+<section id="sec-conditional-factorization" class="slide level2 small scrollable">
+<h2>Conditional Expectations of Products Factor</h2>
+<p>When we sample with replacement, the conditional expectation of products factors into a product of conditional expectations.</p>
+<p><span class="math display">
+\mathop{\mathrm{E}}[Y_i \ Y_j \mid X_1 \ldots X_n] = \mathop{\mathrm{E}}[Y_i \mid X_i]\mathop{\mathrm{E}}[Y_j \mid X_j] = \mu(X_i)\mu(X_j) \qqtext{ when $(X_1, Y_1) \ldots (X_n, Y_n)$ are independent.}
+</span></p>
+<p>This is a subtle application of two of our ‘laws’. <span class="math display">
+\begin{aligned}
+&amp;\mathop{\mathrm{E}}[Y \mid X] = \mathop{\mathrm{E}}[ \mathop{\mathrm{E}}\sb*{Y \mid W, X} \mid X] \quad \text{ for any random variables $W, X, Y$}  
+&amp;&amp; \text{Law of Iterated Iterated Expectations} \\
+&amp;\mathop{\mathrm{E}}[ \textcolor{#118AB2}{Y} \mid \textcolor{#118AB2}{X}, \textcolor{#EF476F}{X'} ] = \textcolor{#118AB2}{\mathop{\mathrm{E}}[ Y \mid X ]} \quad \text{ when $X'$ is independent of $X,Y$ }
+&amp;&amp; \text{Irrelevance of Independent Conditioning Variables}
+\end{aligned}
+</span></p>
+<div class="panel-tabset">
+<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">The Proof</a></li><li><a href="#tabset-8-2">The Idea Behind the Proof</a></li><li><a href="#tabset-8-3">It’s an Odd Idea, But It Works</a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1">
+<p><span class="math display">
+\color{gray}
+\begin{aligned}
+\mathop{\mathrm{E}}[ \textcolor{#EF476F}{Y_i} \ \textcolor{#118AB2}{Y_j} \mid X_1 \ldots X_n]
+&amp;\overset{\texttip{\small{\text{?}}}{Here's use the law of iterated iterated expectations to 'break the second stage into a second and third'}}{=}
+\mathop{\mathrm{E}}[\mathop{\mathrm{E}}[\textcolor{#EF476F}{Y_i} \ \textcolor{#118AB2}{Y_j} \mid \textcolor{#EF476F}{Y_i}, X_1 \ldots X_n] \mid X_1 \ldots X_n] \\
+&amp;\overset{\texttip{\small{\text{?}}}{Here we pull $Y_i$ out of the inner expectation (stage 3). That's justified by linearity of conditional expectations because it's a function of $\textcolor{#EF476F}{Y_i}, X_1 \ldots X_n$, the stuff we chose in stages 1 and 2.}}{=}
+\mathop{\mathrm{E}}[ \textcolor{#EF476F}{Y_i} \ \mathop{\mathrm{E}}[\textcolor{#118AB2}{Y_j} \mid \textcolor{#EF476F}{Y_i}, X_1 \ldots X_n] \mid X_1 \ldots X_n] \\
+&amp;\overset{\texttip{\small{\text{?}}}{Here we drop the irrelevant conditioning variables from the inner expectation. In the notation above, $Y=Y_j$, $X=X_j$, and $X'=(Y_i, X_1 \ldots X_n \text{ except } X_j)$, which describes other 'calls', is independent of $(X,Y)=(X_j, Y_j)$.}}{=}
+\mathop{\mathrm{E}}[\textcolor{#EF476F}{Y_i} \ \mathop{\mathrm{E}}[\textcolor{#118AB2}{Y_j} \mid X_j] \mid X_1 \ldots X_n] \\
+&amp;\overset{\texttip{\small{\text{?}}}{Here we pull $\textcolor{#118AB2}{Y_j}$ out of the outer expectation (stage 2). That's justified by linearity of conditional expectations because it's a function of $X_1 \ldots X_n$, the stuff we chose in stage 1.}}{=}
+\textcolor{#118AB2}{\mathop{\mathrm{E}}[Y_j \mid X_j]} \ \mathop{\mathrm{E}}[\textcolor{#EF476F}{Y_i} \mid X_1 \ldots X_n] \\
+&amp;\overset{\texttip{\small{\text{?}}}{Here we drop the irrelevant conditioning variables from expectation involving $\textcolor{#EF476F}{Y_i}$. In the notation above, $Y=Y_i$, $X=X_i$, and $X'=(Y_j, X_1 \ldots X_n \text{ except } X_i)$, which describes other 'calls', is independent of $(X,Y)=(X_i, Y_i)$.}}{=}
+\textcolor{#118AB2}{\mathop{\mathrm{E}}[Y_j \mid X_j]} \ \textcolor{#EF476F}{\mathop{\mathrm{E}}[Y_i \mid X_i]} \\
+&amp;\overset{\texttip{\small{\text{?}}}{This is the same thing in different notation.}}{=}
+\textcolor{#118AB2}{\mu(X_j)} \ \textcolor{#EF476F}{\mu(X_i)}
+\end{aligned}
+</span></p>
+</div>
+<div id="tabset-8-2">
+<ul>
+<li>This proof is a bit stranger conceptually than it is as a matter of pushing symbols around.
+<ul>
+<li>You don’t have to get it conceptually if you don’t want to.</li>
+<li>Sometimes it’s not worth it. But if you do want to, here’s what’s going on.</li>
+</ul></li>
+<li>We start out thinking about a ‘two stage’ sampling process.
+<ol type="1">
+<li>We flip our ‘color coin’ <span class="math inline">n</span> times to choose <span class="math inline">X_1 \ldots X_n</span>.</li>
+</ol>
+<ul>
+<li>Those flips together are <span class="math inline">X</span> in our iterated expectations formula.</li>
+</ul>
+<ol start="2" type="1">
+<li>We roll n times to choose <span class="math inline">Y_1 \ldots Y_n</span>.</li>
+</ol>
+<ul>
+<li>For <span class="math inline">Y_i</span>, we roll the ‘red die’ if <span class="math inline">X_i=0</span> and the ‘green die’ if <span class="math inline">X_i=1</span>.</li>
+<li>You can think of the product <span class="math inline">Y_i Y_j</span> as <span class="math inline">Y</span> in our iterated expectations formula.</li>
+</ul></li>
+<li>Then we use the ‘law of iterated iterated expectations’ to break that second stage into two.
+<ol type="a">
+<li>We roll once to choose <span class="math inline">Y_i</span>. That’s <span class="math inline">W</span> in our iterated expectations formula.</li>
+<li>We roll <span class="math inline">n-1</span> times to choose the rest of <span class="math inline">Y_1 \ldots Y_n</span>.</li>
+</ol></li>
+<li>After that, we simplify using linearity and the irrelevance of independent conditioning variables.</li>
+</ul>
+</div>
+<div id="tabset-8-3">
+<ul>
+<li>It sound a little odd because our ‘3 stage sampling’ scheme depends on the pair <span class="math inline">Y_i, Y_j</span> we’re thinking about.
+<ul>
+<li>When we think about the pairs <span class="math inline">Y_1 Y_3</span> and <span class="math inline">Y_2 Y_3</span>, we’re thinking about two different ways of drawing <span class="math inline">Y_3</span>.</li>
+<li>And we can’t really do both. It’s just one thing. We can’t draw it twice.</li>
+</ul></li>
+<li>That’s ok because we don’t really have to sample this way. It’s just a way of thinking about doing a calculation.
+<ul>
+<li>This is a bit like how we can think of any pair <span class="math inline">Y_i,Y_j</span> as distributed like <span class="math inline">Y_1,Y_2</span> when<br>
+<a href="https://qtm285-1.github.io/assets/homework/week3-homework.html#exr-covariance-with-replacement">calculating about variance after sampling without replacement</a> in this week’s homework.</li>
+<li>Ultimately, it’s about linearity. When we’re calculating the expectation of a sum,<br>
+we only care about the marginal distribution of each term.</li>
+<li>When that term involves only two observations, like we see in variance calculations,<br>
+we can think about the random mechanism that gives us each pair separately.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="the-variance-of-the-subsample-mean" class="slide level2">
+<h2>The Variance of the Subsample Mean</h2>
+<p><strong>Claim.</strong> When we sample with replacement, the variance of a subsample mean is the<br>
+<strong>expected value</strong> of the subpopulation variance divided by the number of people in the subsample. <span class="math display">
+\mathop{\mathrm{\mathop{\mathrm{V}}}}[\hat\mu(1)] = \mathop{\mathrm{E}}\sb*{ \frac{\sigma^2(1)}{N_1} } \quad \text{ for } \quad N_1 = \sum_{i=1}^n 1_{=1}(X_i)  
+</span></p>
+<ul>
+<li>This is like what we saw in the unconditional case, but with a twist.</li>
+<li>The number of people in the subsample is random, so instead of <span class="math inline">1/n</span>, we have <span class="math inline">\mathop{\mathrm{E}}[ \frac{1}{N_1} ]</span>.</li>
+</ul>
+</section>
+<section id="step-1.-total-variance" class="slide level2 scrollable">
+<h2>Step 1. Total Variance</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-27-1.svg"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>We’ll start by using the Law of Total Variance, conditioning on <span class="math inline">X_1 \ldots X_n</span>.</li>
+<li>And then we’ll have to calculate two terms.
+<ol type="1">
+<li>The expected value of the conditional variance</li>
+<li>The variance of the conditional expectation <span class="math display">
+\begin{aligned}
+\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb*{ \hat \mu(1) } &amp;= \underset{\color{#404040}\text{within-groups term}}{\mathop{\mathrm{E}}\sb*{ \mathop{\mathrm{\mathop{\mathrm{V}}}}\cb*{ \hat \mu(1) \mid X_1 \ldots X_n }} } + \underset{\color{#404040}\text{between-groups term}}{\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb*{ \mathop{\mathrm{E}}\cb*{\hat \mu(1) \mid X_1 \ldots X_n} } } \\
+\end{aligned}
+</span></li>
+</ol></li>
+<li>This is one place it helps to know our estimator is <em>conditionally unbiased</em>.
+<ul>
+<li>That conditional expectation is the constant <span class="math inline">\mu(1)</span>.<a href="#/footnotes" class="footnote-ref" id="fnref2" role="doc-noteref" data-footnote-href="#/fn2" onclick=""><sup>2</sup></a></li>
+<li>So the ‘between-groups’ variance term is zero.</li>
+</ul></li>
+</ul>
+<aside></aside></section>
+<section id="step-2.-centering-and-squaring" class="slide level2">
+<h2>Step 2. Centering and Squaring</h2>
+<p><span class="math display">
+\begin{aligned}
+\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb*{ \hat \mu(1) \mid X_1 \ldots X_n }
+&amp;\overset{\texttip{\small{\text{?}}}{Definitionally.}}{=}
+\mathop{\mathrm{E}}\sb*{ \cb*{\hat \mu(1) - \mu(1) }^2 \mid X_1 \ldots X_n } \\
+&amp;\overset{\texttip{\small{\text{?}}}{Also definitionally.}}{=}
+\mathop{\mathrm{E}}\sb*{ \cb*{\frac{\sum_{i=1}^n 1_{=1}(X_i)Y_{i}}{\sum_{i=1}^n 1_{=1}(X_i)} - \mu(1)}^2 \mid X_1 \ldots X_n } \\
+&amp;\overset{\texttip{\small{\text{?}}}{Multiplying $\mu(1)$ by $N_1/N_1$ to get a common denominator}}{=}
+\mathop{\mathrm{E}}\sb*{ \cb*{ \frac{\sum_{i=1}^n 1_{=1}(X_i){\textcolor{#0000FF}{\cb*{Y_{i} - \mu(1)}}}}{\sum_{i=1}^n 1_{=1}(X_i)}}^2  \mid X_1 \ldots X_n } \\
+&amp;\overset{\texttip{\small{\text{?}}}{The indicator trick tells us the factors we've highlighted in \textcolor{#0000FF}{blue} are the same.}}{=}
+\mathop{\mathrm{E}}\sb*{ \cb*{ \frac{\sum_{i=1}^n 1_{=1}(X_i)\textcolor{#0000FF}{Z_i}}{\sum_{i=1}^n 1_{=1}(X_i)}}^2  \mid X_1 \ldots X_n } \qfor \textcolor{#0000FF}{Z_i = Y_{i} - \mu(X_i)} \\
+&amp;\overset{\texttip{\small{\text{?}}}{Expanding the square.}}{=}
+\mathop{\mathrm{E}}\sb*{ \frac{\textcolor{#EF476F}{\sum_{i=1}^n}\textcolor{#118AB2}{\sum_{j=1}^n} \textcolor{#EF476F}{1_{=1}(X_i)Z_i} \ \textcolor{#118AB2}{1_{=1}(X_j)Z_j}}{\cb*{\sum_{i=1}^n 1_{=1}(X_i) }^2} \mid X_1 \ldots X_n } \\
+&amp;\overset{\texttip{\small{\text{?}}}{Distributing the expectation. We can pull out the denominator and the indicator in each term because they're functions of $X_1 \ldots X_n$.}}{=}
+\frac{\textcolor{#EF476F}{\sum_{i=1}^n}\textcolor{#118AB2}{\sum_{j=1}^n} \textcolor{#EF476F}{1_{=1}(X_i)} \textcolor{#118AB2}{1_{=1}(X_j)}\mathop{\mathrm{E}}\sb*{\textcolor{#EF476F}{Z_i} \textcolor{#118AB2}{Z_j} \mid X_1 \ldots X_n}  }{\cb*{\sum_{i=1}^n 1_{=1}(X_i) }^2}
+\end{aligned}
+</span></p>
+<p>This random variable <span class="math inline">Z_i</span> is like the one we have in the unconditional case, but conditionally.</p>
+<p><span class="math display">
+\begin{aligned}
+\mathop{\mathrm{E}}[ Z_i \mid X_i ] &amp;= \mathop{\mathrm{E}}[ Y_i - \mu(X_i) \mid X_i ] = \mathop{\mathrm{E}}[ Y_i \mid X_i ] - \mu(X_i) = \mu(X_i) - \mu(X_i) &amp;&amp; \overset{\texttip{\small{\text{?}}}{It has conditional expectation zero. }}{\ } \\
+\mathop{\mathrm{E}}[ Z_i^2 \mid X_i] &amp;= \mathop{\mathrm{E}}[ \{ Y_i - \mathop{\mathrm{E}}[Y_i \mid X_i] \}^2 \mid X_i] = \mathop{\mathrm{\mathop{\mathrm{V}}}}[Y_i \mid X_i]   &amp;&amp; \overset{\texttip{\small{\text{?}}}{The conditional expectation of its square is the conditional variance of $Y_i$ }}{\ }
+\end{aligned}
+</span></p>
+</section>
+<section id="step-3.-taking-expectations-term-by-term" class="slide level2">
+<h2>Step 3. Taking Expectations Term-by-Term</h2>
+<h3 id="squared-terms-ij">Squared Terms (<span class="math inline">i=j</span>)</h3>
+<p><span class="math display">
+\begin{aligned}
+\mathop{\mathrm{E}}\sb*{\textcolor{#EF476F}{Z_i}\textcolor{#118AB2}{Z_j} \mid X_1 \ldots X_n}
+&amp;\overset{\texttip{\small{\text{?}}}{Because $i=j$}}{=}
+\mathop{\mathrm{E}}\sb*{ Z_i^2  \mid X_1 \ldots X_n}  \\
+&amp;\overset{\texttip{\small{\text{?}}}{Because $X' = (X_1 \ldots X_n \text{except} X_i)$ is independent of $X_i$ and $Y_i$.}}{=}
+\mathop{\mathrm{E}}\sb*{ Z_i^2  \mid X_i}  \\
+&amp;\overset{\texttip{\small{\text{?}}}{Definitionally}}{=}\mathop{\mathrm{\mathop{\mathrm{V}}}}[Y_i \mid X_i] = \sigma^2(X_i)
+\end{aligned}
+</span></p>
+<h3 id="cross-terms-ineq-j">Cross-Terms (<span class="math inline">i\neq j</span>)</h3>
+<p><span class="math display">
+\begin{aligned}
+\mathop{\mathrm{E}}\sb*{\textcolor{#EF476F}{Z_i} \textcolor{#118AB2}{Z_j} \mid X_1 \ldots X_n}
+&amp;\overset{\texttip{\small{\text{?}}}{This is the factorization identity we proved a few slides back.}}{=}\textcolor{#EF476F}{\mathop{\mathrm{E}}\sb*{Z_i \mid X_i}} \textcolor{#118AB2}{\mathop{\mathrm{E}}\sb*{Z_j \mid X_j}} \\
+&amp;\overset{\texttip{\small{\text{?}}}{Definitionally}}{=} 0 \times 0
+\end{aligned}
+</span></p>
+</section>
+<section id="step-4.-putting-the-pieces-together" class="slide level2">
+<h2>Step 4. Putting the Pieces Together</h2>
+<p><span class="math display">
+\begin{aligned}
+\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb*{ \hat \mu(1) \mid X_1 \ldots X_n }
+&amp;\overset{\texttip{\small{\text{?}}}{Step 1}}{=}
+\underset{\color{#404040}\text{within-groups term}}{\mathop{\mathrm{E}}\sb*{ \mathop{\mathrm{\mathop{\mathrm{V}}}}\cb*{ \hat \mu(1) \mid X_1 \ldots X_n }} } + \underset{\color{#404040}\text{between-groups term}}{ 0 } \\
+&amp;\overset{\texttip{\small{\text{?}}}{Step 2}}{=}
+\mathop{\mathrm{E}}\sb*{\frac{\textcolor{#EF476F}{\sum_{i=1}^n}\textcolor{#118AB2}{\sum_{j=1}^n} \textcolor{#EF476F}{1_{=1}(X_i)} \textcolor{#118AB2}{1_{=1}(X_j)}\mathop{\mathrm{E}}\sb*{\textcolor{#EF476F}{Z_i} \textcolor{#118AB2}{Z_j} \mid X_1 \ldots X_n}  }{\cb*{\sum_{i=1}^n 1_{=1}(X_i) }^2}} + 0 \\
+&amp;\overset{\texttip{\small{\text{?}}}{Step 3}}{=}
+\mathop{\mathrm{E}}\sb*{\frac{\textcolor{#EF476F}{\sum_{i=1}^n 1_{=1}(X_i)} \ \sigma^2(X_i) }{\cb*{\sum_{i=1}^n 1_{=1}(X_i) }^2}} \\
+&amp;\overset{\texttip{\small{\text{?}}}{The indicator trick again.}}{=}
+\mathop{\mathrm{E}}\sb*{\frac{\textcolor{#EF476F}{\sum_{i=1}^n 1_{=1}(X_i)} \ \sigma^2(1) }{\cb*{\sum_{i=1}^n 1_{=1}(X_i) }^2}} \\
+&amp;\overset{\texttip{\small{\text{?}}}{Cancelling a common factor of $N_1$ in the numerator and denominator.}}{=}
+\mathop{\mathrm{E}}\sb*{\frac{\sigma^2(1)}{\sum_{i=1}^n 1_{=1}(X_i) } }
+\end{aligned}
+</span></p>
+</section>
+<section id="the-variance-of-differences-in-means" class="slide level2">
+<h2>The Variance of <strong>Differences in Means</strong></h2>
+<p><strong>Claim.</strong> The variance of the difference in subsample means is the <strong>sum</strong> of the variances of the subsample means. <span class="math display">
+\mathop{\mathrm{\mathop{\mathrm{V}}}}[\hat\mu(1) - \hat\mu(0)] = \mathop{\mathrm{E}}\sb*{ \frac{\sigma^2(1)}{N_1} +
+\frac{\sigma^2(0)}{N_0}} \quad \text{ for } \quad N_x = \sum_{i=1}^n 1_{=x}(X_i)
+</span></p>
+<p>This’ll be a Homework Exercise.</p>
+</section>
+<section id="sec-estimating-variance" class="slide level2">
+<h2>Estimating the Variance</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-28-1.svg"></p>
+<figcaption>The population.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-28-2.svg"></p>
+<figcaption>The sample.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p><span class="math display">
+\mathop{\mathrm{\mathop{\mathrm{V}}}}[\hat\mu(1) - \hat\mu(0)] = \mathop{\mathrm{E}}\sb*{ \frac{\sigma^2(1)}{N_1} +
+\frac{\sigma^2(0)}{N_0}} \quad \text{ for } \quad N_x = \sum_{i=1}^n 1_{=x}(X_i)
+</span></p>
+<div class="panel-tabset">
+<ul id="tabset-9" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-9-1">What We Don’t Know</a></li><li><a href="#tabset-9-2">Getting By With What We Have</a></li></ul>
+<div class="tab-content">
+<div id="tabset-9-1">
+<ul>
+<li>This formula includes a few things we don’t know.</li>
+<li>We don’t know the subpopulation standard deviations <span class="groupa"><span class="math inline">\sigma(0)</span></span> or <span class="groupb"><span class="math inline">\sigma(1)</span></span>.
+<ul>
+<li>Those are drawn in as ‘arms’ on the subpopulation means in the plot on the left.</li>
+<li>That’s a fake-data plot. It’s an illustration of data we don’t really get to see.</li>
+</ul></li>
+<li>We also don’t know the expected values of <span class="math inline">1/N_1</span> or <span class="math inline">1/N_0</span>.
+<ul>
+<li>We’d need to know some things about the population to calculate those, too.</li>
+<li>In particular, we’d need to know the frequency that <span class="math inline">x_j=1</span> in our population.</li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-9-2">
+<ul>
+<li>What we can do is use our sample to estimate all of those tings.</li>
+<li>We can use the <em>subsample standard deviations</em> <span class="groupa"><span class="math inline">\hat\sigma(0)</span></span> or <span class="groupb"><span class="math inline">\hat\sigma(1)</span></span>.
+<ul>
+<li>Those are drawn in as ‘arms’ on the subsample means in the plot on the right.</li>
+<li>That’s a plot of the data we have. Our sample. And they’re about the same length.</li>
+</ul></li>
+<li>We can use the <span class="math inline">1/N_1</span> and <span class="math inline">1/N_0</span> themselves to estimate their expected values.</li>
+<li>And we can plug those into our variance formula to get an estimate of this variance.</li>
+</ul>
+</div>
+</div>
+</div>
+<p><span class="math display">
+\widehat{\mathop{\mathrm{\mathop{\mathrm{V}}}}}[\hat\mu(1) - \hat\mu(0)] = \frac{\hat{\sigma}^2(1)}{N_1} + \frac{\hat{\sigma}^2(0)}{N_0}
+\qfor \hat \sigma^2(x) = \frac{1}{N_x} \sum_{i:X_i=x} (Y_i - \hat \mu(x))^2
+</span></p>
+</section></section>
+<section>
+<section id="case-study" class="title-slide slide level1 center">
+<h1>Case Study</h1>
+<p>The NSW Experiment</p>
+</section>
+<section id="code" class="slide level2">
+<h2>Code</h2>
+<div class="panel-tabset">
+<ul id="tabset-10" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-10-1">Load the Data</a></li><li><a href="#tabset-10-2">Bootstrap the Difference in Means</a></li><li><a href="#tabset-10-3">Calculate Width</a></li><li><a href="#tabset-10-4">Visualization</a></li></ul>
+<div class="tab-content">
+<div id="tabset-10-1">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>nsw.data <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">'data/nsw.csv'</span>)</span>
+<span id="cb1-2"><a href=""></a>nsw <span class="ot">=</span> nsw.data <span class="sc">|&gt;</span> </span>
+<span id="cb1-3"><a href=""></a>  <span class="fu">filter</span>(dataset<span class="sc">==</span><span class="st">'nsw'</span>) </span>
+<span id="cb1-4"><a href=""></a></span>
+<span id="cb1-5"><a href=""></a>X <span class="ot">=</span> <span class="fu">as.numeric</span>(nsw<span class="sc">$</span>treated)</span>
+<span id="cb1-6"><a href=""></a>Y <span class="ot">=</span> <span class="fu">as.numeric</span>(nsw<span class="sc">$</span>income78)</span>
+<span id="cb1-7"><a href=""></a>n <span class="ot">=</span> <span class="fu">length</span>(Y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div id="tabset-10-2">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">library</span>(purrr)</span>
+<span id="cb2-2"><a href=""></a>difference <span class="ot">=</span> <span class="fu">mean</span>(Y[X<span class="sc">==</span><span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(Y[X<span class="sc">==</span><span class="dv">0</span>])</span>
+<span id="cb2-3"><a href=""></a>difference.bootstrap.samples <span class="ot">=</span> <span class="fu">map_vec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span>, <span class="cf">function</span>(.) {</span>
+<span id="cb2-4"><a href=""></a>    I <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb2-5"><a href=""></a>    Xstar <span class="ot">=</span> X[I]</span>
+<span id="cb2-6"><a href=""></a>    Ystar <span class="ot">=</span> Y[I]</span>
+<span id="cb2-7"><a href=""></a>    <span class="fu">mean</span>(Ystar[Xstar<span class="sc">==</span><span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(Ystar[Xstar<span class="sc">==</span><span class="dv">0</span>])</span>
+<span id="cb2-8"><a href=""></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div id="tabset-10-3">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>w95.boot <span class="ot">=</span> <span class="fu">width</span>(difference.bootstrap.samples, <span class="at">alpha=</span>.<span class="dv">05</span>)</span>
+<span id="cb3-2"><a href=""></a>nsw.interval <span class="ot">=</span> difference <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>)<span class="sc">*</span>w95.boot<span class="sc">/</span><span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div id="tabset-10-4">
+
+</div>
+</div>
+</div>
+</section>
+<section id="the-national-supported-work-demonstration" class="slide level2">
+<h2>The National Supported Work Demonstration</h2>
+<div class="columns">
+<div class="column">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-33-1.svg"></p>
+<figcaption>The Bootstrap Sampling Distribution of the Difference in Means</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th><span class="math inline">x</span></th>
+<th><span class="math inline">N_x</span></th>
+<th><span class="math inline">\hat \mu(x)</span></th>
+<th><span class="math inline">\hat \sigma(x)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>260</td>
+<td>4600</td>
+<td>5500</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>185</td>
+<td>6300</td>
+<td>7900</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+<div class="panel-tabset">
+<ul id="tabset-11" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-11-1">The Program</a></li><li><a href="#tabset-11-2">The Result</a></li><li><a href="#tabset-11-3">Interpretation: Inconclusive</a></li></ul>
+<div class="tab-content">
+<div id="tabset-11-1">
+<ul>
+<li>The National Supported Work Demonstration was an experimental program in the 1970s that provided job training and other services.</li>
+<li>Here ‘experimental’ doesn’t just mean untested. It was run as a big experiment.</li>
+<li>From a population of eligible people, they drew a sample of size 445 to participate.</li>
+<li>To help estimate the impact of the program, participants were randomized into two groups.
+<ul>
+<li>The ‘treated’ group received the training and services.</li>
+<li>The ‘control’ group did not.</li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-11-2">
+<ul>
+<li>A year or two after the program ended, they compared the incomes of the two groups.
+<ul>
+<li>And the difference within the sample was about $1800 per year. In 1978 dollars.</li>
+<li>That’s pretty good. A dollar in 1978 was worth about what $4.80 is today.</li>
+<li>So adjusting for inflation, that’s an in-sample difference of about $8600. Huge impact.</li>
+</ul></li>
+<li>But there’s problem. It’s not clear that this describes a real population-level difference.</li>
+<li>The sample was relatively small. And, as a result, their interval estimate was pretty wide.</li>
+</ul>
+<p><span class="math display">
+\begin{aligned}
+\mu(1)-\mu(0)
+&amp;\in 1800 \pm 1300 \approx [500, \ 3100]
+&amp;&amp;\qqtext{is a 95\% confidence interval in 1978 dollars} \\
+&amp;\in 8600 \pm 6300 \approx [2300, \ 14900]
+&amp;&amp;\qqtext{adjusted for inflation}
+\end{aligned}
+</span></p>
+</div>
+<div id="tabset-11-3">
+<ul>
+<li>This was an expensive program to run.
+<ul>
+<li>If the population difference were at the low end of the interval, at 500 1978 dollars, it wouldn’t be cost-effective.</li>
+<li>If the population difference were at the high end of the interval, at 3100 1978 dollars, it would be.</li>
+</ul></li>
+<li>To figure out if it’s worth running, we need a more conclusive result.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="activities" class="slide level2 scrollable">
+<h2>Activities</h2>
+<div class="columns">
+<div class="column">
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-34-1.svg"></p>
+<figcaption>The Bootstrap Sampling Distribution of the Difference in Means</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th><span class="math inline">x</span></th>
+<th><span class="math inline">N_x</span></th>
+<th><span class="math inline">\hat \mu(x)</span></th>
+<th><span class="math inline">\hat \sigma(x)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>260</td>
+<td>4600</td>
+<td>5500</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>185</td>
+<td>6300</td>
+<td>7900</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+<div class="panel-tabset">
+<ul id="tabset-12" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-12-1">Warm-Up</a></li><li><a href="#tabset-12-2">Resizing</a></li><li><a href="#tabset-12-3">About Dilution</a></li><li><a href="#tabset-12-4">Solutions and Discussion</a></li></ul>
+<div class="tab-content">
+<div id="tabset-12-1">
+<ul>
+<li>Use the information in this table to calculate a 95% interval based on normal approximation.</li>
+<li>Compare it to the interval we got using the bootstrap sampling distribution for calibration.</li>
+</ul>
+</div>
+<div id="tabset-12-2">
+<ul>
+<li>Suppose we want to know the population difference to within $500 (1978 dollars).</li>
+<li>How can we resize our experiment to make that happen?</li>
+</ul>
+<ol type="1">
+<li>We could restart the experiment, running it exactly as before, to get a larger sample like the one we have.
+<ul>
+<li>In particular, one with the same proportion of participants assigned to treated and control units.</li>
+<li>What sample size would we need to be able to get a 95% confidence interval this accurate?</li>
+</ul></li>
+<li>It’d be cheaper to increase the size of our control group without actually treating anyone.
+<ul>
+<li>Suppose you can analyze the resulting ‘diluted’ version of our experiment exactly like the original.</li>
+<li>Same variance formula, same <span class="math inline">N_1</span>, but larger <span class="math inline">N_0</span>.</li>
+<li>How big do we need to make <span class="math inline">N_0</span> to get the desired level of precision?</li>
+<li>Is it even possible without increasing <span class="math inline">N_1</span>? How precise can we get keeping <span class="math inline">N_1</span> as-is?</li>
+</ul></li>
+</ol>
+</div>
+<div id="tabset-12-3">
+<ul>
+<li>You can use a ‘two stage sampling’ argument to think of the ‘diluted’ version of our experiment …</li>
+<li>… as being like the one we ran orginally, but with a different coin to assign treatment.</li>
+<li>In essence, getting assigned treatment in the diluated version requires you to flip heads twice.
+<ol type="1">
+<li>Once to be in the first part of this larger sample—our original sample.</li>
+<li>Once to be in the part of that sample assigned to treatment.</li>
+</ol></li>
+<li>We can boil those two flips down to one flip of an appropriately weighted coin.</li>
+</ul>
+</div>
+<div id="tabset-12-4">
+<p><strong>Warm-Up.</strong></p>
+<p>Our interval based on normal approximation should be <span class="math inline">\hat\theta \pm 1.96 \times \hat\sigma_{\hat\theta}</span> where <span class="math inline">\hat\theta=\hat\mu(1) - \hat\mu(0)</span> is our point estimate and <span class="math inline">\hat\sigma_{\hat\theta}</span> is an estimate of its standard deviation. That’s roughly <span class="math inline">\hat\theta \pm 2 \times 670</span>. Pretty similar to our bootstrap interval. Using the formula from <a href="#/sec-estimating-variance" class="quarto-xref">Slide&nbsp;5.13</a>, we calculate it like this.</p>
+<p><span class="math display">
+\begin{aligned}
+\widehat{\mathop{\mathrm{\mathop{\mathrm{V}}}}}[\hat\mu(1) - \hat\mu(0)]
+&amp;= \frac{\hat\sigma^2(1)}{N_1} + \frac{\hat\sigma^2(0)}{N_0} \\
+&amp;\approx \frac{61.90M}{185} + \frac{30.07M}{260} \\
+&amp;\approx 450.24K \approx \hat\sigma_{\hat\theta}^2 \qfor \hat\sigma_{\hat\theta} \approx 670
+\end{aligned}
+</span></p>
+<p><strong>Resizing Part 1.</strong></p>
+<p>If we’re resizing our experiment but running as before, we can think of the new subsample sizes as being roughly proportional to the old ones. That is, if our new sample size is <span class="math inline">\alpha n</span>, then our subsample sizes will be <span class="math inline">\alpha N_1</span> and <span class="math inline">\alpha N_0</span>. Plugging these new sample sizes in our variance formula, we get a simple formula for our our estimator’s standard deviation in this new experiment relative to the old one. It’s just <span class="math inline">\sigma_{\hat\theta}/\sqrt{\alpha}</span> where <span class="math inline">\sigma_{\hat\theta}</span> is the standard deviation of our estimator in our original experiment.</p>
+<p><span class="math display">
+\begin{aligned}
+\mathop{\mathrm{\mathop{\mathrm{V}}}}[\hat\mu(1) - \hat\mu(0)]
+&amp;= \frac{\sigma^2(1)}{\alpha N_1} + \frac{\sigma^2(0)}{\alpha N_0}  
+= \frac{1}{\alpha} \sigma_{\hat\theta}^2 = \p*{\frac{\sigma_{\hat\theta}}{\sqrt{\alpha}}}^2
+\end{aligned}
+</span></p>
+<p>That is, it’s <span class="math inline">1/\sqrt{\alpha}</span> times the quantity we just estimated to be <span class="math inline">\hat\sigma_{\hat\theta} \approx 670</span>, so it’s sensible to estimate it by <span class="math inline">\hat\sigma_{\hat\theta}/\sqrt{\alpha}</span>. We want our new interval <span class="math inline">\hat\theta \pm 1.96\hat\sigma_{\hat\theta}/\sqrt{\alpha}</span> to be <span class="math inline">\hat\theta \pm 500</span>. The old one, <span class="math inline">\hat\theta \pm 1.96\hat\sigma_{\hat\theta} \approx \hat\theta \pm 1320</span>, was about 3 times wider than this, so we want <span class="math inline">\sqrt{\alpha} \approx 3</span> and therefore <span class="math inline">\alpha \approx 9</span>. Since we’ve already got a sample of size <span class="math inline">n</span>, we can run a ‘second wave’ of size <span class="math inline">(\alpha-1)n \approx 8n</span> to get a big enough sample.</p>
+<p>That’s a back-of-the-envelope calculation. If we want to be a bit more precise, we can actually solve for <span class="math inline">\alpha</span> that equates these two interval widths. <span class="math display">
+\begin{aligned}
+\frac{1.96\hat\sigma_{\hat\theta}}{\sqrt{\alpha}} = 500 \qfor
+\alpha = \p*{\frac{1.96\hat\sigma_{\hat\theta}}{500}}^2 \approx 6.92
+\end{aligned}
+</span></p>
+<p>That’s a bit better than 9. It pays to be precise sometimes.</p>
+<p><strong>Resizing Part 2.</strong> If it’s free to include more participants in our control group, we may as we’ll make <span class="math inline">N_0</span> arbitrarily large. If we did, we’d have this variance.</p>
+<p><span class="math display">
+\begin{aligned}
+\widehat{\mathop{\mathrm{\mathop{\mathrm{V}}}}}[\hat\mu(1) - \hat\mu(0)]
+&amp;= \frac{\hat\sigma^2(1)}{N_1} + \frac{\hat\sigma^2(0)}{\infty}
+= \p*{\frac{\hat\sigma(1)}{\sqrt{N_1}}}^2 \approx 580^2
+\end{aligned}
+</span></p>
+<p>The resulting interval would be <span class="math inline">\pm 1.96 \times 580 \approx \pm 1130</span>. Roughly twice as wide as we want. So we’re not getting the precision we want for free. Thinking back to Part 1, that means we’d want <span class="math inline">N_1</span> to be roughly <span class="math inline">\alpha = 4</span> times larger. And that’d mean treating roughly <span class="math inline">(\alpha-1) = 3</span> more people. That’s a lot cheaper than treating <span class="math inline">8</span> (or really <span class="math inline">5.92</span>) times as many people, as we would if we ran our second wave as a scaled-up version of the first.</p>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="appendix-additional-figures" class="title-slide slide level1 center">
+<h1>Appendix: Additional Figures</h1>
+
+</section>
+<section id="the-social-pressure-letter" class="slide level2">
+<h2>The Social Pressure Letter</h2>
+
+<img data-src="figs/gerber-green-larimer-neighbors.png" class="r-stretch quarto-figure-center" id="fig-social-pressure-letter"><p class="caption">
+Figure&nbsp;2
+</p></section></section>
+<section>
+<section id="sec-proving-total-variance" class="title-slide slide level1 center">
+<h1>Appendix: Proving the Law of Total Variance</h1>
+
+</section>
+<section id="starting-point-interpreting-variance-as-excess" class="slide level2 smaller">
+<h2>Starting Point: Interpreting Variance as Excess</h2>
+<p><span class="math display">
+\small{
+\begin{aligned}
+\mathop{\mathrm{\mathop{\mathrm{V}}}}(Y) &amp;= \mathop{\mathrm{E}}\sb*{ \cb*{ Y - \mathop{\mathrm{E}}(Y) }^2 } &amp;&amp; \text{ the \emph{spread} idea: the mean square of a \emph{centered version} of $Y$ } \\
+&amp;= \mathop{\mathrm{E}}\p*{Y^2} - \cb*{\mathop{\mathrm{E}}\p*{Y}}^2         &amp;&amp; \text{ the \emph{excess} idea: the average amount $Y^2$ \emph{exceeds} the square of its mean}.
+\end{aligned}
+}
+</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-37-1.svg" height="250"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s think, in terms of the plot, about why there is excess in the square.</p>
+<ul>
+<li>Suppose <span class="math inline">Y</span> takes on three values — the dots —with equal probability.
+<ul>
+<li>Its expectation is the average height of the black dots.</li>
+<li>And its expectation, squared, is the square of this.</li>
+</ul></li>
+<li>Its square <span class="math inline">Y^2</span> takes on the the square of those values—the squares — with equal probability.
+<ul>
+<li>Its expectation is the average height of the squares.</li>
+</ul></li>
+<li>Why is the second one bigger?
+<ul>
+<li>Because squaring <em>increases big draws of Y</em> more than it <em>decreases small ones</em>.</li>
+<li>Visually, the line from <span class="math inline">Y</span> to <span class="math inline">Y^2</span> is longer when <span class="math inline">Y</span> is bigger than when it’s smaller.</li>
+</ul></li>
+<li>We’ll mostly think about variance in terms of spread, but the ‘excess’ formula comes up in calculations.</li>
+</ul>
+</section>
+<section id="equivalence-proof" class="slide level2">
+<h2>Equivalence Proof</h2>
+<p><strong>Claim.</strong> The spread and excess formulas for variance are equivalent. <span class="math display">  
+\mathop{\mathrm{E}}\sb*{ \cb*{ Y - \mathop{\mathrm{E}}(Y) }^2 } =\mathop{\mathrm{E}}[ Y^2] - \cb*{\mathop{\mathrm{E}}(Y)}^2
+</span></p>
+<p><span class="math display">
+\small{
+\begin{aligned}
+\mathop{\mathrm{E}}\sb*{ \cb*{ Y - \mathop{\mathrm{E}}(Y) }^2 }
+&amp;= \mathop{\mathrm{E}}\sb*{ Y^2 - 2 Y \mathop{\mathrm{E}}(Y) + \cb*{\mathop{\mathrm{E}}(Y)}^2 } &amp;&amp; \text{ FOIL } \\
+&amp;= \mathop{\mathrm{E}}[ Y^2] - \mathop{\mathrm{E}}\sb*{2 Y \mathop{\mathrm{E}}(Y)} + \mathop{\mathrm{E}}\sb*{\cb*{\mathop{\mathrm{E}}(Y)}^2} &amp;&amp; \text{Distributing expectations (linearity)} \\
+&amp;= \mathop{\mathrm{E}}[ Y^2] - 2\mathop{\mathrm{E}}(Y)\mathop{\mathrm{E}}\sb*{Y} + \cb*{\mathop{\mathrm{E}}(Y)}^2\mathop{\mathrm{E}}[1] &amp;&amp; \text{Pulling constants out of expectations (linearity)} \\
+&amp;= \mathop{\mathrm{E}}[ Y^2] - 2\cb*{\mathop{\mathrm{E}}(Y)}^2 + \cb*{\mathop{\mathrm{E}}(Y)}^2] &amp;&amp; \text{Recognizing a product of something with itself as a square} \\
+&amp;= \mathop{\mathrm{E}}[ Y^2] - \cancel{2}\cb*{\mathop{\mathrm{E}}(Y)}^2 + \cancel{\cb*{\mathop{\mathrm{E}}(Y)}^2}] &amp;&amp; \text{Subtracting}
+\end{aligned}
+}
+</span></p>
+</section>
+<section id="conditional-variance-as-excess" class="slide level2 smaller">
+<h2>Conditional Variance as Excess</h2>
+<p><span class="math display">
+\small{
+\begin{aligned}
+\mathop{\mathrm{\mathop{\mathrm{V}}}}(Y \mid X) &amp;= \mathop{\mathrm{E}}\sb*{ \cb*{ Y - \mathop{\mathrm{E}}(Y\mid X)}^2 \mid X } &amp;&amp; \text{ the \emph{spread} idea: the mean square of a conditionally centered version of $Y$ } \\
+&amp;= \mathop{\mathrm{E}}\p*{Y^2 \mid X} - \cb*{\mathop{\mathrm{E}}\p*{Y \mid X}}^2              &amp;&amp; \text{ the \emph{excess} idea: the average amount $Y^2$ exceeds the square of its cond. mean}
+\end{aligned}
+}
+</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture6_files/figure-revealjs/unnamed-chunk-38-1.svg" height="500"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>We can think of the Conditional Variance as excess, too.</li>
+<li>It’s the same as the unconditional case, but <em>within subpopulations</em>.</li>
+</ul>
+</section>
+<section id="proof-1" class="slide level2 scrollable">
+<h2>Proof</h2>
+<p><strong>Claim.</strong> <span class="math display">
+\mathop{\mathrm{\mathop{\mathrm{V}}}}[Y] = \textcolor{blue}{\mathop{\mathrm{E}}\sb*{\mathop{\mathrm{\mathop{\mathrm{V}}}}(Y \mid X)}} + \textcolor{green}{\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb*{\mathop{\mathrm{E}}(Y \mid X)}}
+</span></p>
+<ol type="1">
+<li>Rewrite the variances, conditional and unconditional, in <em>excess</em> form.</li>
+</ol>
+<div class="fragment">
+<p><span class="math display">
+\mathop{\mathrm{\mathop{\mathrm{V}}}}[Y]  = \textcolor{blue}{\mathop{\mathrm{E}}\sb*{ \mathop{\mathrm{E}}(Y^2 \mid X) - \cb*{\mathop{\mathrm{E}}\p*{Y \mid X}}^2}}
+                       + \textcolor{green}{\mathop{\mathrm{E}}\cb*{ \mathop{\mathrm{E}}(Y \mid X)^2}  - \p*{\mathop{\mathrm{E}}\cb*{\mathop{\mathrm{E}}\p*{Y \mid X}}}^2}
+</span></p>
+</div>
+<ol start="2" type="1">
+<li>Distribute the outer expectations in the first term.</li>
+</ol>
+<div class="fragment">
+<p><span class="math display">
+\mathop{\mathrm{\mathop{\mathrm{V}}}}[Y] = \textcolor{blue}{\mathop{\mathrm{E}}\sb*{ \mathop{\mathrm{E}}(Y^2 \mid X)} - \mathop{\mathrm{E}}\sb*{\cb*{\mathop{\mathrm{E}}\p*{Y \mid X}}^2}}
+                       + \textcolor{green}{\mathop{\mathrm{E}}\sb*{ \cb*{\mathop{\mathrm{E}}(Y \mid X)^2} } - \p*{\mathop{\mathrm{E}}\cb*{\mathop{\mathrm{E}}\p*{Y \mid X}}}^2}
+</span></p>
+</div>
+<ol start="3" type="1">
+<li>Cancel matching terms</li>
+</ol>
+<div class="fragment">
+<p><span class="math display">
+\mathop{\mathrm{\mathop{\mathrm{V}}}}[Y]  = \textcolor{blue}{\mathop{\mathrm{E}}\sb*{ \mathop{\mathrm{E}}(Y^2 \mid X)} \cancel{- \mathop{\mathrm{E}}\sb*{\cb*{\mathop{\mathrm{E}}\p*{Y \mid X}}^2}}}  
+                       + \textcolor{green}{\cancel{\mathop{\mathrm{E}}\sb*{ \cb*{\mathop{\mathrm{E}}(Y \mid X)^2} }} -  \p*{\mathop{\mathrm{E}}\cb*{\mathop{\mathrm{E}}\p*{Y \mid X}}}^2}
+</span></p>
+</div>
+<ol start="4" type="1">
+<li>Use the law of iterated expectations to simplify the remaining terms.</li>
+</ol>
+<div class="fragment">
+<p><span class="math display">
+\mathop{\mathrm{\mathop{\mathrm{V}}}}[Y]  = \textcolor{blue}{E[Y^2]  \cancel{- \mathop{\mathrm{E}}\sb*{\cb*{\mathop{\mathrm{E}}\p*{Y \mid X}}^2}}}
+                       + \textcolor{green}{\cancel{\mathop{\mathrm{E}}\sb*{ \cb*{\mathop{\mathrm{E}}(Y \mid X)^2} }} - (\mathop{\mathrm{E}}\cb*{Y})^2}
+</span></p>
+</div>
+
+</section></section>
+<section id="footnotes" class="footnotes footnotes-end-of-document smaller scrollable" role="doc-endnotes"><h2>Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>This is really still called the law of iterated expectations.</p></li>
+<li id="fn2"><p>We showed that on <a href="#/sec-linearity" class="quarto-xref">Slide&nbsp;3.1</a>.</p></li>
+</ol>
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="Lecture6_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="Lecture6_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="Lecture6_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="Lecture6_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="Lecture6_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="Lecture6_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="Lecture6_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="Lecture6_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="Lecture6_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': false,
+'previewLinksAuto': false,
+'pdfSeparateFragments': true,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': true,
+ 
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1290,
+
+        height: 1000,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 2.0e-2,
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const xrefs = window.document.querySelectorAll('a.quarto-xref');
+        const processXRef = (id, note) => {
+          // Strip column container classes
+          const stripColumnClz = (el) => {
+            el.classList.remove("page-full", "page-columns");
+            if (el.children) {
+              for (const child of el.children) {
+                stripColumnClz(child);
+              }
+            }
+          }
+          stripColumnClz(note)
+          if (id === null || id.startsWith('sec-')) {
+            // Special case sections, only their first couple elements
+            const container = document.createElement("div");
+            if (note.children && note.children.length > 2) {
+              container.appendChild(note.children[0].cloneNode(true));
+              for (let i = 1; i < note.children.length; i++) {
+                const child = note.children[i];
+                if (child.tagName === "P" && child.innerText === "") {
+                  continue;
+                } else {
+                  container.appendChild(child.cloneNode(true));
+                  break;
+                }
+              }
+              if (window.Quarto?.typesetMath) {
+                window.Quarto.typesetMath(container);
+              }
+              return container.innerHTML
+            } else {
+              if (window.Quarto?.typesetMath) {
+                window.Quarto.typesetMath(note);
+              }
+              return note.innerHTML;
+            }
+          } else {
+            // Remove any anchor links if they are present
+            const anchorLink = note.querySelector('a.anchorjs-link');
+            if (anchorLink) {
+              anchorLink.remove();
+            }
+            if (window.Quarto?.typesetMath) {
+              window.Quarto.typesetMath(note);
+            }
+            if (note.classList.contains("callout")) {
+              return note.outerHTML;
+            } else {
+              return note.innerHTML;
+            }
+          }
+        }
+        for (var i=0; i<xrefs.length; i++) {
+          const xref = xrefs[i];
+          tippyHover(xref, undefined, function(instance) {
+            instance.disable();
+            let url = xref.getAttribute('href');
+            let hash = undefined; 
+            if (url.startsWith('#')) {
+              hash = url;
+            } else {
+              try { hash = new URL(url).hash; } catch {}
+            }
+            if (hash) {
+              const id = hash.replace(/^#\/?/, "");
+              const note = window.document.getElementById(id);
+              if (note !== null) {
+                try {
+                  const html = processXRef(id, note.cloneNode(true));
+                  instance.setContent(html);
+                } finally {
+                  instance.enable();
+                  instance.show();
+                }
+              } else {
+                // See if we can fetch this
+                fetch(url.split('#')[0])
+                .then(res => res.text())
+                .then(html => {
+                  const parser = new DOMParser();
+                  const htmlDoc = parser.parseFromString(html, "text/html");
+                  const note = htmlDoc.getElementById(id);
+                  if (note !== null) {
+                    const html = processXRef(id, note);
+                    instance.setContent(html);
+                  } 
+                }).finally(() => {
+                  instance.enable();
+                  instance.show();
+                });
+              }
+            } else {
+              // See if we can fetch a full url (with no hash to target)
+              // This is a special case and we should probably do some content thinning / targeting
+              fetch(url)
+              .then(res => res.text())
+              .then(html => {
+                const parser = new DOMParser();
+                const htmlDoc = parser.parseFromString(html, "text/html");
+                const note = htmlDoc.querySelector('main.content');
+                if (note !== null) {
+                  // This should only happen for chapter cross references
+                  // (since there is no id in the URL)
+                  // remove the first header
+                  if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                    note.children[0].remove();
+                  }
+                  const html = processXRef(null, note);
+                  instance.setContent(html);
+                } 
+              }).finally(() => {
+                instance.enable();
+                instance.show();
+              });
+            }
+          }, function(instance) {
+          });
+        }
+            let selectedAnnoteEl;
+            const selectorForAnnotation = ( cell, annotation) => {
+              let cellAttr = 'data-code-cell="' + cell + '"';
+              let lineAttr = 'data-code-annotation="' +  annotation + '"';
+              const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+              return selector;
+            }
+            const selectCodeLines = (annoteEl) => {
+              const doc = window.document;
+              const targetCell = annoteEl.getAttribute("data-target-cell");
+              const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+              const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+              const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+              const lineIds = lines.map((line) => {
+                return targetCell + "-" + line;
+              })
+              let top = null;
+              let height = null;
+              let parent = null;
+              if (lineIds.length > 0) {
+                  //compute the position of the single el (top and bottom and make a div)
+                  const el = window.document.getElementById(lineIds[0]);
+                  top = el.offsetTop;
+                  height = el.offsetHeight;
+                  parent = el.parentElement.parentElement;
+                if (lineIds.length > 1) {
+                  const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+                  const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+                  height = bottom - top;
+                }
+                if (top !== null && height !== null && parent !== null) {
+                  // cook up a div (if necessary) and position it 
+                  let div = window.document.getElementById("code-annotation-line-highlight");
+                  if (div === null) {
+                    div = window.document.createElement("div");
+                    div.setAttribute("id", "code-annotation-line-highlight");
+                    div.style.position = 'absolute';
+                    parent.appendChild(div);
+                  }
+                  div.style.top = top - 2 + "px";
+                  div.style.height = height + 4 + "px";
+                  div.style.left = 0;
+                  let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+                  if (gutterDiv === null) {
+                    gutterDiv = window.document.createElement("div");
+                    gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                    gutterDiv.style.position = 'absolute';
+                    const codeCell = window.document.getElementById(targetCell);
+                    const gutter = codeCell.querySelector('.code-annotation-gutter');
+                    gutter.appendChild(gutterDiv);
+                  }
+                  gutterDiv.style.top = top - 2 + "px";
+                  gutterDiv.style.height = height + 4 + "px";
+                }
+                selectedAnnoteEl = annoteEl;
+              }
+            };
+            const unselectCodeLines = () => {
+              const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+              elementsIds.forEach((elId) => {
+                const div = window.document.getElementById(elId);
+                if (div) {
+                  div.remove();
+                }
+              });
+              selectedAnnoteEl = undefined;
+            };
+              // Handle positioning of the toggle
+          window.addEventListener(
+            "resize",
+            throttle(() => {
+              elRect = undefined;
+              if (selectedAnnoteEl) {
+                selectCodeLines(selectedAnnoteEl);
+              }
+            }, 10)
+          );
+          function throttle(fn, ms) {
+          let throttle = false;
+          let timer;
+            return (...args) => {
+              if(!throttle) { // first call gets through
+                  fn.apply(this, args);
+                  throttle = true;
+              } else { // all the others get throttled
+                  if(timer) clearTimeout(timer); // cancel #2
+                  timer = setTimeout(() => {
+                    fn.apply(this, args);
+                    timer = throttle = false;
+                  }, ms);
+              }
+            };
+          }
+            const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+            for (let i=0; i<annoteTargets.length; i++) {
+              const annoteTarget = annoteTargets[i];
+              const targetCell = annoteTarget.getAttribute("data-target-cell");
+              const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+              const contentFn = () => {
+                const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+                if (content) {
+                  const tipContent = content.cloneNode(true);
+                  tipContent.classList.add("code-annotation-tip-content");
+                  return tipContent.outerHTML;
+                }
+              }
+              const config = {
+                allowHTML: true,
+                content: contentFn,
+                onShow: (instance) => {
+                  selectCodeLines(instance.reference);
+                  instance.reference.classList.add('code-annotation-active');
+                  window.tippy.hideAll();
+                },
+                onHide: (instance) => {
+                  unselectCodeLines();
+                  instance.reference.classList.remove('code-annotation-active');
+                },
+                maxWidth: 300,
+                delay: [50, 0],
+                duration: [200, 0],
+                offset: [5, 10],
+                arrow: true,
+                appendTo: function(el) {
+                  return el.parentElement.parentElement.parentElement;
+                },
+                interactive: true,
+                interactiveBorder: 10,
+                theme: 'light-border',
+                placement: 'right',
+                popperOptions: {
+                  modifiers: [
+                  {
+                    name: 'flip',
+                    options: {
+                      flipVariations: false, // true by default
+                      allowedAutoPlacements: ['right'],
+                      fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                    },
+                  },
+                  {
+                    name: 'preventOverflow',
+                    options: {
+                      mainAxis: false,
+                      altAxis: false
+                    }
+                  }
+                  ]        
+                }      
+              };
+              window.tippy(annoteTarget, config); 
+            }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
